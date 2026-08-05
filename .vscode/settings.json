@@ -1,0 +1,6 @@
+{
+  "tailwindCSS.classFunctions": ["cva", "cn"],
+  "terminal.integrated.env.windows": {
+    "PATH": "C:\\Users\\admin\\node22;${env:PATH}"
+  }
+}

@@ -1,0 +1,236 @@
+# 音乐百科 · 设计文档（唯一事实来源）
+
+> 本文档是本项目的**权威设计基准**。所有产品、架构、设计、技术决策以本文档为准。
+> 若上下文丢失/压缩,先读本文件 + `SETUP.md` + `src/styles/global.css` 即可恢复全部设计意图。
+> 最后更新:2026-08-04
+
+---
+
+## 0. 一句话定义
+
+**一本「可交互的音乐精品百科全书」** —— 主体是可检索、可关联跳转的词条库,叠加精选学习路线;词条内嵌入即时交互演示(点谱发声、认音反馈);纯静态、无账号。
+
+**它不是**:音乐播放/收藏库、LMS 学习管理系统、开放 UGC 百科。
+
+---
+
+## 1. 锁定的关键决策（不要动摇）
+
+| 维度 | 决定 | 说明 |
+|------|------|------|
+| **形态** | 百科(主体)+ 学习路线(叠加),**融合式 IA** | 词条非线性可查可跳转;路线把词条串成建议顺序,线性引导是叠在非线性之上的一层 |
+| **交互** | 嵌入式**即时**演示/反馈 | 定位是「演示/探索」,不是「考试/打分」。点谱能响、认音当场提示——但**不积累成个人档案** |
+| **追踪** | **无** | 无账号、无学习仪表盘、无错题本、无积分连胜、无跨条目进度 |
+| **内容** | **精品**,编辑团队 / Git PR 维护 | 非开放 UGC;质量优先于广度 |
+| **部署** | **纯静态站** | 后端为零;Cloudflare Pages(国内正式上线再换国内主机 + ICP 备案) |
+| **审美优先级** | 设计第一 | 面向 C 端,必须满足主流审美与操作习惯 |
+
+### 明确不做（避免需求蔓延）
+- ❌ 账号系统 / 用户登录（P1-P2 不要;P3 视情况再议,且仅限编辑账号）
+- ❌ 学习仪表盘 / 错题本 / 进度档案 / 积分
+- ❌ 音乐播放/收藏/歌单功能
+- ❌ 通用元数据库路线（不做 MusicBrainz/RYM 类目录）
+- ❌ 照搬 Ant Design / Arco / Naive UI（后台管理气质,违和）
+
+---
+
+## 2. 技术栈与环境
+
+### 选型
+| 层 | 技术 | 备注 |
+|----|------|------|
+| 框架 | **Astro 7** | 岛屿架构:静态文字 + 局部交互组件 |
+| 交互组件 | **React 19**（作为 Astro 岛屿） | `@astrojs/react` |
+| 样式 | **Tailwind CSS v4** | `@tailwindcss/vite`,CSS 变量配置(无 tailwind.config) |
+| UI 组件 | **shadcn/ui**(基于 **Base UI**,非 Radix) | 源码自有,可深度定制 |
+| 内容格式 | **MDX** | 文章内直接嵌交互组件 |
+| 图标 | **lucide-react** | |
+| 音频/记谱 | **Tone.js + OpenSheetMusicDisplay + abcjs** | 待安装 |
+| 动效 | **Framer Motion** | 待安装 |
+| 全文搜索 | **Pagefind** | Starlight 同款,任何静态站可用;待接入 |
+| Lint/Format | **oxlint / oxfmt** | 模板自带 |
+| 部署 | **Cloudflare Pages** | 静态 |
+
+### 项目底座
+- 来源:`AREA44/astro-shadcn-ui-template`(GitHub),已剥离其 `.git` 与 pnpm 工作区文件,改用 npm。
+- 路径:`E:\Project\music-wiki`
+
+### 环境关键事实
+- **Node 版本:必须 ≥ 22**(Astro 7 强制)。便携 Node 22.23.2 装在 `C:\Users\admin\node22`,npm 10.9.8。
+- 原 Node 20 不动;其他项目不受影响。
+- VS Code 终端已配自动激活(`.vscode/settings.json` 的 `terminal.integrated.env.windows`)。
+- npm 镜像:项目级 `.npmrc` → `https://registry.npmmirror.com`(不动全局)。
+- 日常命令与激活方式见 `SETUP.md`。
+
+---
+
+## 3. 设计系统
+
+### 设计理念
+> 「满足主流审美」≠ 抄通用模板。= **熟悉的结构和操作**（降低学习成本）+ **高完成度的细节**（质感）+ **一个让人记住的个性**（辨识度）。
+> **结构要"熟",气质要"独"。** 避开 AI 设计三大俗套（米白+衬线+赭红 / 纯黑+荧光绿 / 报纸细线风）。
+
+### 色板（已落地于 `src/styles/global.css`）
+琥珀「signature」签名色 + 暖中性底,亮/暗双主题。
+
+| token | 亮色 | 暗色 | 用途 |
+|-------|------|------|------|
+| `--signature` | `oklch(0.78 0.15 71)` | `oklch(0.82 0.15 75)` | 琥珀签名色:播放键、链接、高亮、激活态、focus |
+| `--signature-foreground` | `oklch(0.22 0.03 71)` | `oklch(0.16 0.02 71)` | 琥珀上的文字(深色) |
+| `--background` | `oklch(0.992 0.004 90)`(暖白) | `oklch(0.165 0.012 260)`(蓝黑) | 页面背景 |
+| `--surface` | `oklch(0.975 0.004 90)` | `oklch(0.19 0.01 260)` | 次级面/卡片层 |
+| `--foreground` | `oklch(0.16 0.006 260)` | `oklch(0.985 0 0)` | 主文字 |
+| `--primary` | 中性近黑 | 中性近白 | 按钮(保持克制,不用琥珀当主按钮,避免廉价) |
+| `--selection` | 琥珀 | 琥珀 | 文本选中 |
+
+> 用法:交互组件的**播放键用 `bg-signature`**(音乐产品的标志性元素,类比 Spotify 绿)。中性 `primary` 留给普通按钮。
+
+### 字体
+- **正文/界面**:`--font-sans` = `"Inter Variable", "PingFang SC", "Microsoft YaHei", "HarmonyOS Sans SC", system-ui, sans-serif`（CJK 走系统字体,零下载）。
+- **数据/等宽**（BPM、音值、调号,营造"音乐工作站"感）:**JetBrains Mono**（待安装 `@fontsource/jetbrains-mono`）。
+- **展示/大标题**（课程封面等仪式感位置,可用衬线增加文化底蕴）:待选,候选 思源宋体 / Space Grotesk。
+
+### 签名元素（别人抄不走的辨识度）
+1. **「五线谱分隔线」motif**:段落分隔不用普通横线,而用 5 条间距递减的细线(像五线谱),一致用于导航/分隔/加载/播放态。
+2. **琥珀播放键**:所有交互组件的播放 affordance 统一用琥珀三角形。
+
+### 参考产品（偷什么）
+- **LightNote**:交互乐理的优雅标杆（文字×互动如何无缝交织）
+- **ToneGym / SoundGym**:游戏化练耳的即时反馈手感
+- **Notion / Linear**:阅读型内容的高级感（留白、字号层级）
+- **Apple Music / 网易云**:音乐产品的呼吸感、暗色格调
+- **Duolingo**:学习产品的进度反馈、不挫败的纠错（即时反馈部分）
+- **Musictheory.net**:乐理内容鼻祖（功能好但 UI 老,作为"做得更好"的对标）
+
+---
+
+## 4. 信息架构（融合式）
+
+### 两个内容类型
+1. **词条 Entry**（百科原子,非线性）
+   - 例:五线谱、音名与音高、节奏与拍号、调式、和弦、流行、爵士、发声原理…
+   - 每条:分类 / 标签 / 摘要 / 相关条目 / 所属路线
+   - 页面:正文 + 交互演示 + 面包屑 + 相关条目 +（若属路线)路线上下文
+2. **学习路线 Path**（精选顺序专题,把词条串成路径）
+   - 例:「零基础读谱入门」= [五线谱 → 音名音高 → 节奏拍号 → 调号 → …]
+   - 页面:为什么按这个顺序 + 有序步骤列表(链向词条)
+
+### 融合机制（关键）
+当用户在**属于某路线的词条**上时,顶部出现上下文条:
+`你在『零基础读谱』路线 · 第 3/8 步 · 上一步 / 下一步`
+→ 词条本身仍非线性(可单独查、可跳转),路线只是叠加的线性引导。
+
+### 导航面
+首页（精选词条 + 精选路线 + 分类门户）/ 分类门户（乐理·记谱·和声·曲风·乐器·唱法）/ **全文搜索**（Pagefind,顶栏）/ 词条页 / 路线页
+
+### URL 结构（建议）
+- 词条:`/entries/<slug>`
+- 路线:`/paths/<slug>`
+- 分类:`/category/<slug>`
+- 首页:`/`
+
+---
+
+## 5. 内容模型（Content Collections schema,待实现）
+
+目录:`src/content/entries/*.md(x)`、`src/content/paths/*.md(x)`,在 `src/content.config.ts` 定义集合与 zod schema。
+
+### entries
+```ts
+{
+  title: string
+  slug: string          // URL
+  category: '乐理' | '记谱' | '和声' | '曲风' | '乐器' | '唱法'
+  summary: string       // 列表/搜索用一句话
+  tags?: string[]
+  related?: string[]    // 相关词条 slug
+  order?: number        // 分类内排序
+}
+```
+
+### paths
+```ts
+{
+  title: string
+  slug: string
+  description: string   // 为什么按这个顺序
+  steps: string[]       // 有序的 entry slug 列表
+  cover?: string
+}
+```
+
+---
+
+## 6. 交互组件生态（核心壁垒）
+
+### 组件契约
+每个交互学习组件可选实现「上报」,但**不上报个人进度档案**（无追踪层):
+```ts
+interface InteractiveWidget {
+  // 仅组件内即时反馈,可选
+  onProgress?: (r: { score?: number; completed: boolean }) => void
+}
+```
+
+### 组件清单
+**MVP 先做:**
+| 组件 | 功能 | 技术 |
+|------|------|------|
+| `<StaffNotation>` | 渲染五线谱,点击音符/段落可发声播放 | OpenSheetMusicDisplay + Tone.js |
+| `<NoteDemo>` | "认出这个音"即时反馈（答错当场提示,不存档） | Tone.js |
+
+**后续组件库:**
+`<Piano>` 虚拟钢琴、`<EarTrainer>` 练耳闯关、`<RhythmTap>` 节奏打拍、`<PitchTrainer>` 麦克风唱歌音高反馈、`<TempoExplorer>` BPM 滑块、`<Fretboard>` 吉他指板、`<ScalePlayer>` 音阶试听。
+
+### 嵌入方式（MDX）
+```mdx
+## 什么是五线谱
+五线谱由五条平行线组成……
+
+<StaffNotation src="./scores/lines.musicxml" playable highlight />
+<NoteDemo clef="treble" range={["C4", "G4"]} />
+```
+
+### 技术依赖（待安装）
+- `tone`（音频合成/播放）
+- `opensheetmusicdisplay`（MusicXML → SVG,交互）
+- `abcjs`（ABC 记谱,轻量可播放,备选）
+- `framer-motion`（微交互）
+- `@fontsource/jetbrains-mono`
+
+### 注册表（生态）
+`src/lib/registry.ts` 登记所有可用交互组件,供编辑器插入 UI 与未来第三方贡献使用。后续发《交互组件贡献指南》让别人加新组件类型 = 生态飞轮。
+
+---
+
+## 7. 路线图与当前状态
+
+| 阶段 | 内容 | 状态 |
+|------|------|------|
+| **P1 基座+原型** | 脚手架 / 设计底座 / 内容集合 / 百科 IA / Pagefind / 2 交互组件 / 样例内容 / 静态部署 | 进行中 |
+| **P2 扩充** | 交互组件库扩充 + 词条量产(先聚焦乐理·记谱) + 可选 CMS | 待开始 |
+| **P3 生态开放** | 《交互组件贡献指南》+ 注册表 + 质感打磨 + 移动端 PWA + SEO | 待开始 |
+
+### P1 任务清单（详见任务系统）
+1. ✅ 脚手架:拉取 astro-shadcn 模板 + npmmirror + 装依赖(Node 22)
+2. ✅ 应用设计系统:琥珀主题/字体/亮暗/五线谱 motif
+3. ✅ Content Collections:entries + paths schema(`src/content.config.ts`)
+4. ✅ 百科 IA:首页/词条页/路线页/分类页/关联跳转/路线上下文(14 页静态生成)
+5. ✅ Pagefind 全文搜索(构建时建索引 + 自定义 /search 页 + 首页表单)
+6. ✅ 交互组件:音频引擎(Tone.js)+ StaffNotation(abcjs 点谱发声)+ NoteDemo(认音即时反馈)
+7. ✅ 样例内容:4 条词条(五线谱/谱号/音名音高/节奏拍号)+ 1 条「零基础读谱」路线
+8. ✅ 静态构建(astro build && pagefind)+ 部署指南 DEPLOY.md
+
+---
+
+## 8. 设计校准锚点（防跑偏）
+- 每次大改 UI 前,问自己:**结构是否主流熟悉?个性是否在配色/字体/签名元素上?**
+- 任何引入「账号/进度/仪表盘」的冲动 → 拒绝（见 §1）。
+- 任何把交互组件做成「考试/记分系统」的冲动 → 拒绝,改回「即时演示」。
+- 内容扩张前先问:**这是不是精品?** 求精不求全。
+
+---
+
+## 9. 维护说明
+- 每当做出**新的重大决策**(产品方向/技术栈/设计 token 变更),同步更新本文件。
+- 本文件与代码不一致时,以**代码为准的实现** + 在此记录差异原因。

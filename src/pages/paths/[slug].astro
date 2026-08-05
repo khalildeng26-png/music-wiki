@@ -1,0 +1,74 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import StaffLines from "@/components/StaffLines.astro";
+
+export async function getStaticPaths() {
+  const [paths, entries] = await Promise.all([
+    getCollection("paths", (p) => !p.data.draft),
+    getCollection("entries", (e) => !e.data.draft),
+  ]);
+  const entryMap = new Map(entries.map((e) => [e.id, e]));
+  return paths.map((p) => ({
+    params: { slug: p.id },
+    props: { path: p, entryMap },
+  }));
+}
+
+const { path, entryMap } = Astro.props;
+const { Content } = await render(path);
+const steps = path.data.steps
+  .map((id) => entryMap.get(id))
+  .filter(Boolean) as NonNullable<ReturnType<typeof entryMap.get>>[];
+---
+
+<BaseLayout title={`${path.data.title} · 音乐百科`} description={path.data.description}>
+  <section class="container py-12 max-w-3xl">
+    <nav class="text-sm text-muted-foreground">
+      <a href="/" class="hover:text-signature">首页</a>
+      <span class="mx-1">/</span>
+      <a href="/paths" class="hover:text-signature">学习路线</a>
+    </nav>
+
+    <div class="mt-4 flex items-center gap-3">
+      <div class="flex flex-col items-center justify-center rounded-lg bg-signature/10 px-3 py-1.5 text-signature">
+        <span class="text-2xl font-bold leading-none">{steps.length}</span>
+        <span class="text-xs">步</span>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight">{path.data.title}</h1>
+    </div>
+    <p class="mt-4 text-lg text-muted-foreground">{path.data.description}</p>
+
+    {
+      path.body?.trim() && (
+        <div class="prose dark:prose-invert mt-6 max-w-none">
+          <Content />
+        </div>
+      )
+    }
+
+    <StaffLines class="mt-10 w-24 text-signature/40" />
+
+    <ol class="mt-8 space-y-3">
+      {
+        steps.map((e, i) => (
+          <li>
+            <a
+              href={`/entries/${e.id}`}
+              class="group flex items-center gap-4 rounded-xl border bg-card p-4 transition hover:border-signature/50"
+            >
+              <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-signature/10 text-sm font-bold text-signature">
+                {i + 1}
+              </span>
+              <div class="flex-1">
+                <div class="font-medium group-hover:text-signature">{e.data.title}</div>
+                <div class="text-sm text-muted-foreground">{e.data.summary}</div>
+              </div>
+              <span class="text-xs text-muted-foreground">{e.data.category}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+</BaseLayout>

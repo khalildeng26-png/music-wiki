@@ -1,0 +1,53 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import { categories } from "@/lib/categories";
+
+export async function getStaticPaths() {
+  return categories.map((c) => ({
+    params: { slug: c.id },
+    props: { category: c },
+  }));
+}
+
+const { category } = Astro.props;
+const Icon = category.icon;
+
+const entries = (
+  await getCollection("entries", (e) => !e.data.draft && e.data.category === category.label)
+).sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+---
+
+<BaseLayout title={`${category.label} · 音乐百科`} description={category.desc}>
+  <section class="container py-12">
+    <nav class="text-sm text-muted-foreground">
+      <a href="/" class="hover:text-signature">首页</a>
+      <span class="mx-1">/</span>
+      <a href="/entries" class="hover:text-signature">词条</a>
+    </nav>
+
+    <div class="mt-4 flex items-center gap-3">
+      <Icon className="size-7 text-signature" />
+      <h1 class="text-3xl font-bold tracking-tight">{category.label}</h1>
+    </div>
+    <p class="mt-2 text-muted-foreground">{category.desc}</p>
+
+    {
+      entries.length === 0 ? (
+        <p class="mt-12 text-muted-foreground">这个分类下还没有词条,敬请期待。</p>
+      ) : (
+        <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {entries.map((e) => (
+            <a
+              href={`/entries/${e.id}`}
+              class="group flex flex-col gap-1.5 rounded-xl border bg-card p-4 transition hover:border-signature/50"
+            >
+              <div class="font-medium group-hover:text-signature">{e.data.title}</div>
+              <div class="line-clamp-2 text-sm text-muted-foreground">{e.data.summary}</div>
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>

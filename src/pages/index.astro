@@ -1,0 +1,107 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import StaffLines from "@/components/StaffLines.astro";
+import CategoryCard from "@/components/CategoryCard.astro";
+import { getCollection } from "astro:content";
+import { categories } from "@/lib/categories";
+import { Search } from "lucide-react";
+
+const entries = (await getCollection("entries", (e) => !e.data.draft)).sort(
+  (a, b) => (a.data.order ?? 99) - (b.data.order ?? 99),
+);
+const paths = await getCollection("paths", (p) => !p.data.draft);
+const featured = entries.slice(0, 4);
+---
+
+<BaseLayout
+  title="音乐百科"
+  description="一本可交互的音乐百科全书 —— 乐理、记谱、曲风,边读边练。"
+>
+  <!-- Hero -->
+  <section class="border-b bg-linear-to-b from-surface/60 to-background">
+    <div class="container py-20 md:py-28">
+      <div class="flex items-center gap-2 text-sm text-muted-foreground">
+        <span class="inline-flex size-2 rounded-full bg-signature"></span>
+        可交互的音乐百科 · 边读边练
+      </div>
+      <h1 class="mt-5 text-5xl font-bold tracking-tight md:text-7xl">音乐百科</h1>
+      <p class="mt-5 max-w-2xl text-lg text-muted-foreground md:text-xl">
+        乐理、记谱、曲风 —— 一本可以「动手」的音乐百科。看不懂的地方,点一下就响给你听。
+      </p>
+      <form
+        action="/search"
+        method="get"
+        class="mt-8 flex max-w-xl items-center gap-3 rounded-lg border bg-card px-4 py-3 transition focus-within:border-signature/50"
+      >
+        <Search className="size-4 text-muted-foreground" />
+        <input
+          type="text"
+          name="q"
+          placeholder="搜索词条、曲风、乐理……"
+          class="flex-1 bg-transparent text-base outline-none placeholder:text-muted-foreground"
+        />
+        <kbd class="rounded border px-1.5 py-0.5 text-[11px] text-muted-foreground">回车</kbd>
+      </form>
+      <StaffLines class="mt-12 w-40 text-signature/60" />
+    </div>
+  </section>
+
+  <!-- 分类 -->
+  <section class="container py-16">
+    <div class="flex items-end justify-between">
+      <h2 class="text-2xl font-bold tracking-tight">按分类浏览</h2>
+      <a href="/entries" class="text-sm text-muted-foreground hover:text-signature"
+        >全部词条 →</a
+      >
+    </div>
+    <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {categories.map((c) => <CategoryCard category={c} />)}
+    </div>
+  </section>
+
+  <!-- 精选词条 -->
+  <section class="container py-16">
+    <h2 class="text-2xl font-bold tracking-tight">精选词条</h2>
+    <div class="mt-8 grid gap-4 sm:grid-cols-2">
+      {
+        featured.map((e) => (
+          <a
+            href={`/entries/${e.id}`}
+            class="group flex flex-col gap-2 rounded-xl border bg-card p-5 transition hover:border-signature/50 hover:shadow-sm"
+          >
+            <span class="w-fit rounded-md bg-signature/10 px-2 py-0.5 text-xs font-medium text-signature">
+              {e.data.category}
+            </span>
+            <div class="text-lg font-semibold group-hover:text-signature">{e.data.title}</div>
+            <div class="text-sm text-muted-foreground">{e.data.summary}</div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 学习路线 -->
+  <section class="container py-16">
+    <h2 class="text-2xl font-bold tracking-tight">学习路线</h2>
+    <p class="mt-2 text-muted-foreground">不想自己挑顺序?跟着精选路线循序渐进。</p>
+    <div class="mt-8 grid gap-4">
+      {
+        paths.map((p) => (
+          <a
+            href={`/paths/${p.id}`}
+            class="group flex items-center gap-4 rounded-xl border bg-card p-5 transition hover:border-signature/50"
+          >
+            <div class="flex flex-col items-center justify-center rounded-lg bg-signature/10 px-4 py-2 text-signature">
+              <span class="text-2xl font-bold leading-none">{p.data.steps.length}</span>
+              <span class="text-xs">步</span>
+            </div>
+            <div class="flex-1">
+              <div class="text-lg font-semibold group-hover:text-signature">{p.data.title}</div>
+              <div class="mt-1 text-sm text-muted-foreground">{p.data.description}</div>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

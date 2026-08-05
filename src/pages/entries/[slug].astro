@@ -1,0 +1,106 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import StaffLines from "@/components/StaffLines.astro";
+import { categoryByLabel } from "@/lib/categories";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("entries", (e) => !e.data.draft);
+  return entries.map((e) => ({
+    params: { slug: e.id },
+    props: { entry: e, allEntries: entries },
+  }));
+}
+
+const { entry, allEntries } = Astro.props;
+const { Content } = await render(entry);
+
+const entryMap = new Map(allEntries.map((e) => [e.id, e]));
+const related = entry.data.related
+  .map((id) => entryMap.get(id))
+  .filter(Boolean) as typeof allEntries;
+
+const allPaths = await getCollection("paths", (p) => !p.data.draft);
+const inPaths = allPaths
+  .filter((p) => p.data.steps.includes(entry.id))
+  .map((p) => {
+    const i = p.data.steps.indexOf(entry.id);
+    return {
+      p,
+      step: i + 1,
+      total: p.data.steps.length,
+      prev: p.data.steps[i - 1],
+      next: p.data.steps[i + 1],
+    };
+  });
+
+const cat = categoryByLabel[entry.data.category];
+---
+
+<BaseLayout title={`${entry.data.title} · 音乐百科`} description={entry.data.summary}>
+  <article data-pagefind-body class="container py-12 max-w-3xl">
+    <nav class="text-sm text-muted-foreground">
+      <a href="/" class="hover:text-signature">首页</a>
+      <span class="mx-1">/</span>
+      <a href={`/categories/${cat.id}`} class="hover:text-signature">{cat.label}</a>
+    </nav>
+
+    {
+      inPaths.map(({ p, step, total, prev, next }) => (
+        <div class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-signature/30 bg-signature/5 px-4 py-3 text-sm">
+          <span>你在路线</span>
+          <a href={`/paths/${p.id}`} class="font-medium text-signature hover:underline">
+            {p.data.title}
+          </a>
+          <span class="text-muted-foreground">· 第 {step} / {total} 步</span>
+          <span class="ml-auto flex gap-3">
+            {prev && (
+              <a href={`/entries/${prev}`} class="text-muted-foreground hover:text-signature">← 上一步</a>
+            )}
+            {next && (
+              <a href={`/entries/${next}`} class="text-muted-foreground hover:text-signature">下一步 →</a>
+            )}
+          </span>
+        </div>
+      ))
+    }
+
+    <h1 class="mt-6 text-4xl font-bold tracking-tight">{entry.data.title}</h1>
+    <p class="mt-3 text-lg text-muted-foreground">{entry.data.summary}</p>
+    <div class="mt-4 flex flex-wrap gap-2 text-xs">
+      <span class="rounded-md bg-signature/10 px-2 py-0.5 font-medium text-signature">
+        {entry.data.category}
+      </span>
+      {
+        entry.data.tags.map((t) => (
+          <span class="rounded-md bg-muted px-2 py-0.5 text-muted-foreground">#{t}</span>
+        ))
+      }
+    </div>
+
+    <StaffLines class="mt-8 w-24 text-signature/40" />
+
+    <div class="prose dark:prose-invert mt-8 max-w-none">
+      <Content />
+    </div>
+
+    {
+      related.length > 0 && (
+        <section class="not-prose mt-16 border-t pt-8">
+          <h2 class="text-xl font-semibold">相关词条</h2>
+          <div class="mt-4 grid gap-3 sm:grid-cols-2">
+            {related.map((r) => (
+              <a
+                href={`/entries/${r.id}`}
+                class="group rounded-lg border bg-card p-4 transition hover:border-signature/50"
+              >
+                <div class="font-medium group-hover:text-signature">{r.data.title}</div>
+                <div class="mt-1 text-sm text-muted-foreground">{r.data.summary}</div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </article>
+</BaseLayout>
