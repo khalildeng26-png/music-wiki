@@ -8,6 +8,7 @@ order: 2
 ---
 
 import { StaffNotation } from "../../components/interactive/StaffNotation";
+import { Fretboard } from "../../components/interactive/Fretboard";
 
 **吉他**(Guitar)是拨弦乐器的代表,通常有**六根弦**,指板上嵌有**品格**。用手指或拨片弹拨琴弦发声。它能同时担任**伴奏**(弹和弦、节奏)和**独奏**(弹旋律 / 指弹)两种角色,是流行、摇滚、民谣、布鲁斯、弗拉门戈等风格的核心乐器。
 
@@ -30,6 +31,10 @@ import { StaffNotation } from "../../components/interactive/StaffNotation";
 <StaffNotation client:visible notes={["E2", "A2", "D3", "G3", "B3", "E4"]} label="吉他标准空弦音(6 弦 E2 → 1 弦 E4),从低到高。" />
 
 > 调音小窍门:除 3 弦外,每根弦的第 5 品 ≈ 下一根弦的空弦音;3 弦是第 4 品 = 2 弦空弦。
+
+想直观感受指板上每个位置的音?下面这块可交互指板,点任意品格听音:
+
+<Fretboard client:visible label="吉他指板(0–12 品)。点品格上的音名听音,从上到下是 6 弦(E2)到 1 弦(E4)。" />
 
 ## 怎么弹:右手与左手
 
