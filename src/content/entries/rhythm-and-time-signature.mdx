@@ -7,6 +7,8 @@ related: [staff-notation, pitch-and-note-names]
 order: 2
 ---
 
+import { Metronome } from "../../components/interactive/Metronome";
+
 五线谱除了记音高,还要记音的**长短**和**节拍结构**,这就是节奏。
 
 ## 拍号
@@ -17,6 +19,14 @@ order: 2
 - **分母**:以什么音符为一拍(4 = 四分音符为一拍)
 
 例如 4/4 = 每小节 4 拍、四分音符为一拍;3/4 = 每小节 3 拍,常用于华尔兹。
+
+## 速度(BPM)
+
+节奏的"快慢"用 **BPM(beats per minute,每分钟拍数)** 衡量:60 BPM = 每秒 1 拍,120 BPM = 每秒 2 拍。古典传统还用意大利术语描述速度区间(Largo 慢、Andante 中等、Allegro 快、Presto 极快)。
+
+不同 BPM 是什么感觉?用下面这个节拍器感受一下——点开始,拖动滑块改速度,换每小节拍数(注意强拍的重音):
+
+<Metronome client:visible />
 
 ## 音符的时值
 
