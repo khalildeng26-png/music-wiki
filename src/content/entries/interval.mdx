@@ -1,0 +1,37 @@
+---
+title: 音程
+category: 乐理
+summary: 两个音之间的距离叫音程,用"度"衡量;它是旋律与和声的基本单位。
+tags: [乐理, 音程, 基础]
+related: [pitch-and-note-names, chord]
+order: 3
+---
+
+import { StaffNotation } from "../../components/interactive/StaffNotation";
+
+**音程**是两个音之间的距离。它是构成旋律(先后发声)与和声(同时发声)的基本单位。
+
+## 用"度"衡量
+
+从低音数到高音,包含的音级数就是"度"。例如 C 到 D 是**二度**,C 到 G 是**五度**,C 到高一个 C 是**八度**(octave)。
+
+## 大小与性质
+
+同样叫"三度",还有**大三度、小三度**之分(取决于两音间相隔的半音数):
+
+- 大三度:如 C–E,听起来明亮
+- 小三度:如 C–E♭(E 降半音),听起来柔和、略带忧伤
+
+<StaffNotation client:visible notes={["C4", "E4"]} label="大三度(C–E),听它的明亮感。" />
+<StaffNotation client:visible notes={["C4", "Eb4"]} label="小三度(C–E♭),听它的柔和感。" />
+
+## 半音与全音
+
+- **半音**:相邻最近的两音(如 E–F、C–C♯)
+- **全音**:两个半音相加(如 C–D)
+
+一个八度被平均分成 12 个半音(十二平均律),这是现代音乐的基础。
+
+> 听辨不同音程的色彩(明亮 / 柔和 / 紧张 / 稳定),是练耳的核心。
+
+下一步:把三个或更多音叠起来,就进入 [和弦](/entries/chord) 的世界。

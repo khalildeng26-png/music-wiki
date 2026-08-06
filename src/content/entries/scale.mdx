@@ -1,0 +1,34 @@
+---
+title: 音阶
+category: 乐理
+summary: 按一定规律排列的一串音,最常见的是大调与小调音阶;中国传统音乐常用五声音阶。
+tags: [乐理, 音阶, 基础]
+related: [pitch-and-note-names, key-and-mode]
+order: 4
+---
+
+import { StaffNotation } from "../../components/interactive/StaffNotation";
+
+**音阶**(scale)是按特定音程规律、由低到高(或由高到低)排列的一串音。它是旋律与调性的基础。
+
+## 大调音阶
+
+大调音阶的音程规律是 **全 全 半 全 全 全 半**(全 = 全音,半 = 半音)。以 C 为起点就是 C 大调,全是白键:
+
+<StaffNotation client:visible notes={["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"]} label="C 大调音阶:do re mi fa sol la si do。" />
+
+大调色彩通常**明亮、开阔**。
+
+## 小调音阶
+
+自然小调的规律是 **全 半 全 全 半 全 全**。以 A 为起点是 a 小调(同样全是白键),色彩**柔和、内敛**。
+
+## 五声音阶
+
+中国传统音乐常用**五声音阶**:宫 商 角 徵 羽,对应 **do re mi sol la**(少了 fa 和 si)。
+
+<StaffNotation client:visible notes={["C4", "D4", "E4", "G4", "A4", "C5"]} label="C 五声音阶:宫商角徵羽(do re mi sol la),中国风的核心。" />
+
+> 一句话:音阶决定了一段音乐的"调性色彩";换音阶 = 换情绪。
+
+延伸:不同音阶组合形成不同的 [调式与调性](/entries/key-and-mode)。

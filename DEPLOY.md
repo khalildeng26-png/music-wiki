@@ -45,3 +45,16 @@ wrangler pages deploy dist --project-name music-wiki
 - **npm 源**:项目 `.npmrc` 指向 npmmirror(国内快)。Cloudflare 构建机能访问该镜像;若构建慢可临时删 `.npmrc` 用默认 registry。
 - **搜索**:Pagefind 索引在构建时生成,**线上自动可用**;本地需 `npm run preview` 才能用搜索(`npm run dev` 下不可用)。
 - **国内正式上线**:Cloudflare 在大陆访问不稳定。正式面向国内用户时,建议换**国内对象存储 + CDN**(如腾讯云 COS+CDN、阿里云 OSS+CDN)并完成 **ICP 备案**,把 `dist/` 里的静态文件上传/同步即可——无需改代码。
+
+---
+
+## 实际部署记录(2026-08-06)
+
+- 已部署到 **Cloudflare Workers**:`https://music-wiki.khalildeng26.workers.dev`
+- 仓库:`khalildeng26-png/music-wiki`(私有)、main 分支自动部署
+- **踩坑 1**:CF 连 Git 时自动运行 `astro add cloudflare`,给项目加了 `@astrojs/cloudflare` 适配器 → 部署成 **Worker**(`workers.dev`)而非纯静态 Pages(`pages.dev`)。功能正常,但国内访问不如 pages.dev 稳。
+- **踩坑 2(已修)**:适配器生成的 wrangler 配置 `name` 取自 `package.json` 的 `name`,原值 `@area44/astro-shadcn-ui-template` 含 `@/` 不合法 → 已把包名改为 `music-wiki`。
+- **改善国内访问的三种方案**:
+  1. 给该 Worker **绑定自定义域名**(走 CF CDN,比裸 `workers.dev` 稳)。
+  2. 改回**纯静态 Pages**(`pages.dev`):让 CF 不自动加适配器(在 CF 构建设置里把 Astro 预设关掉 / 或本地 build 后用 `wrangler pages deploy dist` 直接传静态产物)。
+  3. **国内对象存储 + CDN + ICP 备案**(长期面向国内用户推荐)。

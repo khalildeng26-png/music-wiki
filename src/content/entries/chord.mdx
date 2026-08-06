@@ -1,0 +1,31 @@
+---
+title: 和弦
+category: 和声
+summary: 三个或更多音按三度叠置同时发声,就构成和弦;三和弦是最基本的和弦。
+tags: [和声, 和弦, 基础]
+related: [interval, chord-progression]
+order: 1
+---
+
+import { StaffNotation } from "../../components/interactive/StaffNotation";
+
+**和弦**(chord)是三个或更多音**同时发声**的组合。最基本的是**三和弦**——三个音按**三度**叠置:根音、三音、五音。
+
+## 大三和弦与小三和弦
+
+- **大三和弦**:根音到三音是大三度,三音到五音是小三度。如 C 大三和弦 = C–E–G,色彩**明亮**。
+- **小三和弦**:根音到三音是小三度,三音到五音是大三度。如 C 小三和弦 = C–E♭–G,色彩**柔和**。
+
+下面用琶音(依次弹出)的方式听一听两种和弦的差别:
+
+<StaffNotation client:visible notes={["C4", "E4", "G4", "C4", "E4", "G4"]} label="C 大三和弦(C–E–G)琶音。" />
+<StaffNotation client:visible notes={["C4", "Eb4", "G4", "C4", "Eb4", "G4"]} label="C 小三和弦(C–E♭–G)琶音,听它更柔和。" />
+
+## 其他常见三和弦
+
+- **增三和弦**:两个大三度叠置,紧张、悬浮。
+- **减三和弦**:两个小三度叠置,刺耳、不稳定。
+
+> 三和弦是和声的"单词",把多个和弦连起来就是 [和弦进行](/entries/chord-progression)——和声的"句子"。
+
+延伸:理解 [音程](/entries/interval) 是懂和弦的前提。
