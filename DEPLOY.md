@@ -58,3 +58,36 @@ wrangler pages deploy dist --project-name music-wiki
   1. 给该 Worker **绑定自定义域名**(走 CF CDN,比裸 `workers.dev` 稳)。
   2. 改回**纯静态 Pages**(`pages.dev`):让 CF 不自动加适配器(在 CF 构建设置里把 Astro 预设关掉 / 或本地 build 后用 `wrangler pages deploy dist` 直接传静态产物)。
   3. **国内对象存储 + CDN + ICP 备案**(长期面向国内用户推荐)。
+
+---
+
+## 国内快速访问(阿里云 OSS,免备案,今天就能用)
+
+不用等 ICP 备案,先用 OSS 桶默认域名让国内能打开;备案下来后再换自定义域名 + CDN。
+
+### 一次性准备
+
+1. **开通阿里云 OSS,创建 Bucket**:
+   - 地域:选离你近的(如华东2 上海 → `OSS_REGION=oss-cn-shanghai`)。
+   - **读写权限:设为「公共读」**(否则网页打不开)。
+   - 记下 **Bucket 名**。
+2. **创建 AccessKey**:控制台 → RAM → AccessKey 管理(建议建子用户,只授 OSS 读写权限),拿到 AccessKeyId / AccessKeySecret。
+3. **配置本地 `.env`**:把 `.env.example` 复制为 `.env`,填入 `OSS_REGION / OSS_BUCKET / OSS_ACCESS_KEY_ID / OSS_ACCESS_KEY_SECRET`。(`.env` 已被 gitignore,不会提交,密钥也不用在聊天里发我。)
+4. **开启静态页面托管**:OSS 控制台 → 该 Bucket → 基础设置 → 静态页面 → 默认首页填 `index.html` 并开启。
+
+### 部署
+
+```bash
+npm run deploy:oss   # = npm run build && node --env-file-if-exists=.env scripts/deploy-oss.mjs
+```
+
+脚本会把 `dist/` 全部上传到桶里,并对每个 `index.html` **额外上传一份无斜杠别名**,所以你站点现有的链接(如 `/entries/guitar`)**在 OSS 上不用改就能直接打开**。
+
+### 访问
+
+- 桶默认域名(**国内可开,HTTP**):`http://<桶名>.<OSS_REGION>.aliyuncs.com/`
+- 国内访问稳定;缺点是域名丑、只有 HTTP。
+
+### 之后(备案下来 → 正式版)
+
+ICP 备案通过后:把自定义域名 CNAME 到 `<桶名>.<OSS_REGION>.aliyuncs.com`,开启阿里云 CDN,绑域名 + 免费 HTTPS 证书 → 拿到漂亮正式网址。届时在 `deploy-oss.mjs` 基础上加 CDN 刷新即可。
