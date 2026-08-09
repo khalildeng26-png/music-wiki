@@ -7,6 +7,7 @@ type Result = { title: string; url: string; excerpt: string };
 export function SearchBox({ initial = "" }: { initial?: string }) {
   const [q, setQ] = React.useState(initial);
   const [results, setResults] = React.useState<Result[]>([]);
+  const [ready, setReady] = React.useState(false);
   const [status, setStatus] = React.useState<
     "idle" | "loading" | "done" | "unavailable"
   >("idle");
@@ -20,6 +21,7 @@ export function SearchBox({ initial = "" }: { initial?: string }) {
       try {
         pf.current = await import(/* @vite-ignore */ "/pagefind/pagefind.js");
         await pf.current.init();
+        setReady(true);
       } catch {
         pf.current = null;
         setStatus("unavailable");
@@ -27,8 +29,9 @@ export function SearchBox({ initial = "" }: { initial?: string }) {
     })();
   }, []);
 
+  // ready 变化时也重跑,修掉"先输入、后加载完"导致搜索被跳过的竞态
   React.useEffect(() => {
-    if (!pf.current) return;
+    if (!ready || !pf.current) return;
     const query = q.trim();
     if (!query) {
       setResults([]);
@@ -67,7 +70,7 @@ export function SearchBox({ initial = "" }: { initial?: string }) {
       cancelled = true;
       window.clearTimeout(t);
     };
-  }, [q]);
+  }, [q, ready]);
 
   return (
     <div>
