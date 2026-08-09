@@ -44,3 +44,17 @@ export async function playChord(notes: string[], dur = 1.3) {
   const now = Tone.now() + 0.02;
   notes.forEach((n) => synth.triggerAttackRelease(n, dur, now));
 }
+
+/** 依次播放多个和弦(进行/终止式)。 */
+export async function playChordProgression(
+  chords: string[][],
+  dur = 0.9,
+  gap = 0.25,
+) {
+  const { Tone, synth } = await ensureAudio();
+  const now = Tone.now() + 0.05;
+  chords.forEach((notes, i) => {
+    const t = now + i * (dur + gap);
+    notes.forEach((n) => synth.triggerAttackRelease(n, dur, t));
+  });
+}
