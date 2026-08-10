@@ -1,0 +1,46 @@
+---
+title: 挂留与加音和弦
+category: 和声
+summary: sus 和弦用四度/二度替换三度、"悬浮"着不表态;add9 等加音和弦则给和弦"镀"上流行光泽。
+tags: [和声, 挂留和弦, 加音和弦]
+related: [chord, chord-symbols, pop]
+order: 6
+---
+
+import { ChordPlayer } from "../../components/interactive/ChordPlayer";
+
+[和弦](/entries/chord)的"性格"来自三度(大或小),而**挂留**与**加音**是在此基础上最常用的两种"加工"。
+
+## 挂留和弦(sus)
+
+把三度音**替换**成其他音,和弦就"悬"起来,失去大小调的明确性格:
+
+- **sus4**:三度换成四度(如 Csus4 = C F G)——有"想解决回原位"的倾向;
+- **sus2**:三度换成二度(如 Csus2 = C D G)——更空、更朦胧。
+
+用法:摇滚/流行里常见 **Isus4 → I** 的解决(副歌前制造推进力);民谣、新世纪音乐里 sus2 直接当稳定音色用。
+
+<ChordPlayer
+  label="Csus4 → C(悬而未决 → 落地)"
+  desc="四度音滑回三度的经典解决"
+  chords={[["C4", "F4", "G4"], ["C4", "E4", "G4"]]}
+/>
+
+## 加音和弦(add)
+
+三度**保留**,再"添加"一个色彩音(不动七音):
+
+- **add9**:加二度/九度(Cadd9 = C E G D)——温暖明亮,流行吉他最爱;
+- **add11 / add13**:四度/六度色彩的点缀。
+
+与七和弦的区别:**七和弦必须带七音,add 和弦不带**——add 更轻盈,没有"急着解决"的倾向。
+
+<ChordPlayer
+  label="Cadd9(流行的「光泽感」)"
+  desc="C 与 Cadd9 对比:后者多一层温暖的光"
+  chords={[["C4", "E4", "G4"], ["C4", "D4", "E4", "G4"]]}
+/>
+
+> 经验:写流行歌时,把普通三和弦顺手换成 sus2 / add9,质感立刻"高级"一档。
+
+延伸:这些标记怎么写见 [和弦标记](/entries/chord-symbols);七和弦的完整体系见 [七和弦](/entries/seventh-chords)。

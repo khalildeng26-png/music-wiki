@@ -1,0 +1,42 @@
+---
+title: 副属和弦
+category: 和声
+summary: 「临时借用别的调的属和弦」:V/ii、V/V 这类副属和弦给流行与爵士带来恰到好处的「意外感」。
+tags: [和声, 副属和弦, 离调]
+related: [chord-progression, cadences, circle-of-fifths]
+order: 9
+---
+
+import { ChordPlayer } from "../../components/interactive/ChordPlayer";
+
+[属和弦(V)](/entries/chord-progression)天生想回到主和弦(I)。如果我们**临时**把某个非主和弦也当成"家",借用它自己的属和弦先推一把,就得到**副属和弦**(secondary dominant)。
+
+## 记法:V/x
+
+读作"x 的属和弦":
+
+- **V/ii**:二级和弦的属和弦。C 大调里 ii=Am,它的属和弦是 **E(大)**;
+- **V/V**:五级的属和弦,C 大调里是 **D(大)**;
+- **V/vi**:六级的属和弦,C 大调里是 **E(大)**……以此类推。
+
+共同点:它们都**带一个调号外的变化音**(升高的音),正是这个音制造了"短暂离开原调"的色彩——术语叫**离调**。
+
+## 听一下:V/ii → ii
+
+对比普通的 iii → ii(VI 级替代)与副属 E → Am,后者的"推力"明显更强:
+
+<ChordPlayer
+  label="C → E7 → Am(副属 V/ii)"
+  desc="E7 里的 G♯ 不在 C 大调里,正是它带来「意外」的牵引力"
+  chords={[["C4", "E4", "G4"], ["E3", "G#3", "B3", "D4"], ["A3", "C4", "E4"]]}
+/>
+
+## 流行里的副属
+
+- 周杰伦式进行里常见的 **III7 → vi**(即 V/vi),让进入 vi 的瞬间"亮一下";
+- 爵士标准曲几乎每一小节都有副属,形成连续的"属 → 主"链条(与 [五度圈](/entries/circle-of-fifths) 方向一致);
+- 副属可以**不解决**(欺骗预期),流行歌常这样吊住情绪进副歌。
+
+> 使用心法:副属是"调味品"——一两个点缀刚刚好,整首歌全是副属就变成爵士了(那也很好,但别意外)。
+
+延伸:属 → 主的解决感见 [终止式](/entries/cadences);五度下行的链条见 [五度圈](/entries/circle-of-fifths)。
