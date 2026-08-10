@@ -1,9 +1,18 @@
 ---
-// 签名视觉元素:五线谱的 5 条线(从左到右渐隐),用作分隔/装饰
-const { class: className = "" } = Astro.props;
+// 签名视觉元素:五线谱的 5 条线(从左到右渐隐)+ 散落的音符点缀
+const { class: className = "", notes = true } = Astro.props;
 ---
 
-<div aria-hidden="true" class:list={["flex h-3 flex-col justify-between", className]}>
+<div aria-hidden="true" class:list={["relative flex h-3 flex-col justify-between", className]}>
+  {
+    notes && (
+      <>
+        <span class="absolute -top-4 left-[10%] text-[12px] leading-none">♪</span>
+        <span class="absolute -top-2.5 left-[38%] text-[9px] leading-none opacity-70">♫</span>
+        <span class="absolute -top-5 left-[62%] text-[14px] leading-none opacity-90">♩</span>
+      </>
+    )
+  }
   <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
   <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
   <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
