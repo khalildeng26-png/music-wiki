@@ -16,14 +16,14 @@ export type SiteConfig = {
   }[];
 };
 
-// TODO: 产品名「音乐百科」为占位,后续可改。
+// 品牌名「橙月Wiki」呼应域名 ambermoon.wiki(琥珀橙 + 月亮)。
 export const siteConfig: SiteConfig = {
-  name: "音乐百科",
+  name: "橙月Wiki",
   description: "一本可交互的音乐百科全书 —— 乐理、记谱、曲风,边读边练。",
   url: "http://localhost:4321",
   author: {
-    name: "音乐百科",
-    url: "https://example.com",
+    name: "橙月Wiki",
+    url: "https://ambermoon.wiki",
   },
   links: {
     github: "https://github.com/",
