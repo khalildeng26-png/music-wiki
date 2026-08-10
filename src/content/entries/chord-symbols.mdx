@@ -1,0 +1,48 @@
+---
+title: 和弦标记
+category: 记谱
+summary: 流行谱中最常见的记法:C、Am7、F/G 等符号直接标出该弹什么和弦,是弹唱、伴奏的通用语言。
+tags: [记谱, 和弦标记, 实用]
+related: [chord, seventh-chords]
+order: 5
+---
+
+import { ChordPlayer } from "../../components/interactive/ChordPlayer";
+
+**和弦标记**(chord symbols)是流行音乐谱面(歌词谱、吉他谱)上最常见的记法:在歌词或旋律上方直接标出和弦名,演奏者据此即兴伴奏。看懂它,一张"歌词+和弦"的谱就能弹起来。
+
+## 基本构成
+
+一个和弦标记 = **根音字母 + 性质后缀**,如 `Am7` = 以 A 为根音的小七和弦。根音用大写字母 C D E F G A B,升降号用 ♯/♭(或 #/b)。
+
+## 常用后缀速查
+
+| 标记 | 含义 | 例:以 C 为根音 |
+| --- | --- | --- |
+| `C` | 大三和弦 | C–E–G |
+| `Cm` 或 `C-` | 小三和弦 | C–E♭–G |
+| `Cdim` 或 `C°` | 减三和弦 | C–E♭–G♭ |
+| `Caug` 或 `C+` | 增三和弦 | C–E–G♯ |
+| `C7` | 属七和弦 | C–E–G–B♭ |
+| `Cmaj7` | 大七和弦 | C–E–G–B |
+| `Cm7` | 小七和弦 | C–E♭–G–B♭ |
+| `Csus4` | 挂四和弦(三音换成四音) | C–F–G |
+
+点播放,逐个感受几种常用标记的音响:
+
+<ChordPlayer label="C(大三和弦)" desc="无后缀 = 大三。" chords={[["C4", "E4", "G4"]]} />
+<ChordPlayer label="Cm(小三和弦)" desc="加 m 变小三。" chords={[["C4", "Eb4", "G4"]]} />
+<ChordPlayer label="Csus4(挂四)" desc="悬浮感,常解决回大三。" chords={[["C4", "F4", "G4"]]} />
+<ChordPlayer label="C7(属七)" desc="带张力,想解决到 F。" chords={[["C4", "E4", "G4", "Bb4"]]} />
+
+## 斜杠和弦(转位标记)
+
+`C/E` 读作"C on E":弹 **C 和弦**,但**最低音(贝斯)要落在 E 上**——即 C 和弦的第一转位。流行歌的贝斯线条常靠它走顺(如 C → C/B → Am)。
+
+> 记忆口诀:斜杠左边是"弹什么",右边是"低音弹什么"。
+
+## 和弦标记 vs 五线谱
+
+和弦标记**不规定具体排列和节奏型**,把发挥空间留给演奏者——这正是它适合伴奏/即兴的原因;需要精确控制每个音时,还是看 [五线谱](/entries/staff-notation)。
+
+延伸:和弦的构成见 [和弦](/entries/chord),更丰富的色彩见 [七和弦](/entries/seventh-chords)。
