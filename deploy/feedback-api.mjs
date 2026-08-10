@@ -22,14 +22,18 @@ const server = createServer((req, res) => {
   res.setHeader("Content-Type", "application/json; charset=utf-8");
 
   if (req.method === "POST" && url.pathname === "/api/feedback") {
-    let body = "";
+    // 必须收集 Buffer 再按 utf-8 解码;直接 body += chunk 会按 latin1 解码导致中文乱码
+    const chunks = [];
+    let size = 0;
     let overflow = false;
     req.on("data", (c) => {
-      body += c;
-      if (body.length > 8192) {
+      size += c.length;
+      if (size > 8192) {
         overflow = true;
         req.destroy();
+        return;
       }
+      chunks.push(c);
     });
     req.on("close", () => {
       if (overflow) {
@@ -40,7 +44,9 @@ const server = createServer((req, res) => {
     req.on("end", () => {
       if (overflow) return;
       try {
-        const data = JSON.parse(body || "{}");
+        const data = JSON.parse(
+          Buffer.concat(chunks).toString("utf-8") || "{}",
+        );
         const message = String(data.message ?? "")
           .trim()
           .slice(0, MAX_MSG);
@@ -53,7 +59,7 @@ const server = createServer((req, res) => {
           contact: String(data.contact ?? "").trim().slice(0, MAX_CONTACT),
           page: String(data.page ?? "").slice(0, 200),
           time: String(data.time ?? new Date().toISOString()),
-          ip: req.socket.remoteAddress,
+          ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
         };
         const file = `${DIR}/feedback-${new Date()
           .toISOString()
