@@ -7,7 +7,7 @@ USER_NAME="${2:-admin}"
 KEY="$HOME/.ssh/musicwiki_deploy"
 
 echo "→ 构建…"
-npm run build
+SITE="${SITE:-https://ambermoon.wiki}" npm run build
 
 echo "→ 打包上传…"
 tar -czf /tmp/dist.tar.gz -C dist .
