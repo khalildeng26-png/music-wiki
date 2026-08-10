@@ -91,3 +91,20 @@ npm run deploy:oss   # = npm run build && node --env-file-if-exists=.env scripts
 ### 之后(备案下来 → 正式版)
 
 ICP 备案通过后:把自定义域名 CNAME 到 `<桶名>.<OSS_REGION>.aliyuncs.com`,开启阿里云 CDN,绑域名 + 免费 HTTPS 证书 → 拿到漂亮正式网址。届时在 `deploy-oss.mjs` 基础上加 CDN 刷新即可。
+
+---
+
+## 国内服务器部署(已上线,日常首选)
+
+- **地址**:`http://47.108.214.184/`(国内直连,快)
+- **服务器**:阿里云轻量 **Ubuntu 24.04**,nginx,站点目录 `/var/www/music-wiki`,用户 `admin`(免密 sudo)
+- **本机密钥**:`~/.ssh/musicwiki_deploy`(已装公钥到服务器)
+- **更新网站唯一命令**:`bash deploy/deploy-server.sh`(build → 上传 → 生效)
+
+### 域名 + HTTPS(备案过审后)
+1. 域名 A 记录 → `47.108.214.184`
+2. `sudo certbot --nginx -d 你的域名`(免费证书)
+3. 可选挂国内 CDN
+
+## 海外备用
+`https://music-wiki-3pf.pages.dev`(Cloudflare Pages)。注意不要用 CF 的 Git 自动部署(会自动加 @astrojs/cloudflare 适配器,与 astro@7.1.6 版本不匹配,构建报 `MISSING_EXPORT beginContentEntryCollection`)。
