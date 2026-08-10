@@ -3,8 +3,8 @@ import { Check, MessageSquareHeart, Send, X } from "lucide-react";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-// TODO(server): 服务器就绪后填入后端地址,如 "https://api.xxx.com/api/feedback"
-const FEEDBACK_ENDPOINT = "";
+// 反馈后端:与站点同源(国内服务器 /api/feedback);Cloudflare Pages 上该路径不存在时自动降级为本地暂存
+const FEEDBACK_ENDPOINT = "/api/feedback";
 const OUTBOX_KEY = "music-wiki-feedback-outbox";
 
 type Payload = { message: string; contact: string; page: string; time: string };
@@ -74,8 +74,16 @@ export function FeedbackWidget() {
       time: new Date().toISOString(),
     };
     try {
-      if (FEEDBACK_ENDPOINT) await post(payload);
-      else saveLocal(payload);
+      if (FEEDBACK_ENDPOINT) {
+        try {
+          await post(payload);
+        } catch {
+          // 后端不可达(如 Cloudflare Pages)时降级为本地暂存,不丢反馈
+          saveLocal(payload);
+        }
+      } else {
+        saveLocal(payload);
+      }
       setState("done");
       setMsg("");
       setContact("");
