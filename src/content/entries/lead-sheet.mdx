@@ -1,0 +1,51 @@
+---
+title: Lead Sheet
+category: 记谱
+summary: 最精简的歌谱:一行旋律 + 歌词 + 和弦标记。爵士乐手的"通用语言",流行谱书也常用。
+tags: [记谱, lead sheet, 爵士]
+related: [chord-symbols, staff-notation, jazz]
+order: 8
+---
+
+import { StaffNotation } from "../../components/interactive/StaffNotation";
+
+**Lead Sheet**(主音谱/领谱)是记录一首歌的**最小信息集**:一行旋律(五线谱或[简谱](/entries/jianpu))、歌词、以及旋律上方的[和弦标记](/entries/chord-symbols)。它不写伴奏怎么弹——伴奏由演奏者现场"配"。
+
+## 长什么样
+
+```
+      C        Am7      Dm7   G7
+   ┌─────────────────────────────┐
+   │ 旋律线(五线谱/简谱)        │
+   └─────────────────────────────┘
+      歌词写在旋律下方
+```
+
+- **旋律**告诉你"唱什么";
+- **和弦标记**告诉你"和声骨架是什么";
+- 中间的**伴奏织体**(琶音?柱式?walking bass?)由你决定。
+
+## 为什么需要它
+
+- **爵士**:同一个标准曲,每个乐队的编配都不同,写死伴奏反而限制了即兴——lead sheet 正是为此而生。著名的爵士曲集 *Real Book* 就是一大本 lead sheet;
+- **流行/教学**:一本书装几百首歌,只印 lead sheet 才放得下;
+- **创作**:写歌时先记旋律+和弦,编曲以后再慢慢做。
+
+## 读谱练一练
+
+下面这条旋律,配上 C – Am – F – G 的和弦,就是最典型的流行 lead sheet 片段。先听旋律,再想象和弦在底下怎么走:
+
+<StaffNotation
+  notes={["C4", "E4", "G4", "E4", "F4", "A4", "G4", "E4", "D4", "G4", "B4", "D5", "C5"]}
+  label="Lead sheet 旋律示例(配 C–Am–F–G)"
+/>
+
+## 要读 lead sheet,需要什么
+
+1. 能读旋律(五线谱或简谱);
+2. 认得和弦标记(看到 Am7 知道是哪几个音);
+3. 会"配"——左手按和弦、右手弹旋律,或边弹边唱。
+
+> Lead sheet 的本质:谱只给"骨架",血肉由演奏者补。它考验的不是读谱,而是**理解和声**。
+
+延伸:和弦标记怎么读见 [和弦标记](/entries/chord-symbols);旋律行的记法见 [五线谱](/entries/staff-notation);lead sheet 的主场是 [爵士](/entries/jazz)。
