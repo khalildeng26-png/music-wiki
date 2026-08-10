@@ -1,6 +1,6 @@
 ---
 name: deslop-prose
-description: 去除 music-wiki 词条的 AI 腔(de-AI-ify)。按 DESIGN.md §10 文风规范重写条目正文,保留交互组件与 frontmatter 元数据,改完构建验证再部署。
+description: 去除 music-wiki 词条的 AI 腔(de-AI-ify)。【暂缓】2026-08 两轮样本后用户决定回归原版,此流程挂起,重启时可用。
 triggers:
   - deslop prose
   - 去AI味
@@ -10,6 +10,8 @@ triggers:
 ---
 
 # Deslop Prose(橙月Wiki 词条去 AI 腔)
+
+> **状态:暂缓(2026-08)**。两轮样本重写后用户选择回归原版。流程与经验保留如下,重启时从「批量节奏建议」继续。
 
 适用:用户说词条"一看就是 AI 写的"、要求批量/单篇重写文风时。
 不适用:新增词条(新写时直接遵守规范即可,不用走重写流程)、纯事实纠错。
