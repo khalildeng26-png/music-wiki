@@ -1,12 +1,12 @@
 ---
-// 签名视觉元素:五线谱的 5 条线,用作分隔/装饰
+// 签名视觉元素:五线谱的 5 条线(从左到右渐隐),用作分隔/装饰
 const { class: className = "" } = Astro.props;
 ---
 
 <div aria-hidden="true" class:list={["flex h-3 flex-col justify-between", className]}>
-  <span class="block h-px w-full bg-current"></span>
-  <span class="block h-px w-full bg-current"></span>
-  <span class="block h-px w-full bg-current"></span>
-  <span class="block h-px w-full bg-current"></span>
-  <span class="block h-px w-full bg-current"></span>
+  <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
+  <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
+  <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
+  <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
+  <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
 </div>
