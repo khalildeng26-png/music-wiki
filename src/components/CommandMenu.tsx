@@ -2,7 +2,6 @@ import { Dialog as DialogPrimitive } from "@base-ui/react";
 import { SearchIcon, SunIcon, MoonIcon, HomeIcon, XIcon } from "lucide-react";
 import * as React from "react";
 
-import { Icons } from "@/components/Icons";
 import { Button } from "@/components/ui/button";
 
 interface CommandItem {
@@ -62,20 +61,6 @@ export function CommandMenu() {
         subtitle: "Switch appearance to dark mode",
         icon: MoonIcon,
         action: () => changeTheme("dark"),
-      },
-      {
-        id: "github",
-        title: "View GitHub Repository",
-        subtitle: "Open the source code repository",
-        icon: Icons.gitHub,
-        action: () => {
-          window.open(
-            "https://github.com/area44/astro-shadcn-ui-template",
-            "_blank",
-            "noopener,noreferrer",
-          );
-          setOpen(false);
-        },
       },
     ],
     [],

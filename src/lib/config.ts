@@ -6,9 +6,6 @@ export type SiteConfig = {
     name: string;
     url: string;
   };
-  links: {
-    github: string;
-  };
   navItems: {
     href: string;
     label: string;
@@ -24,9 +21,6 @@ export const siteConfig: SiteConfig = {
   author: {
     name: "橙月Wiki",
     url: "https://ambermoon.wiki",
-  },
-  links: {
-    github: "https://github.com/",
   },
   navItems: [
     { href: "/", label: "首页" },
