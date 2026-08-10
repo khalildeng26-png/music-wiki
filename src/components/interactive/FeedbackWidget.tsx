@@ -6,8 +6,15 @@ import { Check, MessageSquareHeart, Send, X } from "lucide-react";
 // 反馈后端:与站点同源(国内服务器 /api/feedback);Cloudflare Pages 上该路径不存在时自动降级为本地暂存
 const FEEDBACK_ENDPOINT = "/api/feedback";
 const OUTBOX_KEY = "music-wiki-feedback-outbox";
+const TOP_KEY = "music-wiki-feedback-top";
+const BTN_HALF = 24; // 按钮半径(48px 高)
+const MARGIN = 12;
 
 type Payload = { message: string; contact: string; page: string; time: string };
+
+function clamp(v: number, min: number, max: number) {
+  return Math.min(Math.max(v, min), max);
+}
 
 async function post(payload: Payload) {
   const res = await fetch(FEEDBACK_ENDPOINT, {
@@ -29,13 +36,17 @@ function saveLocal(payload: Payload) {
   }
 }
 
-/** 右侧浮动反馈入口 + 小弹窗。后端就绪前本地暂存,就绪后自动补交。 */
+/** 右侧浮动反馈入口:可上下拖动(位置记忆),点击弹出反馈表单。 */
 export function FeedbackWidget() {
   const [open, setOpen] = React.useState(false);
   const [msg, setMsg] = React.useState("");
   const [contact, setContact] = React.useState("");
   const [state, setState] = React.useState<"idle" | "sending" | "done" | "error">("idle");
+  const [top, setTop] = React.useState<number | null>(null);
+  const [desktop, setDesktop] = React.useState(false);
+  const [dragging, setDragging] = React.useState(false);
   const taRef = React.useRef<HTMLTextAreaElement>(null);
+  const dragRef = React.useRef<{ startY: number; startTop: number; moved: boolean } | null>(null);
 
   // 后端就绪后:把本地暂存过的反馈补交上去
   React.useEffect(() => {
@@ -55,6 +66,28 @@ export function FeedbackWidget() {
     }
   }, []);
 
+  // 初始化位置 + 窗口变化时重新夹紧
+  React.useEffect(() => {
+    const mq = window.matchMedia("(min-width: 640px)");
+    const apply = () => {
+      setDesktop(mq.matches);
+      const vh = window.innerHeight;
+      setTop((t) => {
+        const saved = Number(localStorage.getItem(TOP_KEY));
+        const base =
+          t ?? (Number.isFinite(saved) && saved > 0 ? saved : vh / 2);
+        return clamp(base, BTN_HALF + MARGIN, vh - BTN_HALF - MARGIN);
+      });
+    };
+    apply();
+    mq.addEventListener("change", apply);
+    window.addEventListener("resize", apply);
+    return () => {
+      mq.removeEventListener("change", apply);
+      window.removeEventListener("resize", apply);
+    };
+  }, []);
+
   React.useEffect(() => {
     if (open) {
       window.setTimeout(() => taRef.current?.focus(), 50);
@@ -62,6 +95,50 @@ export function FeedbackWidget() {
       setState((s) => (s === "done" ? "idle" : s));
     }
   }, [open]);
+
+  function onPointerDown(e: React.PointerEvent<HTMLButtonElement>) {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    dragRef.current = {
+      startY: e.clientY,
+      startTop: top ?? window.innerHeight / 2,
+      moved: false,
+    };
+    setDragging(true);
+  }
+
+  function onPointerMove(e: React.PointerEvent<HTMLButtonElement>) {
+    const d = dragRef.current;
+    if (!d) return;
+    const dy = e.clientY - d.startY;
+    if (!d.moved && Math.abs(dy) > 5) d.moved = true;
+    if (d.moved) {
+      setTop(
+        clamp(d.startTop + dy, BTN_HALF + MARGIN, window.innerHeight - BTN_HALF - MARGIN),
+      );
+    }
+  }
+
+  function onPointerUp(e: React.PointerEvent<HTMLButtonElement>) {
+    const d = dragRef.current;
+    dragRef.current = null;
+    setDragging(false);
+    if (!d) return;
+    if (d.moved) {
+      const final = clamp(
+        d.startTop + (e.clientY - d.startY),
+        BTN_HALF + MARGIN,
+        window.innerHeight - BTN_HALF - MARGIN,
+      );
+      setTop(final);
+      try {
+        localStorage.setItem(TOP_KEY, String(final));
+      } catch {
+        /* 忽略 */
+      }
+    } else {
+      setOpen((o) => !o);
+    }
+  }
 
   async function submit() {
     const text = msg.trim();
@@ -78,7 +155,6 @@ export function FeedbackWidget() {
         try {
           await post(payload);
         } catch {
-          // 后端不可达(如 Cloudflare Pages)时降级为本地暂存,不丢反馈
           saveLocal(payload);
         }
       } else {
@@ -96,11 +172,19 @@ export function FeedbackWidget() {
     }
   }
 
+  const popupTop =
+    desktop && top != null
+      ? clamp(top, 260, Math.max(261, window.innerHeight - 260))
+      : undefined;
+
   return (
     <>
-      {/* 弹窗 */}
+      {/* 弹窗(桌面跟随按钮垂直位置,移动端底部卡片) */}
       {open && (
-        <div className="fixed inset-x-4 bottom-24 z-50 mx-auto w-auto max-w-sm rounded-xl border bg-card p-4 shadow-xl sm:inset-x-auto sm:bottom-auto sm:right-20 sm:top-1/2 sm:max-w-80 sm:-translate-y-1/2">
+        <div
+          style={popupTop != null ? { top: popupTop } : undefined}
+          className="fixed inset-x-4 bottom-24 z-50 mx-auto w-auto max-w-sm rounded-xl border bg-card p-4 shadow-xl sm:inset-x-auto sm:bottom-auto sm:right-20 sm:max-w-80 sm:-translate-y-1/2"
+        >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-sm font-semibold">
               <MessageSquareHeart className="size-4 text-signature" /> 意见反馈
@@ -159,12 +243,20 @@ export function FeedbackWidget() {
         </div>
       )}
 
-      {/* 浮动按钮 */}
+      {/* 浮动按钮:可上下拖动 */}
       <button
         type="button"
-        aria-label="意见反馈"
-        onClick={() => setOpen((o) => !o)}
-        className="fixed right-4 top-1/2 z-50 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-signature text-signature-foreground shadow-lg transition hover:scale-105 hover:opacity-90"
+        aria-label="意见反馈(可上下拖动)"
+        title="点我反馈 · 可上下拖动"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        className={
+          "fixed right-4 top-1/2 z-50 flex h-12 w-12 -translate-y-1/2 touch-none items-center justify-center rounded-full bg-signature text-signature-foreground shadow-lg transition hover:opacity-90 " +
+          (dragging ? "cursor-grabbing" : "cursor-grab")
+        }
+        style={top != null ? { top } : undefined}
       >
         <MessageSquareHeart className="size-5" />
       </button>
