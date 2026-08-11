@@ -31,16 +31,16 @@ const featured = entries.slice(0, 4);
       <form
         action="/search"
         method="get"
-        class="mt-8 flex max-w-xl items-center gap-3 rounded-lg border bg-card px-4 py-3 transition focus-within:border-signature/50"
+        class="mt-8 flex max-w-xl min-w-0 items-center gap-3 rounded-lg border bg-card px-4 py-3 transition focus-within:border-signature/50"
       >
-        <Search className="size-4 text-muted-foreground" />
+        <Search className="size-4 shrink-0 text-muted-foreground" />
         <input
           type="text"
           name="q"
           placeholder="搜索词条、曲风、乐理……"
-          class="flex-1 bg-transparent text-base outline-none placeholder:text-muted-foreground"
+          class="min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-muted-foreground"
         />
-        <kbd class="rounded border px-1.5 py-0.5 text-[11px] text-muted-foreground">回车</kbd>
+        <kbd class="hidden shrink-0 rounded border px-1.5 py-0.5 text-[11px] text-muted-foreground sm:inline-block">回车</kbd>
       </form>
       <StaffLines class="mt-12 w-72 text-signature/60" />
     </div>

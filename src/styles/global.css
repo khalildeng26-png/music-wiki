@@ -196,3 +196,15 @@
     @apply relative touch-manipulation after:absolute after:-inset-2;
   }
 }
+
+/* 窄屏保护:正文表格/代码块横向滚动而非撑破整页布局
+   注意:必须写在 @layer 之外——typography 插件样式是无层的,层内规则优先级不够 */
+.prose :where(table) {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+.prose :where(pre) {
+  max-width: 100%;
+  overflow-x: auto;
+}
