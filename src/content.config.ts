@@ -6,6 +6,7 @@ const entries = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/entries" }),
   schema: z.object({
     title: z.string(),
+    titleEn: z.string().optional(), // 英文译名,展示在中文标题之后
     category: z.enum(["乐理", "记谱", "和声", "曲风", "乐器", "唱法"]),
     summary: z.string(),
     tags: z.array(z.string()).default([]),

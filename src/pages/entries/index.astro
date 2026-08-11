@@ -17,11 +17,9 @@ const entries = (await getCollection("entries", (e) => !e.data.draft)).sort(
       categories.map((cat) => {
         const items = entries.filter((e) => e.data.category === cat.label);
         if (items.length === 0) return null;
-        const Icon = cat.icon;
         return (
           <div class="mt-12">
-            <div class="flex items-center gap-2">
-              <Icon className="size-5 text-signature" />
+            <div class="flex items-baseline gap-2">
               <h2 class="text-xl font-semibold">{cat.label}</h2>
               <span class="text-sm text-muted-foreground">{items.length}</span>
             </div>
@@ -31,7 +29,10 @@ const entries = (await getCollection("entries", (e) => !e.data.draft)).sort(
                   href={`/entries/${e.id}`}
                   class="group flex flex-col gap-1.5 rounded-xl border bg-card p-4 transition hover:border-signature/50"
                 >
-                  <div class="font-medium group-hover:text-signature">{e.data.title}</div>
+                  <div class="font-medium group-hover:text-signature">
+                    {e.data.title}
+                    {e.data.titleEn && <span class="ml-1.5 text-sm font-normal text-muted-foreground">{e.data.titleEn}</span>}
+                  </div>
                   <div class="line-clamp-2 text-sm text-muted-foreground">{e.data.summary}</div>
                 </a>
               ))}

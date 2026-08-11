@@ -11,7 +11,6 @@ export async function getStaticPaths() {
 }
 
 const { category } = Astro.props;
-const Icon = category.icon;
 
 const entries = (
   await getCollection("entries", (e) => !e.data.draft && e.data.category === category.label)
@@ -26,10 +25,7 @@ const entries = (
       <a href="/entries" class="hover:text-signature">词条</a>
     </nav>
 
-    <div class="mt-4 flex items-center gap-3">
-      <Icon className="size-7 text-signature" />
-      <h1 class="text-3xl font-bold tracking-tight">{category.label}</h1>
-    </div>
+    <h1 class="mt-4 text-3xl font-bold tracking-tight">{category.label}</h1>
     <p class="mt-2 text-muted-foreground">{category.desc}</p>
 
     {
@@ -42,7 +38,10 @@ const entries = (
               href={`/entries/${e.id}`}
               class="group flex flex-col gap-1.5 rounded-xl border bg-card p-4 transition hover:border-signature/50"
             >
-              <div class="font-medium group-hover:text-signature">{e.data.title}</div>
+              <div class="font-medium group-hover:text-signature">
+                {e.data.title}
+                {e.data.titleEn && <span class="ml-1.5 text-sm font-normal text-muted-foreground">{e.data.titleEn}</span>}
+              </div>
               <div class="line-clamp-2 text-sm text-muted-foreground">{e.data.summary}</div>
             </a>
           ))}

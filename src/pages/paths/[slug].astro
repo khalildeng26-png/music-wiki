@@ -61,7 +61,10 @@ const steps = path.data.steps
                 {i + 1}
               </span>
               <div class="flex-1">
-                <div class="font-medium group-hover:text-signature">{e.data.title}</div>
+                <div class="font-medium group-hover:text-signature">
+                  {e.data.title}
+                  {e.data.titleEn && <span class="ml-1.5 text-sm font-normal text-muted-foreground">{e.data.titleEn}</span>}
+                </div>
                 <div class="text-sm text-muted-foreground">{e.data.summary}</div>
               </div>
               <span class="text-xs text-muted-foreground">{e.data.category}</span>

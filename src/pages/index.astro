@@ -72,7 +72,10 @@ const featured = entries.slice(0, 4);
             <span class="w-fit rounded-md bg-signature/10 px-2 py-0.5 text-xs font-medium text-signature">
               {e.data.category}
             </span>
-            <div class="text-lg font-semibold group-hover:text-signature">{e.data.title}</div>
+            <div class="text-lg font-semibold group-hover:text-signature">
+              {e.data.title}
+              {e.data.titleEn && <span class="ml-2 text-sm font-normal text-muted-foreground">{e.data.titleEn}</span>}
+            </div>
             <div class="text-sm text-muted-foreground">{e.data.summary}</div>
           </a>
         ))
