@@ -27,7 +27,7 @@ import { StaffNotation } from "../../components/interactive/StaffNotation";
 
 ## 为什么需要它
 
-- **爵士**:同一个标准曲,每个乐队的编配都不同,写死伴奏反而限制了即兴——lead sheet 正是为此而生。著名的爵士曲集 *Real Book* 就是一大本 lead sheet;
+- **爵士**:同一个标准曲,每个乐队的编配都不同,写死伴奏反而限制了即兴——lead sheet 正是为此而生。著名的爵士曲集 _Real Book_ 就是一大本 lead sheet;
 - **流行/教学**:一本书装几百首歌,只印 lead sheet 才放得下;
 - **创作**:写歌时先记旋律+和弦,编曲以后再慢慢做。
 
@@ -36,6 +36,7 @@ import { StaffNotation } from "../../components/interactive/StaffNotation";
 下面这条旋律,配上 C – Am – F – G 的和弦,就是最典型的流行 lead sheet 片段。先听旋律,再想象和弦在底下怎么走:
 
 <StaffNotation
+  client:visible
   notes={["C4", "E4", "G4", "E4", "F4", "A4", "G4", "E4", "D4", "G4", "B4", "D5", "C5"]}
   label="Lead sheet 旋律示例(配 C–Am–F–G)"
 />

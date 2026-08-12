@@ -27,15 +27,27 @@ import { ChordPlayer } from "../../components/interactive/ChordPlayer";
 除了音区更高、更响,和声上也常有套路差异:主歌爱用"收着"的进行,副歌爱用"打开"的进行。听一下对比:
 
 <ChordPlayer
+  client:visible
   label="主歌感:I–vi–IV–V(收着叙事)"
   desc="平稳、循环、不急着爆发"
-  chords={[["C4", "E4", "G4"], ["A3", "C4", "E4"], ["F3", "A3", "C4"], ["G3", "B3", "D4"]]}
+  chords={[
+    ["C4", "E4", "G4"],
+    ["A3", "C4", "E4"],
+    ["F3", "A3", "C4"],
+    ["G3", "B3", "D4"],
+  ]}
 />
 
 <ChordPlayer
+  client:visible
   label="副歌感:I–V–vi–IV(情绪打开)"
   desc="同一套材料,换个顺序就「亮」了"
-  chords={[["C4", "E4", "G4"], ["G3", "B3", "D4"], ["A3", "C4", "E4"], ["F3", "A3", "C4"]]}
+  chords={[
+    ["C4", "E4", "G4"],
+    ["G3", "B3", "D4"],
+    ["A3", "C4", "E4"],
+    ["F3", "A3", "C4"],
+  ]}
 />
 
 ## 为什么这套结构赢

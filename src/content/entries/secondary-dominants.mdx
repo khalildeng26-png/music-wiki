@@ -27,9 +27,14 @@ import { ChordPlayer } from "../../components/interactive/ChordPlayer";
 对比普通的 iii → ii(VI 级替代)与副属 E → Am,后者的"推力"明显更强:
 
 <ChordPlayer
+  client:visible
   label="C → E7 → Am(副属 V/ii)"
   desc="E7 里的 G♯ 不在 C 大调里,正是它带来「意外」的牵引力"
-  chords={[["C4", "E4", "G4"], ["E3", "G#3", "B3", "D4"], ["A3", "C4", "E4"]]}
+  chords={[
+    ["C4", "E4", "G4"],
+    ["E3", "G#3", "B3", "D4"],
+    ["A3", "C4", "E4"],
+  ]}
 />
 
 ## 流行里的副属

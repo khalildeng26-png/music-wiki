@@ -18,23 +18,43 @@ import { ChordPlayer } from "../../components/interactive/ChordPlayer";
 
 ## 常用后缀速查
 
-| 标记 | 含义 | 例:以 C 为根音 |
-| --- | --- | --- |
-| `C` | 大三和弦 | C–E–G |
-| `Cm` 或 `C-` | 小三和弦 | C–E♭–G |
-| `Cdim` 或 `C°` | 减三和弦 | C–E♭–G♭ |
-| `Caug` 或 `C+` | 增三和弦 | C–E–G♯ |
-| `C7` | 属七和弦 | C–E–G–B♭ |
-| `Cmaj7` | 大七和弦 | C–E–G–B |
-| `Cm7` | 小七和弦 | C–E♭–G–B♭ |
-| `Csus4` | 挂四和弦(三音换成四音) | C–F–G |
+| 标记           | 含义                   | 例:以 C 为根音 |
+| -------------- | ---------------------- | -------------- |
+| `C`            | 大三和弦               | C–E–G          |
+| `Cm` 或 `C-`   | 小三和弦               | C–E♭–G         |
+| `Cdim` 或 `C°` | 减三和弦               | C–E♭–G♭        |
+| `Caug` 或 `C+` | 增三和弦               | C–E–G♯         |
+| `C7`           | 属七和弦               | C–E–G–B♭       |
+| `Cmaj7`        | 大七和弦               | C–E–G–B        |
+| `Cm7`          | 小七和弦               | C–E♭–G–B♭      |
+| `Csus4`        | 挂四和弦(三音换成四音) | C–F–G          |
 
 点播放,逐个感受几种常用标记的音响:
 
-<ChordPlayer label="C(大三和弦)" desc="无后缀 = 大三。" chords={[["C4", "E4", "G4"]]} />
-<ChordPlayer label="Cm(小三和弦)" desc="加 m 变小三。" chords={[["C4", "Eb4", "G4"]]} />
-<ChordPlayer label="Csus4(挂四)" desc="悬浮感,常解决回大三。" chords={[["C4", "F4", "G4"]]} />
-<ChordPlayer label="C7(属七)" desc="带张力,想解决到 F。" chords={[["C4", "E4", "G4", "Bb4"]]} />
+<ChordPlayer
+  client:visible
+  label="C(大三和弦)"
+  desc="无后缀 = 大三。"
+  chords={[["C4", "E4", "G4"]]}
+/>
+<ChordPlayer
+  client:visible
+  label="Cm(小三和弦)"
+  desc="加 m 变小三。"
+  chords={[["C4", "Eb4", "G4"]]}
+/>
+<ChordPlayer
+  client:visible
+  label="Csus4(挂四)"
+  desc="悬浮感,常解决回大三。"
+  chords={[["C4", "F4", "G4"]]}
+/>
+<ChordPlayer
+  client:visible
+  label="C7(属七)"
+  desc="带张力,想解决到 F。"
+  chords={[["C4", "E4", "G4", "Bb4"]]}
+/>
 
 ## 斜杠和弦(转位标记)
 

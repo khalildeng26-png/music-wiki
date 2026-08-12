@@ -17,11 +17,13 @@ import { StaffNotation } from "../../components/interactive/StaffNotation";
 在调内,沿音阶往上数一个音,就是主线的**三度和声**。C 大调里主线唱 C,和声就唱 E;主线唱 G,和声就唱 B。这条线和主线同进同出,几乎不"打架":
 
 <StaffNotation
+  client:visible
   notes={["C4", "D4", "E4", "G4", "A4", "G4", "E4", "C4"]}
   label="主旋律(先听熟)"
 />
 
 <StaffNotation
+  client:visible
   notes={["E4", "F4", "G4", "B4", "C5", "B4", "G4", "E4"]}
   label="它的三度和声线(主线上方)"
 />

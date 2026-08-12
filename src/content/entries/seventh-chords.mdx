@@ -14,17 +14,32 @@ import { ChordPlayer } from "../../components/interactive/ChordPlayer";
 
 ## 三种最常用的七和弦(以 C 为根音)
 
-| 名称 | 构成 | 记号 | 色彩 |
-| --- | --- | --- | --- |
-| **大七和弦** | 大三和弦 + 大三度 | Cmaj7 / C△7 | 明亮而梦幻、柔和 |
-| **属七和弦** | 大三和弦 + 小三度 | C7 | 不稳定、"想解决"的张力感 |
-| **小七和弦** | 小三和弦 + 小三度 | Cm7 | 柔和、慵懒、爵士味 |
+| 名称         | 构成              | 记号        | 色彩                     |
+| ------------ | ----------------- | ----------- | ------------------------ |
+| **大七和弦** | 大三和弦 + 大三度 | Cmaj7 / C△7 | 明亮而梦幻、柔和         |
+| **属七和弦** | 大三和弦 + 小三度 | C7          | 不稳定、"想解决"的张力感 |
+| **小七和弦** | 小三和弦 + 小三度 | Cm7         | 柔和、慵懒、爵士味       |
 
 点播放,逐个感受三种色彩的差别:
 
-<ChordPlayer label="大七和弦 Cmaj7(C–E–G–B)" desc="明亮、梦幻,常用于抒情流行与 City Pop。" chords={[["C4", "E4", "G4", "B4"]]} />
-<ChordPlayer label="属七和弦 C7(C–E–G–B♭)" desc="带张力,强烈倾向「解决」到下一个和弦。" chords={[["C4", "E4", "G4", "Bb4"]]} />
-<ChordPlayer label="小七和弦 Cm7(C–E♭–G–B♭)" desc="柔和、慵懒,爵士与 R&B 的底色。" chords={[["C4", "Eb4", "G4", "Bb4"]]} />
+<ChordPlayer
+  client:visible
+  label="大七和弦 Cmaj7(C–E–G–B)"
+  desc="明亮、梦幻,常用于抒情流行与 City Pop。"
+  chords={[["C4", "E4", "G4", "B4"]]}
+/>
+<ChordPlayer
+  client:visible
+  label="属七和弦 C7(C–E–G–B♭)"
+  desc="带张力,强烈倾向「解决」到下一个和弦。"
+  chords={[["C4", "E4", "G4", "Bb4"]]}
+/>
+<ChordPlayer
+  client:visible
+  label="小七和弦 Cm7(C–E♭–G–B♭)"
+  desc="柔和、慵懒,爵士与 R&B 的底色。"
+  chords={[["C4", "Eb4", "G4", "Bb4"]]}
+/>
 
 ## 为什么属七和弦特殊
 

@@ -14,17 +14,32 @@ import { ChordPlayer } from "../../components/interactive/ChordPlayer";
 
 ## 三和弦的三种形态(以 C 大三和弦为例)
 
-| 形态 | 最低音 | 传统记号 | 感觉 |
-| --- | --- | --- | --- |
-| **原位** | 根音(C) | 5/3(常省略) | 最稳定、最"正" |
-| **第一转位** | 三音(E) | 6 | 稍轻、常用来平滑连接 |
-| **第二转位** | 五音(G) | 6/4 | 最不稳定,常作过渡 |
+| 形态         | 最低音  | 传统记号    | 感觉                 |
+| ------------ | ------- | ----------- | -------------------- |
+| **原位**     | 根音(C) | 5/3(常省略) | 最稳定、最"正"       |
+| **第一转位** | 三音(E) | 6           | 稍轻、常用来平滑连接 |
+| **第二转位** | 五音(G) | 6/4         | 最不稳定,常作过渡    |
 
 点播放,听同一个和弦三种形态的微妙差别:
 
-<ChordPlayer label="原位(C–E–G,根音 C 在最低)" desc="最稳定。" chords={[["C4", "E4", "G4"]]} />
-<ChordPlayer label="第一转位(E–G–C,三音 E 在最低)" desc="稍轻,声部连接更顺滑。" chords={[["E4", "G4", "C5"]]} />
-<ChordPlayer label="第二转位(G–C–E,五音 G 在最低)" desc="悬浮感最强,常作过渡。" chords={[["G4", "C5", "E5"]]} />
+<ChordPlayer
+  client:visible
+  label="原位(C–E–G,根音 C 在最低)"
+  desc="最稳定。"
+  chords={[["C4", "E4", "G4"]]}
+/>
+<ChordPlayer
+  client:visible
+  label="第一转位(E–G–C,三音 E 在最低)"
+  desc="稍轻,声部连接更顺滑。"
+  chords={[["E4", "G4", "C5"]]}
+/>
+<ChordPlayer
+  client:visible
+  label="第二转位(G–C–E,五音 G 在最低)"
+  desc="悬浮感最强,常作过渡。"
+  chords={[["G4", "C5", "E5"]]}
+/>
 
 ## 为什么要学转位
 

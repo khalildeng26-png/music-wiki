@@ -18,25 +18,60 @@ import { ChordPlayer } from "../../components/interactive/ChordPlayer";
 
 属和弦解决到主和弦,最完满的结束。流行歌副歌的最后一句几乎都用它。
 
-<ChordPlayer label="正格终止:I → V → I" desc="V 制造张力,I 给出答案——最稳的收尾。" chords={[["C4", "E4", "G4"], ["G4", "B4", "D5"], ["C4", "E4", "G4"]]} />
+<ChordPlayer
+  client:visible
+  label="正格终止:I → V → I"
+  desc="V 制造张力,I 给出答案——最稳的收尾。"
+  chords={[
+    ["C4", "E4", "G4"],
+    ["G4", "B4", "D5"],
+    ["C4", "E4", "G4"],
+  ]}
+/>
 
 ### 2. 半终止 …→ V(逗号/省略号)
 
 停在不稳定的属和弦上,听感是"还没说完",期待下一句继续。
 
-<ChordPlayer label="半终止:I → V" desc="停在了半空,等着下文。" chords={[["C4", "E4", "G4"], ["G4", "B4", "D5"]]} />
+<ChordPlayer
+  client:visible
+  label="半终止:I → V"
+  desc="停在了半空,等着下文。"
+  chords={[
+    ["C4", "E4", "G4"],
+    ["G4", "B4", "D5"],
+  ]}
+/>
 
 ### 3. 变格终止 IV → I("阿门"终止)
 
 下属到主,宗教音乐中唱"阿门"常用,色彩庄严、开阔。
 
-<ChordPlayer label="变格终止:I → IV → I" desc="开阔、庄严的收束。" chords={[["C4", "E4", "G4"], ["F4", "A4", "C5"], ["C4", "E4", "G4"]]} />
+<ChordPlayer
+  client:visible
+  label="变格终止:I → IV → I"
+  desc="开阔、庄严的收束。"
+  chords={[
+    ["C4", "E4", "G4"],
+    ["F4", "A4", "C5"],
+    ["C4", "E4", "G4"],
+  ]}
+/>
 
 ### 4. 阻碍终止 V → vi(惊喜/转折)
 
 你以为要回到 I,它却拐去了 vi——预期被"阻碍",常用于副歌前制造转折或延长段落。
 
-<ChordPlayer label="阻碍终止:I → V → vi" desc="以为到家了,结果被拐了个弯。" chords={[["C4", "E4", "G4"], ["G4", "B4", "D5"], ["A4", "C5", "E5"]]} />
+<ChordPlayer
+  client:visible
+  label="阻碍终止:I → V → vi"
+  desc="以为到家了,结果被拐了个弯。"
+  chords={[
+    ["C4", "E4", "G4"],
+    ["G4", "B4", "D5"],
+    ["A4", "C5", "E5"],
+  ]}
+/>
 
 ## 为什么重要
 
