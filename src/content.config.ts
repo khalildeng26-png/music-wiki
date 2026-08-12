@@ -8,6 +8,7 @@ const entries = defineCollection({
     title: z.string(),
     titleEn: z.string().optional(), // 英文译名,展示在中文标题之后
     category: z.enum(["乐理", "记谱", "和声", "曲风", "乐器", "唱法"]),
+    series: z.string().optional(), // 教程型词条所属路线(如 guitar-intro),有值即按线性教程分组展示
     summary: z.string(),
     tags: z.array(z.string()).default([]),
     related: z.array(z.string()).default([]),

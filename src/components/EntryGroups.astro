@@ -1,0 +1,103 @@
+---
+/**
+ * 一个分类下的词条渲染:百科词条(网格)与学习教程(按路线分组、带步骤序号)分两段呈现。
+ * props: entries —— 该分类下未草稿的全部词条(已按 order 排序)
+ */
+import { getCollection } from "astro:content";
+
+const { entries } = Astro.props as { entries: any[] };
+
+const paths = await getCollection("paths", (p) => !p.data.draft);
+
+const encyclopedia = entries.filter((e) => !e.data.series);
+const tutorials = entries.filter((e) => e.data.series);
+
+// 教程按路线分组;路线顺序 = 该路线在本分类下命中的首个词条在 entries 中的位置
+const seriesIds = [...new Set(tutorials.map((e) => e.data.series))];
+seriesIds.sort(
+  (a, b) =>
+    tutorials.findIndex((e) => e.data.series === a) -
+    tutorials.findIndex((e) => e.data.series === b),
+);
+---
+
+{
+  encyclopedia.length > 0 && (
+    <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {encyclopedia.map((e) => (
+        <a
+          href={`/entries/${e.id}`}
+          class="group flex flex-col gap-1.5 rounded-xl border bg-card p-4 transition hover:border-signature/50"
+        >
+          <div class="font-medium group-hover:text-signature">
+            {e.data.title}
+            {e.data.titleEn && (
+              <span class="ml-1.5 text-sm font-normal text-muted-foreground">{e.data.titleEn}</span>
+            )}
+          </div>
+          <div class="line-clamp-2 text-sm text-muted-foreground">{e.data.summary}</div>
+        </a>
+      ))}
+    </div>
+  )
+}
+
+{
+  tutorials.length > 0 && (
+    <div class="mt-10">
+      <h2 class="text-xl font-semibold">学习教程</h2>
+      <p class="mt-1 text-sm text-muted-foreground">想系统上手?按路线顺序走,每一步都带能听、能练的组件。</p>
+      <div class="mt-4 space-y-6">
+        {seriesIds.map((sid) => {
+          const path = paths.find((p) => p.id === sid);
+          const steps = path
+            ? path.data.steps
+                .map((id) => tutorials.find((e) => e.id === id))
+                .filter(Boolean)
+            : tutorials.filter((e) => e.data.series === sid);
+          if (steps.length === 0) return null;
+          return (
+            <div class="rounded-xl border bg-card p-5">
+              <div class="flex flex-wrap items-baseline gap-2">
+                <span class="text-base font-semibold">{path?.data.title ?? sid}</span>
+                <span class="text-xs text-muted-foreground">{steps.length} 步</span>
+                {path && (
+                  <a
+                    href={`/paths/${path.id}`}
+                    class="ml-auto text-sm text-signature hover:underline"
+                  >
+                    跟随路线学习 →
+                  </a>
+                )}
+              </div>
+              <ol class="mt-4 space-y-2">
+                {steps.map((e, i) => (
+                  <li>
+                    <a
+                      href={`/entries/${e.id}`}
+                      class="group flex items-center gap-3 rounded-lg px-2 py-1.5 transition hover:bg-accent"
+                    >
+                      <span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-signature/10 text-xs font-bold text-signature">
+                        {i + 1}
+                      </span>
+                      <span class="min-w-0 flex-1">
+                        <span class="font-medium group-hover:text-signature">
+                          {e.data.title}
+                          {e.data.titleEn && (
+                            <span class="ml-1.5 text-xs font-normal text-muted-foreground">
+                              {e.data.titleEn}
+                            </span>
+                          )}
+                        </span>
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  )
+}

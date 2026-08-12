@@ -139,14 +139,17 @@
 ```ts
 {
   title: string
-  slug: string          // URL
+  titleEn?: string      // 英文译名,展示在中文标题之后
   category: '乐理' | '记谱' | '和声' | '曲风' | '乐器' | '唱法'
+  series?: string       // 教程型词条所属路线 slug(如 guitar-intro)
   summary: string       // 列表/搜索用一句话
   tags?: string[]
   related?: string[]    // 相关词条 slug
   order?: number        // 分类内排序
 }
 ```
+
+**两个正交维度**:category 是知识维度(这是什么),series 是学习维度(怎么练)。无 series 的词条是百科型,分类页以网格展示;有 series 的是教程型,分类页在百科网格之下按路线分组、带步骤序号展示,顺序跟随路线 steps。教程词条同时属于某个 category(如「乐器」),不新增顶层分类。
 
 ### paths
 ```ts

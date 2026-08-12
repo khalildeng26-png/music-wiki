@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import EntryGroups from "@/components/EntryGroups.astro";
 import { getCollection } from "astro:content";
 import { categories } from "@/lib/categories";
 
@@ -32,20 +33,7 @@ const entries = (
       entries.length === 0 ? (
         <p class="mt-12 text-muted-foreground">这个分类下还没有词条,敬请期待。</p>
       ) : (
-        <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {entries.map((e) => (
-            <a
-              href={`/entries/${e.id}`}
-              class="group flex flex-col gap-1.5 rounded-xl border bg-card p-4 transition hover:border-signature/50"
-            >
-              <div class="font-medium group-hover:text-signature">
-                {e.data.title}
-                {e.data.titleEn && <span class="ml-1.5 text-sm font-normal text-muted-foreground">{e.data.titleEn}</span>}
-              </div>
-              <div class="line-clamp-2 text-sm text-muted-foreground">{e.data.summary}</div>
-            </a>
-          ))}
-        </div>
+        <EntryGroups entries={entries} />
       )
     }
   </section>
