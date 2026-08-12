@@ -1,0 +1,56 @@
+---
+title: 简单伴奏入门
+titleEn: First Accompaniment
+category: 乐器
+summary: 左手根音、右手和弦:C、F、G 三个和弦就能撑起一段伴奏。会了它,你已经能给简单的旋律配伴奏。
+tags: [乐器, 钢琴, 入门, 伴奏, 和弦]
+related: [piano-two-hands, chord, guitar-first-song]
+order: 20
+---
+
+import { Piano } from "../../components/interactive/Piano";
+import { ChordPlayer } from "../../components/interactive/ChordPlayer";
+
+钢琴伴奏的最小公式:**左手弹根音 + 右手弹三和弦**。学会这一招,就能给不少简单的旋律配伴奏。
+
+## 三个和弦
+
+C 调的 I、IV、V 级([和弦](/entries/chord)),都在一个手掌范围内:
+
+- **C = C–E–G**
+- **F = F–A–C**
+- **G = G–B–D**
+
+<ChordPlayer
+  client:visible
+  chords={[
+    ["C4", "E4", "G4"],
+    ["F4", "A4", "C5"],
+    ["G4", "B4", "D5"],
+    ["C4", "E4", "G4"],
+  ]}
+  label="C → F → G → C:左手根音 + 右手和弦的听感。"
+/>
+
+<Piano client:visible label="试着在键盘上同时按下 C-E-G 三个键。" />
+
+## 左手干什么
+
+每个和弦切换的时候,左手弹一次它的**根音**:C 换 F 时,左手从 C2 换到 F2。4 拍一换,稳稳铺底。
+
+## 合起来
+
+进行 `| C | F | G | C |`,左手根音每小节第 1 拍(熟练后第 1、3 拍各一次),右手和弦落在第 1 拍:
+
+| 小节 | 1    | 2   | 3    | 4   |
+| ---- | ---- | --- | ---- | --- |
+| 左手 | 根音 | —   | 根音 | —   |
+| 右手 | 和弦 | —   | —    | —   |
+
+对齐表只是脚手架:真正合手时的方法,和上一阶一样——先单手、再极慢合手。
+
+## 升级预告
+
+右手把和弦拆成 1-5-8 的分解音型(先弹根音、再弹五音、再弹八度),伴奏立刻「流动」起来——留给下一阶。
+
+到这里,入门五步走完:会坐、会找音、会跑音阶、会合手、会伴奏骨架。
