@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="吉他持琴坐姿:琴体凹口搭在右大腿上,琴颈略上扬,身体放松坐直">
+  <!-- 地面 -->
+  <line x1="20" y1="290" x2="460" y2="290" stroke="#a1a1aa" stroke-width="2"/>
+  <!-- 凳子 -->
+  <rect x="210" y="200" width="110" height="12" fill="none" stroke="#a1a1aa" stroke-width="2.5" rx="3"/>
+  <line x1="222" y1="212" x2="222" y2="290" stroke="#a1a1aa" stroke-width="2.5"/>
+  <line x1="308" y1="212" x2="308" y2="290" stroke="#a1a1aa" stroke-width="2.5"/>
+  <!-- 人:头 -->
+  <circle cx="268" cy="78" r="20" fill="none" stroke="#a1a1aa" stroke-width="2.5"/>
+  <!-- 躯干(坐直) -->
+  <line x1="264" y1="98" x2="258" y2="200" stroke="#a1a1aa" stroke-width="2.5"/>
+  <!-- 大腿(向右前) -->
+  <line x1="258" y1="200" x2="176" y2="228" stroke="#a1a1aa" stroke-width="2.5"/>
+  <!-- 小腿+脚 -->
+  <line x1="176" y1="228" x2="172" y2="290" stroke="#a1a1aa" stroke-width="2.5"/>
+  <line x1="172" y1="290" x2="150" y2="290" stroke="#a1a1aa" stroke-width="2.5"/>
+  <!-- 吉他琴体:下凹大、上凹小,搭在大腿上 -->
+  <ellipse cx="182" cy="222" rx="46" ry="38" fill="none" stroke="#d97706" stroke-width="2.5"/>
+  <ellipse cx="208" cy="190" rx="28" ry="23" fill="none" stroke="#d97706" stroke-width="2.5"/>
+  <!-- 音孔 -->
+  <circle cx="196" cy="208" r="11" fill="none" stroke="#d97706" stroke-width="2"/>
+  <!-- 琴颈:向左上微扬 -->
+  <line x1="186" y1="172" x2="92" y2="118" stroke="#d97706" stroke-width="5"/>
+  <!-- 琴头 -->
+  <rect x="74" y="104" width="22" height="14" rx="3" transform="rotate(-30 85 111)" fill="none" stroke="#d97706" stroke-width="2.5"/>
+  <!-- 左手扶琴颈 -->
+  <path d="M 236 132 Q 168 120 108 124" fill="none" stroke="#a1a1aa" stroke-width="2.5"/>
+  <!-- 右手搭琴体 -->
+  <path d="M 252 128 Q 232 168 210 198" fill="none" stroke="#a1a1aa" stroke-width="2.5"/>
+  <!-- 标注 -->
+  <text x="40" y="88" font-size="12" fill="#d97706">琴颈略上扬,约 30°</text>
+  <text x="230" y="260" font-size="12" fill="#a1a1aa">琴体凹口搭右大腿</text>
+  <text x="270" y="44" font-size="12" fill="#a1a1aa">坐直不驼背,琴靠身上而不是人趴琴上</text>
+</svg>

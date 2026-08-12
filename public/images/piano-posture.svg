@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="钢琴坐姿侧视图:背挺直,手肘与键盘大致同高,坐琴凳前二分之一">
+  <!-- 地面 -->
+  <line x1="20" y1="290" x2="460" y2="290" stroke="#a1a1aa" stroke-width="2"/>
+  <!-- 钢琴琴体 -->
+  <rect x="300" y="60" width="150" height="150" fill="none" stroke="#a1a1aa" stroke-width="2.5" rx="4"/>
+  <!-- 键盘托板 -->
+  <rect x="240" y="210" width="210" height="14" fill="none" stroke="#a1a1aa" stroke-width="2.5" rx="3"/>
+  <!-- 琴键分隔线 -->
+  <line x1="260" y1="210" x2="260" y2="224" stroke="#a1a1aa" stroke-width="1"/>
+  <line x1="280" y1="210" x2="280" y2="224" stroke="#a1a1aa" stroke-width="1"/>
+  <line x1="300" y1="210" x2="300" y2="224" stroke="#a1a1aa" stroke-width="1"/>
+  <line x1="320" y1="210" x2="320" y2="224" stroke="#a1a1aa" stroke-width="1"/>
+  <line x1="340" y1="210" x2="340" y2="224" stroke="#a1a1aa" stroke-width="1"/>
+  <!-- 琴凳 -->
+  <rect x="70" y="200" width="90" height="12" fill="none" stroke="#a1a1aa" stroke-width="2.5" rx="3"/>
+  <line x1="80" y1="212" x2="80" y2="290" stroke="#a1a1aa" stroke-width="2.5"/>
+  <line x1="150" y1="212" x2="150" y2="290" stroke="#a1a1aa" stroke-width="2.5"/>
+  <!-- 人:头 -->
+  <circle cx="128" cy="88" r="20" fill="none" stroke="#a1a1aa" stroke-width="2.5"/>
+  <!-- 躯干(微前倾) -->
+  <line x1="124" y1="108" x2="112" y2="200" stroke="#a1a1aa" stroke-width="2.5"/>
+  <!-- 手臂:肩→肘→手(强调色,落点在键盘面) -->
+  <polyline points="122,124 168,158 250,208" fill="none" stroke="#d97706" stroke-width="2.5"/>
+  <!-- 大腿→小腿→脚 -->
+  <polyline points="112,200 185,238 185,290" fill="none" stroke="#a1a1aa" stroke-width="2.5"/>
+  <line x1="185" y1="290" x2="206" y2="290" stroke="#a1a1aa" stroke-width="2.5"/>
+  <!-- 手肘高度参考虚线(肘→键盘) -->
+  <line x1="168" y1="158" x2="240" y2="158" stroke="#d97706" stroke-width="1" stroke-dasharray="4 4"/>
+  <!-- 标注 -->
+  <text x="88" y="50" font-size="12" fill="#d97706">背挺直,头不低</text>
+  <text x="130" y="146" font-size="12" fill="#d97706">手肘约与键盘同高</text>
+  <text x="52" y="262" font-size="12" fill="#a1a1aa">坐琴凳前二分之一</text>
+  <text x="360" y="252" font-size="12" fill="#a1a1aa">双脚平放地面</text>
+</svg>
