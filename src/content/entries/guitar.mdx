@@ -4,7 +4,7 @@ titleEn: Guitar
 category: 乐器
 summary: 拨弦乐器,六弦带品格,分木吉他与电吉他;流行/摇滚/民谣/布鲁斯的核心乐器,既能伴奏也能独奏。
 tags: [乐器, 吉他, 拨弦]
-related: [guitar-tab, electric-guitar, bass]
+related: [guitar-tab, electric-guitar, bass, guitar-setup]
 order: 2
 ---
 
@@ -28,13 +28,20 @@ import { Fretboard } from "../../components/interactive/Fretboard";
 
 标准调弦从最粗(低音)到最细(高音),即 6 弦到 1 弦,依次是 **E A D G B E**(mi la re sol si mi)。点播放,从 6 弦到 1 弦听一遍空弦音:
 
-<StaffNotation client:visible notes={["E2", "A2", "D3", "G3", "B3", "E4"]} label="吉他标准空弦音(6 弦 E2 → 1 弦 E4),从低到高。" />
+<StaffNotation
+  client:visible
+  notes={["E2", "A2", "D3", "G3", "B3", "E4"]}
+  label="吉他标准空弦音(6 弦 E2 → 1 弦 E4),从低到高。"
+/>
 
 > 调音小窍门:除 3 弦外,每根弦的第 5 品 ≈ 下一根弦的空弦音;3 弦是第 4 品 = 2 弦空弦。
 
 想直观感受指板上每个位置的音?下面这块可交互指板,点任意品格听音:
 
-<Fretboard client:visible label="吉他指板(0–12 品)。点品格上的音名听音,从上到下是 6 弦(E2)到 1 弦(E4)。" />
+<Fretboard
+  client:visible
+  label="吉他指板(0–12 品)。点品格上的音名听音,从上到下是 6 弦(E2)到 1 弦(E4)。"
+/>
 
 ## 怎么弹:右手与左手
 
@@ -64,4 +71,4 @@ import { Fretboard } from "../../components/interactive/Fretboard";
 
 > 吉他上手快(几个和弦就能弹唱),但精通同样需要扎实练习——尤其节奏感和和弦切换的速度。
 
-延伸:看 [六线谱 TAB](/entries/guitar-tab) 学读吉他谱;了解 [电吉他](/entries/electric-guitar) 和 [贝斯](/entries/bass)。
+想从零开始系统地学?走 [吉他入门](/paths/guitar-intro) 路线,从持琴调音一路练到第一首弹唱。读谱部分看 [六线谱 TAB](/entries/guitar-tab);家族其他成员看 [电吉他](/entries/electric-guitar) 和 [贝斯](/entries/bass)。
