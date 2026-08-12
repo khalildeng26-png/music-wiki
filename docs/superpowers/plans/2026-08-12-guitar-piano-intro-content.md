@@ -388,7 +388,7 @@ category: 乐器
 summary: 学吉他的第 0 步:把琴拿稳、把音调准。标准定弦 EADGBE、调音器用法、坐姿站姿一次讲清。
 tags: [乐器, 吉他, 入门, 调音]
 related: [guitar, guitar-tab, guitar-open-chords]
-order: 4
+order: 11
 ---
 ```
 
@@ -415,7 +415,7 @@ category: 乐器
 summary: Em、Am、C、G、D——按手指难度递进的五个开放和弦,附指法图与常见按错排查。拿下它们就能弹大量流行歌。
 tags: [乐器, 吉他, 入门, 和弦]
 related: [guitar-setup, chord]
-order: 5
+order: 12
 ---
 ```
 
@@ -480,7 +480,7 @@ category: 乐器
 summary: 右手是吉他的发动机:下扫上扫怎么发力,4/4 最常用的节奏型怎么读怎么练,节拍器怎么配合。
 tags: [乐器, 吉他, 入门, 节奏]
 related: [guitar-open-chords, rhythm-and-time-signature, guitar-chord-changes]
-order: 6
+order: 13
 ---
 ```
 
@@ -508,7 +508,7 @@ category: 乐器
 summary: 弹唱卡壳九成卡在换和弦:为什么慢、保留指与锚点指怎么用、Em→Am 与 C→G 的针对性练法。
 tags: [乐器, 吉他, 入门, 和弦]
 related: [guitar-open-chords, guitar-strumming, guitar-first-song]
-order: 7
+order: 14
 ---
 ```
 
@@ -536,7 +536,7 @@ category: 乐器
 summary: 用 C、G、Am、F(可简化)四个和弦加一个节奏型,拼出完整的弹唱段落——这就是流行乐最常用的 I–V–vi–IV。
 tags: [乐器, 吉他, 入门, 弹唱]
 related: [guitar-chord-changes, pop-progressions, chord-progression]
-order: 8
+order: 15
 ---
 ```
 
@@ -630,7 +630,7 @@ category: 乐器
 summary: 钢琴的第 0 步:坐多远多高、手怎么摆、五根手指的编号 1-5。谱子上的指法数字读的就是这套编号。
 tags: [乐器, 钢琴, 入门, 手型]
 related: [piano, piano-keyboard-map]
-order: 9
+order: 16
 ---
 ```
 
@@ -655,7 +655,7 @@ category: 乐器
 summary: 88 键看着吓人,其实只有 12 个音在循环:用两黑三黑的分组定位任何音,找到中央 C 你就有了坐标原点。
 tags: [乐器, 钢琴, 入门, 键盘]
 related: [piano-posture, pitch-and-note-names]
-order: 10
+order: 17
 ---
 ```
 
@@ -702,7 +702,7 @@ category: 乐器
 summary: 全白键的 C 大调音阶是钢琴的第一条跑道:右手指法 1-2-3-1-2-3-4-5,练它顺便练了「穿指」这个核心动作。
 tags: [乐器, 钢琴, 入门, 音阶]
 related: [piano-keyboard-map, scale, piano-two-hands]
-order: 11
+order: 18
 ---
 ```
 
@@ -729,7 +729,7 @@ category: 乐器
 summary: 钢琴最难也最迷人的一步——两只手同时干不同的事。从「左手长音+右手旋律」开始,把合手拆成可练的小动作。
 tags: [乐器, 钢琴, 入门, 双手]
 related: [piano-first-scale, piano-first-accompaniment]
-order: 12
+order: 19
 ---
 ```
 
@@ -754,7 +754,7 @@ category: 乐器
 summary: 左手根音、右手和弦:C、F、G 三个和弦就能撑起一段伴奏。会了它,你已经能给简单的旋律配伴奏。
 tags: [乐器, 钢琴, 入门, 伴奏, 和弦]
 related: [piano-two-hands, chord, guitar-first-song]
-order: 13
+order: 20
 ---
 ```
 

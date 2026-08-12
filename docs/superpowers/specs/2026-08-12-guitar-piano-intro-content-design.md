@@ -114,7 +114,7 @@ type Props = {
 
 ## 9. 规范与约束
 
-- **词条 frontmatter** 遵循现有格式: `title / titleEn / category / summary / tags / related / order`；乐器类 `category: 乐器`；`order` 在「乐器」分类内续接现有最大值递增（当前 piano=1、guitar=2、electric-guitar=3，新词条从 4 起按路线步骤顺序排列：吉他入门 5 篇在前，钢琴入门 5 篇在后）
+- **词条 frontmatter** 遵循现有格式: `title / titleEn / category / summary / tags / related / order`；乐器类 `category: 乐器`；`order` 在「乐器」分类内续接现有最大值递增（该分类现有 piano=1 至 synthesizer=10，新词条从 11 起按路线步骤顺序排列：吉他入门 5 篇 11-15，钢琴入门 5 篇 16-20）
 - **路线 frontmatter**: `title / description / steps`（与现有 paths 一致）
 - **乐理事实** 以 DESIGN.md「已核对的低风险事实清单」为准（定弦 EADGBE、指法编号、大调音阶结构等）
 - **文风规范**（DESIGN.md 中标注「暂缓」）不强制执行，不套用四段模板
