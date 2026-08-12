@@ -23,9 +23,16 @@ const FRET_GAP = 26;
 
 const strX = (i: number) => GRID_LEFT + i * STR_GAP;
 const fretY = (j: number) => GRID_TOP + j * FRET_GAP;
+/** 按弦圆点的纵坐标:第 f 品的中心(上、下品丝之间) */
+const dotY = (f: number) => (fretY(f - 1) + fretY(f)) / 2;
 
 /** 吉他和弦指法图:竖线为弦(6→1 从左到右),横线为品丝,圆点为按弦位置,O/× 标在琴枕上方。 */
 export function ChordDiagram({ name, frets, fingers, baseFret = 1, label }: Props) {
+  if (frets.length !== 6) {
+    console.warn(
+      `[ChordDiagram] "${name}" 的 frets 必须是 6 元素数组(顺序 6 弦→1 弦),实际长度 ${frets.length}`,
+    );
+  }
   return (
     <figure className="not-prose my-6 inline-block overflow-hidden rounded-xl border bg-card align-top">
       <svg
@@ -94,16 +101,11 @@ export function ChordDiagram({ name, frets, fingers, baseFret = 1, label }: Prop
         {frets.map((f, i) =>
           f > 0 ? (
             <g key={`d${i}`}>
-              <circle
-                cx={strX(i)}
-                cy={(fretY(f - 1) + fretY(f)) / 2}
-                r={7}
-                className="fill-foreground"
-              />
+              <circle cx={strX(i)} cy={dotY(f)} r={7} className="fill-foreground" />
               {fingers?.[i] ? (
                 <text
                   x={strX(i)}
-                  y={(fretY(f - 1) + fretY(f)) / 2 + 3.5}
+                  y={dotY(f) + 3.5}
                   textAnchor="middle"
                   className="fill-card text-[9px]"
                 >
