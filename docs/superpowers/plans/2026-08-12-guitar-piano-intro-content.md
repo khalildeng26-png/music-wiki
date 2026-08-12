@@ -227,7 +227,7 @@ git commit -m "feat(component): ChordDiagram 吉他和弦指法图(SVG,可复用
 - 创建：`public/images/piano-hand-shape.svg`
 - 创建：`public/images/guitar-setup-posture.svg`
 
-**约定：** SVG 通过 `<img src="/images/xxx.svg">` 引用，页面 CSS 变量**不会**透传进 `<img>`，因此颜色全部写死：线条 `#a1a1aa`（亮暗模式均清晰）、强调色 `#d97706`（琥珀）。线宽 2~2.5，风格简笔示意，允许执行者在保持信息正确的前提下微调坐标。
+**约定：** SVG 通过 `<img src="/images/xxx.svg">` 引用，页面 CSS 变量**不会**透传进 `<img>`，因此颜色全部写死：线条 `#a1a1aa`（亮暗模式均清晰）、强调色 `#d97706`（琥珀）。线宽分层（以下方代码块为准）：主线稿 2~2.5，细节/参考线（琴键分隔线、虚线）1，吉他琴颈 5（粗线模拟厚度）。风格简笔示意，允许执行者在保持信息正确的前提下微调坐标。
 
 - [ ] **步骤 1：创建 `public/images/piano-posture.svg`（坐姿侧视图）**
 
