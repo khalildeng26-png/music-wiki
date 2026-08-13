@@ -17,7 +17,7 @@ export type SiteConfig = {
 export const siteConfig: SiteConfig = {
   name: "橙月Wiki",
   description: "一本可交互的音乐百科全书 —— 乐理、记谱、曲风,边读边练。",
-  url: "http://localhost:4321",
+  url: "https://ambermoon.wiki",
   author: {
     name: "橙月Wiki",
     url: "https://ambermoon.wiki",

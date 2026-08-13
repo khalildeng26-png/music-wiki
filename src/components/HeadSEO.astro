@@ -1,11 +1,14 @@
 ---
 import "@/styles/global.css";
+import { siteConfig } from "@/lib/config";
 
 interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
   type?: "website" | "article";
+  /** 页面级结构化数据(如 Article、BreadcrumbList),会追加到全局 WebSite/Organization 之后 */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
@@ -13,6 +16,7 @@ const {
   description = "Default description for your website.",
   ogImage,
   type = "website",
+  jsonLd,
 } = Astro.props as Props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
@@ -20,6 +24,30 @@ const ogImageURL = ogImage
   ? new URL(ogImage, Astro.site).toString()
   : new URL("og-image.png", canonicalURL).toString();
 const faviconURL = new URL("favicon.svg", canonicalURL).toString();
+
+const baseSchema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteConfig.name,
+    url: siteConfig.url,
+    description: siteConfig.description,
+    inLanguage: "zh-CN",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: siteConfig.name,
+    url: siteConfig.url,
+    logo: new URL("og-image.png", siteConfig.url).toString(),
+  },
+];
+
+const extraSchemas = jsonLd
+  ? Array.isArray(jsonLd)
+    ? jsonLd
+    : [jsonLd]
+  : [];
 ---
 
 <!-- Basic -->
@@ -49,3 +77,11 @@ const faviconURL = new URL("favicon.svg", canonicalURL).toString();
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImageURL} />
+
+<!-- Structured data -->
+{baseSchema.map((s) => (
+  <script type="application/ld+json" set:html={JSON.stringify(s)} />
+))}
+{extraSchemas.map((s) => (
+  <script type="application/ld+json" set:html={JSON.stringify(s)} />
+))}

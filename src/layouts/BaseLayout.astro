@@ -7,13 +7,13 @@ import { Footer } from "@/components/Footer";
 import { FeedbackWidget } from "@/components/interactive/FeedbackWidget";
 import { Toaster } from "sonner";
 
-const { title, description, ogImage } = Astro.props;
+const { title, description, ogImage, jsonLd } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="zh-CN">
   <head>
-    <HeadSEO title={title} description={description} ogImage={ogImage} />
+    <HeadSEO title={title} description={description} ogImage={ogImage} jsonLd={jsonLd} />
     <script is:inline>
       (() => {
         try {

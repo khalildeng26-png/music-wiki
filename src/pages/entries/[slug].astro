@@ -35,9 +35,40 @@ const inPaths = allPaths
   });
 
 const cat = categoryByLabel[entry.data.category];
+
+const entryURL = new URL(`/entries/${entry.id}`, Astro.site).toString();
+const headline = entry.data.titleEn
+  ? `${entry.data.title} ${entry.data.titleEn}`
+  : entry.data.title;
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline,
+    description: entry.data.summary,
+    url: entryURL,
+    mainEntityOfPage: entryURL,
+    articleSection: entry.data.category,
+    inLanguage: "zh-CN",
+    publisher: {
+      "@type": "Organization",
+      name: "橙月Wiki",
+      url: "https://ambermoon.wiki",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "首页", item: "https://ambermoon.wiki/" },
+      { "@type": "ListItem", position: 2, name: cat.label, item: `https://ambermoon.wiki/categories/${cat.id}` },
+      { "@type": "ListItem", position: 3, name: entry.data.title },
+    ],
+  },
+];
 ---
 
-<BaseLayout title={`${entry.data.title} · 橙月Wiki`} description={entry.data.summary}>
+<BaseLayout title={`${entry.data.title} · 橙月Wiki`} description={entry.data.summary} type="article" jsonLd={jsonLd}>
   <article data-pagefind-body class="container py-12 max-w-3xl">
     <nav class="text-sm text-muted-foreground">
       <a href="/" class="hover:text-signature">首页</a>
