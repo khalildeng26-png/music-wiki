@@ -65,6 +65,19 @@ const jsonLd = [
       { "@type": "ListItem", position: 3, name: entry.data.title },
     ],
   },
+  ...(entry.data.faq?.length
+    ? [
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: entry.data.faq.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        },
+      ]
+    : []),
 ];
 ---
 
@@ -117,6 +130,22 @@ const jsonLd = [
     <div class="prose dark:prose-invert mt-8 max-w-none">
       <Content />
     </div>
+
+    {
+      entry.data.faq?.length > 0 && (
+        <section class="not-prose mt-16 border-t pt-8">
+          <h2 class="text-xl font-semibold">常见问题</h2>
+          <div class="mt-4 space-y-5">
+            {entry.data.faq.map((f) => (
+              <div>
+                <h3 class="font-medium">{f.q}</h3>
+                <p class="mt-1 text-muted-foreground">{f.a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )
+    }
 
     {
       related.length > 0 && (

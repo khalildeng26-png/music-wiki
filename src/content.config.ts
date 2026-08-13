@@ -12,6 +12,9 @@ const entries = defineCollection({
     summary: z.string(),
     tags: z.array(z.string()).default([]),
     related: z.array(z.string()).default([]),
+    faq: z
+      .array(z.object({ q: z.string(), a: z.string() }))
+      .optional(), // 词条常见问题,渲染 FAQ 区块 + FAQPage 结构化数据(GEO)
     order: z.number().optional(),
     draft: z.boolean().default(false),
   }),
