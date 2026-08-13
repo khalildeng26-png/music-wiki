@@ -1,10 +1,6 @@
-import { HomeIcon } from "lucide-react";
-
 import { MainNav } from "@/components/MainNav";
 import { MobileNav } from "@/components/MobileNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 export function Header() {
   return (
@@ -13,15 +9,9 @@ export function Header() {
         <div className="flex h-(--header-height) items-center 3xl:fixed:container">
           <MobileNav className="flex lg:hidden" />
 
-          <a
-            href="/"
-            className={cn(
-              buttonVariants({ variant: "ghost", size: "icon" }),
-              "hidden size-8 lg:flex",
-            )}
-          >
-            <HomeIcon className="size-5" />
-            <span className="sr-only">Home</span>
+          <a href="/" className="hidden items-center gap-2.5 lg:flex">
+            <img src="/logo.png" alt="橙月Wiki" className="size-7 rounded-md" />
+            <span className="text-base font-semibold tracking-tight">橙月Wiki</span>
           </a>
 
           <MainNav className="hidden lg:flex" />

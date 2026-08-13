@@ -23,7 +23,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 const ogImageURL = ogImage
   ? new URL(ogImage, Astro.site).toString()
   : new URL("og-image.png", canonicalURL).toString();
-const faviconURL = new URL("favicon.svg", canonicalURL).toString();
 
 const baseSchema = [
   {
@@ -59,7 +58,8 @@ const extraSchemas = jsonLd
 <!-- Canonical -->
 <link rel="canonical" href={canonicalURL} />
 <link rel="icon" href="/favicon.ico" sizes="any" />
-<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
 <!-- Title -->
 <title>{title}</title>
