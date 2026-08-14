@@ -1,5 +1,6 @@
-import * as React from "react";
 import { Play } from "lucide-react";
+import * as React from "react";
+
 import { playChordProgression, type Timbre } from "./audio";
 
 type Props = {
@@ -24,10 +25,7 @@ export function ChordPlayer({ chords, label, desc, timbre = "piano" }: Props) {
     } catch {
       /* 忽略 */
     }
-    window.setTimeout(
-      () => setPlaying(false),
-      chords.length * (dur + gap) * 1000 + 300,
-    );
+    window.setTimeout(() => setPlaying(false), chords.length * (dur + gap) * 1000 + 300);
   }
 
   return (

@@ -1,5 +1,6 @@
-import * as React from "react";
 import { Volume2 } from "lucide-react";
+import * as React from "react";
+
 import { playNote } from "./audio";
 
 const CHROM = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];

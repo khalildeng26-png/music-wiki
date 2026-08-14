@@ -1,5 +1,5 @@
-import * as React from "react";
 import { Pause, Play } from "lucide-react";
+import * as React from "react";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -48,12 +48,7 @@ export function Metronome() {
     transport.scheduleRepeat((time: number) => {
       const b = beatsRef.current;
       const downbeat = i % b === 0;
-      synth.triggerAttackRelease(
-        downbeat ? "C6" : "G5",
-        "32n",
-        time,
-        downbeat ? 1 : 0.65,
-      );
+      synth.triggerAttackRelease(downbeat ? "C6" : "G5", "32n", time, downbeat ? 1 : 0.65);
       Draw.schedule(() => setBeat(i % b), time);
       i++;
     }, "4n");
@@ -160,9 +155,7 @@ export function Metronome() {
             onClick={() => setBeats(b)}
             className={
               "rounded-md border px-2.5 py-1 text-xs " +
-              (beats === b
-                ? "border-signature/50 text-signature"
-                : "hover:border-signature/50")
+              (beats === b ? "border-signature/50 text-signature" : "hover:border-signature/50")
             }
           >
             {b} 拍

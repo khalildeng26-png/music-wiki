@@ -1,5 +1,5 @@
-import * as React from "react";
 import { Loader2, Search } from "lucide-react";
+import * as React from "react";
 
 type Result = { title: string; url: string; excerpt: string };
 
@@ -8,9 +8,7 @@ export function SearchBox({ initial = "" }: { initial?: string }) {
   const [q, setQ] = React.useState(initial);
   const [results, setResults] = React.useState<Result[]>([]);
   const [ready, setReady] = React.useState(false);
-  const [status, setStatus] = React.useState<
-    "idle" | "loading" | "done" | "unavailable"
-  >("idle");
+  const [status, setStatus] = React.useState<"idle" | "loading" | "done" | "unavailable">("idle");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const pf = React.useRef<any>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -84,24 +82,20 @@ export function SearchBox({ initial = "" }: { initial?: string }) {
           placeholder="搜索词条、曲风、乐理……"
           className="flex-1 bg-transparent text-lg outline-none placeholder:text-muted-foreground"
         />
-        {status === "loading" && (
-          <Loader2 className="size-4 animate-spin text-muted-foreground" />
-        )}
+        {status === "loading" && <Loader2 className="size-4 animate-spin text-muted-foreground" />}
       </div>
 
       {status === "unavailable" && (
         <p className="mt-4 text-sm text-muted-foreground">
-          搜索索引在构建后生成。请用{" "}
-          <code className="rounded bg-muted px-1">npm run preview</code>{" "}
-          预览构建产物来使用搜索(开发模式 <code className="rounded bg-muted px-1">dev</code> 下不可用)。
+          搜索索引在构建后生成。请用 <code className="rounded bg-muted px-1">npm run preview</code>{" "}
+          预览构建产物来使用搜索(开发模式 <code className="rounded bg-muted px-1">dev</code>{" "}
+          下不可用)。
         </p>
       )}
 
       {pf.current && status === "done" && (
         <p className="mt-3 text-sm text-muted-foreground">
-          {results.length > 0
-            ? `找到 ${results.length} 条结果`
-            : `没有找到「${q}」相关的内容`}
+          {results.length > 0 ? `找到 ${results.length} 条结果` : `没有找到「${q}」相关的内容`}
         </p>
       )}
 

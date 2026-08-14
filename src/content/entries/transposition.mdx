@@ -22,7 +22,11 @@ import { StaffNotation } from "../../components/interactive/StaffNotation";
 下面这条简单旋律,第二遍**整体上移一个全音**(C 调 → D 调)——注意每个音都升高了同样的距离:
 
 <StaffNotation client:visible notes={["C4", "D4", "E4", "C4"]} label="原旋律(C 大调)。" />
-<StaffNotation client:visible notes={["D4", "E4", "F#4", "D4"]} label="上移一个全音(D 大调):注意 E→F 变成了 F♯。" />
+<StaffNotation
+  client:visible
+  notes={["D4", "E4", "F#4", "D4"]}
+  label="上移一个全音(D 大调):注意 E→F 变成了 F♯。"
+/>
 
 ## 什么时候用转调
 

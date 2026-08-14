@@ -1,5 +1,5 @@
-import * as React from "react";
 import { Loader2, Search } from "lucide-react";
+import * as React from "react";
 
 type Result = { title: string; url: string; excerpt: string };
 
@@ -55,7 +55,13 @@ export function HomeSearch() {
         const search = await pf.current.search(v.trim());
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const data = await Promise.all(
-          search.results.slice(0, 6).map((r: { data: () => Promise<{ meta?: { title?: string }; url: string; excerpt?: string }> }) => r.data()),
+          search.results
+            .slice(0, 6)
+            .map(
+              (r: {
+                data: () => Promise<{ meta?: { title?: string }; url: string; excerpt?: string }>;
+              }) => r.data(),
+            ),
         );
         setResults(
           data.map((d) => ({
@@ -137,8 +143,7 @@ export function HomeSearch() {
                 href={r.url}
                 onMouseEnter={() => setHi(i)}
                 className={
-                  "block px-4 py-3 transition " +
-                  (i === hi ? "bg-accent" : "hover:bg-accent/60")
+                  "block px-4 py-3 transition " + (i === hi ? "bg-accent" : "hover:bg-accent/60")
                 }
               >
                 <div className="font-medium">{r.title}</div>

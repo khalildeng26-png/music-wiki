@@ -1,5 +1,7 @@
 import type { APIRoute } from "astro";
+
 import { getCollection } from "astro:content";
+
 import { siteConfig } from "@/lib/config";
 
 // 生成 llms.txt(https://llmstxt.org/):给 AI 爬虫/大模型一个站点内容清单入口。

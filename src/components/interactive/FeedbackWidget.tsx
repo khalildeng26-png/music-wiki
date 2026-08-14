@@ -1,5 +1,5 @@
-import * as React from "react";
 import { Check, MessageSquareHeart, Send, X } from "lucide-react";
+import * as React from "react";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -74,8 +74,7 @@ export function FeedbackWidget() {
       const vh = window.innerHeight;
       setTop((t) => {
         const saved = Number(localStorage.getItem(TOP_KEY));
-        const base =
-          t ?? (Number.isFinite(saved) && saved > 0 ? saved : vh / 2);
+        const base = t ?? (Number.isFinite(saved) && saved > 0 ? saved : vh / 2);
         return clamp(base, BTN_HALF + MARGIN, vh - BTN_HALF - MARGIN);
       });
     };
@@ -112,9 +111,7 @@ export function FeedbackWidget() {
     const dy = e.clientY - d.startY;
     if (!d.moved && Math.abs(dy) > 5) d.moved = true;
     if (d.moved) {
-      setTop(
-        clamp(d.startTop + dy, BTN_HALF + MARGIN, window.innerHeight - BTN_HALF - MARGIN),
-      );
+      setTop(clamp(d.startTop + dy, BTN_HALF + MARGIN, window.innerHeight - BTN_HALF - MARGIN));
     }
   }
 
@@ -173,9 +170,7 @@ export function FeedbackWidget() {
   }
 
   const popupTop =
-    desktop && top != null
-      ? clamp(top, 260, Math.max(261, window.innerHeight - 260))
-      : undefined;
+    desktop && top != null ? clamp(top, 260, Math.max(261, window.innerHeight - 260)) : undefined;
 
   return (
     <>
@@ -183,7 +178,7 @@ export function FeedbackWidget() {
       {open && (
         <div
           style={popupTop != null ? { top: popupTop } : undefined}
-          className="fixed inset-x-4 bottom-24 z-50 mx-auto w-auto max-w-sm rounded-xl border bg-card p-4 shadow-xl sm:inset-x-auto sm:bottom-auto sm:right-20 sm:max-w-80 sm:-translate-y-1/2"
+          className="fixed inset-x-4 bottom-24 z-50 mx-auto w-auto max-w-sm rounded-xl border bg-card p-4 shadow-xl sm:inset-x-auto sm:right-20 sm:bottom-auto sm:max-w-80 sm:-translate-y-1/2"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-sm font-semibold">
@@ -226,9 +221,7 @@ export function FeedbackWidget() {
                 placeholder="联系方式(选填,便于回复)"
                 className="w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus:border-signature/50"
               />
-              {state === "error" && (
-                <p className="text-xs text-red-500">提交失败,请稍后再试。</p>
-              )}
+              {state === "error" && <p className="text-xs text-red-500">提交失败,请稍后再试。</p>}
               <button
                 type="button"
                 disabled={!msg.trim() || state === "sending"}
@@ -253,7 +246,7 @@ export function FeedbackWidget() {
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         className={
-          "fixed right-4 top-1/2 z-50 flex h-12 w-12 -translate-y-1/2 touch-none items-center justify-center rounded-full bg-signature text-signature-foreground shadow-lg transition hover:opacity-90 " +
+          "fixed top-1/2 right-4 z-50 flex h-12 w-12 -translate-y-1/2 touch-none items-center justify-center rounded-full bg-signature text-signature-foreground shadow-lg transition hover:opacity-90 " +
           (dragging ? "cursor-grabbing" : "cursor-grab")
         }
         style={top != null ? { top } : undefined}

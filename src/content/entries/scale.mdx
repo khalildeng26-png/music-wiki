@@ -21,7 +21,11 @@ import { StaffNotation } from "../../components/interactive/StaffNotation";
 
 大调音阶的音程规律是 **全 全 半 全 全 全 半**(全 = 全音,半 = 半音)。以 C 为起点就是 C 大调,全是白键:
 
-<StaffNotation client:visible notes={["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"]} label="C 大调音阶:do re mi fa sol la si do。" />
+<StaffNotation
+  client:visible
+  notes={["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"]}
+  label="C 大调音阶:do re mi fa sol la si do。"
+/>
 
 大调色彩通常**明亮、开阔**。
 
@@ -33,7 +37,11 @@ import { StaffNotation } from "../../components/interactive/StaffNotation";
 
 中国传统音乐常用**五声音阶**:宫 商 角 徵 羽,对应 **do re mi sol la**(少了 fa 和 si)。
 
-<StaffNotation client:visible notes={["C4", "D4", "E4", "G4", "A4", "C5"]} label="C 五声音阶:宫商角徵羽(do re mi sol la),中国风的核心。" />
+<StaffNotation
+  client:visible
+  notes={["C4", "D4", "E4", "G4", "A4", "C5"]}
+  label="C 五声音阶:宫商角徵羽(do re mi sol la),中国风的核心。"
+/>
 
 > 一句话:音阶决定了一段音乐的"调性色彩";换音阶 = 换情绪。
 

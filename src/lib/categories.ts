@@ -13,10 +13,6 @@ export const categories: Category[] = [
   { id: "vocal", label: "唱法", desc: "发声、咬字与演唱技巧" },
 ];
 
-export const categoryByLabel = Object.fromEntries(
-  categories.map((c) => [c.label, c]),
-);
+export const categoryByLabel = Object.fromEntries(categories.map((c) => [c.label, c]));
 
-export const categoryById = Object.fromEntries(
-  categories.map((c) => [c.id, c]),
-);
+export const categoryById = Object.fromEntries(categories.map((c) => [c.id, c]));

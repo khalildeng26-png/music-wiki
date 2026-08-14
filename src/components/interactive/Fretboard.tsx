@@ -1,5 +1,6 @@
-import * as React from "react";
 import { Volume2 } from "lucide-react";
+import * as React from "react";
+
 import { playNote } from "./audio";
 import { midiToNote, noteToMidi } from "./noteUtils";
 
@@ -41,10 +42,7 @@ export function Fretboard({ frets = 12, label }: Props) {
         <div className="overflow-x-auto pb-2">
           <div className="min-w-[580px]">
             {/* 品位号 + 品记 */}
-            <div
-              className="mb-1 grid text-center"
-              style={{ gridTemplateColumns: cols }}
-            >
+            <div className="mb-1 grid text-center" style={{ gridTemplateColumns: cols }}>
               {fretIdx.map((f) => (
                 <div
                   key={f}
@@ -78,7 +76,7 @@ export function Fretboard({ frets = 12, label }: Props) {
                         <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-stone-200/30" />
                         {/* 上弦枕(0 品右侧) */}
                         {f === 0 && (
-                          <span className="absolute right-0 top-0 h-full w-[3px] bg-stone-100/80" />
+                          <span className="absolute top-0 right-0 h-full w-[3px] bg-stone-100/80" />
                         )}
                         {/* 音品按钮 */}
                         <button

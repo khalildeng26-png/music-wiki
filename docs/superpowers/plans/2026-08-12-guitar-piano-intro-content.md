@@ -16,26 +16,26 @@
 
 ## 文件结构
 
-| 文件 | 动作 | 职责 |
-|---|---|---|
-| `src/components/interactive/ChordDiagram.tsx` | 创建 | 可复用吉他和弦指法图（SVG） |
-| `public/images/piano-posture.svg` | 创建 | 钢琴坐姿侧视图（线条图） |
-| `public/images/piano-hand-shape.svg` | 创建 | 钢琴手型与指法编号图（线条图） |
-| `public/images/guitar-setup-posture.svg` | 创建 | 吉他持琴坐姿图（线条图） |
-| `src/content/entries/guitar-setup.mdx` | 创建 | 吉他入门 ① 持琴与调音 |
-| `src/content/entries/guitar-open-chords.mdx` | 创建 | 吉他入门 ② 第一批开放和弦 |
-| `src/content/entries/guitar-strumming.mdx` | 创建 | 吉他入门 ③ 扫弦与节奏型 |
-| `src/content/entries/guitar-chord-changes.mdx` | 创建 | 吉他入门 ④ 和弦转换 |
-| `src/content/entries/guitar-first-song.mdx` | 创建 | 吉他入门 ⑤ 第一首弹唱 |
-| `src/content/entries/piano-posture.mdx` | 创建 | 钢琴入门 ① 坐姿手型与指法编号 |
-| `src/content/entries/piano-keyboard-map.mdx` | 创建 | 钢琴入门 ② 键盘地图与找音 |
-| `src/content/entries/piano-first-scale.mdx` | 创建 | 钢琴入门 ③ 第一条音阶 C 大调 |
-| `src/content/entries/piano-two-hands.mdx` | 创建 | 钢琴入门 ④ 双手协调入门 |
-| `src/content/entries/piano-first-accompaniment.mdx` | 创建 | 钢琴入门 ⑤ 简单伴奏入门 |
-| `src/content/paths/guitar-intro.mdx` | 创建 | 吉他入门路线 |
-| `src/content/paths/piano-intro.mdx` | 创建 | 钢琴入门路线 |
-| `src/content/entries/guitar.mdx` | 修改 | 文末加入门路线导航；related 补 guitar-setup |
-| `src/content/entries/piano.mdx` | 修改 | 文末加入门路线导航；related 补 piano-posture |
+| 文件                                                | 动作 | 职责                                         |
+| --------------------------------------------------- | ---- | -------------------------------------------- |
+| `src/components/interactive/ChordDiagram.tsx`       | 创建 | 可复用吉他和弦指法图（SVG）                  |
+| `public/images/piano-posture.svg`                   | 创建 | 钢琴坐姿侧视图（线条图）                     |
+| `public/images/piano-hand-shape.svg`                | 创建 | 钢琴手型与指法编号图（线条图）               |
+| `public/images/guitar-setup-posture.svg`            | 创建 | 吉他持琴坐姿图（线条图）                     |
+| `src/content/entries/guitar-setup.mdx`              | 创建 | 吉他入门 ① 持琴与调音                        |
+| `src/content/entries/guitar-open-chords.mdx`        | 创建 | 吉他入门 ② 第一批开放和弦                    |
+| `src/content/entries/guitar-strumming.mdx`          | 创建 | 吉他入门 ③ 扫弦与节奏型                      |
+| `src/content/entries/guitar-chord-changes.mdx`      | 创建 | 吉他入门 ④ 和弦转换                          |
+| `src/content/entries/guitar-first-song.mdx`         | 创建 | 吉他入门 ⑤ 第一首弹唱                        |
+| `src/content/entries/piano-posture.mdx`             | 创建 | 钢琴入门 ① 坐姿手型与指法编号                |
+| `src/content/entries/piano-keyboard-map.mdx`        | 创建 | 钢琴入门 ② 键盘地图与找音                    |
+| `src/content/entries/piano-first-scale.mdx`         | 创建 | 钢琴入门 ③ 第一条音阶 C 大调                 |
+| `src/content/entries/piano-two-hands.mdx`           | 创建 | 钢琴入门 ④ 双手协调入门                      |
+| `src/content/entries/piano-first-accompaniment.mdx` | 创建 | 钢琴入门 ⑤ 简单伴奏入门                      |
+| `src/content/paths/guitar-intro.mdx`                | 创建 | 吉他入门路线                                 |
+| `src/content/paths/piano-intro.mdx`                 | 创建 | 钢琴入门路线                                 |
+| `src/content/entries/guitar.mdx`                    | 修改 | 文末加入门路线导航；related 补 guitar-setup  |
+| `src/content/entries/piano.mdx`                     | 修改 | 文末加入门路线导航；related 补 piano-posture |
 
 ---
 
@@ -72,6 +72,7 @@ import { ChordDiagram } from "../../components/interactive/ChordDiagram";
 ### 任务 1：ChordDiagram 组件
 
 **文件：**
+
 - 创建：`src/components/interactive/ChordDiagram.tsx`
 
 - [ ] **步骤 1：创建组件文件**
@@ -113,7 +114,12 @@ export function ChordDiagram({ name, frets, fingers, baseFret = 1, label }: Prop
         role="img"
         aria-label={`${name} 和弦图`}
       >
-        <text x={W / 2} y={20} textAnchor="middle" className="fill-foreground text-sm font-semibold">
+        <text
+          x={W / 2}
+          y={20}
+          textAnchor="middle"
+          className="fill-foreground text-sm font-semibold"
+        >
           {name}
         </text>
         {/* 品丝横线;baseFret=1 时最上边线画粗,代表琴枕 */}
@@ -168,7 +174,12 @@ export function ChordDiagram({ name, frets, fingers, baseFret = 1, label }: Prop
         {frets.map((f, i) =>
           f > 0 ? (
             <g key={`d${i}`}>
-              <circle cx={strX(i)} cy={(fretY(f - 1) + fretY(f)) / 2} r={7} className="fill-foreground" />
+              <circle
+                cx={strX(i)}
+                cy={(fretY(f - 1) + fretY(f)) / 2}
+                r={7}
+                className="fill-foreground"
+              />
               {fingers?.[i] ? (
                 <text
                   x={strX(i)}
@@ -223,6 +234,7 @@ git commit -m "feat(component): ChordDiagram 吉他和弦指法图(SVG,可复用
 ### 任务 2：3 张线条插图 SVG
 
 **文件：**
+
 - 创建：`public/images/piano-posture.svg`
 - 创建：`public/images/piano-hand-shape.svg`
 - 创建：`public/images/guitar-setup-posture.svg`
@@ -373,6 +385,7 @@ git commit -m "feat(assets): 入门阶线条插图——钢琴坐姿/钢琴手�
 ### 任务 3：吉他入门词条 ① ②（持琴调音 + 开放和弦）
 
 **文件：**
+
 - 创建：`src/content/entries/guitar-setup.mdx`
 - 创建：`src/content/entries/guitar-open-chords.mdx`
 
@@ -429,11 +442,36 @@ order: 12
 import { ChordDiagram } from "../../components/interactive/ChordDiagram";
 import { ChordPlayer } from "../../components/interactive/ChordPlayer";
 
-<ChordDiagram name="Em" frets={[0, 2, 2, 0, 0, 0]} fingers={[0, 2, 3, 0, 0, 0]} label="Em:5 弦、4 弦第 2 品,最简单的大横按之前的起点。" />
-<ChordDiagram name="Am" frets={[-1, 0, 2, 2, 1, 0]} fingers={[0, 0, 2, 3, 1, 0]} label="Am:6 弦不弹(×)。" />
-<ChordDiagram name="C" frets={[-1, 3, 2, 0, 1, 0]} fingers={[0, 3, 2, 0, 1, 0]} label="C:注意 6 弦不弹。" />
-<ChordDiagram name="G" frets={[3, 2, 0, 0, 0, 3]} fingers={[3, 2, 0, 0, 0, 4]} label="G:3-2-4 指法,换到 C 时手型顺。" />
-<ChordDiagram name="D" frets={[-1, -1, 0, 2, 3, 2]} fingers={[0, 0, 0, 1, 3, 2]} label="D:只弹 4-3-2-1 四根弦。" />
+<ChordDiagram
+  name="Em"
+  frets={[0, 2, 2, 0, 0, 0]}
+  fingers={[0, 2, 3, 0, 0, 0]}
+  label="Em:5 弦、4 弦第 2 品,最简单的大横按之前的起点。"
+/>
+<ChordDiagram
+  name="Am"
+  frets={[-1, 0, 2, 2, 1, 0]}
+  fingers={[0, 0, 2, 3, 1, 0]}
+  label="Am:6 弦不弹(×)。"
+/>
+<ChordDiagram
+  name="C"
+  frets={[-1, 3, 2, 0, 1, 0]}
+  fingers={[0, 3, 2, 0, 1, 0]}
+  label="C:注意 6 弦不弹。"
+/>
+<ChordDiagram
+  name="G"
+  frets={[3, 2, 0, 0, 0, 3]}
+  fingers={[3, 2, 0, 0, 0, 4]}
+  label="G:3-2-4 指法,换到 C 时手型顺。"
+/>
+<ChordDiagram
+  name="D"
+  frets={[-1, -1, 0, 2, 3, 2]}
+  fingers={[0, 0, 0, 1, 3, 2]}
+  label="D:只弹 4-3-2-1 四根弦。"
+/>
 
 <ChordPlayer client:visible chords={[["E2", "B2", "E3", "G3", "B3", "E4"], ["A2", "E3", "A3", "C4", "E4"], ["C3", "E3", "G3", "C4", "E4"], ["G2", "B2", "D3", "G3", "B3", "G4"], ["D3", "A3", "D4", "F#4"]} label="依次听五个和弦:Em → Am → C → G → D。" desc="点播放,对照手型记住每个和弦的「长相」与「听感」。" />
 ```
@@ -464,6 +502,7 @@ git commit -m "feat(content): 吉他入门①②——持琴与调音+第一批�
 ### 任务 4：吉他入门词条 ③ ④ ⑤（扫弦 + 和弦转换 + 第一首弹唱）
 
 **文件：**
+
 - 创建：`src/content/entries/guitar-strumming.mdx`
 - 创建：`src/content/entries/guitar-chord-changes.mdx`
 - 创建：`src/content/entries/guitar-first-song.mdx`
@@ -567,6 +606,7 @@ git commit -m "feat(content): 吉他入门③④⑤——扫弦节奏型+和弦�
 ### 任务 5：吉他入门路线 + guitar.mdx 导航
 
 **文件：**
+
 - 创建：`src/content/paths/guitar-intro.mdx`
 - 修改：`src/content/entries/guitar.mdx`
 
@@ -615,6 +655,7 @@ git commit -m "feat(paths): 吉他入门路线(5 步)+guitar 词条加路线导�
 ### 任务 6：钢琴入门词条 ① ②（坐姿手型 + 键盘地图）
 
 **文件：**
+
 - 创建：`src/content/entries/piano-posture.mdx`
 - 创建：`src/content/entries/piano-keyboard-map.mdx`
 
@@ -686,6 +727,7 @@ git commit -m "feat(content): 钢琴入门①②——坐姿手型与指法编�
 ### 任务 7：钢琴入门词条 ③ ④ ⑤（音阶 + 双手 + 伴奏）
 
 **文件：**
+
 - 创建：`src/content/entries/piano-first-scale.mdx`
 - 创建：`src/content/entries/piano-two-hands.mdx`
 - 创建：`src/content/entries/piano-first-accompaniment.mdx`
@@ -786,6 +828,7 @@ git commit -m "feat(content): 钢琴入门③④⑤——C 大调音阶+双手�
 ### 任务 8：钢琴入门路线 + piano.mdx 导航
 
 **文件：**
+
 - 创建：`src/content/paths/piano-intro.mdx`
 - 修改：`src/content/entries/piano.mdx`
 
@@ -795,7 +838,8 @@ git commit -m "feat(content): 钢琴入门③④⑤——C 大调音阶+双手�
 ---
 title: 钢琴入门
 description: 从坐姿手型到第一次伴奏:5 步走完,你能双手弹出一段简单伴奏。每一步都带能点、能听的键盘组件。
-steps: [piano-posture, piano-keyboard-map, piano-first-scale, piano-two-hands, piano-first-accompaniment]
+steps:
+  [piano-posture, piano-keyboard-map, piano-first-scale, piano-two-hands, piano-first-accompaniment]
 ---
 
 钢琴是把乐理「摊开给你看」的乐器:音高、音程、和弦在键盘上都看得见摸得着。这条路线不急着弹曲子,先把地基打牢——坐对手型、认清 88 键、跑通第一条音阶、学会双手协作,最后用三个和弦做出第一段伴奏。出口标准不是「弹得多快」,而是「手知道自己在干什么」。每步建议练到不用想也能做再往下走。
@@ -843,6 +887,7 @@ git commit -m "feat(paths): 钢琴入门路线(5 步)+piano 词条加路线导�
 - [ ] **步骤 2：两条路线端到端走查**
 
 运行：`npm run dev`，依次打开：
+
 - `/paths/guitar-intro`：从第 1 步点到第 5 步，确认「上一步/下一步」链通、5 篇词条的组件全部渲染出声（ChordDiagram 5 图、ChordPlayer、Metronome、Fretboard、StaffNotation）
 - `/paths/piano-intro`：同样走一遍（插图 2 张、Piano 组件 4 处、ChordPlayer 1 处、StaffNotation 1 处）
 - 切换暗色模式重走一遍，确认 SVG 插图、和弦图、组件在暗色下清晰

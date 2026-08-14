@@ -1,5 +1,6 @@
-import * as React from "react";
 import { Play, RotateCcw } from "lucide-react";
+import * as React from "react";
+
 import { playChord, playSequence } from "./audio";
 import { midiToNote, noteToMidi } from "./noteUtils";
 

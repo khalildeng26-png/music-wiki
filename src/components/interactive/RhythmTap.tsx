@@ -1,5 +1,5 @@
-import * as React from "react";
 import { Hand, Play } from "lucide-react";
+import * as React from "react";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -122,7 +122,8 @@ export function RhythmTap({ bpm = 80, beats = 8 }: { bpm?: number; beats?: numbe
   return (
     <figure className="not-prose my-8 rounded-xl border bg-card p-5">
       <figcaption className="mb-3 text-sm text-muted-foreground">
-        节奏跟打:听到拍子后,跟着节拍点下面的大圆按钮(或按空格),看你能踩准几拍。BPM {bpm},共 {beats} 拍。
+        节奏跟打:听到拍子后,跟着节拍点下面的大圆按钮(或按空格),看你能踩准几拍。BPM {bpm},共 {beats}{" "}
+        拍。
       </figcaption>
 
       <div className="flex items-center justify-center gap-2">
@@ -154,7 +155,7 @@ export function RhythmTap({ bpm = 80, beats = 8 }: { bpm?: number; beats?: numbe
           <button
             type="button"
             onClick={tap}
-            className="inline-flex h-28 w-28 select-none flex-col items-center justify-center rounded-full border-4 border-signature bg-signature/10 text-signature transition active:scale-95 active:bg-signature/30"
+            className="inline-flex h-28 w-28 flex-col items-center justify-center rounded-full border-4 border-signature bg-signature/10 text-signature transition select-none active:scale-95 active:bg-signature/30"
           >
             <Hand className="size-7" />
             <span className="mt-1 text-sm font-semibold">TAP</span>
@@ -164,8 +165,7 @@ export function RhythmTap({ bpm = 80, beats = 8 }: { bpm?: number; beats?: numbe
         <div className="text-sm">
           {running ? (
             <span>
-              命中 {hits} / {beats} ·{" "}
-              <span className="text-muted-foreground">{hint}</span>
+              命中 {hits} / {beats} · <span className="text-muted-foreground">{hint}</span>
             </span>
           ) : done ? (
             <span>

@@ -1,9 +1,9 @@
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 // 把 dist/ 上传到阿里云 OSS(S3 兼容),用桶默认域名即可国内访问(免备案)。
 // 用法:npm run deploy:oss   (会先 build 再上传)
 // 密钥从 .env 读取(参考 .env.example),不要提交。
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { extname, join, relative } from "node:path";
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 const REGION = process.env.OSS_REGION; // 如 oss-cn-shanghai
 const BUCKET = process.env.OSS_BUCKET;

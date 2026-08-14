@@ -21,7 +21,11 @@ import { StaffNotation } from "../../components/interactive/StaffNotation";
 
 每一条线和每一个间都代表一个确定的音高:位置越高音越高,位置越低音越低。
 
-<StaffNotation client:visible notes={["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"]} label="从中央 C(C4)向上到 C5,点播放听每个音的位置。" />
+<StaffNotation
+  client:visible
+  notes={["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"]}
+  label="从中央 C(C4)向上到 C5,点播放听每个音的位置。"
+/>
 
 > 当五条线不够用时,可在上方加"上加线"、下方加"下加线"来扩展音域。
 

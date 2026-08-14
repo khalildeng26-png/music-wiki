@@ -1,5 +1,6 @@
-import * as React from "react";
 import { Loader2, Play } from "lucide-react";
+import * as React from "react";
+
 import { playSequence, type Timbre } from "./audio";
 import { toAbc } from "./noteUtils";
 
@@ -60,11 +61,7 @@ export function StaffNotation({ notes, label, timbre = "piano" }: Props) {
           disabled={playing}
           className="mt-3 inline-flex items-center gap-2 rounded-lg bg-signature px-4 py-2 text-sm font-medium text-signature-foreground transition hover:opacity-90 disabled:opacity-60"
         >
-          {playing ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            <Play className="size-4" />
-          )}
+          {playing ? <Loader2 className="size-4 animate-spin" /> : <Play className="size-4" />}
           {playing ? "播放中…" : "播放"}
         </button>
       </div>

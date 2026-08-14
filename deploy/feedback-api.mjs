@@ -1,8 +1,8 @@
+import mysql from "mysql2/promise";
 // 音乐百科 · 反馈后端 v2(MySQL 版,Node >= 18)
 // POST /api/feedback            提交反馈 → 写入 MySQL feedbacks 表
 // GET  /api/feedback/list?key=  查看最近 100 条(需管理员密钥)
 import { createServer } from "node:http";
-import mysql from "mysql2/promise";
 
 const PORT = Number(process.env.PORT || 8089);
 const ADMIN_KEY = process.env.FEEDBACK_ADMIN_KEY || "";
@@ -49,10 +49,10 @@ const server = createServer((req, res) => {
       if (overflow) return;
       (async () => {
         try {
-          const data = JSON.parse(
-            Buffer.concat(chunks).toString("utf-8") || "{}",
-          );
-          const message = String(data.message ?? "").trim().slice(0, MAX_MSG);
+          const data = JSON.parse(Buffer.concat(chunks).toString("utf-8") || "{}");
+          const message = String(data.message ?? "")
+            .trim()
+            .slice(0, MAX_MSG);
           if (!message) {
             res.statusCode = 400;
             return res.end(JSON.stringify({ ok: false, error: "empty" }));
@@ -61,7 +61,9 @@ const server = createServer((req, res) => {
             "INSERT INTO feedbacks (message, contact, page, ip) VALUES (?, ?, ?, ?)",
             [
               message,
-              String(data.contact ?? "").trim().slice(0, MAX_CONTACT),
+              String(data.contact ?? "")
+                .trim()
+                .slice(0, MAX_CONTACT),
               String(data.page ?? "").slice(0, 200),
               String(req.headers["x-forwarded-for"] ?? "")
                 .split(",")[0]
