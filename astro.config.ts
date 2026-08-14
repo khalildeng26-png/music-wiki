@@ -15,5 +15,10 @@ export default defineConfig({
   integrations: [react(), mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      // abcjs(~500kB)/Tone(~340kB)均为运行时动态 import(岛屿可见/点播放才加载),
+      // 不占首屏;>500kB 警告与实际加载行为不符,抬高阈值避免误导。
+      chunkSizeWarningLimit: 600,
+    },
   },
 });
