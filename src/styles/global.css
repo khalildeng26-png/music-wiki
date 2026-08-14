@@ -17,7 +17,7 @@
 
 @theme inline {
   --breakpoint-3xl: 1600px;
-  --font-sans: "LXGW WenKai Lite", "PingFang SC", "Microsoft YaHei", "HarmonyOS Sans SC", system-ui, sans-serif;
+  --font-sans: "Inter Variable", "PingFang SC", "Microsoft YaHei", "HarmonyOS Sans SC", system-ui, sans-serif;
   --font-display: "LXGW WenKai Lite", "PingFang SC", "Microsoft YaHei", "HarmonyOS Sans SC", system-ui, serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -214,7 +214,7 @@
   overflow-x: auto;
 }
 
-/* 正文标题用宋体(书卷气),正文仍用黑体保证可读性 */
+/* 标题用霞鹜文楷(手写书法感),正文用 Inter + 系统黑体保证可读性 */
 .prose :where(h1, h2, h3, h4):not(:where(.not-prose *)) {
   font-family: var(--font-display);
   font-optical-sizing: auto;
