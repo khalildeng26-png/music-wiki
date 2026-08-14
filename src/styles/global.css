@@ -8,17 +8,17 @@
 
 @import "@fontsource-variable/inter";
 
-@import "@fontsource-variable/noto-serif-sc";
+@import "lxgw-wenkai-lite-webfont/lxgwwenkailite-regular.css";
 
-@import "@fontsource-variable/fraunces";
+@import "lxgw-wenkai-lite-webfont/lxgwwenkailite-bold.css";
 
 @custom-variant dark (&:is(.dark *));
 @custom-variant fixed (&:is(.layout-fixed *));
 
 @theme inline {
   --breakpoint-3xl: 1600px;
-  --font-sans: "Inter Variable", "PingFang SC", "Microsoft YaHei", "HarmonyOS Sans SC", system-ui, sans-serif;
-  --font-display: "Fraunces Variable", "Noto Serif SC Variable", "Songti SC", "STSong", "SimSun", serif;
+  --font-sans: "LXGW WenKai Lite", "PingFang SC", "Microsoft YaHei", "HarmonyOS Sans SC", system-ui, sans-serif;
+  --font-display: "LXGW WenKai Lite", "PingFang SC", "Microsoft YaHei", "HarmonyOS Sans SC", system-ui, serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
