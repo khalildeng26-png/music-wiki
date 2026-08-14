@@ -8,12 +8,17 @@
 
 @import "@fontsource-variable/inter";
 
+@import "@fontsource-variable/noto-serif-sc";
+
+@import "@fontsource-variable/fraunces";
+
 @custom-variant dark (&:is(.dark *));
 @custom-variant fixed (&:is(.layout-fixed *));
 
 @theme inline {
   --breakpoint-3xl: 1600px;
   --font-sans: "Inter Variable", "PingFang SC", "Microsoft YaHei", "HarmonyOS Sans SC", system-ui, sans-serif;
+  --font-display: "Fraunces Variable", "Noto Serif SC Variable", "Songti SC", "STSong", "SimSun", serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -207,4 +212,10 @@
 .prose :where(pre) {
   max-width: 100%;
   overflow-x: auto;
+}
+
+/* 正文标题用宋体(书卷气),正文仍用黑体保证可读性 */
+.prose :where(h1, h2, h3, h4):not(:where(.not-prose *)) {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
 }

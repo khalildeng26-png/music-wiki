@@ -109,7 +109,7 @@ const jsonLd = [
       ))
     }
 
-    <h1 class="mt-6 text-4xl font-bold tracking-tight">
+    <h1 class="mt-6 text-4xl font-display font-bold tracking-tight">
       {entry.data.title}
       {entry.data.titleEn && <span class="ml-3 text-2xl font-medium text-muted-foreground md:text-3xl">{entry.data.titleEn}</span>}
     </h1>
@@ -134,7 +134,7 @@ const jsonLd = [
     {
       entry.data.faq?.length > 0 && (
         <section class="not-prose mt-16 border-t pt-8">
-          <h2 class="text-xl font-semibold">常见问题</h2>
+          <h2 class="text-xl font-display font-semibold">常见问题</h2>
           <div class="mt-4 space-y-5">
             {entry.data.faq.map((f) => (
               <div>
@@ -150,7 +150,7 @@ const jsonLd = [
     {
       related.length > 0 && (
         <section class="not-prose mt-16 border-t pt-8">
-          <h2 class="text-xl font-semibold">相关词条</h2>
+          <h2 class="text-xl font-display font-semibold">相关词条</h2>
           <div class="mt-4 grid gap-3 sm:grid-cols-2">
             {related.map((r) => (
               <a

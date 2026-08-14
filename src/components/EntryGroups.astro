@@ -29,7 +29,7 @@ seriesIds.sort(
           href={`/entries/${e.id}`}
           class="group flex flex-col gap-1.5 rounded-xl border bg-card p-4 transition hover:border-signature/50"
         >
-          <div class="font-medium group-hover:text-signature">
+          <div class="font-display font-medium group-hover:text-signature">
             {e.data.title}
             {e.data.titleEn && (
               <span class="ml-1.5 text-sm font-normal text-muted-foreground">{e.data.titleEn}</span>
@@ -45,7 +45,7 @@ seriesIds.sort(
 {
   tutorials.length > 0 && (
     <div class="mt-10">
-      <h2 class="text-xl font-semibold">学习教程</h2>
+      <h2 class="font-display text-xl font-semibold">学习教程</h2>
       <p class="mt-1 text-sm text-muted-foreground">想系统上手?按路线顺序走,每一步都带能听、能练的组件。</p>
       <div class="mt-4 space-y-6">
         {seriesIds.map((sid) => {

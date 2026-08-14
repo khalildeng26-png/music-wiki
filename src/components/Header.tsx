@@ -11,7 +11,7 @@ export function Header() {
 
           <a href="/" className="hidden items-center gap-2.5 lg:flex">
             <img src="/logo.png" alt="橙月Wiki" className="size-7 rounded-md" />
-            <span className="text-base font-semibold tracking-tight">橙月Wiki</span>
+            <span className="font-display text-base font-bold tracking-tight">橙月Wiki</span>
           </a>
 
           <MainNav className="hidden lg:flex" />

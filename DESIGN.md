@@ -88,7 +88,7 @@
 ### 字体
 - **正文/界面**:`--font-sans` = `"Inter Variable", "PingFang SC", "Microsoft YaHei", "HarmonyOS Sans SC", system-ui, sans-serif`（CJK 走系统字体,零下载）。
 - **数据/等宽**（BPM、音值、调号,营造"音乐工作站"感）:**JetBrains Mono**（待安装 `@fontsource/jetbrains-mono`）。
-- **展示/大标题**（课程封面等仪式感位置,可用衬线增加文化底蕴）:待选,候选 思源宋体 / Space Grotesk。
+- **展示/标题**（书卷气的艺术气息）:`--font-display` = `"Fraunces Variable", "Noto Serif SC Variable", "Songti SC", "STSong", "SimSun", serif`（2026-08 定稿）。西文走 Fraunces 复古衬线,CJK 走思源宋体。应用于全站 h1/h2（含 `.prose` 正文标题）与站点字标。宋体横细竖粗的笔锋是"权威音乐百科"书卷气的来源;正文仍用黑体保证可读性。依赖 `@fontsource-variable/noto-serif-sc`（unicode-range 分片,按需加载）+ `@fontsource-variable/fraunces`。
 
 ### 签名元素（别人抄不走的辨识度）
 1. **「五线谱分隔线」motif**:段落分隔不用普通横线,而用 5 条间距递减的细线(像五线谱),一致用于导航/分隔/加载/播放态。
