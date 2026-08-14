@@ -14,6 +14,7 @@ order: 6
 ---
 
 import { EarTrainer } from "../../components/interactive/EarTrainer";
+import { PitchTrainer } from "../../components/interactive/PitchTrainer";
 
 **音准**是把音唱到**正确的音高**上的能力。"跑调"绝大多数不是嗓子问题,而是**耳朵和嗓子之间的反馈回路**没打通:听不准,或听到了但发不出。
 
@@ -35,6 +36,12 @@ import { EarTrainer } from "../../components/interactive/EarTrainer";
 音准从"听"开始。先做几题音程听辨,把耳朵校准好,再开口唱:
 
 <EarTrainer client:visible />
+
+## 开口试一试:看看你唱的音
+
+耳朵校准后,轮到嗓子了。开麦克风唱一个稳定的音(啊——),实时看它落在哪个音、偏了多少音分;再点播放键听听标准音高,对照着微调。**偏差 ±10 音分以内**,人耳基本听不出跑调:
+
+<PitchTrainer client:visible />
 
 > 音准提升没有捷径,但有方法:每天 10 分钟"听 → 模唱 → 录音对照",一个月会有明显变化。
 

@@ -6,19 +6,19 @@
 
 - **104 篇词条**:乐理 / 记谱 / 和声 / 曲风 / 乐器 / 唱法 六大分类
 - **10 条学习路线**:吉他入门、钢琴入门、和声四阶、读谱、曲式、声乐等
-- **12 个交互组件**:StaffNotation(点谱发声)、NoteDemo(认音)、Piano、Fretboard、ChordDiagram、EarTrainer、Metronome、RhythmTap 等
+- **13 个交互组件**:StaffNotation(点谱发声)、NoteDemo(认音)、PitchTrainer(唱歌音高反馈)、Piano、Fretboard、ChordDiagram、EarTrainer、Metronome、RhythmTap 等
 
 ## 技术栈
 
-| 层 | 技术 |
-|----|------|
-| 框架 | Astro 7(岛屿架构:静态内容 + 局部交互) |
-| 交互组件 | React 19(@astrojs/react) |
-| 样式 | Tailwind CSS v4 + shadcn/ui(Base UI) |
-| 内容 | MDX(正文内直接嵌交互组件) |
-| 音频 | Tone.js + abcjs |
-| 搜索 | Pagefind(构建时索引) |
-| 质量工具 | oxlint / oxfmt |
+| 层       | 技术                                  |
+| -------- | ------------------------------------- |
+| 框架     | Astro 7(岛屿架构:静态内容 + 局部交互) |
+| 交互组件 | React 19(@astrojs/react)              |
+| 样式     | Tailwind CSS v4 + shadcn/ui(Base UI)  |
+| 内容     | MDX(正文内直接嵌交互组件)             |
+| 音频     | Tone.js + abcjs                       |
+| 搜索     | Pagefind(构建时索引)                  |
+| 质量工具 | oxlint / oxfmt                        |
 
 ## 本地开发
 
