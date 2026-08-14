@@ -40,7 +40,8 @@ export function Piano({ startOct = 4, octaves = 2, label }: Props) {
   async function hit(note: string) {
     setActive(note);
     try {
-      await playNote(note, 0.9);
+      // 虚拟钢琴键 → 永远用钢琴音色
+      await playNote(note, 0.9, "piano");
     } catch {
       /* 忽略 */
     }

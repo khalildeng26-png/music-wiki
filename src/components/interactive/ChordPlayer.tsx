@@ -1,15 +1,17 @@
 import * as React from "react";
 import { Play } from "lucide-react";
-import { playChordProgression } from "./audio";
+import { playChordProgression, type Timbre } from "./audio";
 
 type Props = {
   chords: string[][];
   label: string;
   desc?: string;
+  /** 播放音色,默认钢琴。 */
+  timbre?: Timbre;
 };
 
 /** 和弦播放器:点一下依次奏响一串和弦(用于终止式、转位、进行示范)。 */
-export function ChordPlayer({ chords, label, desc }: Props) {
+export function ChordPlayer({ chords, label, desc, timbre = "piano" }: Props) {
   const [playing, setPlaying] = React.useState(false);
 
   async function handle() {
@@ -18,7 +20,7 @@ export function ChordPlayer({ chords, label, desc }: Props) {
     const dur = 0.9;
     const gap = 0.25;
     try {
-      await playChordProgression(chords, dur, gap);
+      await playChordProgression(chords, dur, gap, timbre);
     } catch {
       /* 忽略 */
     }

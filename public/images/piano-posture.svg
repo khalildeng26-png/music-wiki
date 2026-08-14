@@ -1,34 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="钢琴坐姿侧视图:背挺直,手肘与键盘大致同高,坐琴凳前二分之一">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="钢琴坐姿侧视图:背挺直,头不低,手肘约与键盘同高,坐琴凳前二分之一,双脚平放地面">
   <!-- 地面 -->
-  <line x1="20" y1="290" x2="460" y2="290" stroke="#a1a1aa" stroke-width="2"/>
-  <!-- 钢琴琴体 -->
-  <rect x="300" y="60" width="150" height="150" fill="none" stroke="#a1a1aa" stroke-width="2.5" rx="4"/>
+  <line x1="20" y1="292" x2="460" y2="292" stroke="#a1a1aa" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- 立式钢琴琴体 -->
+  <rect x="312" y="58" width="138" height="158" rx="5" fill="none" stroke="#a1a1aa" stroke-width="2.5"/>
   <!-- 键盘托板 -->
-  <rect x="240" y="210" width="210" height="14" fill="none" stroke="#a1a1aa" stroke-width="2.5" rx="3"/>
+  <rect x="238" y="216" width="212" height="13" rx="3" fill="none" stroke="#a1a1aa" stroke-width="2.5"/>
   <!-- 琴键分隔线 -->
-  <line x1="260" y1="210" x2="260" y2="224" stroke="#a1a1aa" stroke-width="1"/>
-  <line x1="280" y1="210" x2="280" y2="224" stroke="#a1a1aa" stroke-width="1"/>
-  <line x1="300" y1="210" x2="300" y2="224" stroke="#a1a1aa" stroke-width="1"/>
-  <line x1="320" y1="210" x2="320" y2="224" stroke="#a1a1aa" stroke-width="1"/>
-  <line x1="340" y1="210" x2="340" y2="224" stroke="#a1a1aa" stroke-width="1"/>
+  <line x1="262" y1="216" x2="262" y2="229" stroke="#a1a1aa" stroke-width="1"/>
+  <line x1="286" y1="216" x2="286" y2="229" stroke="#a1a1aa" stroke-width="1"/>
+  <line x1="310" y1="216" x2="310" y2="229" stroke="#a1a1aa" stroke-width="1"/>
+  <line x1="334" y1="216" x2="334" y2="229" stroke="#a1a1aa" stroke-width="1"/>
+  <line x1="358" y1="216" x2="358" y2="229" stroke="#a1a1aa" stroke-width="1"/>
+  <line x1="382" y1="216" x2="382" y2="229" stroke="#a1a1aa" stroke-width="1"/>
+
   <!-- 琴凳 -->
-  <rect x="70" y="200" width="90" height="12" fill="none" stroke="#a1a1aa" stroke-width="2.5" rx="3"/>
-  <line x1="80" y1="212" x2="80" y2="290" stroke="#a1a1aa" stroke-width="2.5"/>
-  <line x1="150" y1="212" x2="150" y2="290" stroke="#a1a1aa" stroke-width="2.5"/>
-  <!-- 人:头 -->
-  <circle cx="128" cy="88" r="20" fill="none" stroke="#a1a1aa" stroke-width="2.5"/>
-  <!-- 躯干(微前倾) -->
-  <line x1="124" y1="108" x2="112" y2="200" stroke="#a1a1aa" stroke-width="2.5"/>
-  <!-- 手臂:肩→肘→手(强调色,落点在键盘面) -->
-  <polyline points="122,124 168,158 250,208" fill="none" stroke="#d97706" stroke-width="2.5"/>
-  <!-- 大腿→小腿→脚 -->
-  <polyline points="112,200 185,238 185,290" fill="none" stroke="#a1a1aa" stroke-width="2.5"/>
-  <line x1="185" y1="290" x2="206" y2="290" stroke="#a1a1aa" stroke-width="2.5"/>
+  <rect x="52" y="210" width="100" height="11" rx="4" fill="none" stroke="#a1a1aa" stroke-width="2.5"/>
+  <line x1="62" y1="221" x2="62" y2="292" stroke="#a1a1aa" stroke-width="2.5"/>
+  <line x1="142" y1="221" x2="142" y2="292" stroke="#a1a1aa" stroke-width="2.5"/>
+
+  <!-- 人:头(不低头) -->
+  <circle cx="118" cy="86" r="17" fill="#a1a1aa"/>
+  <!-- 人:躯干(挺直) -->
+  <rect x="100" y="108" width="36" height="104" rx="17" fill="#a1a1aa"/>
+  <!-- 人:手臂 肩→肘→手(强调色,手落在键面上) -->
+  <polyline points="124,122 170,156 246,210" fill="none" stroke="#d97706" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 人:大腿→膝→小腿→脚 -->
+  <line x1="116" y1="212" x2="182" y2="238" stroke="#a1a1aa" stroke-width="13" stroke-linecap="round"/>
+  <line x1="182" y1="238" x2="182" y2="284" stroke="#a1a1aa" stroke-width="11" stroke-linecap="round"/>
+  <line x1="182" y1="286" x2="204" y2="286" stroke="#a1a1aa" stroke-width="8" stroke-linecap="round"/>
+
   <!-- 手肘高度参考虚线(肘→键盘) -->
-  <line x1="168" y1="158" x2="240" y2="158" stroke="#d97706" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="170" y1="156" x2="244" y2="156" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4 4"/>
+
   <!-- 标注 -->
-  <text x="88" y="50" font-size="12" fill="#d97706">背挺直,头不低</text>
-  <text x="130" y="146" font-size="12" fill="#d97706">手肘约与键盘同高</text>
-  <text x="52" y="262" font-size="12" fill="#a1a1aa">坐琴凳前二分之一</text>
-  <text x="360" y="252" font-size="12" fill="#a1a1aa">双脚平放地面</text>
+  <text x="70" y="50" font-size="12" fill="#d97706">背挺直,头不低</text>
+  <text x="150" y="144" font-size="12" fill="#d97706">手肘约与键盘同高</text>
+  <text x="30" y="262" font-size="12" fill="#a1a1aa">坐琴凳前二分之一</text>
+  <text x="330" y="268" font-size="12" fill="#a1a1aa">双脚平放地面</text>
 </svg>

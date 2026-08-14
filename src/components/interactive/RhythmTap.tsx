@@ -24,9 +24,10 @@ export function RhythmTap({ bpm = 80, beats = 8 }: { bpm?: number; beats?: numbe
     transport.cancel();
     transport.bpm.value = bpm;
     const synth = new Tone.Synth({
-      oscillator: { type: "square" },
-      envelope: { attack: 0.001, decay: 0.05, sustain: 0, release: 0.04 },
-      volume: -12,
+      // 与节拍器同配方:三角波 + 快衰减,清脆不发糊
+      oscillator: { type: "triangle" },
+      envelope: { attack: 0.001, decay: 0.06, sustain: 0, release: 0.04 },
+      volume: -6,
     }).toDestination();
     synthRef.current = synth;
 

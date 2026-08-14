@@ -37,9 +37,10 @@ export function Metronome() {
     const Draw = Tone.getDraw?.() ?? Tone.Draw;
     transport.bpm.value = bpmRef.current;
     const synth = new Tone.Synth({
-      oscillator: { type: "square" },
-      envelope: { attack: 0.001, decay: 0.06, sustain: 0, release: 0.05 },
-      volume: -10,
+      // 三角波 + 快衰减:比方波干净不发糊,限幅后依然清脆
+      oscillator: { type: "triangle" },
+      envelope: { attack: 0.001, decay: 0.08, sustain: 0, release: 0.05 },
+      volume: -4,
     }).toDestination();
     synthRef.current = synth;
 

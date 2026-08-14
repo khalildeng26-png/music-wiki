@@ -20,7 +20,8 @@ export function Fretboard({ frets = 12, label }: Props) {
   async function hit(note: string) {
     setActive(note);
     try {
-      await playNote(note, 0.9);
+      // 吉他指板 → 永远用吉他拨弦音色
+      await playNote(note, 0.9, "guitar");
     } catch {
       /* 忽略 */
     }

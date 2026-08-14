@@ -1,15 +1,17 @@
 import * as React from "react";
 import { Loader2, Play } from "lucide-react";
-import { playSequence } from "./audio";
+import { playSequence, type Timbre } from "./audio";
 import { toAbc } from "./noteUtils";
 
 type Props = {
   notes: string[];
   label?: string;
+  /** 播放音色,默认钢琴。词条在哪个乐器语境下就用哪个(如 guitar* 用 guitar)。 */
+  timbre?: Timbre;
 };
 
 /** 渲染一段五线谱(abcjs),点琥珀播放键用 Tone.js 依次发声。 */
-export function StaffNotation({ notes, label }: Props) {
+export function StaffNotation({ notes, label, timbre = "piano" }: Props) {
   const ref = React.useRef<HTMLDivElement>(null);
   const [playing, setPlaying] = React.useState(false);
 
@@ -35,7 +37,7 @@ export function StaffNotation({ notes, label }: Props) {
     if (playing) return;
     setPlaying(true);
     try {
-      await playSequence(notes);
+      await playSequence(notes, 0.45, 0.08, timbre);
     } catch {
       /* 忽略音频错误 */
     }
