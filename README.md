@@ -6,7 +6,7 @@
 
 - **104 篇词条**:乐理 / 记谱 / 和声 / 曲风 / 乐器 / 唱法 六大分类
 - **10 条学习路线**:吉他入门、钢琴入门、和声四阶、读谱、曲式、声乐等
-- **13 个交互组件**:StaffNotation(点谱发声)、NoteDemo(认音)、PitchTrainer(唱歌音高反馈)、Piano、Fretboard、ChordDiagram、EarTrainer、Metronome、RhythmTap 等
+- **14 个交互组件**:StaffNotation(点谱发声)、NoteDemo(认音)、PitchTrainer(唱歌音高反馈)、ScalePlayer(音阶试听)、Piano、Fretboard、ChordDiagram、EarTrainer、Metronome、RhythmTap 等
 
 ## 技术栈
 
