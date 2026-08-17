@@ -5,9 +5,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const require = createRequire(import.meta.url);
-const { chromium } = require(
-  "C:/Users/admin/AppData/Roaming/npm/node_modules/mcp-jobs/node_modules/playwright",
-);
+const {
+  chromium,
+} = require("C:/Users/admin/AppData/Roaming/npm/node_modules/mcp-jobs/node_modules/playwright");
 
 const BASE = "http://localhost:4321";
 const OUT = path.join(path.dirname(fileURLToPath(import.meta.url)), "_verify");
@@ -38,7 +38,11 @@ const readings = [];
 for (let i = 0; i < 8; i++) {
   await page.waitForTimeout(700);
   const note = await fig.locator(".font-display").first().textContent();
-  const hz = await fig.locator(".tabular-nums").first().textContent().catch(() => "");
+  const hz = await fig
+    .locator(".tabular-nums")
+    .first()
+    .textContent()
+    .catch(() => "");
   readings.push(`${note?.trim()}|${hz?.trim()}`);
 }
 console.log("组件读数序列:", readings);
