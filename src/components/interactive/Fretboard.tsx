@@ -4,17 +4,20 @@ import * as React from "react";
 import { playNote } from "./audio";
 import { midiToNote, noteToMidi } from "./noteUtils";
 
-// 标准调弦,从 6 弦(低 E2)到 1 弦(高 E4);渲染时从上到下
-const TUNING = ["E2", "A2", "D3", "G3", "B3", "E4"];
+// 默认吉他标准调弦,从 6 弦(低 E2)到 1 弦(高 E4);渲染时从上到下。
+// 可传 tuning 支持 4 弦贝斯/尤克里里(数组顺序 = 最粗弦 → 最细弦)。
+const GUITAR_TUNING = ["E2", "A2", "D3", "G3", "B3", "E4"];
 const INLAY = new Set([3, 5, 7, 9]);
 
 type Props = {
   frets?: number;
   label?: string;
+  /** 定弦(最粗弦 → 最细弦),默认吉他标准音 */
+  tuning?: string[];
 };
 
-/** 吉他指板:点任意品格听音,琥珀高亮当前音。 */
-export function Fretboard({ frets = 12, label }: Props) {
+/** 指板(默认吉他):点任意品格听音,琥珀高亮当前音。 */
+export function Fretboard({ frets = 12, label, tuning = GUITAR_TUNING }: Props) {
   const [active, setActive] = React.useState<string | null>(null);
   const cols = `repeat(${frets + 1}, minmax(0, 1fr))`;
 
@@ -61,7 +64,7 @@ export function Fretboard({ frets = 12, label }: Props) {
             {/* 指板 */}
             <div className="overflow-hidden rounded-md bg-amber-900">
               <div className="grid" style={{ gridTemplateColumns: cols }}>
-                {TUNING.map((open) =>
+                {tuning.map((open) =>
                   fretIdx.map((f) => {
                     const note = midiToNote(noteToMidi(open) + f);
                     const display = note.replace(/\d+$/, "");
@@ -101,7 +104,8 @@ export function Fretboard({ frets = 12, label }: Props) {
           </div>
         </div>
         <p className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
-          <Volume2 className="size-3.5" /> 点品格上的音名听音(从上到下:6 弦 E2 → 1 弦 E4)
+          <Volume2 className="size-3.5" /> 点品格上的音名听音(从上到下:{tuning.length} 弦{" "}
+          {tuning[0]} → 1 弦 {tuning[tuning.length - 1]})
         </p>
       </div>
     </figure>

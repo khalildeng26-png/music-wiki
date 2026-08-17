@@ -1,0 +1,65 @@
+---
+title: 第一条 Bassline
+titleEn: "Bass: Your First Bassline"
+category: 乐器
+series: bass-intro
+summary: 把根音、五度和经过音拼成八小节完整 bassline——配上 C–G–Am–F,你已经能跟一首歌了。
+tags: [乐器, 贝斯, 入门, 实战]
+related: [bass-scale-fifths, pop-progressions, bass]
+faq:
+  - q: 新手能弹什么完整曲子?
+    a: 用 C–G–Am–F 四个和弦的任何歌都可以:每小节弹根音与五度,末拍加一个"走向下一个和弦"的经过音,就是合格的入门 bassline。
+  - q: 什么是经过音?
+    a: 换和弦前的一两个"路过"音,用来把前后两个根音连起来(如从小节末的 D 走向下一个和弦的 E)。它让贝斯线有"走路"的方向感,而不是一个个孤立的重音。
+order: 25
+---
+
+import { ChordPlayer } from "../../components/interactive/ChordPlayer";
+import { Metronome } from "../../components/interactive/Metronome";
+
+走到这一步,你手里已有三块积木:**根音、五度、音阶里的音**。现在把它们拼成一条真正的 bassline——八小节,配流行乐最经典的 [C–G–Am–F 进行](/entries/pop-progressions)。
+
+## 先听要伴奏的和弦
+
+<ChordPlayer
+  client:visible
+  chords={[
+    ["C2", "E2", "G2"],
+    ["G2", "B2", "D3"],
+    ["A2", "C3", "E3"],
+    ["F2", "A2", "C3"],
+  ]}
+  label="C – G – Am – F(I–V–vi–IV):你的 bassline 要垫的就是它。"
+/>
+
+四个根音:**C(3 弦 3 品)、G(1 弦空弦)、A(1 弦 2 品)、F(2 弦 1 品)**。
+
+## Bassline 三层楼梯
+
+**第一层:纯根音**(每小节 4 个四分音符)
+
+```text
+| C C C C | G G G G | A A A A | F F F F |
+```
+
+**第二层:根音 + 五度**(前两拍根音、后两拍五度)
+
+```text
+| C C G G | G G D D | A A E E | F F C C |
+```
+
+(Am 的五度是 E——1 弦 7 品或 2 弦 2 品都行,选顺手那个。)
+
+**第三层:加经过音**(小节末换成"走向下一个根音"的音)
+
+```text
+| C C G D | G G D D#| A A E E | F F C B |
+```
+
+末尾的 D、D♯、B 都是"在路上"的音:离下一个根音只差一步,换和弦时有滑过去的方向感。**经过音不和谐没关系,它只路过不停留**——这正是贝斯线的调味逻辑。
+
+<Metronome client:visible />
+
+> 练法:每层单独跟节拍器练稳,80 BPM 起步,稳了加到 100。然后找一首 C–G–Am–F 的歌(这个进行的歌一抓一大把),关掉原曲贝斯,你来当它的地板。
+
+五步走完:持琴调音 → 根音 → 律动 → 音阶与五度 → 第一条 bassline。回到 [贝斯](/entries/bass) 词条看这件乐器的全貌,或去 [和弦进行](/entries/chord-progression) 理解你刚才伴奏的和声逻辑。

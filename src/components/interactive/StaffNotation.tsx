@@ -9,10 +9,12 @@ type Props = {
   label?: string;
   /** 播放音色,默认钢琴。词条在哪个乐器语境下就用哪个(如 guitar* 用 guitar)。 */
   timbre?: Timbre;
+  /** 谱号,默认高音;低音乐器(贝斯等)传 "bass" 免得加线满天飞 */
+  clef?: "treble" | "bass";
 };
 
 /** 渲染一段五线谱(abcjs),点琥珀播放键用 Tone.js 依次发声。 */
-export function StaffNotation({ notes, label, timbre = "piano" }: Props) {
+export function StaffNotation({ notes, label, timbre = "piano", clef = "treble" }: Props) {
   const ref = React.useRef<HTMLDivElement>(null);
   const [playing, setPlaying] = React.useState(false);
 
@@ -22,7 +24,8 @@ export function StaffNotation({ notes, label, timbre = "piano" }: Props) {
       const abcjs = (await import("abcjs")).default;
       if (cancelled || !ref.current) return;
       ref.current.innerHTML = "";
-      const abc = `X:1\nL:1/4\nK:C\n${notes.map(toAbc).join(" ")} |`;
+      const key = clef === "bass" ? "K:C clef=bass" : "K:C";
+      const abc = `X:1\nL:1/4\n${key}\n${notes.map(toAbc).join(" ")} |`;
       abcjs.renderAbc(ref.current, abc, {
         responsive: "resize",
         add_classes: true,
@@ -32,7 +35,7 @@ export function StaffNotation({ notes, label, timbre = "piano" }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [notes.join(",")]);
+  }, [notes.join(","), clef]);
 
   async function handlePlay() {
     if (playing) return;

@@ -3,7 +3,7 @@ import * as React from "react";
 type Props = {
   /** 和弦名,如 "Em" */
   name: string;
-  /** 长度 6,顺序为 6 弦(低 E)→1 弦(高 E);-1 = 不弹(×),0 = 空弦(O) */
+  /** 顺序为最粗弦 → 最细弦(默认 6 弦);-1 = 不弹(×),0 = 空弦(O) */
   frets: number[];
   /** 可选,指法编号 1-4,顺序同 frets(0 或不传 = 不标) */
   fingers?: number[];
@@ -11,10 +11,11 @@ type Props = {
   baseFret?: number;
   /** 图注文字 */
   label?: string;
+  /** 弦数,默认 6(吉他);尤克里里传 4 */
+  strings?: number;
 };
 
 const FRET_COUNT = 4; // 纵向固定展示 4 个品格
-const W = 132;
 const H = 150;
 const GRID_LEFT = 26;
 const GRID_TOP = 34;
@@ -26,11 +27,12 @@ const fretY = (j: number) => GRID_TOP + j * FRET_GAP;
 /** 按弦圆点的纵坐标:第 f 品的中心(上、下品丝之间) */
 const dotY = (f: number) => (fretY(f - 1) + fretY(f)) / 2;
 
-/** 吉他和弦指法图:竖线为弦(6→1 从左到右),横线为品丝,圆点为按弦位置,O/× 标在琴枕上方。 */
-export function ChordDiagram({ name, frets, fingers, baseFret = 1, label }: Props) {
-  if (frets.length !== 6) {
+/** 和弦指法图(默认吉他,支持 4 弦):竖线为弦(粗→细 从左到右),横线为品丝,圆点为按弦位置,O/× 标在琴枕上方。 */
+export function ChordDiagram({ name, frets, fingers, baseFret = 1, label, strings = 6 }: Props) {
+  const W = GRID_LEFT + (strings - 1) * STR_GAP + 26;
+  if (frets.length !== strings) {
     console.warn(
-      `[ChordDiagram] "${name}" 的 frets 必须是 6 元素数组(顺序 6 弦→1 弦),实际长度 ${frets.length}`,
+      `[ChordDiagram] "${name}" 的 frets 必须是 ${strings} 元素数组(顺序 粗弦→细弦),实际长度 ${frets.length}`,
     );
   }
   return (
@@ -55,14 +57,14 @@ export function ChordDiagram({ name, frets, fingers, baseFret = 1, label }: Prop
             key={`f${j}`}
             x1={GRID_LEFT}
             y1={fretY(j)}
-            x2={strX(5)}
+            x2={strX(strings - 1)}
             y2={fretY(j)}
             className="stroke-foreground"
             strokeWidth={j === 0 && baseFret === 1 ? 3.5 : 1}
           />
         ))}
         {/* 琴弦竖线 */}
-        {Array.from({ length: 6 }, (_, i) => (
+        {Array.from({ length: strings }, (_, i) => (
           <line
             key={`s${i}`}
             x1={strX(i)}

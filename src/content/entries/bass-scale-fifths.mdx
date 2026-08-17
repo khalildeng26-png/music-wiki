@@ -1,0 +1,76 @@
+---
+title: 第一条音阶与五度
+titleEn: "Bass: First Scale & Fifths"
+category: 乐器
+series: bass-intro
+summary: 在开放把位弹出 C 大调音阶,再学伴奏神器"根音-五度"——两个音,就能给绝大多数字歌曲垫底。
+tags: [乐器, 贝斯, 入门, 音阶]
+related: [scale, bass-eighth-groove, bass-first-song]
+faq:
+  - q: 贝斯上 C 大调音阶怎么按?
+    a: 开放把位:C2 在 3 弦(A 弦)第 3 品,D2 是 2 弦空弦,E2、F2 在 2 弦第 2、3 品,G2 是 1 弦空弦,A2、B2 在 1 弦第 2、4 品,上行到 C3 是 1 弦第 5 品。
+  - q: 什么是根音-五度伴奏?
+    a: 每个和弦弹它的根音和上方纯五度两个音(如 C 弹 C–G),轮流或交替。从乡村到摇滚通用的贝斯基本功型,比纯根音更有推动力。
+order: 24
+---
+
+import { StaffNotation } from "../../components/interactive/StaffNotation";
+import { Fretboard } from "../../components/interactive/Fretboard";
+import { ChordPlayer } from "../../components/interactive/ChordPlayer";
+
+只会根音,音够用但歌显得"平"。这一步给耳朵添两种味道:完整的 [音阶](/entries/scale),和最经典的两人组——**根音-五度**。
+
+## C 大调音阶:开放把位
+
+贝斯上最顺手的入门音阶,全在 0–5 品内:
+
+| 音  | 位置              |
+| --- | ----------------- |
+| C2  | 3 弦(A 弦)第 3 品 |
+| D2  | 2 弦空弦          |
+| E2  | 2 弦第 2 品       |
+| F2  | 2 弦第 3 品       |
+| G2  | 1 弦空弦          |
+| A2  | 1 弦第 2 品       |
+| B2  | 1 弦第 4 品       |
+| C3  | 1 弦第 5 品       |
+
+<StaffNotation
+  client:visible
+  timbre="guitar"
+  clef="bass"
+  notes={["C2", "D2", "E2", "F2", "G2", "A2", "B2", "C3"]}
+  label="C 大调音阶:do re mi fa sol la si do(低音谱表)。"
+/>
+
+上下行各练熟,再配合上一步的八分律动来弹它。在指板上自己找一遍这些音,记忆才牢:
+
+<Fretboard
+  client:visible
+  tuning={["E1", "A1", "D2", "G2"]}
+  label="找音练习:在指板上依次点出 C 大调音阶的八个音(提示:3 弦 3 品起步)。"
+/>
+
+## 根音-五度:伴奏神器
+
+每个和弦除了根音,再加上**上方纯五度**:
+
+- C 和弦 → **C + G**
+- F 和弦 → **F + C**
+- G 和弦 → **G + D**
+
+弹法通常是根音、五度交替(一小节 C G C G)。听感立刻从"报幕"变成"走路"——这是乡村、民谣、摇滚通用的基本功型:
+
+<ChordPlayer
+  client:visible
+  chords={[
+    ["C2", "G2"],
+    ["F2", "C3"],
+    ["G2", "D3"],
+  ]}
+  label="根音-五度:C–G、F–C、G–D 两音交替的感觉。"
+/>
+
+> 五度为什么这么百搭?因为它是泛音列里紧随八度之后的音(见 [泛音列](/entries/overtone-series)),跟谁都不打架。贝斯手的"安全牌"就是它。
+
+最后一步:把根音、五度、经过音拼成一条完整的 bassline——你的第一条。
