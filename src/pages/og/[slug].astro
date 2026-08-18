@@ -1,0 +1,112 @@
+---
+// OG 分享卡模板(1200×630):仅供 scripts/generate-og.mjs 截图用,对搜索引擎不可见。
+// 设计令牌与字体全部复用 global.css——卡片与站点视觉严格一致。
+import "@/styles/global.css";
+import { getCollection } from "astro:content";
+import { siteConfig } from "@/lib/config";
+
+export async function getStaticPaths() {
+  const [entries, paths] = await Promise.all([
+    getCollection("entries", (e) => !e.data.draft),
+    getCollection("paths", (p) => !p.data.draft),
+  ]);
+
+  const targets = [
+    {
+      params: { slug: "index" },
+      props: {
+        badge: "可交互的音乐百科",
+        title: "橙月Wiki",
+        sub: "一本会发声的音乐百科",
+        summary: siteConfig.description,
+      },
+    },
+    ...entries.map((e) => ({
+      params: { slug: e.id },
+      props: {
+        badge: e.data.category,
+        title: e.data.title,
+        sub: e.data.titleEn ?? "",
+        summary: e.data.summary,
+      },
+    })),
+    ...paths.map((p) => ({
+      params: { slug: p.id },
+      props: {
+        badge: `学习路线 · ${p.data.steps.length} 步`,
+        title: p.data.title,
+        sub: "",
+        summary: p.data.description,
+      },
+    })),
+  ];
+  return targets;
+}
+
+const { badge, title, sub, summary } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>OG</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--background);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="relative flex h-[630px] w-[1200px] flex-col justify-between overflow-hidden bg-background p-16"
+    >
+      <!-- 右下角大音符水印 -->
+      <div
+        aria-hidden="true"
+        class="absolute -right-10 -bottom-16 font-display text-[420px] leading-none text-signature/6 select-none"
+      >
+        ♪
+      </div>
+
+      <!-- 顶部:品牌 + 分类徽章 -->
+      <div class="relative flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <img src="/logo.png" alt="" class="size-10 rounded-md" />
+          <span class="text-2xl font-display font-bold tracking-tight">橙月Wiki</span>
+        </div>
+        <span class="rounded-lg bg-signature/10 px-4 py-1.5 text-xl font-medium text-signature">
+          {badge}
+        </span>
+      </div>
+
+      <!-- 中部:标题 + 摘要 -->
+      <div class="relative">
+        <h1 class="max-w-[980px] text-[88px] leading-tight font-display font-bold tracking-tight text-foreground">
+          {title}
+          {sub && <span class="ml-4 align-middle text-[34px] font-medium text-muted-foreground">{sub}</span>}
+        </h1>
+        <div class="mt-7 h-0.5 w-24 rounded bg-signature"></div>
+        <p class="mt-7 max-w-[920px] text-[27px] leading-relaxed text-muted-foreground line-clamp-2">
+          {summary}
+        </p>
+      </div>
+
+      <!-- 底部:播放键 + 域名 -->
+      <div class="relative flex items-center gap-4">
+        <span
+          class="flex size-14 items-center justify-center rounded-full bg-signature text-signature-foreground"
+        >
+          <svg viewBox="0 0 24 24" class="ml-1 size-7 fill-current">
+            <path d="M8 5v14l11-7z"></path>
+          </svg>
+        </span>
+        <span class="text-[26px] text-muted-foreground">点一下就响 · ambermoon.wiki</span>
+      </div>
+    </div>
+  </body>
+</html>

@@ -83,7 +83,13 @@ const jsonLd = [
 ];
 ---
 
-<BaseLayout title={`${entry.data.title} · 橙月Wiki`} description={entry.data.summary} type="article" jsonLd={jsonLd}>
+<BaseLayout
+  title={`${entry.data.title} · 橙月Wiki`}
+  description={entry.data.summary}
+  ogImage={`/og/${entry.id}.png`}
+  type="article"
+  jsonLd={jsonLd}
+>
   <article data-pagefind-body class="container py-12 max-w-3xl">
     <nav class="text-sm text-muted-foreground">
       <a href="/" class="hover:text-signature">首页</a>

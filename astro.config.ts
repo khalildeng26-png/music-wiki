@@ -12,7 +12,14 @@ const base = process.env.BASE || "/";
 export default defineConfig({
   site,
   base,
-  integrations: [react(), mdx(), sitemap()],
+  integrations: [
+    react(),
+    mdx(),
+    sitemap({
+      // /og/ 是分享卡模板页(截图用),不进 sitemap
+      filter: (page) => !page.includes("/og/"),
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
     build: {

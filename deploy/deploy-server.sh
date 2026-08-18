@@ -6,6 +6,9 @@ SERVER_IP="${1:-47.108.214.184}"
 USER_NAME="${2:-admin}"
 KEY="$HOME/.ssh/musicwiki_deploy"
 
+echo "→ 生成 OG 分享卡(内容有变才重截)…"
+node scripts/generate-og.mjs
+
 echo "→ 构建…"
 SITE="${SITE:-https://ambermoon.wiki}" npm run build
 

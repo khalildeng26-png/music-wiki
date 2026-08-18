@@ -20,3 +20,7 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 dev_server.log
+
+# OG 分享卡生成产物(脚本按需重建,不进仓库)
+public/og/
+scripts/_og-cache.json
