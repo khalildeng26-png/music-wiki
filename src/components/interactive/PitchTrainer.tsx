@@ -182,7 +182,7 @@ export function PitchTrainer() {
               {detected ? detected.note : live ? "…" : "—"}
             </span>
             {detected && (
-              <span className="text-sm text-muted-foreground tabular-nums">
+              <span className="font-mono text-sm text-muted-foreground tabular-nums">
                 {Math.round(freq)} Hz
               </span>
             )}
@@ -200,7 +200,7 @@ export function PitchTrainer() {
                   style={{ left: `${pos}%` }}
                 />
               </div>
-              <div className="mt-1 flex justify-between text-xs text-muted-foreground tabular-nums">
+              <div className="mt-1 flex justify-between font-mono text-xs text-muted-foreground tabular-nums">
                 <span>-50¢</span>
                 <span>{cents > 0 ? `+${cents}¢` : `${cents}¢`}</span>
                 <span>+50¢</span>

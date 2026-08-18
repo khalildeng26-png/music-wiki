@@ -105,7 +105,7 @@ export function Metronome() {
       <div className="flex items-end justify-between gap-4">
         <div>
           <div className="flex items-baseline gap-2">
-            <span className="text-5xl font-bold tabular-nums">{bpm}</span>
+            <span className="font-mono text-5xl font-bold tabular-nums">{bpm}</span>
             <span className="text-sm text-muted-foreground">BPM</span>
           </div>
           <div className="mt-1 text-sm text-signature">{tempoName(bpm)}</div>

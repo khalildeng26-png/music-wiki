@@ -103,7 +103,7 @@ export function ScalePlayer() {
             <span
               key={`${n}-${i}`}
               className={
-                "rounded-md px-1.5 py-0.5 text-sm tabular-nums " +
+                "rounded-md px-1.5 py-0.5 font-mono text-sm tabular-nums " +
                 (i === 0 || i === notes.length - 1
                   ? "bg-signature/10 font-semibold text-signature"
                   : "bg-muted/60 text-foreground")

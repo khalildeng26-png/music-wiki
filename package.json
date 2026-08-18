@@ -26,6 +26,7 @@
     "@astrojs/react": "^6.0.2",
     "@astrojs/sitemap": "^3.7.3",
     "@base-ui/react": "^1.6.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",
     "abcjs": "^6.6.4",

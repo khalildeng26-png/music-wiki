@@ -103,7 +103,8 @@ ICP 备案通过后:把自定义域名 CNAME 到 `<桶名>.<OSS_REGION>.aliyuncs
 - **裸 IP `http://47.108.214.184/` 返回 404 属预期**:nginx 按 server_name 匹配域名,IP 直连不提供服务
 - **服务器**:阿里云轻量 **Ubuntu 24.04**,nginx,站点目录 `/var/www/music-wiki`,用户 `admin`(免密 sudo)
 - **本机密钥**:`~/.ssh/musicwiki_deploy`(已装公钥到服务器)
-- **更新网站唯一命令**:`bash deploy/deploy-server.sh`(build → 上传 → 生效)
+- **更新网站唯一命令**:`bash deploy/deploy-server.sh`(build → 上传 → 生效 → 可选百度推送)
+- **百度 API 推送(可选)**:在百度搜索资源平台(普通收录 → API 推送)拿 token,填入本地 `.env` 的 `BAIDU_PUSH_TOKEN`,之后每次部署自动把全站 URL 推给百度;未配置时脚本自动跳过
 - **404 页**:nginx 配置 `error_page 404 /404.html;` 指向站内品牌 404 页(`src/pages/404.astro` 构建产物);注意 `deploy-server.sh` 不会动 nginx 配置,改配置需手动 ssh
 
 ## 海外备用
