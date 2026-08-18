@@ -52,13 +52,13 @@ export function MobileNav({ className }: { className?: string }) {
             onClick={() => setOpen(false)}
             aria-hidden="true"
           />
-          {/* 底部抽屉:固定视口底部,只占内容高度,滚动页面不移动 */}
+          {/* 底部抽屉:固定视口底部,只占内容高度,滚动页面不移动;用暖调 surface 与全站一致 */}
           <div
             role="dialog"
             aria-label="导航菜单"
-            className="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl border-t bg-card px-6 pt-3 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl"
+            className="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl border-t bg-surface px-6 pt-3 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl"
           >
-            <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-muted-foreground/30" />
+            <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-foreground/20" />
             <nav aria-label="主导航" className="flex flex-col gap-1">
               {siteConfig.navItems.map((item) => (
                 <a
