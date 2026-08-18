@@ -40,6 +40,19 @@ const steps = path.data.steps
     <p class="mt-4 text-lg text-muted-foreground">{path.data.description}</p>
 
     {
+      steps.length > 0 && (
+        <div class="mt-6">
+          <a
+            href={`/entries/${steps[0].id}`}
+            class="inline-flex items-center gap-1.5 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition hover:opacity-90 active:scale-95"
+          >
+            从第 1 步开始 →
+          </a>
+        </div>
+      )
+    }
+
+    {
       path.body?.trim() && (
         <div class="prose dark:prose-invert mt-6 max-w-none">
           <Content />

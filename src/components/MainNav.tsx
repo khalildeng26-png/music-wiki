@@ -4,11 +4,7 @@ import { cn } from "@/lib/utils";
 
 export function MainNav({ className, ...props }: React.ComponentProps<"nav">) {
   return (
-    <nav
-      aria-label="Main navigation"
-      className={cn("flex items-center gap-2", className)}
-      {...props}
-    >
+    <nav aria-label="主导航" className={cn("flex items-center gap-2", className)} {...props}>
       {siteConfig.navItems.map((item) => {
         const isExternal = item.external;
         return (

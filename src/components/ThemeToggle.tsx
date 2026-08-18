@@ -78,11 +78,11 @@ export const ThemeToggle: React.FC = () => {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      aria-label="Toggle theme"
+      aria-label="切换主题"
       aria-pressed={isDark}
     >
       {isDark ? <Moon className="size-5" /> : <Sun className="size-6" />}
-      <span className="sr-only">Toggle theme</span>
+      <span className="sr-only">切换主题</span>
     </Button>
   );
 };

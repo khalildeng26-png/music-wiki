@@ -1,22 +1,77 @@
+import { categories } from "@/lib/categories";
+
+// 入门路线五件套(footer 直链,免一跳)
+const INTRO_PATHS = [
+  { id: "guitar-intro", label: "吉他入门" },
+  { id: "piano-intro", label: "钢琴入门" },
+  { id: "bass-intro", label: "贝斯入门" },
+  { id: "ukulele-intro", label: "尤克里里入门" },
+  { id: "harmonica-intro", label: "口琴入门" },
+];
+
 export function Footer() {
   const year = new Date().getFullYear();
   return (
     <footer className="group-has-[.section-soft]/body:bg-surface/40 dark:bg-transparent 3xl:fixed:bg-transparent">
-      <div className="container-wrapper px-4 xl:px-6">
-        <div className="flex h-(--footer-height) items-center justify-between">
-          <div className="w-full px-1 text-center text-xs leading-loose text-muted-foreground sm:text-sm">
-            <div>© {year} 橙月Wiki · 一本可交互的音乐百科全书</div>
-            <div className="mt-1 space-x-3">
-              <a
-                href="https://beian.miit.gov.cn/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-signature"
-              >
-                蜀ICP备2026046666号-1
-              </a>
+      <div className="container-wrapper px-4 pb-8 xl:px-6">
+        <div className="grid gap-10 border-t pt-10 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="lg:col-span-2">
+            <div className="flex items-center gap-2.5">
+              <img src="/logo.png" alt="" className="size-7 rounded-md" />
+              <span className="font-display text-base font-bold tracking-tight">橙月Wiki</span>
             </div>
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
+              一本会发声的音乐百科——乐理、记谱、和声、曲风、乐器、唱法,看不懂的地方点一下就响。免费,无需注册。
+            </p>
           </div>
+
+          <nav aria-label="分类导航">
+            <div className="text-sm font-medium">按分类浏览</div>
+            <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+              {categories.map((c) => (
+                <li key={c.id}>
+                  <a href={`/categories/${c.id}`} className="hover:text-signature">
+                    {c.label}
+                  </a>
+                </li>
+              ))}
+              <li>
+                <a href="/entries" className="hover:text-signature">
+                  全部词条
+                </a>
+              </li>
+            </ul>
+          </nav>
+
+          <nav aria-label="路线导航">
+            <div className="text-sm font-medium">入门路线</div>
+            <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+              {INTRO_PATHS.map((p) => (
+                <li key={p.id}>
+                  <a href={`/paths/${p.id}`} className="hover:text-signature">
+                    {p.label}
+                  </a>
+                </li>
+              ))}
+              <li>
+                <a href="/paths" className="hover:text-signature">
+                  全部路线
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+        <div className="mt-10 flex flex-col items-center justify-between gap-2 border-t pt-6 text-xs text-muted-foreground sm:flex-row">
+          <span>© {year} 橙月Wiki · 一本可交互的音乐百科全书</span>
+          <a
+            href="https://beian.miit.gov.cn/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-signature"
+          >
+            蜀ICP备2026046666号-1
+          </a>
         </div>
       </div>
     </footer>
