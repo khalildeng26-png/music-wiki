@@ -36,9 +36,8 @@ export function MobileNav({ className }: { className?: string }) {
               )}
             />
           </div>
-          <span className="sr-only">Toggle Menu</span>
+          <span className="sr-only">菜单</span>
         </div>
-        <span className="flex h-8 items-center text-lg leading-none font-medium">Menu</span>
       </PopoverTrigger>
 
       <PopoverContent
@@ -50,13 +49,9 @@ export function MobileNav({ className }: { className?: string }) {
       >
         <div className="flex flex-col gap-12 overflow-auto px-6 py-6">
           <div className="flex flex-col gap-4">
-            <div className="text-sm font-medium text-muted-foreground">Menu</div>
+            <div className="text-sm font-medium text-muted-foreground">导航</div>
 
             <div className="flex flex-col gap-3">
-              <a href="/" className="text-2xl font-medium" onClick={() => setOpen(false)}>
-                Home
-              </a>
-
               {siteConfig.navItems.map((item) => (
                 <a
                   key={item.href}
