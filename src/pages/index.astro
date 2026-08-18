@@ -6,6 +6,7 @@ import { getCollection } from "astro:content";
 import { categories } from "@/lib/categories";
 import HomeSearch from "@/components/interactive/HomeSearch";
 import Piano from "@/components/interactive/Piano";
+import PlayableWord from "@/components/interactive/PlayableWord";
 import RandomEntryButton from "@/components/interactive/RandomEntryButton";
 
 const entries = await getCollection("entries", (e) => !e.data.draft);
@@ -32,37 +33,47 @@ const FEATURED_PATHS = ["guitar-intro", "piano-intro", "bass-intro", "ukulele-in
 ---
 
 <BaseLayout
-  title="橙月Wiki"
+  title="橙月Wiki · 会发声的音乐百科"
   description="一本可交互的音乐百科全书 —— 乐理、记谱、曲风,边读边练。"
 >
-  <!-- Hero -->
+  <!-- Hero:价值主张当主角,品牌住在徽章里 -->
   <section class="border-b bg-linear-to-b from-surface/60 to-background">
-    <div class="container py-16 md:py-24">
-      <div class="hero-in flex items-center gap-2 text-sm text-muted-foreground">
-        <span class="inline-flex size-2 rounded-full bg-signature"></span>
-        可交互的音乐百科 · 边读边练
+    <div class="container py-14 md:py-24">
+      <div class="hero-in inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 text-sm text-muted-foreground">
+        <img src="/logo.png" alt="" class="size-4 rounded-sm" />
+        <span class="font-medium text-foreground">橙月Wiki</span>
+        <span aria-hidden="true">·</span>
+        <span>可交互的音乐百科</span>
       </div>
-      <h1 class="hero-in hero-in-2 mt-5 text-5xl font-display font-bold tracking-tight md:text-7xl">
-        橙月Wiki
+
+      <h1 class="hero-in hero-in-2 mt-6 text-4xl leading-tight font-display font-bold tracking-tight sm:text-5xl md:text-7xl">
+        一本会 <PlayableWord client:load word="发声" /> 的
+        <br class="hidden md:block" />音乐百科
       </h1>
+
       <p class="hero-in hero-in-2 mt-5 max-w-2xl text-lg text-muted-foreground md:text-xl">
-        乐理、记谱、曲风 —— 一本可以「动手」的音乐百科。看不懂的地方,点一下就响给你听。
+        看不懂的地方,点一下就响给你听——乐理、记谱、和声、曲风,零基础也能跟着路线从识谱走到第一首弹唱。
       </p>
 
-      <div class="hero-in hero-in-3 mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
-        <span><strong class="font-mono tabular-nums text-foreground">{entries.length}</strong> 篇词条</span>
-        <span aria-hidden="true">·</span>
-        <span><strong class="font-mono tabular-nums text-foreground">{paths.length}</strong> 条学习路线</span>
-        <span aria-hidden="true">·</span>
-        <span><strong class="font-mono tabular-nums text-foreground">14</strong> 个互动组件</span>
+      <div class="hero-in hero-in-3 mt-8 flex max-w-2xl flex-col gap-3 sm:flex-row sm:items-center">
+        <div class="flex-1">
+          <HomeSearch client:visible />
+        </div>
+        <a
+          href="/paths"
+          class="inline-flex items-center justify-center gap-1.5 rounded-full bg-primary px-6 py-3 text-sm font-medium whitespace-nowrap text-primary-foreground transition hover:opacity-90 active:scale-95"
+        >
+          从零开始学 →
+        </a>
       </div>
 
-      <div class="hero-in hero-in-3 mt-8 max-w-xl">
-        <HomeSearch client:visible />
-      </div>
-
-      <div class="hero-in hero-in-4 mt-8 flex items-center gap-4">
+      <div class="hero-in hero-in-3 mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
         <RandomEntryButton client:load slugs={entries.map((e) => e.id)} />
+        <span aria-hidden="true">·</span>
+        <span><strong class="font-mono tabular-nums text-foreground">{entries.length}</strong> 篇词条</span>
+        <span><strong class="font-mono tabular-nums text-foreground">{paths.length}</strong> 条路线</span>
+        <span><strong class="font-mono tabular-nums text-foreground">14</strong> 个互动组件</span>
+        <span>免费,无需注册</span>
       </div>
 
       <div class="hero-in hero-in-4 mt-10 max-w-2xl">
