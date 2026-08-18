@@ -53,7 +53,7 @@ export function Piano({ startOct = 4, octaves = 2, label }: Props) {
   const blacks = keys.filter((k) => k.black);
 
   return (
-    <figure className="not-prose my-8 overflow-hidden rounded-xl border bg-card">
+    <figure className="not-prose overflow-hidden rounded-xl border bg-card">
       {label && (
         <figcaption className="border-b bg-muted/40 px-4 py-2 text-sm text-muted-foreground">
           {label}

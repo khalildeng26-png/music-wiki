@@ -36,7 +36,7 @@ export function ChordDiagram({ name, frets, fingers, baseFret = 1, label, string
     );
   }
   return (
-    <figure className="not-prose my-6 inline-block overflow-hidden rounded-xl border bg-card align-top">
+    <figure className="not-prose inline-block overflow-hidden rounded-xl border bg-card align-top">
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className="block w-32"

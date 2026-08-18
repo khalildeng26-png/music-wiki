@@ -217,6 +217,13 @@
   overflow-x: auto;
 }
 
+/* 交互组件(figure,均带 not-prose)的流内间距:组件自身不带外边距,
+   在正文里由这里统一给;首页 hero 等布局场景不受影响,想贴多近贴多近 */
+.prose figure {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 /* 标题与正文统一霞鹜文楷(手写楷体,艺术气息);西文/符号回退系统字体 */
 .prose :where(h1, h2, h3, h4):not(:where(.not-prose *)) {
   font-family: var(--font-display);

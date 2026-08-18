@@ -120,7 +120,7 @@ export function RhythmTap({ bpm = 80, beats = 8 }: { bpm?: number; beats?: numbe
   }, []);
 
   return (
-    <figure className="not-prose my-8 rounded-xl border bg-card p-5">
+    <figure className="not-prose rounded-xl border bg-card p-5">
       <figcaption className="mb-3 text-sm text-muted-foreground">
         节奏跟打:听到拍子后,跟着节拍点下面的大圆按钮(或按空格),看你能踩准几拍。BPM {bpm},共 {beats}{" "}
         拍。

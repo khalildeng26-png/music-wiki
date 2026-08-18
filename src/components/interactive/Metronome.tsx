@@ -101,7 +101,7 @@ export function Metronome() {
   }
 
   return (
-    <figure className="not-prose my-8 rounded-xl border bg-card p-5">
+    <figure className="not-prose rounded-xl border bg-card p-5">
       <div className="flex items-end justify-between gap-4">
         <div>
           <div className="flex items-baseline gap-2">

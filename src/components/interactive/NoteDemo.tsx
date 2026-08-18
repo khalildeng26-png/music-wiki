@@ -41,7 +41,7 @@ export function NoteDemo() {
   }
 
   return (
-    <figure className="not-prose my-8 rounded-xl border bg-card p-4">
+    <figure className="not-prose rounded-xl border bg-card p-4">
       <figcaption className="mb-3 text-sm text-muted-foreground">
         认音练习:谱上这个音的音名是?
       </figcaption>

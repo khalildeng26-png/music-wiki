@@ -45,7 +45,7 @@ export function ScalePlayer() {
   }
 
   return (
-    <figure className="not-prose my-8 rounded-xl border bg-card p-4">
+    <figure className="not-prose rounded-xl border bg-card p-4">
       <figcaption className="mb-3 text-sm text-muted-foreground">
         音阶试听:选一个主音和一种音阶,点播放听上下行——同一主音,换音阶就是换情绪。
       </figcaption>

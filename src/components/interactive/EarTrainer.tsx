@@ -81,7 +81,7 @@ export function EarTrainer({ mode = "interval" }: { mode?: Mode }) {
   }
 
   return (
-    <figure className="not-prose my-8 rounded-xl border bg-card p-5">
+    <figure className="not-prose rounded-xl border bg-card p-5">
       <figcaption className="mb-4 text-sm text-muted-foreground">
         {mode === "chord"
           ? "听辨和弦:这是大三和弦还是小三和弦?"

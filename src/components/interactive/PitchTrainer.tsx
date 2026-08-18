@@ -157,7 +157,7 @@ export function PitchTrainer() {
         : "高了,收一点 ↓";
 
   return (
-    <figure className="not-prose my-8 rounded-xl border bg-card p-4">
+    <figure className="not-prose rounded-xl border bg-card p-4">
       <figcaption className="mb-3 text-sm text-muted-foreground">
         音高反馈:开麦克风唱一个音,实时看它落在哪个音、偏了多少音分。
       </figcaption>
