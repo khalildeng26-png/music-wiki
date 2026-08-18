@@ -222,3 +222,51 @@
   font-family: var(--font-display);
   font-optical-sizing: auto;
 }
+
+/* 首屏入场:hero 元素依次渐入 */
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.hero-in {
+  animation: hero-in 0.6s ease both;
+}
+.hero-in-2 {
+  animation-delay: 0.1s;
+}
+.hero-in-3 {
+  animation-delay: 0.2s;
+}
+.hero-in-4 {
+  animation-delay: 0.3s;
+}
+
+/* 滚动入场:.reveal 进入视口后由 BaseLayout 的 IntersectionObserver 加 is-visible */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+
+/* 尊重系统"减少动态效果"设置 */
+@media (prefers-reduced-motion: reduce) {
+  .hero-in {
+    animation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

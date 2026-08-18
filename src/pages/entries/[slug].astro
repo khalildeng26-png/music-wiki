@@ -2,6 +2,8 @@
 import { getCollection, render } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import StaffLines from "@/components/StaffLines.astro";
+import ShareButton from "@/components/interactive/ShareButton";
+import RandomEntryButton from "@/components/interactive/RandomEntryButton";
 import { categoryByLabel } from "@/lib/categories";
 
 export async function getStaticPaths() {
@@ -155,7 +157,7 @@ const jsonLd = [
             {related.map((r) => (
               <a
                 href={`/entries/${r.id}`}
-                class="group rounded-lg border bg-card p-4 transition hover:border-signature/50"
+                class="group rounded-lg border bg-card p-4 transition hover:-translate-y-0.5 hover:border-signature/50 hover:shadow-md"
               >
                 <div class="font-medium group-hover:text-signature">
                   {r.data.title}
@@ -168,5 +170,17 @@ const jsonLd = [
         </section>
       )
     }
+
+    <!-- 读完的行动条:分享 / 随机逛一篇 -->
+    <section class="not-prose mt-12 flex flex-wrap items-center gap-x-5 gap-y-3 rounded-xl border bg-card p-4">
+      <ShareButton client:load title={entry.data.title} />
+      <RandomEntryButton
+        client:load
+        slugs={allEntries.map((e) => e.id)}
+        exclude={entry.id}
+        label="随机看一篇 →"
+      />
+      <span class="ml-auto text-xs text-muted-foreground">读完随手一转,是对这本百科最大的帮助</span>
+    </section>
   </article>
 </BaseLayout>

@@ -5,12 +5,30 @@ import CategoryCard from "@/components/CategoryCard.astro";
 import { getCollection } from "astro:content";
 import { categories } from "@/lib/categories";
 import HomeSearch from "@/components/interactive/HomeSearch";
+import Piano from "@/components/interactive/Piano";
+import RandomEntryButton from "@/components/interactive/RandomEntryButton";
 
-const entries = (await getCollection("entries", (e) => !e.data.draft)).sort(
-  (a, b) => (a.data.order ?? 99) - (b.data.order ?? 99),
-);
+const entries = await getCollection("entries", (e) => !e.data.draft);
 const paths = await getCollection("paths", (p) => !p.data.draft);
-const featured = entries.slice(0, 4);
+const entryMap = new Map(entries.map((e) => [e.id, e]));
+
+// 手工精选:挑"点进去就能发声"的词条(带互动组件、代表性强的九篇)
+const FEATURED = [
+  "staff-notation",
+  "interval",
+  "pitch-training",
+  "scale",
+  "tempo",
+  "church-modes",
+  "chord-symbols",
+  "pop-progressions",
+  "blues",
+].map((id) => entryMap.get(id)).filter(Boolean);
+
+// 入门路线五件套
+const FEATURED_PATHS = ["guitar-intro", "piano-intro", "bass-intro", "ukulele-intro", "harmonica-intro"]
+  .map((id) => paths.find((p) => p.id === id))
+  .filter(Boolean);
 ---
 
 <BaseLayout
@@ -19,75 +37,108 @@ const featured = entries.slice(0, 4);
 >
   <!-- Hero -->
   <section class="border-b bg-linear-to-b from-surface/60 to-background">
-    <div class="container py-20 md:py-28">
-      <div class="flex items-center gap-2 text-sm text-muted-foreground">
+    <div class="container py-16 md:py-24">
+      <div class="hero-in flex items-center gap-2 text-sm text-muted-foreground">
         <span class="inline-flex size-2 rounded-full bg-signature"></span>
         可交互的音乐百科 · 边读边练
       </div>
-      <h1 class="mt-5 text-5xl font-display font-bold tracking-tight md:text-7xl">橙月Wiki</h1>
-      <p class="mt-5 max-w-2xl text-lg text-muted-foreground md:text-xl">
+      <h1 class="hero-in hero-in-2 mt-5 text-5xl font-display font-bold tracking-tight md:text-7xl">
+        橙月Wiki
+      </h1>
+      <p class="hero-in hero-in-2 mt-5 max-w-2xl text-lg text-muted-foreground md:text-xl">
         乐理、记谱、曲风 —— 一本可以「动手」的音乐百科。看不懂的地方,点一下就响给你听。
       </p>
-      <HomeSearch client:visible />
+
+      <div class="hero-in hero-in-3 mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+        <span><strong class="font-mono tabular-nums text-foreground">{entries.length}</strong> 篇词条</span>
+        <span aria-hidden="true">·</span>
+        <span><strong class="font-mono tabular-nums text-foreground">{paths.length}</strong> 条学习路线</span>
+        <span aria-hidden="true">·</span>
+        <span><strong class="font-mono tabular-nums text-foreground">14</strong> 个互动组件</span>
+      </div>
+
+      <div class="hero-in hero-in-3 mt-8 max-w-xl">
+        <HomeSearch client:visible />
+      </div>
+
+      <div class="hero-in hero-in-4 mt-8 flex items-center gap-4">
+        <RandomEntryButton client:load slugs={entries.map((e) => e.id)} />
+      </div>
+
+      <div class="hero-in hero-in-4 mt-10 max-w-2xl">
+        <Piano
+          client:visible
+          startOct={4}
+          octaves={1}
+          label="先玩一下 —— 点琴键听音。这本百科的每一页,都能这样「响」起来。"
+        />
+      </div>
+
       <StaffLines class="mt-12 w-72 text-signature/60" />
     </div>
   </section>
 
   <!-- 分类 -->
   <section class="container py-16">
-    <div class="flex items-end justify-between">
+    <div class="reveal flex items-end justify-between">
       <h2 class="text-2xl font-display font-bold tracking-tight">按分类浏览</h2>
       <a href="/entries" class="text-sm text-muted-foreground hover:text-signature"
         >全部词条 →</a
       >
     </div>
-    <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="reveal mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {categories.map((c) => <CategoryCard category={c} />)}
     </div>
   </section>
 
-  <!-- 精选词条 -->
+  <!-- 精选词条(手工策展:每篇都有能发声的互动) -->
   <section class="container py-16">
-    <h2 class="text-2xl font-display font-bold tracking-tight">精选词条</h2>
-    <div class="mt-8 grid gap-4 sm:grid-cols-2">
+    <h2 class="reveal text-2xl font-display font-bold tracking-tight">精选词条</h2>
+    <p class="reveal mt-2 text-muted-foreground">挑了九篇「点进去就能响」的 —— 五线谱、音程、音准、音阶、速度……</p>
+    <div class="reveal mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {
-        featured.map((e) => (
+        FEATURED.map((e) => (
           <a
-            href={`/entries/${e.id}`}
-            class="group flex flex-col gap-2 rounded-xl border bg-card p-5 transition hover:border-signature/50 hover:shadow-sm"
+            href={`/entries/${e!.id}`}
+            class="group flex flex-col gap-2 rounded-xl border bg-card p-5 transition hover:-translate-y-0.5 hover:border-signature/50 hover:shadow-md"
           >
             <span class="w-fit rounded-md bg-signature/10 px-2 py-0.5 text-xs font-medium text-signature">
-              {e.data.category}
+              {e!.data.category}
             </span>
             <div class="text-lg font-semibold group-hover:text-signature">
-              {e.data.title}
-              {e.data.titleEn && <span class="ml-2 text-sm font-normal text-muted-foreground">{e.data.titleEn}</span>}
+              {e!.data.title}
+              {e!.data.titleEn && <span class="ml-2 text-sm font-normal text-muted-foreground">{e!.data.titleEn}</span>}
             </div>
-            <div class="text-sm text-muted-foreground">{e.data.summary}</div>
+            <div class="text-sm text-muted-foreground">{e!.data.summary}</div>
           </a>
         ))
       }
     </div>
   </section>
 
-  <!-- 学习路线 -->
+  <!-- 学习路线(入门五件套) -->
   <section class="container py-16">
-    <h2 class="text-2xl font-display font-bold tracking-tight">学习路线</h2>
-    <p class="mt-2 text-muted-foreground">不想自己挑顺序?跟着精选路线循序渐进。</p>
-    <div class="mt-8 grid gap-4">
+    <div class="reveal flex items-end justify-between">
+      <h2 class="text-2xl font-display font-bold tracking-tight">学习路线</h2>
+      <a href="/paths" class="text-sm text-muted-foreground hover:text-signature"
+        >全部 {paths.length} 条 →</a
+      >
+    </div>
+    <p class="reveal mt-2 text-muted-foreground">从零到第一首歌,五件主流乐器各有一条 5 步路线。</p>
+    <div class="reveal mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {
-        paths.map((p) => (
+        FEATURED_PATHS.map((p) => (
           <a
-            href={`/paths/${p.id}`}
-            class="group flex items-center gap-4 rounded-xl border bg-card p-5 transition hover:border-signature/50"
+            href={`/paths/${p!.id}`}
+            class="group flex items-center gap-4 rounded-xl border bg-card p-5 transition hover:-translate-y-0.5 hover:border-signature/50 hover:shadow-md"
           >
-            <div class="flex flex-col items-center justify-center rounded-lg bg-signature/10 px-4 py-2 text-signature">
-              <span class="text-2xl font-bold leading-none">{p.data.steps.length}</span>
+            <div class="flex shrink-0 flex-col items-center justify-center rounded-lg bg-signature/10 px-4 py-2 text-signature">
+              <span class="text-2xl font-bold leading-none">{p!.data.steps.length}</span>
               <span class="text-xs">步</span>
             </div>
-            <div class="flex-1">
-              <div class="text-lg font-semibold group-hover:text-signature">{p.data.title}</div>
-              <div class="mt-1 text-sm text-muted-foreground">{p.data.description}</div>
+            <div class="min-w-0 flex-1">
+              <div class="font-semibold group-hover:text-signature">{p!.data.title}</div>
+              <div class="mt-1 line-clamp-2 text-sm text-muted-foreground">{p!.data.description}</div>
             </div>
           </a>
         ))
