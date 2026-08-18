@@ -105,7 +105,7 @@ export function HomeSearch() {
   }
 
   return (
-    <div ref={boxRef} className="relative mt-8 max-w-xl">
+    <div ref={boxRef} className="relative w-full">
       <form
         onSubmit={(e) => {
           e.preventDefault();
