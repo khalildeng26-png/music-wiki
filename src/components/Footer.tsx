@@ -14,7 +14,7 @@ export function Footer() {
   return (
     <footer className="group-has-[.section-soft]/body:bg-surface/40 dark:bg-transparent 3xl:fixed:bg-transparent">
       <div className="container-wrapper px-4 pb-8 xl:px-6">
-        <div className="grid gap-10 border-t pt-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-8 border-t pt-8 sm:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2.5">
               <img src="/logo.png" alt="" className="size-7 rounded-md" />
@@ -25,44 +25,47 @@ export function Footer() {
             </p>
           </div>
 
-          <nav aria-label="分类导航">
-            <div className="text-sm font-medium">按分类浏览</div>
-            <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-              {categories.map((c) => (
-                <li key={c.id}>
-                  <a href={`/categories/${c.id}`} className="hover:text-signature">
-                    {c.label}
+          {/* 手机上两组导航并排 + 链接横向流式,避免竖排堆成"第二个首页";≥sm 交还外层网格 */}
+          <div className="grid grid-cols-2 gap-x-6 sm:contents">
+            <nav aria-label="分类导航">
+              <div className="text-sm font-medium">按分类浏览</div>
+              <ul className="mt-2.5 flex flex-wrap gap-x-3 gap-y-1.5 text-sm text-muted-foreground sm:mt-3 sm:block sm:space-y-2 sm:gap-x-4">
+                {categories.map((c) => (
+                  <li key={c.id}>
+                    <a href={`/categories/${c.id}`} className="hover:text-signature">
+                      {c.label}
+                    </a>
+                  </li>
+                ))}
+                <li>
+                  <a href="/entries" className="hover:text-signature">
+                    全部词条
                   </a>
                 </li>
-              ))}
-              <li>
-                <a href="/entries" className="hover:text-signature">
-                  全部词条
-                </a>
-              </li>
-            </ul>
-          </nav>
+              </ul>
+            </nav>
 
-          <nav aria-label="路线导航">
-            <div className="text-sm font-medium">入门路线</div>
-            <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-              {INTRO_PATHS.map((p) => (
-                <li key={p.id}>
-                  <a href={`/paths/${p.id}`} className="hover:text-signature">
-                    {p.label}
+            <nav aria-label="路线导航">
+              <div className="text-sm font-medium">入门路线</div>
+              <ul className="mt-2.5 flex flex-wrap gap-x-3 gap-y-1.5 text-sm text-muted-foreground sm:mt-3 sm:block sm:space-y-2 sm:gap-x-4">
+                {INTRO_PATHS.map((p) => (
+                  <li key={p.id}>
+                    <a href={`/paths/${p.id}`} className="hover:text-signature">
+                      {p.label}
+                    </a>
+                  </li>
+                ))}
+                <li>
+                  <a href="/paths" className="hover:text-signature">
+                    全部路线
                   </a>
                 </li>
-              ))}
-              <li>
-                <a href="/paths" className="hover:text-signature">
-                  全部路线
-                </a>
-              </li>
-            </ul>
-          </nav>
+              </ul>
+            </nav>
+          </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-2 border-t pt-6 text-xs text-muted-foreground sm:flex-row">
+        <div className="mt-8 flex flex-col items-center justify-between gap-2 border-t pt-5 text-xs text-muted-foreground sm:flex-row">
           <span>© {year} 橙月Wiki · 一本可交互的音乐百科全书</span>
           <a
             href="https://beian.miit.gov.cn/"
