@@ -1,35 +1,117 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import StaffLines from "@/components/StaffLines.astro";
-import CategoryCard from "@/components/CategoryCard.astro";
 import { getCollection } from "astro:content";
 import { categories } from "@/lib/categories";
 import HomeSearch from "@/components/interactive/HomeSearch";
 import Piano from "@/components/interactive/Piano";
 import PlayableWord from "@/components/interactive/PlayableWord";
 import RandomEntryButton from "@/components/interactive/RandomEntryButton";
+import DailyEntry from "@/components/interactive/DailyEntry";
+import PlayableCards, { type PlayableCard } from "@/components/interactive/PlayableCards";
 
 const entries = await getCollection("entries", (e) => !e.data.draft);
 const paths = await getCollection("paths", (p) => !p.data.draft);
 const entryMap = new Map(entries.map((e) => [e.id, e]));
 
-// 手工精选:挑"点进去就能发声"的词条(带互动组件、代表性强的九篇)
-const FEATURED = [
-  "staff-notation",
-  "interval",
-  "pitch-training",
-  "scale",
-  "tempo",
-  "church-modes",
-  "chord-symbols",
-  "pop-progressions",
-  "blues",
-].map((id) => entryMap.get(id)).filter(Boolean);
+// 手工精选 + 声音签名:每张卡的就地试听内容
+const FEATURED: PlayableCard[] = [
+  {
+    href: "/entries/staff-notation",
+    title: "五线谱",
+    titleEn: "Staff Notation",
+    category: "记谱",
+    summary: "五条线怎么装下所有音乐?看完这篇,谱子不再是天书。",
+    sig: { kind: "notes", notes: ["C4", "D4", "E4", "F4", "G4"] },
+  },
+  {
+    href: "/entries/interval",
+    title: "音程",
+    titleEn: "Interval",
+    category: "乐理",
+    summary: "两个音的距离决定情绪:大三度明亮,小三度忧伤。",
+    sig: { kind: "notes", notes: ["C4", "E4", "C4", "Eb4"] },
+  },
+  {
+    href: "/entries/pitch-training",
+    title: "音准",
+    titleEn: "Pitch Training",
+    category: "唱法",
+    summary: "开麦克风唱一个音,实时看音名与偏差——跑调不可怕,看不见才可怕。",
+    sig: { kind: "notes", notes: ["A4"], dur: 0.9 },
+  },
+  {
+    href: "/entries/scale",
+    title: "音阶",
+    titleEn: "Scale",
+    category: "乐理",
+    summary: "同一个 C,换成五声音阶立刻中国风。选着听,差别立现。",
+    sig: { kind: "notes", notes: ["C4", "D4", "E4", "G4", "A4", "C5"] },
+  },
+  {
+    href: "/entries/tempo",
+    title: "速度",
+    titleEn: "Tempo",
+    category: "乐理",
+    summary: "60 到 180 BPM 差多少?拖一下滑块,耳朵马上懂。",
+    sig: { kind: "notes", notes: ["C5", "C5", "C5", "C5"], dur: 0.09, gap: 0.41 },
+  },
+  {
+    href: "/entries/church-modes",
+    title: "教会调式",
+    titleEn: "Church Modes",
+    category: "乐理",
+    summary: "七种中世纪'口味'——流行歌都在偷偷用 Dorian 和 Mixolydian。",
+    sig: { kind: "notes", notes: ["D4", "F4", "G4", "A4", "D5"] },
+  },
+  {
+    href: "/entries/chord-symbols",
+    title: "和弦标记",
+    titleEn: "Chord Symbols",
+    category: "记谱",
+    summary: "C、C7、Cadd9 这些字母密码,一篇全破译。",
+    sig: { kind: "chords", chords: [["C4", "E4", "G4", "Bb4"]] },
+  },
+  {
+    href: "/entries/pop-progressions",
+    title: "流行和弦进行",
+    titleEn: "Pop Progressions",
+    category: "和声",
+    summary: "为什么上万首歌用同一套和弦?听完这四句你就懂了。",
+    sig: {
+      kind: "chords",
+      chords: [["C4", "E4", "G4"], ["G3", "B3", "D4"], ["A3", "C4", "E4"], ["F3", "A3", "C4"]],
+    },
+  },
+  {
+    href: "/entries/blues",
+    title: "布鲁斯",
+    titleEn: "Blues",
+    category: "曲风",
+    summary: "把音'弹歪'一点,为什么反而更动人?蓝调的苦味点开就懂。",
+    sig: { kind: "notes", notes: ["C4", "Eb4", "F4", "Gb4", "G4", "Bb4"], timbre: "guitar" },
+  },
+];
+
+// 今日词条候选(带钩子文案,按日期轮换)
+const DAILY = FEATURED.map((c) => ({
+  title: c.title,
+  category: c.category,
+  hook: c.summary,
+  href: c.href,
+  sig: c.sig,
+}));
 
 // 入门路线五件套
 const FEATURED_PATHS = ["guitar-intro", "piano-intro", "bass-intro", "ukulele-intro", "harmonica-intro"]
   .map((id) => paths.find((p) => p.id === id))
   .filter(Boolean);
+
+const countByCategory = new Map(categories.map((c) => [c.label, 0]));
+for (const e of entries) {
+  const n = countByCategory.get(e.data.category);
+  if (n !== undefined) countByCategory.set(e.data.category, n + 1);
+}
 ---
 
 <BaseLayout
@@ -89,41 +171,38 @@ const FEATURED_PATHS = ["guitar-intro", "piano-intro", "bass-intro", "ukulele-in
     </div>
   </section>
 
-  <!-- 分类 -->
-  <section class="container py-16">
-    <div class="reveal flex items-end justify-between">
-      <h2 class="text-2xl font-display font-bold tracking-tight">按分类浏览</h2>
-      <a href="/entries" class="text-sm text-muted-foreground hover:text-signature"
-        >全部词条 →</a
-      >
-    </div>
-    <div class="reveal mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {categories.map((c) => <CategoryCard category={c} />)}
+  <!-- 今日词条 -->
+  <section class="container pt-14">
+    <div class="reveal">
+      <DailyEntry client:load candidates={DAILY} />
     </div>
   </section>
 
-  <!-- 精选词条(手工策展:每篇都有能发声的互动) -->
-  <section class="container py-16">
-    <h2 class="reveal text-2xl font-display font-bold tracking-tight">精选词条</h2>
-    <p class="reveal mt-2 text-muted-foreground">挑了九篇「点进去就能响」的 —— 五线谱、音程、音准、音阶、速度……</p>
-    <div class="reveal mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  <!-- 分类:一行 chips,不再占三行大卡 -->
+  <section class="container pt-12">
+    <div class="reveal flex flex-wrap items-center gap-2">
+      <h2 class="mr-2 text-sm font-medium text-muted-foreground">按分类</h2>
       {
-        FEATURED.map((e) => (
+        categories.map((c) => (
           <a
-            href={`/entries/${e!.id}`}
-            class="group flex flex-col gap-2 rounded-xl border bg-card p-5 transition hover:-translate-y-0.5 hover:border-signature/50 hover:shadow-md"
+            href={`/categories/${c.id}`}
+            class="rounded-full border bg-card px-4 py-1.5 text-sm transition hover:-translate-y-0.5 hover:border-signature/50 hover:text-signature"
           >
-            <span class="w-fit rounded-md bg-signature/10 px-2 py-0.5 text-xs font-medium text-signature">
-              {e!.data.category}
-            </span>
-            <div class="text-lg font-semibold group-hover:text-signature">
-              {e!.data.title}
-              {e!.data.titleEn && <span class="ml-2 text-sm font-normal text-muted-foreground">{e!.data.titleEn}</span>}
-            </div>
-            <div class="text-sm text-muted-foreground">{e!.data.summary}</div>
+            {c.label}
+            <span class="ml-1.5 text-xs text-muted-foreground">{countByCategory.get(c.label)}</span>
           </a>
         ))
       }
+      <a href="/entries" class="ml-1 text-sm text-muted-foreground hover:text-signature">全部 →</a>
+    </div>
+  </section>
+
+  <!-- 精选词条:会响的试听卡 -->
+  <section class="container pt-12 pb-16">
+    <h2 class="reveal text-2xl font-display font-bold tracking-tight">先听为快</h2>
+    <p class="reveal mt-2 text-muted-foreground">九篇能「就地试听」的词条 —— 点卡片右下角的播放键,先听再读。</p>
+    <div class="reveal mt-8">
+      <PlayableCards client:load items={FEATURED} />
     </div>
   </section>
 
@@ -150,6 +229,9 @@ const FEATURED_PATHS = ["guitar-intro", "piano-intro", "bass-intro", "ukulele-in
             <div class="min-w-0 flex-1">
               <div class="font-semibold group-hover:text-signature">{p!.data.title}</div>
               <div class="mt-1 line-clamp-2 text-sm text-muted-foreground">{p!.data.description}</div>
+              <div class="mt-2 text-xs text-muted-foreground">
+                第一步:{entryMap.get(p!.data.steps[0])?.data.title ?? "…"} →
+              </div>
             </div>
           </a>
         ))
