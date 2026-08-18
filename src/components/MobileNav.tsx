@@ -6,9 +6,9 @@ import { cn } from "@/lib/utils";
 const EXIT_MS = 260;
 
 /**
- * 移动端导航:底部抽屉(bottom sheet)。
- * 固定视口底部、只占一条、不随页面滚动;打开时抽屉自底部滑升,
- * 内容(拖动条 → 链接)从上方依次落位;关闭时滑出后再卸载。
+ * 移动端导航:顶部下拉抽屉(top sheet)。
+ * 挂在顶栏正下方、固定不随页面滚动;打开时自屏幕顶部向下拉出,
+ * 内容(链接 → 拖动条)依次落位;关闭时收回顶部后再卸载。
  */
 export function MobileNav({ className }: { className?: string }) {
   const [open, setOpen] = React.useState(false);
@@ -79,24 +79,17 @@ export function MobileNav({ className }: { className?: string }) {
             onClick={hide}
             aria-hidden="true"
           />
-          {/* 底部抽屉:自底部滑升;暖调 surface 与全站一致 */}
+          {/* 顶部下拉抽屉:挂在顶栏下方,自屏幕顶部向下拉出;暖调 surface 与全站一致 */}
           <div
             role="dialog"
             aria-label="导航菜单"
             className={cn(
-              "fixed inset-x-0 bottom-0 z-50 rounded-t-2xl border-t bg-surface px-6 pt-3 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl",
+              "fixed inset-x-0 top-[var(--header-height)] z-50 rounded-b-2xl border-b bg-surface px-6 pt-4 pb-5 shadow-2xl",
               "transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none",
-              shown ? "translate-y-0" : "translate-y-full",
+              shown ? "translate-y-0" : "-translate-y-full",
             )}
           >
-            {/* 内容依次落位:拖动条 → 链接,从上方滑入 */}
-            <div
-              className={cn(
-                "mx-auto mb-4 h-1 w-10 rounded-full bg-foreground/20 transition-all duration-300 motion-reduce:transition-none",
-                shown ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0",
-              )}
-              style={{ transitionDelay: shown ? "80ms" : "0ms" }}
-            />
+            {/* 内容依次落位:链接 → 拖动条 */}
             <nav aria-label="主导航" className="flex flex-col gap-1">
               {siteConfig.navItems.map((item, i) => (
                 <a
@@ -106,12 +99,19 @@ export function MobileNav({ className }: { className?: string }) {
                     "rounded-lg px-3 py-2.5 text-xl font-medium transition-all duration-300 hover:bg-muted active:scale-[0.98] motion-reduce:transition-none",
                     shown ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0",
                   )}
-                  style={{ transitionDelay: shown ? `${140 + i * 70}ms` : "0ms" }}
+                  style={{ transitionDelay: shown ? `${100 + i * 70}ms` : "0ms" }}
                 >
                   {item.label}
                 </a>
               ))}
             </nav>
+            <div
+              className={cn(
+                "mx-auto mt-4 h-1 w-10 rounded-full bg-foreground/20 transition-all duration-300 motion-reduce:transition-none",
+                shown ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0",
+              )}
+              style={{ transitionDelay: shown ? "320ms" : "0ms" }}
+            />
           </div>
         </>
       )}
