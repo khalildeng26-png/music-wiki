@@ -13,6 +13,8 @@ faq:
 order: 7
 ---
 
+import { StaffNotation } from "../../components/interactive/StaffNotation";
+
 **古筝**是中国最古老的弹拨乐器之一,有两千多年历史,因历史悠久也称"汉筝"。它是[国风](/entries/guofeng)音乐里最具代表性的音色之一。
 
 ## 基本构造
@@ -32,5 +34,14 @@ order: 7
 - 《高山流水》《渔舟唱晚》《寒鸦戏水》等;现代也有大量流行曲的古筝改编。
 
 > 古筝的哲学是"**右手弹声,左手弹韵**":弹出来的音只是骨架,左手按出来的韵味才是血肉。
+
+## 听听音色
+
+<StaffNotation
+  client:visible
+  timbre="guzheng"
+  notes={["A3", "C4", "D4", "E4", "A3"]}
+  label="古筝的拨弦音色:A 小调五声片段。"
+/>
 
 延伸:五声音阶的乐理见[音阶](/entries/scale);中文歌曲常用[简谱](/entries/jianpu)记录。

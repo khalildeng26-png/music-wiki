@@ -67,7 +67,7 @@ export function Footer() {
 
         <div className="mt-8 flex flex-col items-center justify-between gap-2 border-t pt-5 text-xs text-muted-foreground sm:flex-row">
           <span>© {year} 橙月Wiki · 一本可交互的音乐百科全书</span>
-          <span>音频采样:Salamander Piano(CC-BY)· ISU MIS</span>
+          <span>音频采样:Salamander(CC-BY)· ISU MIS · Freesound(CC0)</span>
           <a
             href="https://beian.miit.gov.cn/"
             target="_blank"

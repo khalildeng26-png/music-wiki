@@ -23,6 +23,10 @@ export type Timbre =
   | "ukulele"
   | "oboe"
   | "erhu"
+  | "dizi"
+  | "guzheng"
+  | "suona"
+  | "harmonica"
   | "synth";
 
 type Instrument = InstanceType<ToneModule["Sampler"]> | InstanceType<ToneModule["PolySynth"]>;
@@ -125,6 +129,26 @@ const SAMPLES: Record<
     files: { D3: "D3", F3: "F3", A3: "A3", D4: "D4", "F#4": "F#4", A4: "A4" },
     volume: -6,
     release: 0.5,
+  },
+  dizi: {
+    files: { F5: "F5", G5: "G5", A5: "A5", C6: "C6", D6: "D6" },
+    volume: -8,
+    release: 0.4,
+  },
+  guzheng: {
+    files: { A3: "A3" },
+    volume: -6,
+    release: 0.6,
+  },
+  suona: {
+    files: { E6: "E6" },
+    volume: -14,
+    release: 0.4,
+  },
+  harmonica: {
+    files: { C3: "C3", A3: "A3", C4: "C4", "D#4": "Ds4", "F#4": "Fs4", A5: "A5" },
+    volume: -8,
+    release: 0.3,
   },
 };
 
