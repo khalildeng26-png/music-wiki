@@ -13,6 +13,8 @@ faq:
 order: 10
 ---
 
+import { StaffNotation } from "../../components/interactive/StaffNotation";
+
 **合成器**(Synthesizer)不是模仿别的乐器,而是**从零制造声音**。它的键盘和 [钢琴](/entries/piano) 类似,但按下一个键发出的可以是笛声、吼叫、或任何你设计出来的声音。
 
 ## 声音的流水线(减法合成)
@@ -34,5 +36,14 @@ order: 10
 [电子乐](/entries/electronic) 的几乎所有音色、流行歌里的铺底 pad 和 lead,都出自合成器。
 
 > 玩合成器的乐趣:同一首歌,换个波形、换个包络,就换了一个世界。
+
+## 听听音色
+
+<StaffNotation
+  client:visible
+  timbre="synth"
+  notes={["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"]}
+  label="合成器的振荡器音色:C 大调音阶(电子味是它的本命)。"
+/>
 
 延伸:合成器在曲风里的角色见 [电子乐](/entries/electronic);键盘手感的基础见 [钢琴](/entries/piano)。
