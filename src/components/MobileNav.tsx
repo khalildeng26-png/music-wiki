@@ -34,6 +34,16 @@ export function MobileNav({ className }: { className?: string }) {
 
   React.useEffect(() => () => window.clearTimeout(timer.current), []);
 
+  // 打开期间锁住背景滚动(触碰遮罩即关闭,不给穿透滚动留机会)
+  React.useEffect(() => {
+    if (!render) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [render]);
+
   React.useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -70,21 +80,25 @@ export function MobileNav({ className }: { className?: string }) {
 
       {render && (
         <>
-          {/* 轻遮罩:点外部关闭,页面其余内容依然可见 */}
+          {/* 遮罩:从顶栏下方开始(顶栏保持明亮),触碰即收回,禁止穿透滚动 */}
           <div
             className={cn(
-              "fixed inset-0 z-50 bg-black/20 transition-opacity duration-250",
+              "fixed inset-x-0 top-[var(--header-height)] bottom-0 z-50 touch-none bg-black/20 transition-opacity duration-250",
               shown ? "opacity-100" : "opacity-0",
             )}
-            onClick={hide}
+            onPointerDown={hide}
             aria-hidden="true"
           />
-          {/* 顶部下拉抽屉:挂在顶栏下方,自屏幕顶部向下拉出;暖调 surface 与全站一致 */}
+          {/* 顶部下拉抽屉:挂在顶栏下方,自屏幕顶部向下拉出;空白处点击也收回;阴影只向下投,不蹭顶栏 */}
           <div
             role="dialog"
             aria-label="导航菜单"
+            onClick={(e) => {
+              if (!e.target.closest("a")) hide();
+            }}
             className={cn(
-              "fixed inset-x-0 top-[var(--header-height)] z-50 rounded-b-2xl border-b bg-surface px-6 pt-4 pb-5 shadow-2xl",
+              "fixed inset-x-0 top-[var(--header-height)] z-50 rounded-b-2xl border-b bg-surface px-6 pt-4 pb-5",
+              "shadow-[0_16px_40px_-12px_rgb(0_0_0/0.28)]",
               "transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none",
               shown ? "translate-y-0" : "-translate-y-full",
             )}
