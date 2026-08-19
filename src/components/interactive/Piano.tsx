@@ -28,18 +28,12 @@ type Props = {
   label?: string;
   /** 键长(px),默认 160(词条内紧凑);首屏等展示场景传 256 更像真琴 */
   keyHeight?: number;
-  /** 最小宽度(px),默认 440;宽场景可调大让键更舒展 */
+  /** 键盘区最小宽度(px);不传则按每白键 ≥44px 触控标准自适应(超出容器自动横滑) */
   minWidth?: number;
 };
 
 /** 虚拟钢琴:点琴键用 Tone.js 发声,琥珀高亮当前键。 */
-export function Piano({
-  startOct = 4,
-  octaves = 2,
-  label,
-  keyHeight = 160,
-  minWidth = 440,
-}: Props) {
+export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWidth }: Props) {
   const [active, setActive] = React.useState<string | null>(null);
   const { keys, whiteCount } = React.useMemo(
     () => buildKeys(startOct, octaves),
@@ -47,6 +41,8 @@ export function Piano({
   );
   const whiteW = 100 / whiteCount;
   const blackW = whiteW * 0.62;
+  // 白键保底 44px(触控标准),多八度时键盘自动横向滚动
+  const minW = minWidth ?? whiteCount * 44;
 
   async function hit(note: string) {
     setActive(note);
@@ -71,7 +67,7 @@ export function Piano({
       )}
       <div className="p-4">
         <div className="overflow-x-auto pb-2">
-          <div className="relative mx-auto" style={{ height: keyHeight, minWidth }}>
+          <div className="relative mx-auto" style={{ height: keyHeight, minWidth: minW }}>
             {/* 白键 */}
             <div className="flex h-full">
               {whites.map((k) => {
