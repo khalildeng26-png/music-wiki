@@ -21,6 +21,8 @@ export type Timbre =
   | "tuba"
   | "eguitar"
   | "ukulele"
+  | "oboe"
+  | "erhu"
   | "synth";
 
 type Instrument = InstanceType<ToneModule["Sampler"]> | InstanceType<ToneModule["PolySynth"]>;
@@ -113,6 +115,16 @@ const SAMPLES: Record<
     files: { E4: "E4", A4: "A4", D5: "D5", G5: "G5" },
     volume: -4,
     release: 0.4,
+  },
+  oboe: {
+    files: { F3: "F3", D4: "D4", F4: "F4", D5: "D5" },
+    volume: -10,
+    release: 0.4,
+  },
+  erhu: {
+    files: { D3: "D3", F3: "F3", A3: "A3", D4: "D4", "F#4": "F#4", A4: "A4" },
+    volume: -6,
+    release: 0.5,
   },
 };
 

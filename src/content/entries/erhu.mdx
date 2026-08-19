@@ -13,6 +13,8 @@ faq:
 order: 8
 ---
 
+import { StaffNotation } from "../../components/interactive/StaffNotation";
+
 **二胡**是中国最重要的拉弦乐器,属"胡琴"家族。它只有两根弦,却能拉出最接近人声的旋律,被誉为"**中国小提琴**"。
 
 ## 基本构造
@@ -34,5 +36,14 @@ order: 8
 - 《赛马》:热烈奔放,展现二胡的炫技一面。
 
 > 二胡是"三年琴五年筝,一把二胡拉一生"里公认最难入门的民族乐器之一——但一旦音准和运弓过关,它的表现力无可替代。
+
+## 听听音色
+
+<StaffNotation
+  client:visible
+  timbre="erhu"
+  notes={["D4", "E4", "F#4", "G4", "A4"]}
+  label="二胡的歌唱性音色: D 大调五声(内弦 D、外弦 A 正是二胡定弦)。"
+/>
 
 延伸:同属民乐见[古筝](/entries/guzheng);无品乐器的音准训练思路参考[音准](/entries/pitch-training)。

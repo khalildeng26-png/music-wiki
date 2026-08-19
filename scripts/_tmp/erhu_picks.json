@@ -1,0 +1,8 @@
+[
+  { "file": "erhu_d5_sus_rr1.wav", "midi": 50, "note": "D3" },
+  { "file": "erhu_f5_sus_rr1.wav", "midi": 53, "note": "F3" },
+  { "file": "erhu_a5_sus_rr1.wav", "midi": 57, "note": "A3" },
+  { "file": "erhu_d6_sus_rr1.wav", "midi": 62, "note": "D4" },
+  { "file": "erhu_gb6_sus_rr1.wav", "midi": 66, "note": "F#4" },
+  { "file": "erhu_a6_sus_rr1.wav", "midi": 69, "note": "A4" }
+]
