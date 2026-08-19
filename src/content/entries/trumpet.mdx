@@ -13,6 +13,8 @@ faq:
 order: 18
 ---
 
+import { StaffNotation } from "../../components/interactive/StaffNotation";
+
 **小号**(Trumpet)是铜管组的**高音乐器**,音色**嘹亮、辉煌、有穿透力**,是号角、凯旋、爵士独奏的第一选择。它的声音一出,立刻能抓住全场。
 
 ## 构造与变音
@@ -28,5 +30,14 @@ order: 18
 - 在 [管弦乐队](/entries/orchestra) 里是铜管的旋律主力,也是 [爵士](/entries/jazz)、拉丁、军乐的核心独奏乐器。
 
 > 想分辨小号?找那个「最亮、最辉煌、最像吹号角」的铜管声——就是它。
+
+## 听听音色
+
+<StaffNotation
+  client:visible
+  timbre="trumpet"
+  notes={["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"]}
+  label="小号的嘹亮音色:C 大调音阶。"
+/>
 
 延伸:同为铜管的 [圆号](/entries/french-horn)、[长号](/entries/trombone)、[大号](/entries/tuba);它在爵士里的表现见 [爵士](/entries/jazz)。

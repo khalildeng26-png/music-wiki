@@ -13,6 +13,8 @@ faq:
 order: 20
 ---
 
+import { StaffNotation } from "../../components/interactive/StaffNotation";
+
 **大号**(Tuba)是铜管组里**最大、最低**的乐器。它像一根放大的铜管盘旋在身上,喇叭口朝上,音色**浑厚、低沉、有分量**,是整个 [管弦乐队](/entries/orchestra) 的低音地基。
 
 ## 构造与变音
@@ -28,5 +30,14 @@ order: 20
 - 军乐队、铜管重奏、交响乐的铜管低音都靠它压阵。
 
 > 想分辨大号?找那个「最低、最沉、像大地在呼吸」的铜管声——就是它。
+
+## 听听音色
+
+<StaffNotation
+  client:visible
+  timbre="tuba"
+  notes={["F2", "G2", "A2", "Bb2", "C3"]}
+  label="大号的深沉音色:F 大调低音区。"
+/>
 
 延伸:同为铜管的 [长号](/entries/trombone)、[圆号](/entries/french-horn)、[小号](/entries/trumpet);低音搭档见 [贝斯](/entries/bass)。

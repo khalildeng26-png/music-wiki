@@ -13,6 +13,8 @@ faq:
 order: 19
 ---
 
+import { StaffNotation } from "../../components/interactive/StaffNotation";
+
 **长号**(Trombone)是铜管乐器里最独特的一个:**它不用活塞,用「滑管」变音**。乐手来回拉动一根伸缩管,改变管长,音高随之平滑变化——所以长号能吹出其他铜管做不出的**连贯滑音**。
 
 ## 构造与变音
@@ -28,5 +30,14 @@ order: 19
 - 在 [管弦乐队](/entries/orchestra) 里是铜管中低音的支撑,也是 [爵士](/entries/jazz) 大乐队、铜管五重奏的核心。
 
 > 想分辨长号?找那个「能上下滑动、庄严又带点戏剧性」的铜管声——就是它。
+
+## 听听音色
+
+<StaffNotation
+  client:visible
+  timbre="trombone"
+  notes={["C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4"]}
+  label="长号的浑厚音色:C 大调音阶。"
+/>
 
 延伸:同为铜管的 [小号](/entries/trumpet)、[圆号](/entries/french-horn)、[大号](/entries/tuba);乐队编制见 [管弦乐队](/entries/orchestra)。

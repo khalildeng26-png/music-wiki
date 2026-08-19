@@ -7,7 +7,21 @@
 // 统一走主链路(增益→限幅)防 boom,音量按音色分别校准。
 type ToneModule = typeof import("tone");
 
-export type Timbre = "piano" | "guitar" | "violin" | "bass" | "synth";
+export type Timbre =
+  | "piano"
+  | "guitar"
+  | "violin"
+  | "bass"
+  | "flute"
+  | "clarinet"
+  | "bassoon"
+  | "horn"
+  | "trumpet"
+  | "trombone"
+  | "tuba"
+  | "eguitar"
+  | "ukulele"
+  | "synth";
 
 type Instrument = InstanceType<ToneModule["Sampler"]> | InstanceType<ToneModule["PolySynth"]>;
 
@@ -54,6 +68,51 @@ const SAMPLES: Record<
     files: { E1: "E1", "A#1": "As1", E2: "E2", "A#2": "As2", E3: "E3" },
     volume: -2,
     release: 0.3,
+  },
+  flute: {
+    files: { C4: "C4", A4: "A4", E5: "E5", A5: "A5", C6: "C6", E6: "E6" },
+    volume: -8,
+    release: 0.4,
+  },
+  clarinet: {
+    files: { "A#3": "As3", D4: "D4", F4: "F4", "A#4": "As4", D5: "D5", F5: "F5" },
+    volume: -8,
+    release: 0.4,
+  },
+  bassoon: {
+    files: { G2: "G2", C3: "C3", G3: "G3", C4: "C4", G4: "G4" },
+    volume: -8,
+    release: 0.4,
+  },
+  horn: {
+    files: { C2: "C2", D3: "D3", A3: "A3", C4: "C4", D5: "D5", F5: "F5" },
+    volume: -10,
+    release: 0.4,
+  },
+  trumpet: {
+    files: { A3: "A3", C4: "C4", F4: "F4", D5: "D5", A5: "A5" },
+    volume: -10,
+    release: 0.3,
+  },
+  trombone: {
+    files: { "A#1": "As1", C3: "C3", F3: "F3", C4: "C4", F4: "F4" },
+    volume: -8,
+    release: 0.4,
+  },
+  tuba: {
+    files: { F1: "F1", "A#1": "As1", F2: "F2", "A#2": "As2", D3: "D3", F3: "F3" },
+    volume: -8,
+    release: 0.4,
+  },
+  eguitar: {
+    files: { E2: "E2", A2: "A2", "D#3": "Ds3", A3: "A3", "D#4": "Ds4", A4: "A4" },
+    volume: -2,
+    release: 0.4,
+  },
+  ukulele: {
+    files: { E4: "E4", A4: "A4", D5: "D5", G5: "G5" },
+    volume: -4,
+    release: 0.4,
   },
 };
 
