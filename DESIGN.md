@@ -39,19 +39,19 @@
 
 ### 选型
 
-| 层          | 技术                                                   | 备注                                                              |
-| ----------- | ------------------------------------------------------ | ----------------------------------------------------------------- |
-| 框架        | **Astro 7**                                            | 岛屿架构:静态文字 + 局部交互组件                                  |
-| 交互组件    | **React 19**（作为 Astro 岛屿）                        | `@astrojs/react`                                                  |
-| 样式        | **Tailwind CSS v4**                                    | `@tailwindcss/vite`,CSS 变量配置(无 tailwind.config)              |
-| UI 组件     | **shadcn/ui**(基于 **Base UI**,非 Radix)               | 源码自有,可深度定制                                               |
-| 内容格式    | **MDX**                                                | 文章内直接嵌交互组件                                              |
-| 图标        | **lucide-react**                                       |                                                                   |
-| 音频/记谱   | **Tone.js + abcjs**                                    | 已安装使用;OpenSheetMusicDisplay 未采用(abcjs 已覆盖点谱发声需求) |
-| 动效        | **Framer Motion**                                      | 待安装(微交互需要时再引入)                                        |
-| 全文搜索    | **Pagefind**                                           | 已接入:构建时建索引 + 自定义 /search 页 + 首页即时搜索            |
-| Lint/Format | **oxlint / oxfmt**                                     | 模板自带                                                          |
-| 部署        | **国内服务器 nginx(正式)+ Cloudflare Pages(海外备用)** | 正式站 `https://ambermoon.wiki`(已备案 + HTTPS);见 DEPLOY.md      |
+| 层          | 技术                                                   | 备注                                                                                                                                                                                                  |
+| ----------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 框架        | **Astro 7**                                            | 岛屿架构:静态文字 + 局部交互组件                                                                                                                                                                      |
+| 交互组件    | **React 19**（作为 Astro 岛屿）                        | `@astrojs/react`                                                                                                                                                                                      |
+| 样式        | **Tailwind CSS v4**                                    | `@tailwindcss/vite`,CSS 变量配置(无 tailwind.config)                                                                                                                                                  |
+| UI 组件     | **shadcn/ui**(基于 **Base UI**,非 Radix)               | 源码自有,可深度定制                                                                                                                                                                                   |
+| 内容格式    | **MDX**                                                | 文章内直接嵌交互组件                                                                                                                                                                                  |
+| 图标        | **lucide-react**                                       |                                                                                                                                                                                                       |
+| 音频/记谱   | **Tone.js + abcjs**                                    | 音色为真实采样(2026-08-19 起):钢琴 Salamander(CC-BY)/吉他/小提琴/贝斯 ISU MIS,Tone.Sampler 锚点重采样,存于 `public/audio/`(按音色懒加载);synth 音色保留振荡器(理论示范)。OpenSheetMusicDisplay 未采用 |
+| 动效        | **Framer Motion**                                      | 待安装(微交互需要时再引入)                                                                                                                                                                            |
+| 全文搜索    | **Pagefind**                                           | 已接入:构建时建索引 + 自定义 /search 页 + 首页即时搜索                                                                                                                                                |
+| Lint/Format | **oxlint / oxfmt**                                     | 模板自带                                                                                                                                                                                              |
+| 部署        | **国内服务器 nginx(正式)+ Cloudflare Pages(海外备用)** | 正式站 `https://ambermoon.wiki`(已备案 + HTTPS);见 DEPLOY.md                                                                                                                                          |
 
 ### 项目底座
 
