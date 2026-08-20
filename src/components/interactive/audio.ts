@@ -27,7 +27,8 @@ export type Timbre =
   | "guzheng"
   | "suona"
   | "harmonica"
-  | "synth";
+  | "synth"
+  | "chip";
 
 type Instrument = InstanceType<ToneModule["Sampler"]> | InstanceType<ToneModule["PolySynth"]>;
 
@@ -43,7 +44,7 @@ async function getTone(): Promise<ToneModule> {
 
 /** 采样音色:锚点音 → 文件名(不含扩展名);音量相对主链路校准 */
 const SAMPLES: Record<
-  Exclude<Timbre, "synth">,
+  Exclude<Timbre, "synth" | "chip">,
   { files: Record<string, string>; volume: number; release: number }
 > = {
   piano: {
@@ -182,6 +183,17 @@ async function ensureAudio(timbre: Timbre = "piano") {
         instruments.set(timbre, synth);
         return synth;
       }
+      if (timbre === "chip") {
+        // 芯片音乐音色:方波 + 极短包络,8bit/复古游戏味
+        const chip = new Tone.PolySynth(Tone.Synth, {
+          oscillator: { type: "square" },
+          envelope: { attack: 0.001, decay: 0.12, sustain: 0.08, release: 0.08 },
+          volume: -14,
+        });
+        chip.connect(master);
+        instruments.set(timbre, chip);
+        return chip;
+      }
       const cfg = SAMPLES[timbre];
       const urls: Record<string, string> = {};
       for (const [note, file] of Object.entries(cfg.files)) urls[note] = `${file}.mp3`;
@@ -244,4 +256,135 @@ export async function playChordProgression(
     const t = now + i * (dur + gap);
     notes.forEach((n) => inst.triggerAttackRelease(n, dur, t));
   });
+}
+
+// ---------- 风格试听:多轨 pattern 播放(StyleDemo 用) ----------
+
+/** 合成鼓件(示意音色,非真实采样):底鼓/军鼓/踩镲。 */
+export type DrumHit = "kick" | "snare" | "hihat" | "openhat";
+
+/** 一条音符轨/和弦轨的事件。t/dur 以拍为单位。 */
+export type NoteEvent = { t: number; notes: string[]; dur?: number; vel?: number };
+
+export type PatternTrack =
+  | { kind: "notes"; timbre: Timbre; events: NoteEvent[] }
+  | { kind: "drums"; events: { t: number; hit: DrumHit; vel?: number }[] };
+
+export type Pattern = {
+  bpm: number;
+  /** 摇摆:正拍后的八分音往后挪的比例位置。0.5=平直(默认),0.62~0.67≈三连音摇摆 */
+  swing?: number;
+  beats: number;
+  tracks: PatternTrack[];
+};
+
+type DrumKit = Record<DrumHit, InstanceType<ToneModule["MembraneSynth"] | ToneModule["NoiseSynth"]>>;
+let drumKit: DrumKit | null = null;
+let drumKitReady: Promise<DrumKit> | null = null;
+
+/** 惰性构建合成鼓组:底鼓=膜鼓合成,军鼓/踩镲=噪声+滤波。示意用途,UI 需注明。 */
+function ensureDrums(Tone: ToneModule): Promise<DrumKit> {
+  if (!drumKitReady) {
+    drumKitReady = (async () => {
+      const master = ensureMaster(Tone);
+      const kick = new Tone.MembraneSynth({
+        pitchDecay: 0.04,
+        octaves: 6,
+        envelope: { attack: 0.001, decay: 0.28, sustain: 0 },
+        volume: -6,
+      });
+      kick.connect(master);
+
+      const snareBody = new Tone.NoiseSynth({
+        noise: { type: "white" },
+        envelope: { attack: 0.001, decay: 0.14, sustain: 0 },
+        volume: -20,
+      });
+      const snareTone = new Tone.Filter({ type: "bandpass", frequency: 1800, Q: 0.8 });
+      snareBody.connect(snareTone);
+      snareTone.connect(master);
+
+      const hat = new Tone.NoiseSynth({
+        noise: { type: "white" },
+        envelope: { attack: 0.001, decay: 0.03, sustain: 0 },
+        volume: -24,
+      });
+      const hatTone = new Tone.Filter({ type: "highpass", frequency: 8000 });
+      hat.connect(hatTone);
+      hatTone.connect(master);
+
+      const openhat = new Tone.NoiseSynth({
+        noise: { type: "white" },
+        envelope: { attack: 0.001, decay: 0.3, sustain: 0 },
+        volume: -26,
+      });
+      const openTone = new Tone.Filter({ type: "highpass", frequency: 7000 });
+      openhat.connect(openTone);
+      openTone.connect(master);
+
+      drumKit = { kick, snare: snareBody, hihat: hat, openhat };
+      return drumKit;
+    })();
+  }
+  return drumKitReady;
+}
+
+/**
+ * 多轨 pattern 播放:旋律/和弦轨(采样或合成音色)+ 鼓轨(合成示意)。
+ * 时间以拍计,bpm 换算;swing 会把落在正拍后半拍(t 的小数部分恰为 0.5)的事件后移,
+ * 模拟摇摆八分——爵士/布鲁斯的节奏灵魂。
+ */
+export async function playPattern(pattern: Pattern): Promise<void> {
+  const spb = 60 / pattern.bpm; // 每拍秒数
+  const swing = pattern.swing ?? 0.5;
+
+  // 用到的音色先并行就绪(含采样下载),再一次性排进时间线
+  const timbres = [
+    ...new Set(pattern.tracks.flatMap((tr) => (tr.kind === "notes" ? [tr.timbre] : []))),
+  ];
+  const hasDrums = pattern.tracks.some((tr) => tr.kind === "drums");
+  const Tone = await getTone();
+  await Promise.all([...timbres.map((tm) => ensureAudio(tm)), ...(hasDrums ? [ensureDrums(Tone)] : [])]);
+  await Tone.start();
+  const kit = hasDrums ? (drumKit as DrumKit) : null;
+
+  const swingOffset = (t: number) => {
+    const frac = t - Math.floor(t);
+    // 只动"正拍后半"这一格(八分音符网格),其余时值不动
+    if (Math.abs(frac - 0.5) < 1e-6) return (swing - 0.5) * spb;
+    return 0;
+  };
+
+  const start = Tone.now() + 0.08;
+  for (const track of pattern.tracks) {
+    if (track.kind === "notes") {
+      const inst = instruments.get(track.timbre);
+      if (!inst) continue;
+      for (const ev of track.events) {
+        const t = start + ev.t * spb + swingOffset(ev.t);
+        const dur = (ev.dur ?? 0.5) * spb;
+        const vel = ev.vel ?? 1;
+        inst.triggerAttackRelease(ev.notes, dur, t, vel);
+      }
+    } else if (kit) {
+      for (const ev of track.events) {
+        const t = start + ev.t * spb + swingOffset(ev.t);
+        const vel = ev.vel ?? 1;
+        switch (ev.hit) {
+          case "kick":
+            kit.kick.triggerAttackRelease("C1", "16n", t, vel);
+            break;
+          case "snare":
+            kit.snare.triggerAttackRelease("16n", t, vel);
+            break;
+          case "hihat":
+            kit.hihat.triggerAttackRelease("32n", t, vel);
+            break;
+          case "openhat":
+            kit.openhat.triggerAttackRelease("8n", t, vel);
+            break;
+        }
+      }
+    }
+  }
 }

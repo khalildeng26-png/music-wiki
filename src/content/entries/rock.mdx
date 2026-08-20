@@ -13,6 +13,8 @@ faq:
 order: 4
 ---
 
+import { StyleDemo } from "../../components/interactive/StyleDemo";
+
 **摇滚**(Rock)是 20 世纪中叶以来最有影响力的音乐风格之一。它脱胎于 1950 年代的摇滚乐(Rock and Roll),以**电吉他、贝斯、架子鼓**为核心编制,强调**能量、节奏冲击和态度表达**。
 
 ## 核心特征
@@ -21,6 +23,48 @@ order: 4
 - **强烈的 backbeat**:鼓点在 2、4 拍上重击,见 [架子鼓](/entries/drums)。
 - **riff(重复段落)**:一段抓耳的吉他旋律反复出现,撑起整首歌(如无数经典摇滚的开场 riff)。
 - **大声、直接**:音量、速度、态度都比流行音乐更"硬"。
+
+听一段摇滚的基础套路——强力和弦 + 鼓的 backbeat:
+
+<StyleDemo
+  client:visible
+  title="摇滚 · E5–G5–A5 强力和弦推进"
+  hint="注意鼓在 2、4 拍的重击(backbeat),和吉他八分音符一路推着走的感觉。"
+  note="吉他为清音采样(真实摇滚会加失真);鼓组为合成音示意"
+  pattern={{
+    bpm: 120,
+    beats: 16,
+    tracks: [
+      {
+        kind: "notes",
+        timbre: "eguitar",
+        events: [
+          ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, notes: ["E3", "B3", "E4"], dur: 0.42, vel: 0.85 })),
+          ...Array.from({ length: 8 }, (_, i) => ({ t: 8 + i * 0.5, notes: ["G3", "D4", "G4"], dur: 0.42, vel: 0.85 })),
+          ...Array.from({ length: 8 }, (_, i) => ({ t: 12 + i * 0.5, notes: ["A3", "E4", "A4"], dur: 0.42, vel: 0.85 })),
+        ],
+      },
+      {
+        kind: "notes",
+        timbre: "bass",
+        events: [
+          ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, notes: ["E2"], dur: 0.45 })),
+          ...Array.from({ length: 8 }, (_, i) => ({ t: 8 + i * 0.5, notes: ["G2"], dur: 0.45 })),
+          ...Array.from({ length: 8 }, (_, i) => ({ t: 12 + i * 0.5, notes: ["A2"], dur: 0.45 })),
+        ],
+      },
+      {
+        kind: "drums",
+        events: [
+          ...Array.from({ length: 8 }, (_, i) => ({ t: i * 2, hit: "kick", vel: 0.9 })),
+          ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare", vel: 0.8 })),
+          ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat", vel: 0.5 })),
+          { t: 0, hit: "openhat", vel: 0.6 },
+        ],
+      },
+    ],
+  }}
+/>
 
 ## 主要分支
 

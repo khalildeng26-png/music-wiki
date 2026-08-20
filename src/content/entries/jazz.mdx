@@ -13,6 +13,8 @@ faq:
 order: 2
 ---
 
+import { StyleDemo } from "../../components/interactive/StyleDemo";
+
 **爵士乐**(Jazz)起源于 19 世纪末至 20 世纪初的美国新奥尔良,融合了非洲律动、蓝调与欧洲和声。它最鲜明的标志是**即兴**、**摇摆感(swing)** 和**蓝调音阶**。
 
 ## 核心特征
@@ -20,6 +22,67 @@ order: 2
 - **即兴演奏**:乐手在和弦进行的基础上即兴创造旋律,每遍都不一样——这是爵士的灵魂。
 - **摇摆节奏**:八分音符不是均匀的,而是带"长–短"的律动感,让人想跟着晃。
 - **蓝调音阶**:在小调音阶基础上加入降三、降五、降七等"蓝调音",产生特有的张力色彩。
+
+听一段爵士节奏组的签名——钢琴 comping、行走贝斯(walking bass)、摇摆八分:
+
+<StyleDemo
+  client:visible
+  title="爵士 · Dm7–G7–Cmaj7(ii–V–I)"
+  hint="注意两件事:八分音符「长–短」不均的摇摆感;贝斯四拍一音地行走。"
+  note="钢琴/贝斯为真实采样;鼓组为合成音示意"
+  pattern={{
+    bpm: 132,
+    swing: 0.65,
+    beats: 16,
+    tracks: [
+      {
+        kind: "notes",
+        timbre: "piano",
+        events: [
+          { t: 0, notes: ["D4", "F4", "A4", "C5"], dur: 1.1 },
+          { t: 1.5, notes: ["D4", "F4", "A4", "C5"], dur: 0.5 },
+          { t: 4, notes: ["G3", "B3", "D4", "F4"], dur: 1.1 },
+          { t: 5.5, notes: ["G3", "B3", "D4", "F4"], dur: 0.5 },
+          { t: 8, notes: ["C4", "E4", "G4", "B4"], dur: 1.1 },
+          { t: 9.5, notes: ["C4", "E4", "G4", "B4"], dur: 0.5 },
+          { t: 12, notes: ["C4", "E4", "G4", "B4"], dur: 1.1 },
+          { t: 13.5, notes: ["A3", "C#4", "E4", "G4"], dur: 0.5 },
+        ],
+      },
+      {
+        kind: "notes",
+        timbre: "bass",
+        events: [
+          "D2",
+          "E2",
+          "F2",
+          "G2",
+          "F2",
+          "G2",
+          "A2",
+          "B2",
+          "C3",
+          "E3",
+          "G3",
+          "A3",
+          "B2",
+          "A2",
+          "G2",
+          "E2",
+        ].map((n, i) => ({ t: i, notes: [n], dur: 0.95 })),
+      },
+      {
+        kind: "drums",
+        events: [
+          ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat", vel: 0.5 })),
+          ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare", vel: 0.4 })),
+          { t: 0, hit: "kick", vel: 0.35 },
+          { t: 8, hit: "kick", vel: 0.35 },
+        ],
+      },
+    ],
+  }}
+/>
 
 ## 常见乐器
 
