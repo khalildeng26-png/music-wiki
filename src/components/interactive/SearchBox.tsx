@@ -22,6 +22,9 @@ export function SearchBox({ initial = "" }: { initial?: string }) {
 
   React.useEffect(() => {
     inputRef.current?.focus();
+    // 静态站:构建时拿不到 URL 查询串,挂载后从地址栏补读(首页表单 /search?q= 跳转场景)
+    const urlQ = new URLSearchParams(window.location.search).get("q");
+    if (urlQ && urlQ.trim()) setQ(urlQ);
     void (async () => {
       try {
         pf.current = await import(/* @vite-ignore */ "/pagefind/pagefind.js");
@@ -147,7 +150,7 @@ export function SearchBox({ initial = "" }: { initial?: string }) {
         </div>
       )}
 
-      <ul className="mt-4 space-y-2">
+      <ul id="search-results" className="mt-4 space-y-2">
         {results.map((r) => (
           <li key={r.url}>
             <a
