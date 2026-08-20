@@ -26,3 +26,6 @@ public/og/
 scripts/_og-cache.json
 scripts/_tmp/raw/
 *.pcm
+
+# 验证截图(playwright 临时产物)
+scripts/_tmp/shots/
