@@ -26,6 +26,35 @@ const { title, description, ogImage, jsonLd } = Astro.props;
         } catch {}
       })();
     </script>
+    <script is:inline>
+      // 老内核兜底:百度App等内置浏览器内核常停在 Chromium <111,不支持
+      // @layer/oklch/color-mix(Tailwind v4 的硬门槛),整套现代样式会被整块丢弃
+      // → 白底黑字。检测到时切换 /legacy/basic.css 基础排版并加提示条。
+      (() => {
+        try {
+          const modern =
+            window.CSS &&
+            CSS.supports &&
+            CSS.supports("color", "oklch(0.7 0.1 200)") &&
+            CSS.supports("color", "color-mix(in srgb, red, blue)");
+          if (modern) return;
+          document.documentElement.classList.add("legacy");
+          const link = document.createElement("link");
+          link.rel = "stylesheet";
+          link.href = "/legacy/basic.css";
+          document.head.appendChild(link);
+          const addBanner = () => {
+            const bar = document.createElement("div");
+            bar.className = "legacy-banner";
+            bar.innerHTML =
+              "当前浏览器内核较旧,已切换基础排版 · 用 Chrome 或系统浏览器打开可获得完整体验";
+            document.body.insertBefore(bar, document.body.firstChild);
+          };
+          if (document.body) addBanner();
+          else document.addEventListener("DOMContentLoaded", addBanner);
+        } catch {}
+      })();
+    </script>
   </head>
   <body
     class={cn(

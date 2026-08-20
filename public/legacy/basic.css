@@ -1,0 +1,232 @@
+/* 老内核兜底排版(html.legacy 时由探测脚本注入)
+ * 面向不支持 @layer/oklch/color-mix 的浏览器(百度App内置浏览器等,Chromium <111):
+ * Tailwind v4 的整套样式会被整块丢弃,这份手写样式保证页面体面可读。
+ * 只用 2016 年前就普及的特性:基础选择器、flex、媒体查询,不用变量/层级/嵌套/新颜色函数。 */
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  background: #faf6ee;
+  color: #2c2925;
+  font: 16px/1.75 "PingFang SC", "Microsoft YaHei", "HarmonyOS Sans SC", system-ui, sans-serif;
+}
+
+/* 顶部提示条 */
+.legacy-banner {
+  background: #f4e9d4;
+  border-bottom: 1px solid #ddc9a3;
+  color: #6b5533;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 9px 16px;
+  text-align: center;
+}
+
+/* 头部 */
+header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: #fffdf8;
+  border-bottom: 1px solid #e5dcc9;
+}
+header ul,
+header nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+header img {
+  width: 24px;
+  height: 24px;
+}
+
+/* 主体 */
+main {
+  display: block;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 28px 20px 72px;
+}
+
+/* 排版 */
+a {
+  color: #b06a15;
+}
+a:hover {
+  color: #8a5210;
+}
+h1,
+h2,
+h3,
+h4 {
+  color: #1d1b18;
+  line-height: 1.35;
+}
+h1 {
+  font-size: 27px;
+  margin: 20px 0 14px;
+}
+h2 {
+  font-size: 21px;
+  margin: 30px 0 10px;
+}
+h3 {
+  font-size: 17px;
+  margin: 22px 0 8px;
+}
+p,
+ul,
+ol {
+  margin: 0 0 14px;
+}
+ul,
+ol {
+  padding-left: 1.5em;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+figure {
+  margin: 24px 0;
+}
+figcaption {
+  font-size: 13px;
+  color: #857a64;
+  margin-top: 8px;
+  text-align: center;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 14px;
+}
+th,
+td {
+  border: 1px solid #e2d9c8;
+  padding: 6px 10px;
+  text-align: left;
+}
+blockquote {
+  margin: 16px 0;
+  padding: 10px 16px;
+  border-left: 3px solid #d9a441;
+  background: #f5eee1;
+  color: #5c5344;
+}
+code {
+  font-family: Consolas, "Courier New", monospace;
+  background: #f0e9db;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.92em;
+}
+pre {
+  background: #f0e9db;
+  border-radius: 8px;
+  overflow: auto;
+  padding: 12px 14px;
+}
+pre code {
+  background: none;
+  padding: 0;
+}
+hr {
+  border: 0;
+  border-top: 1px solid #e2d9c8;
+  margin: 26px 0;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+}
+input {
+  font: inherit;
+}
+input[type="text"],
+input[type="search"] {
+  border: 1px solid #d8cdb6;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+/* 浮动反馈按钮失去了 fixed 定位,裸露在文档流顶部——藏掉 */
+body > div > button {
+  display: none;
+}
+
+/* 页脚 */
+footer {
+  border-top: 1px solid #e5dcc9;
+  background: #f7f2e7;
+  color: #6f6552;
+  font-size: 14px;
+  padding: 20px;
+}
+footer ul {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* 暗色偏好下的基本适配 */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #1c1a17;
+    color: #ded8cc;
+  }
+  .legacy-banner {
+    background: #2b2417;
+    border-bottom-color: #4d3f26;
+    color: #d3b988;
+  }
+  header {
+    background: #232019;
+    border-bottom-color: #3a352b;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: #f0ebe1;
+  }
+  a {
+    color: #e0a94e;
+  }
+  a:hover {
+    color: #f0c377;
+  }
+  figcaption {
+    color: #a39a86;
+  }
+  th,
+  td,
+  hr {
+    border-color: #3a352b;
+  }
+  blockquote,
+  code,
+  pre {
+    background: #2a2721;
+    color: #d6d0c4;
+  }
+  blockquote {
+    color: #c9c1b2;
+  }
+  footer {
+    background: #201d18;
+    border-top-color: #3a352b;
+    color: #a39a86;
+  }
+}

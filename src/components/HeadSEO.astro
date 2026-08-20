@@ -54,6 +54,9 @@ const extraSchemas = jsonLd
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="generator" content={Astro.generator} />
 <meta name="robots" content="index, follow" />
+<!-- 百度:适配声明 + 禁止转码 -->
+<meta name="applicable-device" content="pc,mobile" />
+<meta http-equiv="Cache-Control" content="no-transform" />
 
 <!-- Canonical -->
 <link rel="canonical" href={canonicalURL} />
