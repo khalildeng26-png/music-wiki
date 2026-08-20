@@ -139,6 +139,64 @@ const jsonLd = [
       <Content />
     </div>
 
+    <!-- 读完正文,顺着路线直接去下一节(不用滚回顶部或返回路线页) -->
+    {
+      inPaths.map(({ p, step, total, prev, next }) => {
+        const prevE = prev ? entryMap.get(prev) : undefined;
+        const nextE = next ? entryMap.get(next) : undefined;
+        return nextE ? (
+          <section class="not-prose mt-12">
+            <a
+              href={`/entries/${next}`}
+              class="group block rounded-xl border border-signature/40 bg-signature/5 p-5 transition hover:border-signature hover:shadow-md sm:p-6"
+            >
+              <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                <span class="font-medium text-signature">{p.data.title}</span>
+                <span aria-hidden="true">·</span>
+                <span>第 {step} / {total} 节读完</span>
+              </div>
+              <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+                <span class="text-xl font-bold tracking-tight transition-colors group-hover:text-signature sm:text-2xl">
+                  下一节:{nextE.data.title}
+                </span>
+                <span class="text-signature transition-transform group-hover:translate-x-1" aria-hidden="true">
+                  →
+                </span>
+              </div>
+              <div class="mt-1.5 line-clamp-2 text-sm text-muted-foreground">{nextE.data.summary}</div>
+            </a>
+            <div class="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-muted-foreground">
+              {prevE && (
+                <a href={`/entries/${prev}`} class="hover:text-signature">← 上一节:{prevE.data.title}</a>
+              )}
+              <a href={`/paths/${p.id}`} class="hover:text-signature">回到路线总览</a>
+            </div>
+          </section>
+        ) : (
+          <section class="not-prose mt-12 rounded-xl border border-signature/40 bg-signature/5 p-6 text-center sm:p-8">
+            <div class="text-sm font-medium text-signature">路线完成</div>
+            <div class="mt-1.5 text-xl font-bold tracking-tight sm:text-2xl">
+              你读完了「{p.data.title}」全部 {total} 节
+            </div>
+            <div class="mt-5 flex flex-wrap justify-center gap-3">
+              <a
+                href="/paths"
+                class="rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground transition hover:opacity-90"
+              >
+                看看其他路线 →
+              </a>
+              <a
+                href={`/paths/${p.id}`}
+                class="rounded-full border px-5 py-2 text-sm transition hover:border-signature/50 hover:text-signature"
+              >
+                回到本路线
+              </a>
+            </div>
+          </section>
+        );
+      })
+    }
+
     {
       entry.data.faq?.length > 0 && (
         <section class="not-prose mt-16 border-t pt-8">
