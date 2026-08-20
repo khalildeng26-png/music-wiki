@@ -1,10 +1,14 @@
 import { Loader2, Search } from "lucide-react";
 import * as React from "react";
 
-type Result = { title: string; url: string; excerpt: string };
+import { rankMeta, type MetaEntry } from "@/lib/fuzzy";
+
+type Result = { title: string; url: string; excerpt: string; tag?: string; html?: boolean };
 
 /** 首页即时搜索:边输入边出下拉结果,点结果直达词条;回车进完整搜索页。
- *  Pagefind 索引仅构建后可用,加载失败时降级为提交跳 /search。 */
+ *  两路召回合并:① 元数据模糊分词(标题/标签/分类,「吉他乐理」也能召回)
+ *              ② Pagefind 全文命中(补正文里的匹配)。
+ *  Pagefind 仅构建后可用;① 在 dev 下也工作,索引加载失败时回车降级跳 /search。 */
 export function HomeSearch() {
   const [q, setQ] = React.useState("");
   const [results, setResults] = React.useState<Result[]>([]);
@@ -13,6 +17,7 @@ export function HomeSearch() {
   const [loading, setLoading] = React.useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const pf = React.useRef<any>(null);
+  const [meta, setMeta] = React.useState<MetaEntry[]>([]);
   const boxRef = React.useRef<HTMLDivElement>(null);
   const debounceRef = React.useRef(0);
 
@@ -22,10 +27,20 @@ export function HomeSearch() {
         pf.current = await import(/* @vite-ignore */ "/pagefind/pagefind.js");
         await pf.current.init();
       } catch {
-        pf.current = null; // dev 下没有索引,降级为跳转搜索页
+        pf.current = null; // dev 下没有索引,靠元数据模糊召回兜底
       }
     })();
-    return () => window.clearTimeout(debounceRef.current);
+    let alive = true;
+    fetch("/search-index.json")
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("no index"))))
+      .then((d: MetaEntry[]) => {
+        if (alive && Array.isArray(d)) setMeta(d);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+      window.clearTimeout(debounceRef.current);
+    };
   }, []);
 
   // 点框外收起下拉
@@ -39,6 +54,8 @@ export function HomeSearch() {
     return () => document.removeEventListener("mousedown", onDown);
   }, []);
 
+  const norm = (u: string) => u.replace(/\/+$/, "");
+
   function onInput(v: string) {
     setQ(v);
     window.clearTimeout(debounceRef.current);
@@ -48,35 +65,55 @@ export function HomeSearch() {
       setLoading(false);
       return;
     }
-    if (!pf.current) return; // 索引未就绪:输入不报错,回车走降级
+    if (!pf.current && meta.length === 0) return; // 两路索引都未就绪:回车走降级
     setLoading(true);
     debounceRef.current = window.setTimeout(async () => {
-      try {
-        const search = await pf.current.search(v.trim());
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const data = await Promise.all(
-          search.results
-            .slice(0, 6)
-            .map(
-              (r: {
-                data: () => Promise<{ meta?: { title?: string }; url: string; excerpt?: string }>;
-              }) => r.data(),
-            ),
-        );
-        setResults(
-          data.map((d) => ({
-            title: d.meta?.title ?? d.url,
-            url: d.url,
-            excerpt: d.excerpt ?? "",
-          })),
-        );
-        setOpen(true);
-        setHi(0);
-      } catch {
-        setResults([]);
-      } finally {
-        setLoading(false);
+      const query = v.trim();
+
+      // ① 元数据模糊召回(同步,排在前面——标题/标签命中的就是用户想找的)
+      const merged: Result[] = rankMeta(query, meta)
+        .slice(0, 4)
+        .map((h) => ({
+          title: h.entry.title,
+          url: `/entries/${h.entry.slug}/`,
+          excerpt: h.entry.summary,
+          tag: h.entry.category,
+        }));
+
+      // ② Pagefind 全文命中补位(去重)
+      if (pf.current) {
+        try {
+          const search = await pf.current.search(query);
+          const seen = new Set(merged.map((m) => norm(m.url)));
+          const data = await Promise.all(
+            search.results
+              .slice(0, 8)
+              .map(
+                (r: {
+                  data: () => Promise<{ meta?: { title?: string }; url: string; excerpt?: string }>;
+                }) => r.data(),
+              ),
+          );
+          for (const d of data) {
+            if (merged.length >= 6) break;
+            if (seen.has(norm(d.url))) continue;
+            seen.add(norm(d.url));
+            merged.push({
+              title: d.meta?.title ?? d.url,
+              url: d.url,
+              excerpt: d.excerpt ?? "",
+              html: true,
+            });
+          }
+        } catch {
+          /* 全文失败只影响补位 */
+        }
       }
+
+      setResults(merged);
+      setOpen(true);
+      setHi(0);
+      setLoading(false);
     }, 150);
   }
 
@@ -124,6 +161,7 @@ export function HomeSearch() {
           aria-label="搜索"
           role="combobox"
           aria-expanded={open}
+          aria-controls="home-search-results"
           className="min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-muted-foreground"
         />
         {loading ? (
@@ -136,7 +174,10 @@ export function HomeSearch() {
       </form>
 
       {open && results.length > 0 && (
-        <ul className="absolute inset-x-0 top-full z-20 mt-2 overflow-hidden rounded-xl border bg-card shadow-lg">
+        <ul
+          id="home-search-results"
+          className="absolute inset-x-0 top-full z-20 mt-2 overflow-hidden rounded-xl border bg-card shadow-lg"
+        >
           {results.map((r, i) => (
             <li key={r.url}>
               <a
@@ -146,11 +187,16 @@ export function HomeSearch() {
                   "block px-4 py-3 transition " + (i === hi ? "bg-accent" : "hover:bg-accent/60")
                 }
               >
-                <div className="font-medium">{r.title}</div>
+                <div className="font-medium">
+                  {r.tag && (
+                    <span className="mr-1.5 text-xs font-normal text-signature">{r.tag}</span>
+                  )}
+                  {r.title}
+                </div>
                 {r.excerpt && (
                   <p
                     className="mt-0.5 line-clamp-1 text-sm text-muted-foreground [&_mark]:rounded [&_mark]:bg-signature/30 [&_mark]:px-0.5 [&_mark]:text-foreground"
-                    dangerouslySetInnerHTML={{ __html: r.excerpt }}
+                    dangerouslySetInnerHTML={{ __html: r.html ? r.excerpt : escapeHtml(r.excerpt) }}
                   />
                 )}
               </a>
@@ -160,6 +206,10 @@ export function HomeSearch() {
       )}
     </div>
   );
+}
+
+function escapeHtml(s: string) {
+  return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
 }
 
 export default HomeSearch;

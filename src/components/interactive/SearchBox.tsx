@@ -1,16 +1,23 @@
 import { Loader2, Search } from "lucide-react";
 import * as React from "react";
 
-type Result = { title: string; url: string; excerpt: string };
+import { rankMeta, type MetaEntry } from "@/lib/fuzzy";
 
-/** 全文搜索框:调用 Pagefind 索引(仅在构建产物/preview/线上可用,dev 下优雅降级)。 */
+type Result = { title: string; url: string; excerpt: string; tag?: string; html?: boolean };
+
+const SUGGESTIONS = ["吉他", "音阶", "布鲁斯", "五线谱", "和弦"];
+
+/** 全文搜索框:两路召回合并——元数据模糊分词(标题/标签/分类/摘要)
+ *  + Pagefind 全文(仅构建产物/preview/线上可用,dev 下由前者兜底)。 */
 export function SearchBox({ initial = "" }: { initial?: string }) {
   const [q, setQ] = React.useState(initial);
   const [results, setResults] = React.useState<Result[]>([]);
-  const [ready, setReady] = React.useState(false);
-  const [status, setStatus] = React.useState<"idle" | "loading" | "done" | "unavailable">("idle");
+  const [status, setStatus] = React.useState<"idle" | "loading" | "done">("idle");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const pf = React.useRef<any>(null);
+  const [pfReady, setPfReady] = React.useState(false);
+  const [meta, setMeta] = React.useState<MetaEntry[]>([]);
+  const [metaTried, setMetaTried] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
@@ -19,56 +26,82 @@ export function SearchBox({ initial = "" }: { initial?: string }) {
       try {
         pf.current = await import(/* @vite-ignore */ "/pagefind/pagefind.js");
         await pf.current.init();
-        setReady(true);
+        setPfReady(true);
       } catch {
-        pf.current = null;
-        setStatus("unavailable");
+        pf.current = null; // dev 下没有全文索引,模糊召回兜底
       }
     })();
+    let alive = true;
+    fetch("/search-index.json")
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("no index"))))
+      .then((d: MetaEntry[]) => {
+        if (alive && Array.isArray(d)) setMeta(d);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (alive) setMetaTried(true);
+      });
+    return () => {
+      alive = false;
+    };
   }, []);
 
-  // ready 变化时也重跑,修掉"先输入、后加载完"导致搜索被跳过的竞态
   React.useEffect(() => {
-    if (!ready || !pf.current) return;
     const query = q.trim();
     if (!query) {
       setResults([]);
       setStatus("idle");
       return;
     }
+    // 两路索引都未就绪时先不出结果,谁先到位谁触发重跑
+    if (!pfReady && !meta.length) return;
     let cancelled = false;
     setStatus("loading");
     const t = window.setTimeout(async () => {
-      try {
-        const search = await pf.current.search(query);
-        const data = await Promise.all(
-          search.results.slice(0, 30).map(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (r: any) => r.data(),
-          ),
-        );
-        if (!cancelled) {
-          setResults(
-            data.map(
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              (d: any) => ({
-                title: d.meta?.title ?? d.url,
-                url: d.url,
-                excerpt: d.excerpt,
-              }),
-            ),
-          );
-          setStatus("done");
+      const norm = (u: string) => u.replace(/\/+$/, "");
+
+      // ① 元数据模糊召回(「吉他乐理」这类非整词查询靠它)
+      const merged: Result[] = rankMeta(query, meta).map((h) => ({
+        title: h.entry.title,
+        url: `/entries/${h.entry.slug}/`,
+        excerpt: h.entry.summary,
+        tag: h.entry.category,
+      }));
+
+      // ② Pagefind 全文补位(去重)
+      if (pf.current) {
+        try {
+          const search = await pf.current.search(query);
+          const seen = new Set(merged.map((m) => norm(m.url)));
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const data = await Promise.all(search.results.slice(0, 30).map((r: any) => r.data()));
+          for (const d of data) {
+            if (seen.has(norm(d.url))) continue;
+            seen.add(norm(d.url));
+            merged.push({
+              title: d.meta?.title ?? d.url,
+              url: d.url,
+              excerpt: d.excerpt,
+              html: true,
+            });
+          }
+        } catch {
+          /* 全文失败只影响补位 */
         }
-      } catch {
-        if (!cancelled) setStatus("done");
+      }
+
+      if (!cancelled) {
+        setResults(merged);
+        setStatus("done");
       }
     }, 180);
     return () => {
       cancelled = true;
       window.clearTimeout(t);
     };
-  }, [q, ready]);
+  }, [q, pfReady, meta]);
+
+  const noSource = metaTried && !pfReady && meta.length === 0;
 
   return (
     <div>
@@ -85,18 +118,33 @@ export function SearchBox({ initial = "" }: { initial?: string }) {
         {status === "loading" && <Loader2 className="size-4 animate-spin text-muted-foreground" />}
       </div>
 
-      {status === "unavailable" && (
+      {noSource && (
         <p className="mt-4 text-sm text-muted-foreground">
-          搜索索引在构建后生成。请用 <code className="rounded bg-muted px-1">npm run preview</code>{" "}
-          预览构建产物来使用搜索(开发模式 <code className="rounded bg-muted px-1">dev</code>{" "}
-          下不可用)。
+          搜索索引加载失败,请刷新重试;完整全文搜索请用{" "}
+          <code className="rounded bg-muted px-1">npm run preview</code> 预览构建产物。
         </p>
       )}
 
-      {pf.current && status === "done" && (
+      {status === "done" && (
         <p className="mt-3 text-sm text-muted-foreground">
-          {results.length > 0 ? `找到 ${results.length} 条结果` : `没有找到「${q}」相关的内容`}
+          {results.length > 0
+            ? `找到 ${results.length} 条结果`
+            : `没有找到「${q}」相关的内容,换个说法试试:`}
         </p>
+      )}
+      {status === "done" && results.length === 0 && (
+        <div className="mt-2 flex flex-wrap gap-2">
+          {SUGGESTIONS.map((s) => (
+            <button
+              key={s}
+              type="button"
+              onClick={() => setQ(s)}
+              className="rounded-full border bg-card px-3 py-1 text-sm text-muted-foreground transition hover:border-signature/50 hover:text-signature"
+            >
+              {s}
+            </button>
+          ))}
+        </div>
       )}
 
       <ul className="mt-4 space-y-2">
@@ -106,11 +154,14 @@ export function SearchBox({ initial = "" }: { initial?: string }) {
               href={r.url}
               className="block rounded-lg border bg-card p-4 transition hover:border-signature/50"
             >
-              <div className="font-medium hover:text-signature">{r.title}</div>
+              <div className="font-medium hover:text-signature">
+                {r.tag && <span className="mr-1.5 text-xs font-normal text-signature">{r.tag}</span>}
+                {r.title}
+              </div>
               {r.excerpt && (
                 <p
-                  className="mt-1 text-sm text-muted-foreground [&_mark]:rounded [&_mark]:bg-signature/30 [&_mark]:px-0.5 [&_mark]:text-foreground"
-                  dangerouslySetInnerHTML={{ __html: r.excerpt }}
+                  className="mt-1 line-clamp-2 text-sm text-muted-foreground [&_mark]:rounded [&_mark]:bg-signature/30 [&_mark]:px-0.5 [&_mark]:text-foreground"
+                  dangerouslySetInnerHTML={{ __html: r.html ? r.excerpt : escapeHtml(r.excerpt) }}
                 />
               )}
             </a>
@@ -119,6 +170,10 @@ export function SearchBox({ initial = "" }: { initial?: string }) {
       </ul>
     </div>
   );
+}
+
+function escapeHtml(s: string) {
+  return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
 }
 
 export default SearchBox;
