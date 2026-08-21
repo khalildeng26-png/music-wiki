@@ -81,7 +81,8 @@ const SAMPLES: Record<
   },
   bass: {
     files: { E1: "E1", "A#1": "As1", E2: "E2", "A#2": "As2", E3: "E3" },
-    volume: -2,
+    // 2026-08-21:-2 → -6。原值按独奏校准,StyleDemo 混编里低频压过钢琴/吉他
+    volume: -6,
     release: 0.3,
   },
   flute: {
