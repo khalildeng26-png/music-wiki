@@ -136,7 +136,7 @@ const SAMPLES: Record<
     release: 0.4,
   },
   erhu: {
-    files: { D3: "D3", F3: "F3", A3: "A3", D4: "D4", "F#4": "F#4", A4: "A4" },
+    files: { D3: "D3", F3: "F3", A3: "A3", D4: "D4", "F#4": "Fs4", A4: "A4" },
     volume: -6,
     release: 0.5,
   },

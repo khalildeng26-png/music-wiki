@@ -22,6 +22,71 @@ order: 8
 - **戏曲元素**:部分作品融入戏腔、京剧韵白等唱法。
 - **古典意象的歌词**:常用诗词典故、山水意象、历史题材。
 
+import { StyleDemo } from "../../components/interactive/StyleDemo";
+
+听一段五声音阶的国风小调:
+
+<StyleDemo
+  client:visible
+  title="国风 · 五声音阶小调(笛子 × 古筝 × 二胡)"
+  hint="旋律里没有 fa 和 si(只剩 do re mi sol la),笛子一响中国味就来了;底下是古筝琶音和二胡长音。"
+  note="笛子/古筝/二胡均为真实采样;民乐打击乐(堂鼓/镲)暂无采样,本段从略"
+  pattern={{
+    bpm: 84,
+    beats: 16,
+    tracks: [
+      {
+        kind: "notes",
+        timbre: "dizi",
+        events: [
+          { t: 0, notes: ["G5"], dur: 0.5 },
+          { t: 0.5, notes: ["A5"], dur: 0.5 },
+          { t: 1, notes: ["C6"], dur: 1 },
+          { t: 2, notes: ["A5"], dur: 0.5 },
+          { t: 2.5, notes: ["G5"], dur: 1.4 },
+          { t: 4, notes: ["D6"], dur: 0.5 },
+          { t: 4.5, notes: ["C6"], dur: 0.5 },
+          { t: 5, notes: ["A5"], dur: 1 },
+          { t: 6, notes: ["G5"], dur: 0.5 },
+          { t: 6.5, notes: ["A5"], dur: 1.4 },
+          { t: 8, notes: ["C6"], dur: 0.5 },
+          { t: 8.5, notes: ["D6"], dur: 0.5 },
+          { t: 9, notes: ["E6"], dur: 1 },
+          { t: 10, notes: ["D6"], dur: 0.5 },
+          { t: 10.5, notes: ["C6"], dur: 1.4 },
+          { t: 12, notes: ["A5"], dur: 0.5 },
+          { t: 12.5, notes: ["G5"], dur: 0.5 },
+          { t: 13, notes: ["E5"], dur: 1 },
+          { t: 14, notes: ["G5"], dur: 0.5 },
+          { t: 14.5, notes: ["A5"], dur: 1.4 },
+        ],
+      },
+      {
+        kind: "notes",
+        timbre: "guzheng",
+        events: [
+          ...["C", "Am", "C", "G"].flatMap((ch, bar) => {
+            const off = bar * 4;
+            const tones =
+              ch === "Am" ? ["A3", "C4", "E4", "A4"] : ch === "G" ? ["G3", "D4", "E4", "G4"] : ["A3", "C4", "E4", "G4"];
+            return tones.map((n, i) => ({ t: off + i, notes: [n], dur: 0.9, vel: 0.55 }));
+          }),
+        ],
+      },
+      {
+        kind: "notes",
+        timbre: "erhu",
+        events: [
+          { t: 0, notes: ["D4"], dur: 3.8, vel: 0.45 },
+          { t: 4, notes: ["E4"], dur: 3.8, vel: 0.45 },
+          { t: 8, notes: ["G4"], dur: 3.8, vel: 0.45 },
+          { t: 12, notes: ["A4"], dur: 3.8, vel: 0.45 },
+        ],
+      },
+    ],
+  }}
+/>
+
 ## 编曲特点
 
 国风常采用"**民族旋律 + 现代编曲**"的混搭:旋律走五声,但编曲用现代流行的鼓、贝斯、合成器,甚至融入 R&B / 嘻哈律动。这种"旧瓶装新酒"正是它流行的原因。

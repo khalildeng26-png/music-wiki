@@ -22,6 +22,56 @@ order: 3
 - **器乐写作**:为管弦乐队(弦乐、木管、铜管、打击乐)精心配器。
 - **记谱精确**:几乎所有细节都写在 [五线谱](/entries/staff-notation) 上,演奏者忠实再现。
 
+import { StyleDemo } from "../../components/interactive/StyleDemo";
+
+听一段古典时期语法的钢琴与小提琴二重奏:
+
+<StyleDemo
+  client:visible
+  title="古典 · 阿尔贝蒂低音 + 小提琴旋律"
+  hint="左手「低-高-中-高」分解和弦(阿尔贝蒂低音)是古典时期的招牌伴奏型;小提琴在上面唱一条规整的旋律。"
+  note="钢琴/小提琴均为真实采样;弦乐四重奏的完整编制(中提琴/大提琴)暂无采样,以二重奏示意"
+  pattern={{
+    bpm: 96,
+    beats: 16,
+    tracks: [
+      {
+        kind: "notes",
+        timbre: "piano",
+        events: [
+          // 阿尔贝蒂低音:C | G | C | G7,每小节 低-高-中-高
+          ...["C", "G", "C", "G"].flatMap((ch, bar) => {
+            const off = bar * 4;
+            const seq = ch === "C" ? ["C3", "G3", "E3", "G3"] : ["G2", "D3", "B3", "D3"];
+            return seq.map((n, i) => ({ t: off + i, notes: [n], dur: 0.9, vel: 0.55 }));
+          }),
+        ],
+      },
+      {
+        kind: "notes",
+        timbre: "violin",
+        events: [
+          { t: 0, notes: ["G4"], dur: 1 },
+          { t: 1, notes: ["A4"], dur: 1 },
+          { t: 2, notes: ["B4"], dur: 0.5 },
+          { t: 2.5, notes: ["C5"], dur: 1.4 },
+          { t: 4, notes: ["D5"], dur: 1.5 },
+          { t: 5.5, notes: ["C5"], dur: 0.5 },
+          { t: 6, notes: ["B4"], dur: 1 },
+          { t: 7, notes: ["A4"], dur: 0.9 },
+          { t: 8, notes: ["E5"], dur: 1 },
+          { t: 9, notes: ["D5"], dur: 1 },
+          { t: 10, notes: ["C5"], dur: 1 },
+          { t: 11, notes: ["D5"], dur: 0.9 },
+          { t: 12, notes: ["C5"], dur: 1.5 },
+          { t: 13.5, notes: ["B4"], dur: 0.5 },
+          { t: 14, notes: ["D5"], dur: 1.8 },
+        ],
+      },
+    ],
+  }}
+/>
+
 ## 几个时期
 
 - 巴洛克(约 1600–1750):巴赫、维瓦尔第,复调、装饰音。
