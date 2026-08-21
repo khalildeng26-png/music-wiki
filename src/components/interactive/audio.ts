@@ -28,7 +28,8 @@ export type Timbre =
   | "suona"
   | "harmonica"
   | "synth"
-  | "chip";
+  | "chip"
+  | "drums";
 
 type Instrument = InstanceType<ToneModule["Sampler"]> | InstanceType<ToneModule["PolySynth"]>;
 
@@ -47,6 +48,13 @@ const SAMPLES: Record<
   Exclude<Timbre, "synth" | "chip">,
   { files: Record<string, string>; volume: number; release: number }
 > = {
+  // 鼓组(Freesound CC0,BaDokick/blakengouda/Cringegaming64yt 上传):
+  // 伪音名映射到五个单响——触发时打对应"音名"即为对应鼓件
+  drums: {
+    files: { C1: "kick", D1: "snare", E1: "hihat", F1: "openhat", G1: "ride" },
+    volume: -10,
+    release: 0.2,
+  },
   piano: {
     files: {
       A1: "A1",
@@ -261,14 +269,15 @@ export async function playChordProgression(
 // ---------- 风格试听:多轨 pattern 播放(StyleDemo 用) ----------
 
 /** 合成鼓件(示意音色,非真实采样):底鼓/军鼓/踩镲。 */
-export type DrumHit = "kick" | "snare" | "hihat" | "openhat";
+export type DrumHit = "kick" | "snare" | "hihat" | "openhat" | "ride";
 
 /** 一条音符轨/和弦轨的事件。t/dur 以拍为单位。 */
 export type NoteEvent = { t: number; notes: string[]; dur?: number; vel?: number };
 
 export type PatternTrack =
   | { kind: "notes"; timbre: Timbre; events: NoteEvent[] }
-  | { kind: "drums"; events: { t: number; hit: DrumHit; vel?: number }[] };
+  /** kit 默认 acoustic(真实采样);synth = 芯片/电子风格的原生噪声鼓 */
+  | { kind: "drums"; kit?: "acoustic" | "synth"; events: { t: number; hit: DrumHit; vel?: number }[] };
 
 export type Pattern = {
   bpm: number;
@@ -278,9 +287,18 @@ export type Pattern = {
   tracks: PatternTrack[];
 };
 
-type DrumKit = Record<DrumHit, InstanceType<ToneModule["MembraneSynth"] | ToneModule["NoiseSynth"]>>;
+type DrumKit = Record<"kick" | "snare" | "hihat" | "openhat", InstanceType<ToneModule["MembraneSynth"] | ToneModule["NoiseSynth"]>>;
 let drumKit: DrumKit | null = null;
 let drumKitReady: Promise<DrumKit> | null = null;
+
+/** 采样鼓组的伪音名 → 鼓件映射(与 SAMPLES.drums.files 对应)。 */
+const DRUM_NOTE: Record<DrumHit, string> = {
+  kick: "C1",
+  snare: "D1",
+  hihat: "E1",
+  openhat: "F1",
+  ride: "G1",
+};
 
 /** 惰性构建合成鼓组:底鼓=膜鼓合成,军鼓/踩镲=噪声+滤波。示意用途,UI 需注明。 */
 function ensureDrums(Tone: ToneModule): Promise<DrumKit> {
@@ -342,11 +360,19 @@ export async function playPattern(pattern: Pattern): Promise<void> {
   const timbres = [
     ...new Set(pattern.tracks.flatMap((tr) => (tr.kind === "notes" ? [tr.timbre] : []))),
   ];
-  const hasDrums = pattern.tracks.some((tr) => tr.kind === "drums");
+  const acousticDrums = pattern.tracks.some(
+    (tr) => tr.kind === "drums" && (tr.kit ?? "acoustic") !== "synth",
+  );
+  const synthDrums = pattern.tracks.some((tr) => tr.kind === "drums" && tr.kit === "synth");
+  if (acousticDrums) timbres.push("drums");
   const Tone = await getTone();
-  await Promise.all([...timbres.map((tm) => ensureAudio(tm)), ...(hasDrums ? [ensureDrums(Tone)] : [])]);
+  await Promise.all([
+    ...timbres.map((tm) => ensureAudio(tm)),
+    ...(synthDrums ? [ensureDrums(Tone)] : []),
+  ]);
   await Tone.start();
-  const kit = hasDrums ? (drumKit as DrumKit) : null;
+  const kit = synthDrums ? (drumKit as DrumKit) : null;
+  const drumSampler = acousticDrums ? instruments.get("drums") : null;
 
   const swingOffset = (t: number) => {
     const frac = t - Math.floor(t);
@@ -366,23 +392,34 @@ export async function playPattern(pattern: Pattern): Promise<void> {
         const vel = ev.vel ?? 1;
         inst.triggerAttackRelease(ev.notes, dur, t, vel);
       }
-    } else if (kit) {
+    } else if (track.kind === "drums") {
+      const useSynth = track.kit === "synth";
       for (const ev of track.events) {
         const t = start + ev.t * spb + swingOffset(ev.t);
         const vel = ev.vel ?? 1;
-        switch (ev.hit) {
-          case "kick":
-            kit.kick.triggerAttackRelease("C1", "16n", t, vel);
-            break;
-          case "snare":
-            kit.snare.triggerAttackRelease("16n", t, vel);
-            break;
-          case "hihat":
-            kit.hihat.triggerAttackRelease("32n", t, vel);
-            break;
-          case "openhat":
-            kit.openhat.triggerAttackRelease("8n", t, vel);
-            break;
+        if (!useSynth && drumSampler) {
+          // 真实采样鼓:伪音名 → 鼓件;dur 给足让采样自然衰减(ride 余音最长)
+          const note = DRUM_NOTE[ev.hit];
+          const dur = ev.hit === "ride" || ev.hit === "openhat" ? 2.2 : 1.4;
+          drumSampler.triggerAttackRelease(note, dur, t, vel);
+        } else if (useSynth && kit) {
+          switch (ev.hit) {
+            case "kick":
+              kit.kick.triggerAttackRelease("C1", "16n", t, vel);
+              break;
+            case "snare":
+              kit.snare.triggerAttackRelease("16n", t, vel);
+              break;
+            case "hihat":
+              kit.hihat.triggerAttackRelease("32n", t, vel);
+              break;
+            case "openhat":
+              kit.openhat.triggerAttackRelease("8n", t, vel);
+              break;
+            case "ride":
+              kit.openhat.triggerAttackRelease("4n", t, vel * 0.8);
+              break;
+          }
         }
       }
     }

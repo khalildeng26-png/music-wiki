@@ -29,7 +29,7 @@ import { StyleDemo } from "../../components/interactive/StyleDemo";
   client:visible
   title="爵士 · Dm7–G7–Cmaj7(ii–V–I)"
   hint="注意两件事:八分音符「长–短」不均的摇摆感;贝斯四拍一音地行走。"
-  note="钢琴/贝斯为真实采样;鼓组为合成音示意"
+  note="钢琴/贝斯/鼓组均为真实采样"
   pattern={{
     bpm: 132,
     swing: 0.65,
@@ -74,10 +74,10 @@ import { StyleDemo } from "../../components/interactive/StyleDemo";
       {
         kind: "drums",
         events: [
-          ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat", vel: 0.5 })),
-          ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare", vel: 0.4 })),
-          { t: 0, hit: "kick", vel: 0.35 },
-          { t: 8, hit: "kick", vel: 0.35 },
+          ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "ride", vel: 0.55 })),
+          ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "hihat", vel: 0.5 })),
+          { t: 0, hit: "kick", vel: 0.3 },
+          { t: 8, hit: "kick", vel: 0.3 },
         ],
       },
     ],
