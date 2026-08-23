@@ -23,54 +23,11 @@ order: 1
 - **和声简明**:常用 I–V–vi–IV 等经典和弦进行(见 [和弦进行](/entries/chord-progression))。
 
 import { StyleDemo } from "../../components/interactive/StyleDemo";
+import { GENRES } from "../../lib/genrePatterns";
 
 听一遍流行音乐最眼熟的四和弦:
 
-<StyleDemo
-  client:visible
-  title="流行 · C–G–Am–F(I–V–vi–IV)"
-  hint="这四个和弦撑起了上万首金曲;注意钢琴在每小节第 1 拍和「3 拍后半」的落点。"
-  note="钢琴/贝斯/鼓组均为真实采样"
-  pattern={{
-    bpm: 120,
-    beats: 16,
-    tracks: [
-      {
-        kind: "notes",
-        timbre: "piano",
-        events: [
-          { t: 0, notes: ["C4", "E4", "G4"], dur: 1.2 },
-          { t: 2.5, notes: ["C4", "E4", "G4"], dur: 1.2 },
-          { t: 4, notes: ["G3", "B3", "D4"], dur: 1.2 },
-          { t: 6.5, notes: ["G3", "B3", "D4"], dur: 1.2 },
-          { t: 8, notes: ["A3", "C4", "E4"], dur: 1.2 },
-          { t: 10.5, notes: ["A3", "C4", "E4"], dur: 1.2 },
-          { t: 12, notes: ["F3", "A3", "C4"], dur: 1.2 },
-          { t: 14.5, notes: ["F3", "A3", "C4"], dur: 1.2 },
-        ],
-      },
-      {
-        kind: "notes",
-        timbre: "bass",
-        events: [
-          ...Array.from({ length: 4 }, (_, i) => ({ t: i, notes: ["C2"], dur: 0.9 })),
-          ...Array.from({ length: 4 }, (_, i) => ({ t: 4 + i, notes: ["A1"], dur: 0.9 })),
-          ...Array.from({ length: 4 }, (_, i) => ({ t: 8 + i, notes: ["A1"], dur: 0.9 })),
-          ...Array.from({ length: 4 }, (_, i) => ({ t: 12 + i, notes: ["F1"], dur: 0.9 })),
-        ],
-      },
-      {
-        kind: "drums",
-        events: [
-          ...Array.from({ length: 8 }, (_, i) => ({ t: i * 2, hit: "kick", vel: 0.85 })),
-          ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare", vel: 0.75 })),
-          ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat", vel: 0.4 })),
-          { t: 0, hit: "openhat", vel: 0.55 },
-        ],
-      },
-    ],
-  }}
-/>
+<StyleDemo client:visible {...GENRES.pop} />
 
 ## 流变
 

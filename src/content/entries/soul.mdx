@@ -22,64 +22,11 @@ order: 10
 - **真挚的情感**:Soul 的灵魂在于"唱得真",不炫技、为情发声。
 
 import { StyleDemo } from "../../components/interactive/StyleDemo";
+import { GENRES } from "../../lib/genrePatterns";
 
 听一段灵魂乐的律动——比 R&B 更用力:
 
-<StyleDemo
-  client:visible
-  title="灵魂乐 · C7–F7 律动(重 backbeat)"
-  hint="7 和弦 + 军鼓在 2、4 拍狠狠地打——从教堂唱诗班长出来的那股劲儿。"
-  note="钢琴/贝斯/鼓组均为真实采样;福音标配的铃鼓/拍手暂无采样,从略"
-  pattern={{
-    bpm: 100,
-    beats: 16,
-    tracks: [
-      {
-        kind: "notes",
-        timbre: "piano",
-        events: [
-          ...["C7", "F7", "C7", "G7"].flatMap((ch, bar) => {
-            const off = bar * 4;
-            const voicing =
-              ch === "C7"
-                ? ["C4", "E4", "G4", "A#4"]
-                : ch === "F7"
-                  ? ["F3", "A3", "C4", "D#4"]
-                  : ["G3", "B3", "D4", "F4"];
-            return [
-              { t: off, notes: voicing, dur: 0.8, vel: 0.75 },
-              { t: off + 1.5, notes: voicing, dur: 0.6, vel: 0.6 },
-              { t: off + 2.5, notes: voicing, dur: 0.8, vel: 0.7 },
-            ];
-          }),
-        ],
-      },
-      {
-        kind: "notes",
-        timbre: "bass",
-        events: [
-          ...["C2", "F1", "C2", "G1"].flatMap((root, bar) => [
-            { t: bar * 4, notes: [root], dur: 1.1 },
-            { t: bar * 4 + 1.75, notes: [root], dur: 0.4 },
-            { t: bar * 4 + 2.5, notes: [root], dur: 1.1 },
-          ]),
-        ],
-      },
-      {
-        kind: "drums",
-        events: [
-          ...Array.from({ length: 4 }, (_, bar) => [
-            { t: bar * 4, hit: "kick", vel: 0.9 },
-            { t: bar * 4 + 3.5, hit: "kick", vel: 0.7 },
-          ]).flat(),
-          ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare", vel: 0.85 })),
-          ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat", vel: 0.45 })),
-          { t: 0, hit: "openhat", vel: 0.6 },
-        ],
-      },
-    ],
-  }}
-/>
+<StyleDemo client:visible {...GENRES.soul} />
 
 ## 代表与影响
 

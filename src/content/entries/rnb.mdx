@@ -22,56 +22,11 @@ order: 7
 - **制作细腻**:人声层层叠加、混响讲究,听感精致。
 
 import { StyleDemo } from "../../components/interactive/StyleDemo";
+import { GENRES } from "../../lib/genrePatterns";
 
 听一段 R&B 的律动:
 
-<StyleDemo
-  client:visible
-  title="R&B · Cmaj7–Am7–Dm7–Em7(黏律动)"
-  hint="全是带 7 音的和弦;速度不快、鼓点松松地落在拍子后面——这就是「黏」的感觉。"
-  note="钢琴/贝斯/鼓组均为真实采样(理想音色是电钢琴 Rhodes,暂无采样,以原声钢琴示意)"
-  pattern={{
-    bpm: 86,
-    swing: 0.6,
-    beats: 16,
-    tracks: [
-      {
-        kind: "notes",
-        timbre: "piano",
-        events: [
-          { t: 0, notes: ["C4", "E4", "G4", "B4"], dur: 1.6 },
-          { t: 2.5, notes: ["C4", "E4", "G4", "B4"], dur: 1.3 },
-          { t: 4, notes: ["A3", "C4", "E4", "G4"], dur: 1.6 },
-          { t: 6.5, notes: ["A3", "C4", "E4", "G4"], dur: 1.3 },
-          { t: 8, notes: ["D4", "F4", "A4", "C5"], dur: 1.6 },
-          { t: 10.5, notes: ["D4", "F4", "A4", "C5"], dur: 1.3 },
-          { t: 12, notes: ["E4", "G4", "B4", "D5"], dur: 1.6 },
-          { t: 14.5, notes: ["E4", "G4", "B4", "D5"], dur: 1.3 },
-        ],
-      },
-      {
-        kind: "notes",
-        timbre: "bass",
-        events: ["C2", "A1", "D2", "E2"].flatMap((root, bar) => [
-          { t: bar * 4, notes: [root], dur: 1.2 },
-          { t: bar * 4 + 1.75, notes: [root], dur: 0.4 },
-          { t: bar * 4 + 2.5, notes: [root], dur: 0.9 },
-        ]),
-      },
-      {
-        kind: "drums",
-        events: [
-          ...Array.from({ length: 4 }, (_, bar) => [
-            { t: bar * 4, hit: "kick", vel: 0.8 },
-            { t: bar * 4 + 2.5, hit: "kick", vel: 0.6 },
-          ]).flat(),
-          ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare", vel: 0.6 })),
-          ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat", vel: 0.3 })),
-        ],
-      },
-    ],
-  }}
-/>
+<StyleDemo client:visible {...GENRES.rnb} />
 
 ## 演变脉络
 

@@ -23,54 +23,11 @@ order: 6
 - **押韵(Rhyme)**:句尾/句中押韵,讲究韵脚的密度与变化。
 
 import { StyleDemo } from "../../components/interactive/StyleDemo";
+import { GENRES } from "../../lib/genrePatterns";
 
 听一段 boom bap 节拍(90 年代嘻哈的骨架):
 
-<StyleDemo
-  client:visible
-  title="嘻哈 · Am7–Dm7 boom bap"
-  hint="慢而沉:军鼓在 2、4 拍打重,底鼓拖在第 3 拍后半才落,贝斯松松地跟着走——说唱就踩在这上面。"
-  note="钢琴/贝斯/鼓组均为真实采样;808 合成鼓与唱机采样(scratch)是嘻哈原生元素,暂无采样,以原声鼓组示意"
-  pattern={{
-    bpm: 88,
-    swing: 0.58,
-    beats: 16,
-    tracks: [
-      {
-        kind: "notes",
-        timbre: "piano",
-        events: [
-          { t: 0, notes: ["A3", "C4", "E4", "G4"], dur: 1.4, vel: 0.6 },
-          { t: 2.5, notes: ["A3", "C4", "E4", "G4"], dur: 0.5, vel: 0.5 },
-          { t: 8, notes: ["D4", "F4", "A4", "C5"], dur: 1.4, vel: 0.6 },
-          { t: 10.5, notes: ["D4", "F4", "A4", "C5"], dur: 0.5, vel: 0.5 },
-        ],
-      },
-      {
-        kind: "notes",
-        timbre: "bass",
-        events: [
-          ...["A1", "A1", "D2", "D2"].flatMap((root, bar) => [
-            { t: bar * 4, notes: [root], dur: 1.3 },
-            { t: bar * 4 + 1.75, notes: [root], dur: 0.35 },
-            { t: bar * 4 + 2.5, notes: [root], dur: 1.2 },
-          ]),
-        ],
-      },
-      {
-        kind: "drums",
-        events: [
-          ...Array.from({ length: 4 }, (_, bar) => [
-            { t: bar * 4, hit: "kick", vel: 0.9 },
-            { t: bar * 4 + 2.75, hit: "kick", vel: 0.8 },
-          ]).flat(),
-          ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare", vel: 0.85 })),
-          ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat", vel: 0.4 })),
-        ],
-      },
-    ],
-  }}
-/>
+<StyleDemo client:visible {...GENRES.hiphop} />
 
 ## 主要分支
 

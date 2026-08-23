@@ -14,6 +14,7 @@ order: 2
 ---
 
 import { StyleDemo } from "../../components/interactive/StyleDemo";
+import { GENRES } from "../../lib/genrePatterns";
 
 **爵士乐**(Jazz)起源于 19 世纪末至 20 世纪初的美国新奥尔良,融合了非洲律动、蓝调与欧洲和声。它最鲜明的标志是**即兴**、**摇摆感(swing)** 和**蓝调音阶**。
 
@@ -25,64 +26,7 @@ import { StyleDemo } from "../../components/interactive/StyleDemo";
 
 听一段爵士节奏组的签名——钢琴 comping、行走贝斯(walking bass)、摇摆八分:
 
-<StyleDemo
-  client:visible
-  title="爵士 · Dm7–G7–Cmaj7(ii–V–I)"
-  hint="注意两件事:八分音符「长–短」不均的摇摆感;贝斯四拍一音地行走。"
-  note="钢琴/贝斯/鼓组均为真实采样"
-  pattern={{
-    bpm: 132,
-    swing: 0.65,
-    beats: 16,
-    tracks: [
-      {
-        kind: "notes",
-        timbre: "piano",
-        events: [
-          { t: 0, notes: ["D4", "F4", "A4", "C5"], dur: 1.1 },
-          { t: 1.5, notes: ["D4", "F4", "A4", "C5"], dur: 0.5 },
-          { t: 4, notes: ["G3", "B3", "D4", "F4"], dur: 1.1 },
-          { t: 5.5, notes: ["G3", "B3", "D4", "F4"], dur: 0.5 },
-          { t: 8, notes: ["C4", "E4", "G4", "B4"], dur: 1.1 },
-          { t: 9.5, notes: ["C4", "E4", "G4", "B4"], dur: 0.5 },
-          { t: 12, notes: ["C4", "E4", "G4", "B4"], dur: 1.1 },
-          { t: 13.5, notes: ["A3", "C#4", "E4", "G4"], dur: 0.5 },
-        ],
-      },
-      {
-        kind: "notes",
-        timbre: "bass",
-        events: [
-          "D2",
-          "E2",
-          "F2",
-          "G2",
-          "F2",
-          "G2",
-          "A2",
-          "B2",
-          "C3",
-          "E3",
-          "G3",
-          "A3",
-          "B2",
-          "A2",
-          "G2",
-          "E2",
-        ].map((n, i) => ({ t: i, notes: [n], dur: 0.95 })),
-      },
-      {
-        kind: "drums",
-        events: [
-          ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "ride", vel: 0.55 })),
-          ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "hihat", vel: 0.5 })),
-          { t: 0, hit: "kick", vel: 0.3 },
-          { t: 8, hit: "kick", vel: 0.3 },
-        ],
-      },
-    ],
-  }}
-/>
+<StyleDemo client:visible {...GENRES.jazz} />
 
 ## 常见乐器
 

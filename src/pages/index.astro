@@ -8,7 +8,8 @@ import Piano from "@/components/interactive/Piano";
 import PlayableWord from "@/components/interactive/PlayableWord";
 import RandomEntryButton from "@/components/interactive/RandomEntryButton";
 import DailyEntry from "@/components/interactive/DailyEntry";
-import PlayableCards, { type PlayableCard } from "@/components/interactive/PlayableCards";
+import type { PlayableCard } from "@/components/interactive/PlayableCards";
+import GenreQuickListen from "@/components/interactive/GenreQuickListen";
 
 const entries = await getCollection("entries", (e) => !e.data.draft);
 const paths = await getCollection("paths", (p) => !p.data.draft);
@@ -200,12 +201,14 @@ for (const e of entries) {
     </div>
   </section>
 
-  <!-- 精选词条:会响的试听卡 -->
+  <!-- 曲风速听:13 种曲风一卡一播键 -->
   <section class="container pt-12 pb-16">
-    <h2 class="reveal text-2xl font-display font-bold tracking-tight">先听为快</h2>
-    <p class="reveal mt-2 text-muted-foreground">九篇能「就地试听」的词条 —— 点卡片右下角的播放键,先听再读。</p>
+    <h2 class="reveal text-2xl font-display font-bold tracking-tight">曲风速听</h2>
+    <p class="reveal mt-2 text-muted-foreground">
+      13 种曲风,点一下就听到各自的签名片段——先听出差别,再点卡片读原理。
+    </p>
     <div class="reveal mt-8">
-      <PlayableCards client:load items={FEATURED} />
+      <GenreQuickListen client:visible />
     </div>
   </section>
 
