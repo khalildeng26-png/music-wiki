@@ -103,18 +103,20 @@ export const GENRES: Record<string, GenreDemo> = {
           kind: "notes",
           timbre: "eguitar",
           events: [
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, notes: ["E3", "B3", "E4"], dur: 0.42, vel: 0.85 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 8 + i * 0.5, notes: ["G3", "D4", "G4"], dur: 0.42, vel: 0.85 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 12 + i * 0.5, notes: ["A3", "E4", "A4"], dur: 0.42, vel: 0.85 })),
+            // 八分音符改短促颗粒(时值 0.42→0.28 拍):收掉余音重叠,"推进"而不是"糊"
+            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, notes: ["E3", "B3", "E4"], dur: 0.28, vel: 0.85 })),
+            ...Array.from({ length: 8 }, (_, i) => ({ t: 8 + i * 0.5, notes: ["G3", "D4", "G4"], dur: 0.28, vel: 0.85 })),
+            ...Array.from({ length: 8 }, (_, i) => ({ t: 12 + i * 0.5, notes: ["A3", "E4", "A4"], dur: 0.28, vel: 0.85 })),
           ],
         },
         {
           kind: "notes",
           timbre: "bass",
           events: [
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, notes: ["E2"], dur: 0.45 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 8 + i * 0.5, notes: ["G2"], dur: 0.45 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 12 + i * 0.5, notes: ["A2"], dur: 0.45 })),
+            // 四分音符根音(与踩镲同密度),不再八分连打——避免低频机关枪感
+            ...Array.from({ length: 8 }, (_, i) => ({ t: i, notes: ["E2"], dur: 0.9, vel: 0.8 })),
+            ...Array.from({ length: 4 }, (_, i) => ({ t: 8 + i, notes: ["G2"], dur: 0.9, vel: 0.8 })),
+            ...Array.from({ length: 4 }, (_, i) => ({ t: 12 + i, notes: ["A2"], dur: 0.9, vel: 0.8 })),
           ],
         },
         {

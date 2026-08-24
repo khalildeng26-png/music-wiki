@@ -25,13 +25,13 @@ const unit = (u: number) => u * 2;
 export const STYLES: StyleArrangement[] = [
   {
     id: "pure",
-    name: "纯净",
-    desc: "帕赫贝尔 1700 年前后的原样:钢琴主题 + 卡农进行——所有版本的对照组。",
+    name: "钢琴",
+    desc: "没有风格包装的对照版:钢琴主题 + 原样和弦——下面五个版本都由它「变装」而来。",
     pattern: {
       bpm: 84,
       beats: 16,
       tracks: [
-        { kind: "notes", timbre: "piano", events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"]) },
+        { kind: "notes", timbre: "piano", events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 1.0) },
         {
           kind: "notes",
           timbre: "piano",
@@ -44,7 +44,7 @@ export const STYLES: StyleArrangement[] = [
             ["C4", "E4", "G4"],
             ["F3", "A3", "C4"],
             ["G3", "B3", "D4"],
-          ].map((ch, u) => ({ t: unit(u), notes: ch, dur: 1.8, vel: 0.45 })),
+          ].map((ch, u) => ({ t: unit(u), notes: ch, dur: 1.8, vel: 0.6 })),
         },
       ],
     },
@@ -117,14 +117,14 @@ export const STYLES: StyleArrangement[] = [
             ["F2", "C3", "F3"],
             ["G2", "D3", "G3"],
           ].flatMap((ch, u) =>
-            Array.from({ length: 4 }, (_, i) => ({ t: unit(u) + i * 0.5, notes: ch, dur: 0.42, vel: 0.8 })),
+            Array.from({ length: 4 }, (_, i) => ({ t: unit(u) + i * 0.5, notes: ch, dur: 0.28, vel: 0.8 })),
           ),
         },
         {
           kind: "notes",
           timbre: "bass",
           events: ["C2", "G1", "A1", "E1", "F1", "C2", "F1", "G1"].flatMap((root, u) =>
-            Array.from({ length: 4 }, (_, i) => ({ t: unit(u) + i * 0.5, notes: [root], dur: 0.45 })),
+            Array.from({ length: 2 }, (_, i) => ({ t: unit(u) + i, notes: [root], dur: 0.9, vel: 0.8 })),
           ),
         },
         {
