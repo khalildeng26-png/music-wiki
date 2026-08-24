@@ -9,7 +9,7 @@ import PlayableWord from "@/components/interactive/PlayableWord";
 import RandomEntryButton from "@/components/interactive/RandomEntryButton";
 import DailyEntry from "@/components/interactive/DailyEntry";
 import type { PlayableCard } from "@/components/interactive/PlayableCards";
-import GenreQuickListen from "@/components/interactive/GenreQuickListen";
+import MelodyStyles from "@/components/interactive/MelodyStyles";
 
 const entries = await getCollection("entries", (e) => !e.data.draft);
 const paths = await getCollection("paths", (p) => !p.data.draft);
@@ -201,14 +201,14 @@ for (const e of entries) {
     </div>
   </section>
 
-  <!-- 曲风速听:13 种曲风一卡一播键 -->
+  <!-- 一首小星星,六种曲风:同一段旋律换风格包装 -->
   <section class="container pt-12 pb-16">
-    <h2 class="reveal text-2xl font-display font-bold tracking-tight">曲风速听</h2>
+    <h2 class="reveal text-2xl font-display font-bold tracking-tight">一首小星星,六种曲风</h2>
     <p class="reveal mt-2 text-muted-foreground">
-      13 种曲风,点一下就听到各自的签名片段——先听出差别,再点卡片读原理。
+      曲风到底是什么?同一段旋律,点六个按钮换六种「包装」,耳朵一听就懂。
     </p>
     <div class="reveal mt-8">
-      <GenreQuickListen client:visible />
+      <MelodyStyles client:visible />
     </div>
   </section>
 
