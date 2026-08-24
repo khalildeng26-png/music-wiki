@@ -20,10 +20,13 @@ export function StyleDemo({ title, hint, note, pattern }: Props) {
   const timer = React.useRef(0);
   // 自己启动播放的瞬间,playPattern 会先广播一次"打断"——那一次要忽略
   const starting = React.useRef(false);
+  // 播放会话号:被新播放取代后,旧的 await 醒来不得再动状态
+  const session = React.useRef(0);
 
   React.useEffect(() => {
     const off = onAudioInterrupt(() => {
       if (starting.current) return;
+      session.current++;
       window.clearTimeout(timer.current);
       setState("idle");
     });
@@ -38,17 +41,21 @@ export function StyleDemo({ title, hint, note, pattern }: Props) {
       stopAllAudio(); // 回调会把本组件复位
       return;
     }
+    const my = ++session.current;
     starting.current = true;
     setState("playing");
     try {
       await playPattern(pattern);
+      if (my !== session.current) return; // 期间又被取代
       starting.current = false;
       // playPattern 排完时间线即返回,按总时长 + 收尾余量复位按钮
       const ms = ((pattern.beats * 60) / pattern.bpm) * 1000 + 900;
       timer.current = window.setTimeout(() => setState("idle"), ms);
     } catch {
-      starting.current = false;
-      setState("idle"); // 无声环境(自动播放被拦等)直接复位
+      if (my === session.current) {
+        starting.current = false;
+        setState("idle"); // 无声环境(自动播放被拦等)直接复位
+      }
     }
   }
 

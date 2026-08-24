@@ -31,10 +31,13 @@ export function PlayChip({ sig, label }: { sig: SoundSig; label: string }) {
   const timer = React.useRef(0);
   // 自己启动播放的瞬间,播放函数会先广播一次"打断"——那一次要忽略
   const starting = React.useRef(false);
+  // 播放会话号:被新播放取代后,旧的 await 醒来不得再动状态
+  const session = React.useRef(0);
 
   React.useEffect(() => {
     const off = onAudioInterrupt(() => {
       if (starting.current) return;
+      session.current++;
       window.clearTimeout(timer.current);
       setState("idle");
     });
@@ -49,10 +52,12 @@ export function PlayChip({ sig, label }: { sig: SoundSig; label: string }) {
       stopAllAudio();
       return;
     }
+    const my = ++session.current;
     starting.current = true;
     setState("playing");
     try {
       await play(sig);
+      if (my !== session.current) return; // 期间又被取代
       starting.current = false;
       // play() 只负责排队,等序列自然结束再复位
       const ms =
@@ -61,8 +66,10 @@ export function PlayChip({ sig, label }: { sig: SoundSig; label: string }) {
           : (sig.chords.length * ((sig.dur ?? 0.55) + (sig.gap ?? 0.12)) + 0.3) * 1000;
       timer.current = window.setTimeout(() => setState("idle"), ms);
     } catch {
-      starting.current = false;
-      setState("idle"); // 无声环境忽略
+      if (my === session.current) {
+        starting.current = false;
+        setState("idle"); // 无声环境忽略
+      }
     }
   }
 

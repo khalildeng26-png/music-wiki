@@ -237,7 +237,9 @@ export async function playSequence(
   timbre: Timbre = "piano",
 ) {
   stopAllAudio();
+  const mySession = playSession;
   const { Tone, inst } = await ensureAudio(timbre);
+  if (mySession !== playSession) return; // 加载期间被新播放取代
   const start = Tone.now() + 0.06;
   notes.forEach((n, i) => {
     inst.triggerAttackRelease(n, dur, start + i * (dur + gap));
@@ -265,7 +267,9 @@ export async function playChordProgression(
   timbre: Timbre = "piano",
 ) {
   stopAllAudio();
+  const mySession = playSession;
   const { Tone, inst } = await ensureAudio(timbre);
+  if (mySession !== playSession) return; // 加载期间被新播放取代
   const now = Tone.now() + 0.05;
   chords.forEach((notes, i) => {
     const t = now + i * (dur + gap);
@@ -303,6 +307,10 @@ let drumKitReady: Promise<DrumKit> | null = null;
 // ---------- 全局播放控制:一次只有一个播放会话,新播放自动打断旧播放 ----------
 const audioInterruptListeners = new Set<() => void>();
 
+/** 播放会话号:每次 stopAllAudio 递增。还在加载采样的旧调用醒来后发现会话变了就作废,
+ *  防止「加载中被切歌 → 加载完照样排进时间线」的双声竞态。 */
+let playSession = 0;
+
 /** 订阅「新的播放开始/全局停止」(组件用它复位播放态 UI)。返回退订函数。 */
 export function onAudioInterrupt(fn: () => void): () => void {
   audioInterruptListeners.add(fn);
@@ -315,6 +323,7 @@ export function onAudioInterrupt(fn: () => void): () => void {
  * 新的序列/片段播放前会自动调用(=点新歌自动切歌)。
  */
 export function stopAllAudio() {
+  playSession++;
   for (const inst of instruments.values()) {
     try {
       inst.releaseAll();
@@ -401,6 +410,7 @@ async function ensureDrums(Tone: ToneModule): Promise<DrumKit> {
  */
 export async function playPattern(pattern: Pattern): Promise<void> {
   stopAllAudio(); // 新片段打断旧片段(全局一次只播一个)
+  const mySession = playSession;
   const spb = 60 / pattern.bpm; // 每拍秒数
   const swing = pattern.swing ?? 0.5;
 
@@ -419,6 +429,7 @@ export async function playPattern(pattern: Pattern): Promise<void> {
     ...(synthDrums ? [ensureDrums(Tone)] : []),
   ]);
   await Tone.start();
+  if (mySession !== playSession) return; // 加载期间被新播放取代
   const kit = synthDrums ? (drumKit as DrumKit) : null;
   const drumSampler = acousticDrums ? instruments.get("drums") : null;
 
