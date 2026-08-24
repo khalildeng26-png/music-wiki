@@ -17,7 +17,10 @@ export default defineConfig({
     mdx(),
     sitemap({
       // /og/ 是分享卡模板页(截图用),search-index.json 是给站内搜索的数据接口,都不进 sitemap
-      filter: (page) => !page.includes("/og/") && !page.endsWith("search-index.json"),
+      filter: (page) =>
+        !page.includes("/og/") &&
+        !page.endsWith("search-index.json") &&
+        !page.includes("/debug-rock"),
     }),
   ],
   vite: {
