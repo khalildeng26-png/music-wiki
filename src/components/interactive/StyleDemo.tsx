@@ -1,7 +1,7 @@
-import { Loader2, Music4, Play } from "lucide-react";
+import { Play, Square } from "lucide-react";
 import * as React from "react";
 
-import { playPattern, type Pattern } from "./audio";
+import { onAudioInterrupt, playPattern, stopAllAudio, type Pattern } from "./audio";
 
 type Props = {
   /** 片段名,如「爵士 · 摇摆八分 + walking bass」 */
@@ -13,22 +13,41 @@ type Props = {
   pattern: Pattern;
 };
 
-/** 风格试听:曲风词条的签名片段——多轨 pattern(BPM/swing/音色/鼓点)一键播放。 */
+/** 风格试听:曲风词条的签名片段——多轨 pattern(BPM/swing/音色/鼓点)一键播放。
+ *  播放中再点=停止;其他地方开始播放会自动打断并复位这里。 */
 export function StyleDemo({ title, hint, note, pattern }: Props) {
   const [state, setState] = React.useState<"idle" | "playing">("idle");
   const timer = React.useRef(0);
+  // 自己启动播放的瞬间,playPattern 会先广播一次"打断"——那一次要忽略
+  const starting = React.useRef(false);
 
-  React.useEffect(() => () => window.clearTimeout(timer.current), []);
+  React.useEffect(() => {
+    const off = onAudioInterrupt(() => {
+      if (starting.current) return;
+      window.clearTimeout(timer.current);
+      setState("idle");
+    });
+    return () => {
+      off();
+      window.clearTimeout(timer.current);
+    };
+  }, []);
 
   async function go() {
-    if (state === "playing") return;
+    if (state === "playing") {
+      stopAllAudio(); // 回调会把本组件复位
+      return;
+    }
+    starting.current = true;
     setState("playing");
     try {
       await playPattern(pattern);
+      starting.current = false;
       // playPattern 排完时间线即返回,按总时长 + 收尾余量复位按钮
       const ms = ((pattern.beats * 60) / pattern.bpm) * 1000 + 900;
       timer.current = window.setTimeout(() => setState("idle"), ms);
     } catch {
+      starting.current = false;
       setState("idle"); // 无声环境(自动播放被拦等)直接复位
     }
   }
@@ -41,8 +60,8 @@ export function StyleDemo({ title, hint, note, pattern }: Props) {
         <button
           type="button"
           onClick={() => void go()}
-          aria-label={`试听:${title}`}
-          title="播放风格片段"
+          aria-label={state === "playing" ? `停止:${title}` : `试听:${title}`}
+          title={state === "playing" ? "停止" : "播放风格片段"}
           className={
             "inline-flex size-10 shrink-0 items-center justify-center rounded-full transition active:scale-90 " +
             (state === "playing"
@@ -50,11 +69,7 @@ export function StyleDemo({ title, hint, note, pattern }: Props) {
               : "bg-signature/10 text-signature hover:bg-signature hover:text-signature-foreground")
           }
         >
-          {state === "playing" ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            <Play className="size-4" />
-          )}
+          {state === "playing" ? <Square className="size-3.5" /> : <Play className="size-4" />}
         </button>
         <div className="min-w-0 flex-1">
           <div className="font-medium">{title}</div>
@@ -62,11 +77,7 @@ export function StyleDemo({ title, hint, note, pattern }: Props) {
         </div>
         <div className="flex shrink-0 flex-col items-end gap-1 text-xs text-muted-foreground">
           <span className="font-mono tabular-nums">{pattern.bpm} BPM</span>
-          {swung && (
-            <span className="inline-flex items-center gap-1">
-              <Music4 className="size-3" /> 摇摆
-            </span>
-          )}
+          {swung && <span className="inline-flex items-center gap-1">摇摆</span>}
         </div>
       </div>
       {note && (

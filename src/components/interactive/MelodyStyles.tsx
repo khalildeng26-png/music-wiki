@@ -1,28 +1,47 @@
-import { Loader2, Play } from "lucide-react";
+import { Play, Square } from "lucide-react";
 import * as React from "react";
 
-import { playPattern } from "./audio";
+import { onAudioInterrupt, playPattern, stopAllAudio } from "./audio";
 import { STYLES } from "@/lib/melodyStyles";
 
-/** 首页「一首小星星,六种曲风」:同一段旋律一键换风格,听懂"曲风"到底是什么。 */
+/** 首页「一首卡农,六种曲风」:同一段旋律一键换风格,听懂"曲风"到底是什么。
+ *  播放中再点同款=停止,点别款=自动切歌(引擎全局互斥)。 */
 export function MelodyStyles() {
   const [playing, setPlaying] = React.useState<string | null>(null);
   const [last, setLast] = React.useState<string>(STYLES[0].id);
   const timer = React.useRef(0);
+  // 自己启动播放的瞬间,playPattern 会先广播一次"打断"——那一次要忽略
+  const starting = React.useRef(false);
 
-  React.useEffect(() => () => window.clearTimeout(timer.current), []);
+  React.useEffect(() => {
+    const off = onAudioInterrupt(() => {
+      if (starting.current) return;
+      window.clearTimeout(timer.current);
+      setPlaying(null);
+    });
+    return () => {
+      off();
+      window.clearTimeout(timer.current);
+    };
+  }, []);
 
   async function play(id: string) {
-    if (playing) return; // 一次只播一个版本
+    if (playing === id) {
+      stopAllAudio(); // 回调自动复位
+      return;
+    }
     const style = STYLES.find((s) => s.id === id);
     if (!style) return;
+    starting.current = true;
     setPlaying(id);
     setLast(id);
     try {
-      await playPattern(style.pattern);
+      await playPattern(style.pattern); // 引擎先打断已有播放(广播被 starting 挡下)
+      starting.current = false;
       const ms = ((style.pattern.beats * 60) / style.pattern.bpm) * 1000 + 900;
       timer.current = window.setTimeout(() => setPlaying(null), ms);
     } catch {
+      starting.current = false;
       setPlaying(null);
     }
   }
@@ -50,7 +69,7 @@ export function MelodyStyles() {
                 key={s.id}
                 type="button"
                 onClick={() => void play(s.id)}
-                aria-label={`试听${s.name}版`}
+                aria-label={on ? `停止${s.name}版` : `试听${s.name}版`}
                 className={
                   "inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm transition active:scale-95 " +
                   (on
@@ -58,7 +77,7 @@ export function MelodyStyles() {
                     : "bg-card hover:border-signature/50 hover:text-signature")
                 }
               >
-                {on ? <Loader2 className="size-3.5 animate-spin" /> : <Play className="size-3.5" />}
+                {on ? <Square className="size-3" /> : <Play className="size-3.5" />}
                 {s.name}
               </button>
             );

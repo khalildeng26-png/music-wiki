@@ -1,7 +1,7 @@
-import { Loader2, Play } from "lucide-react";
+import { Play, Square } from "lucide-react";
 import * as React from "react";
 
-import { playChordProgression, playSequence, type Timbre } from "./audio";
+import { onAudioInterrupt, playChordProgression, playSequence, stopAllAudio, type Timbre } from "./audio";
 
 export type SoundSig =
   | { kind: "notes"; notes: string[]; timbre?: Timbre; dur?: number; gap?: number }
@@ -24,19 +24,46 @@ async function play(sig: SoundSig) {
   }
 }
 
-/** 声音签名试听键:点一下就地播放这条内容的"代表声音"。 */
+/** 声音签名试听键:点一下就地播放这条内容的"代表声音"。
+ *  播放中再点=停止;其他地方开始播放会自动打断并复位这里。 */
 export function PlayChip({ sig, label }: { sig: SoundSig; label: string }) {
   const [state, setState] = React.useState<"idle" | "playing">("idle");
+  const timer = React.useRef(0);
+  // 自己启动播放的瞬间,播放函数会先广播一次"打断"——那一次要忽略
+  const starting = React.useRef(false);
+
+  React.useEffect(() => {
+    const off = onAudioInterrupt(() => {
+      if (starting.current) return;
+      window.clearTimeout(timer.current);
+      setState("idle");
+    });
+    return () => {
+      off();
+      window.clearTimeout(timer.current);
+    };
+  }, []);
 
   async function go() {
-    if (state === "playing") return;
+    if (state === "playing") {
+      stopAllAudio();
+      return;
+    }
+    starting.current = true;
     setState("playing");
     try {
       await play(sig);
+      starting.current = false;
+      // play() 只负责排队,等序列自然结束再复位
+      const ms =
+        sig.kind === "notes"
+          ? (sig.notes.length * ((sig.dur ?? 0.38) + (sig.gap ?? 0.06)) + 0.3) * 1000
+          : (sig.chords.length * ((sig.dur ?? 0.55) + (sig.gap ?? 0.12)) + 0.3) * 1000;
+      timer.current = window.setTimeout(() => setState("idle"), ms);
     } catch {
-      /* 无声环境忽略 */
+      starting.current = false;
+      setState("idle"); // 无声环境忽略
     }
-    setState("idle");
   }
 
   return (
@@ -47,8 +74,8 @@ export function PlayChip({ sig, label }: { sig: SoundSig; label: string }) {
         e.stopPropagation();
         void go();
       }}
-      aria-label={label}
-      title={label}
+      aria-label={state === "playing" ? `停止:${label.replace(/^试听:/, "")}` : label}
+      title={state === "playing" ? "停止" : label}
       className={
         "inline-flex size-9 items-center justify-center rounded-full transition active:scale-90 " +
         (state === "playing"
@@ -56,11 +83,7 @@ export function PlayChip({ sig, label }: { sig: SoundSig; label: string }) {
           : "bg-signature/10 text-signature hover:bg-signature hover:text-signature-foreground")
       }
     >
-      {state === "playing" ? (
-        <Loader2 className="size-4 animate-spin" />
-      ) : (
-        <Play className="size-4" />
-      )}
+      {state === "playing" ? <Square className="size-3.5" /> : <Play className="size-4" />}
     </button>
   );
 }

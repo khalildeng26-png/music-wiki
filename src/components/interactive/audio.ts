@@ -223,16 +223,20 @@ async function ensureAudio(timbre: Timbre = "piano") {
     })();
     ready.set(timbre, p);
   }
-  return { Tone, inst: await p };
+  const inst = await p;
+  // 幂等重连:stopAllAudio 断开输出后,下一次播放从这里恢复
+  inst.connect(master);
+  return { Tone, inst };
 }
 
-/** 顺序播放一串音名(如 ["C4","D4","E4"])。 */
+/** 顺序播放一串音名(如 ["C4","D4","E4"])。开始前打断已有播放。 */
 export async function playSequence(
   notes: string[],
   dur = 0.45,
   gap = 0.08,
   timbre: Timbre = "piano",
 ) {
+  stopAllAudio();
   const { Tone, inst } = await ensureAudio(timbre);
   const start = Tone.now() + 0.06;
   notes.forEach((n, i) => {
@@ -253,13 +257,14 @@ export async function playChord(notes: string[], dur = 1.3, timbre: Timbre = "pi
   notes.forEach((n) => inst.triggerAttackRelease(n, dur, now));
 }
 
-/** 依次播放多个和弦(进行/终止式)。 */
+/** 依次播放多个和弦(进行/终止式)。开始前打断已有播放。 */
 export async function playChordProgression(
   chords: string[][],
   dur = 0.9,
   gap = 0.25,
   timbre: Timbre = "piano",
 ) {
+  stopAllAudio();
   const { Tone, inst } = await ensureAudio(timbre);
   const now = Tone.now() + 0.05;
   chords.forEach((notes, i) => {
@@ -291,7 +296,42 @@ export type Pattern = {
 
 type DrumKit = Record<"kick" | "snare" | "hihat" | "openhat", InstanceType<ToneModule["MembraneSynth"] | ToneModule["NoiseSynth"]>>;
 let drumKit: DrumKit | null = null;
+/** 鼓组各件的输出末端(kick 直连、三件噪声走滤波):断开/重连都作用在末端,链条内部不动 */
+let drumTerminals: unknown[] = [];
 let drumKitReady: Promise<DrumKit> | null = null;
+
+// ---------- 全局播放控制:一次只有一个播放会话,新播放自动打断旧播放 ----------
+const audioInterruptListeners = new Set<() => void>();
+
+/** 订阅「新的播放开始/全局停止」(组件用它复位播放态 UI)。返回退订函数。 */
+export function onAudioInterrupt(fn: () => void): () => void {
+  audioInterruptListeners.add(fn);
+  return () => audioInterruptListeners.delete(fn);
+}
+
+/**
+ * 停止所有正在响和已排队的声音:断开每件乐器的输出端——已排进音频时间线
+ * 但还没响的声源随输出端一起失效,正在延音的音被释放;随后通知所有组件复位。
+ * 新的序列/片段播放前会自动调用(=点新歌自动切歌)。
+ */
+export function stopAllAudio() {
+  for (const inst of instruments.values()) {
+    try {
+      inst.releaseAll();
+    } catch {
+      /* 个别类型无 releaseAll,仅断开即可 */
+    }
+    try {
+      inst.disconnect();
+    } catch {}
+  }
+  for (const t of drumTerminals) {
+    try {
+      (t as { disconnect: () => void }).disconnect();
+    } catch {}
+  }
+  for (const fn of audioInterruptListeners) fn();
+}
 
 /** 采样鼓组的伪音名 → 鼓件映射(与 SAMPLES.drums.files 对应)。 */
 const DRUM_NOTE: Record<DrumHit, string> = {
@@ -303,7 +343,7 @@ const DRUM_NOTE: Record<DrumHit, string> = {
 };
 
 /** 惰性构建合成鼓组:底鼓=膜鼓合成,军鼓/踩镲=噪声+滤波。示意用途,UI 需注明。 */
-function ensureDrums(Tone: ToneModule): Promise<DrumKit> {
+async function ensureDrums(Tone: ToneModule): Promise<DrumKit> {
   if (!drumKitReady) {
     drumKitReady = (async () => {
       const master = ensureMaster(Tone);
@@ -343,10 +383,15 @@ function ensureDrums(Tone: ToneModule): Promise<DrumKit> {
       openTone.connect(master);
 
       drumKit = { kick, snare: snareBody, hihat: hat, openhat };
+      drumTerminals = [kick, snareTone, hatTone, openTone];
       return drumKit;
     })();
   }
-  return drumKitReady;
+  const kit = await drumKitReady;
+  // 幂等重连末端(链条内部 body→filter 不动):stopAllAudio 后恢复
+  const master = ensureMaster(Tone);
+  for (const t of drumTerminals) (t as InstanceType<ToneModule["Filter"]>).connect(master);
+  return kit;
 }
 
 /**
@@ -355,6 +400,7 @@ function ensureDrums(Tone: ToneModule): Promise<DrumKit> {
  * 模拟摇摆八分——爵士/布鲁斯的节奏灵魂。
  */
 export async function playPattern(pattern: Pattern): Promise<void> {
+  stopAllAudio(); // 新片段打断旧片段(全局一次只播一个)
   const spb = 60 / pattern.bpm; // 每拍秒数
   const swing = pattern.swing ?? 0.5;
 
