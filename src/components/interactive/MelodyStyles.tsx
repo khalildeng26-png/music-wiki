@@ -33,12 +33,12 @@ export function MelodyStyles() {
     <figure className="not-prose overflow-hidden rounded-2xl border bg-card">
       <div className="p-5 sm:p-6">
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <span className="font-semibold">旋律原型</span>
+          <span className="font-semibold">和弦进行</span>
           <span className="font-mono text-sm text-muted-foreground tabular-nums">
-            1 1 5 5 6 6 5 – ︱ 4 4 3 3 2 2 1 –
+            C – G – Am – Em – F – C – F – G
           </span>
-          <a href="/entries/jianpu" className="text-xs text-muted-foreground hover:text-signature">
-            (简谱)
+          <a href="/entries/pop-progressions" className="text-xs text-muted-foreground hover:text-signature">
+            (卡农进行:无数流行歌的祖先)
           </a>
         </div>
 
@@ -50,7 +50,7 @@ export function MelodyStyles() {
                 key={s.id}
                 type="button"
                 onClick={() => void play(s.id)}
-                aria-label={`试听${s.name}版小星星`}
+                aria-label={`试听${s.name}版`}
                 className={
                   "inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm transition active:scale-95 " +
                   (on

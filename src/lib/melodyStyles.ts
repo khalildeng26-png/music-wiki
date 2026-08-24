@@ -1,5 +1,6 @@
-// 「一首小星星,六种曲风」的编曲数据——同一段旋律(C 大调,16 拍)换六种风格包装。
-// 旋律:1 1 5 5 6 6 5- | 4 4 3 3 2 2 1-(简谱,C4 起)
+// 「一首卡农,六种曲风」的编曲数据——帕赫贝尔卡农移到 C 大调,
+// 地面低音 8 个和弦 × 2 拍 = 16 拍:C G Am Em F C F G(卡农进行)。
+// 主题旋律(二分音符):E5 D5 C5 B4 A4 G4 A4 B4,各版本按乐器音域移位。
 import type { Pattern } from "@/components/interactive/audio";
 
 export type StyleArrangement = {
@@ -11,47 +12,39 @@ export type StyleArrangement = {
   pattern: Pattern;
 };
 
-/** 小星星旋律(四分音符,结尾长音),音高按编曲需要整体移位 */
-const twinkle = (root: string[], dur = 0.9) =>
-  [
-    [0, 0.9],
-    [1, 0.9],
-    [2, 0.9],
-    [3, 0.9],
-    [4, 0.9],
-    [5, 0.9],
-    [6, 1.9],
-    [8, 0.9],
-    [9, 0.9],
-    [10, 0.9],
-    [11, 0.9],
-    [12, 0.9],
-    [13, 0.9],
-    [14, 1.9],
-  ].map(([t, d], i) => ({ t, notes: [root[i]], dur: Math.min(d, dur + 0.9), vel: 0.8 }));
+/** 卡农进行:每和弦 2 拍,共 16 拍 */
+const CHORDS = ["C", "G", "Am", "Em", "F", "C", "F", "G"] as const;
+
+/** 主题旋律(8 个二分音符);octave 参数整体移位 */
+const theme = (melody: string[], vel = 0.8) =>
+  melody.map((n, i) => ({ t: i * 2, notes: [n], dur: 1.9, vel }));
+
+/** 每和弦单元(u:0-7,起拍 u*2)的工具 */
+const unit = (u: number) => u * 2;
 
 export const STYLES: StyleArrangement[] = [
   {
     id: "pure",
     name: "纯净",
-    desc: "课本原样:钢琴单旋律 + 简单和弦——所有版本的对照组。",
+    desc: "帕赫贝尔 1700 年前后的原样:钢琴主题 + 卡农进行——所有版本的对照组。",
     pattern: {
-      bpm: 100,
+      bpm: 84,
       beats: 16,
       tracks: [
-        { kind: "notes", timbre: "piano", events: twinkle(["C4", "C4", "G4", "G4", "A4", "A4", "G4", "F4", "F4", "E4", "E4", "D4", "D4", "C4"]) },
+        { kind: "notes", timbre: "piano", events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"]) },
         {
           kind: "notes",
           timbre: "piano",
           events: [
-            { t: 0, notes: ["C3", "E3", "G3"], dur: 3.8, vel: 0.5 },
-            { t: 4, notes: ["F3", "A3", "C4"], dur: 1.8, vel: 0.5 },
-            { t: 6, notes: ["C3", "E3", "G3"], dur: 1.8, vel: 0.5 },
-            { t: 8, notes: ["F3", "A3", "C4"], dur: 1.8, vel: 0.5 },
-            { t: 10, notes: ["C3", "E3", "G3"], dur: 1.8, vel: 0.5 },
-            { t: 12, notes: ["G2", "B2", "D3"], dur: 1.8, vel: 0.5 },
-            { t: 14, notes: ["C3", "E3", "G3"], dur: 1.8, vel: 0.5 },
-          ],
+            ["C4", "E4", "G4"],
+            ["G3", "B3", "D4"],
+            ["A3", "C4", "E4"],
+            ["G3", "B3", "E4"],
+            ["F3", "A3", "C4"],
+            ["C4", "E4", "G4"],
+            ["F3", "A3", "C4"],
+            ["G3", "B3", "D4"],
+          ].map((ch, u) => ({ t: unit(u), notes: ch, dur: 1.8, vel: 0.45 })),
         },
       ],
     },
@@ -59,31 +52,34 @@ export const STYLES: StyleArrangement[] = [
   {
     id: "jazz",
     name: "爵士",
-    desc: "换上 7 和弦、行走贝斯和摇摆八分——小星星走进了爵士酒吧。",
+    desc: "和弦全部泡进 7 音,贝斯四拍一音地走,ride 摇摆——卡农走进爵士酒吧。",
     pattern: {
-      bpm: 132,
-      swing: 0.65,
+      bpm: 96,
+      swing: 0.63,
       beats: 16,
       tracks: [
-        { kind: "notes", timbre: "piano", events: twinkle(["C4", "C4", "G4", "G4", "A4", "A4", "G4", "F4", "F4", "E4", "E4", "D4", "D4", "C4"]) },
+        { kind: "notes", timbre: "piano", events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 0.75) },
         {
           kind: "notes",
           timbre: "piano",
           events: [
-            { t: 0, notes: ["E3", "G3", "B3", "D4"], dur: 1.1, vel: 0.5 },
-            { t: 1.5, notes: ["E3", "G3", "B3", "D4"], dur: 0.5, vel: 0.4 },
-            { t: 4, notes: ["F3", "A3", "C4", "E4"], dur: 1.1, vel: 0.5 },
-            { t: 5.5, notes: ["F3", "A3", "C4", "E4"], dur: 0.5, vel: 0.4 },
-            { t: 8, notes: ["E3", "G3", "B3", "D4"], dur: 1.1, vel: 0.5 },
-            { t: 9.5, notes: ["E3", "G3", "B3", "D4"], dur: 0.5, vel: 0.4 },
-            { t: 12, notes: ["G2", "B2", "D3", "F3"], dur: 1.1, vel: 0.5 },
-            { t: 13.5, notes: ["E3", "G3", "B3", "D4"], dur: 0.5, vel: 0.45 },
-          ],
+            ["E3", "G3", "B3", "D4"], // Cmaj7
+            ["F3", "A3", "B3", "D4"], // G9(根音省略)
+            ["A3", "C4", "E4", "G4"], // Am7
+            ["E3", "G3", "B3", "D4"], // Em7
+            ["F3", "A3", "C4", "E4"], // Fmaj7
+            ["E3", "G3", "B3", "D4"], // Cmaj7
+            ["F3", "A3", "C4", "E4"], // Fmaj7
+            ["G3", "B3", "D4", "F4"], // G7
+          ].flatMap((ch, u) => [
+            { t: unit(u), notes: ch, dur: 0.9, vel: 0.5 },
+            { t: unit(u) + 1.5, notes: ch, dur: 0.4, vel: 0.4 },
+          ]),
         },
         {
           kind: "notes",
           timbre: "bass",
-          events: ["C2", "D2", "E2", "F2", "F2", "G2", "A2", "B2", "C3", "B2", "A2", "G2", "G2", "F2", "E2", "D2"].map(
+          events: ["C2", "E2", "G1", "D2", "A1", "E2", "E2", "B2", "F2", "C3", "C2", "G2", "F2", "C3", "G2", "D3"].map(
             (n, i) => ({ t: i, notes: [n], dur: 0.95 }),
           ),
         },
@@ -102,44 +98,42 @@ export const STYLES: StyleArrangement[] = [
   {
     id: "rock",
     name: "摇滚",
-    desc: "电吉他扛旋律,底下强力和弦 + 真鼓 backbeat——小星星插上了电。",
+    desc: "电吉他把主题压低八度扛起来,强力和弦每两拍换一个——卡农插上了电。",
     pattern: {
-      bpm: 130,
+      bpm: 132,
       beats: 16,
       tracks: [
-        { kind: "notes", timbre: "eguitar", events: twinkle(["C4", "C4", "G4", "G4", "A4", "A4", "G4", "F4", "F4", "E4", "E4", "D4", "D4", "C4"], 0.8) },
+        { kind: "notes", timbre: "eguitar", events: theme(["E4", "D4", "C4", "B3", "A3", "G3", "A3", "B3"], 0.8) },
         {
           kind: "notes",
           timbre: "eguitar",
           events: [
-            { t: 0, notes: ["C3", "G3", "C4"], dur: 3.8, vel: 0.7 },
-            { t: 4, notes: ["F2", "C3", "F3"], dur: 1.8, vel: 0.7 },
-            { t: 6, notes: ["C3", "G3", "C4"], dur: 1.8, vel: 0.7 },
-            { t: 8, notes: ["F2", "C3", "F3"], dur: 1.8, vel: 0.7 },
-            { t: 10, notes: ["C3", "G3", "C4"], dur: 1.8, vel: 0.7 },
-            { t: 12, notes: ["G2", "D3", "G3"], dur: 1.8, vel: 0.7 },
-            { t: 14, notes: ["C3", "G3", "C4"], dur: 1.8, vel: 0.7 },
-          ],
+            ["C3", "G3", "C4"],
+            ["G2", "D3", "G3"],
+            ["A2", "E3", "A3"],
+            ["E2", "B2", "E3"],
+            ["F2", "C3", "F3"],
+            ["C3", "G3", "C4"],
+            ["F2", "C3", "F3"],
+            ["G2", "D3", "G3"],
+          ].flatMap((ch, u) =>
+            Array.from({ length: 4 }, (_, i) => ({ t: unit(u) + i * 0.5, notes: ch, dur: 0.42, vel: 0.8 })),
+          ),
         },
         {
           kind: "notes",
           timbre: "bass",
-          events: [
-            ...Array.from({ length: 8 }, (_, i) => ({ t: i * 0.5, notes: ["C2"], dur: 0.45 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 4 + i * 0.5, notes: ["F1"], dur: 0.45 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 6 + i * 0.5, notes: ["C2"], dur: 0.45 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 8 + i * 0.5, notes: ["F1"], dur: 0.45 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 10 + i * 0.5, notes: ["C2"], dur: 0.45 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 12 + i * 0.5, notes: ["G1"], dur: 0.45 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 14 + i * 0.5, notes: ["C2"], dur: 0.45 })),
-          ],
+          events: ["C2", "G1", "A1", "E1", "F1", "C2", "F1", "G1"].flatMap((root, u) =>
+            Array.from({ length: 4 }, (_, i) => ({ t: unit(u) + i * 0.5, notes: [root], dur: 0.45 })),
+          ),
         },
         {
           kind: "drums",
           events: [
             ...Array.from({ length: 8 }, (_, i) => ({ t: i * 2, hit: "kick" as const, vel: 0.85 })),
             ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.8 })),
-            ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.42 })),
+            // 踩镲每拍一下(四分),不再每半拍
+            ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.5 })),
             { t: 0, hit: "openhat", vel: 0.6 },
           ],
         },
@@ -149,22 +143,19 @@ export const STYLES: StyleArrangement[] = [
   {
     id: "folk-cn",
     name: "民乐",
-    desc: "笛子高八度唱主旋律,古筝在底下琶音——小星星穿上了汉服。",
+    desc: "笛子高八度唱主题,古筝八分琶音铺底——卡农穿上了汉服。",
     pattern: {
-      bpm: 96,
+      bpm: 84,
       beats: 16,
       tracks: [
-        { kind: "notes", timbre: "dizi", events: twinkle(["C6", "C6", "G5", "G5", "A5", "A5", "G5", "F5", "F5", "E6", "E6", "D6", "D6", "C6"], 0.9) },
+        { kind: "notes", timbre: "dizi", events: theme(["E6", "D6", "C6", "B5", "A5", "G5", "A5", "B5"], 0.75) },
         {
           kind: "notes",
           timbre: "guzheng",
-          events: [
-            ...Array.from({ length: 4 }, (_, bar) => {
-              const off = bar * 4;
-              const tones = bar % 2 === 0 ? ["A3", "C4", "E4", "A4"] : ["G3", "C4", "D4", "A4"];
-              return tones.map((n, i) => ({ t: off + i, notes: [n], dur: 0.9, vel: 0.5 }));
-            }).flat(),
-          ],
+          events: Array.from({ length: 8 }, (_, u) => {
+            const tones = u % 2 === 0 ? ["A3", "C4", "E4", "A4"] : ["G3", "C4", "D4", "A4"];
+            return tones.map((n, i) => ({ t: unit(u) + i * 0.5, notes: [n], dur: 0.42, vel: 0.5 }));
+          }).flat(),
         },
       ],
     },
@@ -172,17 +163,17 @@ export const STYLES: StyleArrangement[] = [
   {
     id: "chip",
     name: "8bit",
-    desc: "方波 + 噪声鼓——小星星掉进了红白机。",
+    desc: "方波唱主题,方波低八度在底下蹦——卡农掉进了红白机。",
     pattern: {
-      bpm: 160,
+      bpm: 140,
       beats: 16,
       tracks: [
-        { kind: "notes", timbre: "chip", events: twinkle(["C5", "C5", "G5", "G5", "A5", "A5", "G5", "F5", "F5", "E5", "E5", "D5", "D5", "C5"], 0.7) },
+        { kind: "notes", timbre: "chip", events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 0.7) },
         {
           kind: "notes",
           timbre: "chip",
-          events: ["C3", "C3", "C4", "C3", "F2", "F2", "F3", "F2", "C3", "C3", "C4", "C3", "G2", "G2", "G3", "C3"].map(
-            (n, i) => ({ t: i, notes: [n], dur: 0.9, vel: 0.9 }),
+          events: ["C3", "G1", "A1", "E1", "F1", "C2", "F1", "G1"].flatMap((root, u) =>
+            Array.from({ length: 4 }, (_, i) => ({ t: unit(u) + i * 0.5, notes: [root], dur: 0.4, vel: 0.85 })),
           ),
         },
         {
@@ -200,24 +191,24 @@ export const STYLES: StyleArrangement[] = [
   {
     id: "edm",
     name: "舞曲",
-    desc: "底鼓每拍都踩、贝斯全在反拍——小星星登上了音乐节舞台。",
+    desc: "主题变成四分音符脉冲,底鼓每拍都踩——卡农登上了音乐节舞台。",
     pattern: {
       bpm: 126,
       beats: 16,
       tracks: [
-        { kind: "notes", timbre: "synth", events: twinkle(["C5", "C5", "G5", "G5", "A5", "A5", "G5", "F5", "F5", "E5", "E5", "D5", "D5", "C5"], 0.7) },
         {
           kind: "notes",
           timbre: "synth",
-          events: [
-            ...Array.from({ length: 8 }, () => "C2").map((n, i) => ({ t: i * 0.5 + 0.5, notes: [n], dur: 0.3, vel: 0.8 })),
-            ...Array.from({ length: 4 }, () => "F2").map((n, i) => ({ t: 4 + i * 0.5 + 0.5, notes: [n], dur: 0.3, vel: 0.8 })),
-            ...Array.from({ length: 4 }, () => "C2").map((n, i) => ({ t: 6 + i * 0.5 + 0.5, notes: [n], dur: 0.3, vel: 0.8 })),
-            ...Array.from({ length: 4 }, () => "F2").map((n, i) => ({ t: 8 + i * 0.5 + 0.5, notes: [n], dur: 0.3, vel: 0.8 })),
-            ...Array.from({ length: 4 }, () => "C2").map((n, i) => ({ t: 10 + i * 0.5 + 0.5, notes: [n], dur: 0.3, vel: 0.8 })),
-            ...Array.from({ length: 4 }, () => "G2").map((n, i) => ({ t: 12 + i * 0.5 + 0.5, notes: [n], dur: 0.3, vel: 0.8 })),
-            ...Array.from({ length: 4 }, () => "C2").map((n, i) => ({ t: 14 + i * 0.5 + 0.5, notes: [n], dur: 0.3, vel: 0.8 })),
-          ],
+          events: ["E5", "E5", "D5", "D5", "C5", "C5", "B4", "B4", "A4", "A4", "G4", "G4", "A4", "A4", "B4", "B4"].map(
+            (n, i) => ({ t: i, notes: [n], dur: 0.85, vel: 0.75 }),
+          ),
+        },
+        {
+          kind: "notes",
+          timbre: "synth",
+          events: ["C2", "G1", "A1", "E1", "F1", "C2", "F1", "G1"].flatMap((root, u) =>
+            Array.from({ length: 4 }, (_, i) => ({ t: unit(u) + i * 0.5 + 0.5, notes: [root], dur: 0.3, vel: 0.8 })),
+          ),
         },
         {
           kind: "drums",
