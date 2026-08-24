@@ -66,7 +66,8 @@ const SAMPLES: Record<
       A4: "A4",
       A5: "A5",
     },
-    volume: -10,
+    // 2026-08-24:-10 → -6。原值混编时偏低,独奏场景(卡农·钢琴版)手机外放近无声
+    volume: -6,
     release: 0.3,
   },
   guitar: {

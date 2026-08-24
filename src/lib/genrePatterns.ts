@@ -103,10 +103,10 @@ export const GENRES: Record<string, GenreDemo> = {
           kind: "notes",
           timbre: "eguitar",
           events: [
-            // 八分音符改短促颗粒(时值 0.42→0.28 拍):收掉余音重叠,"推进"而不是"糊"
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, notes: ["E3", "B3", "E4"], dur: 0.28, vel: 0.85 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 8 + i * 0.5, notes: ["G3", "D4", "G4"], dur: 0.28, vel: 0.85 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 12 + i * 0.5, notes: ["A3", "E4", "A4"], dur: 0.28, vel: 0.85 })),
+            // 四分音符扫弦(每拍一下):用户听感三连否决八分密度,全曲最高密度=每拍一击
+            ...Array.from({ length: 8 }, (_, i) => ({ t: i, notes: ["E3", "B3", "E4"], dur: 0.8, vel: 0.85 })),
+            ...Array.from({ length: 4 }, (_, i) => ({ t: 8 + i, notes: ["G3", "D4", "G4"], dur: 0.8, vel: 0.85 })),
+            ...Array.from({ length: 4 }, (_, i) => ({ t: 12 + i, notes: ["A3", "E4", "A4"], dur: 0.8, vel: 0.85 })),
           ],
         },
         {
@@ -124,8 +124,8 @@ export const GENRES: Record<string, GenreDemo> = {
           events: [
             ...Array.from({ length: 8 }, (_, i) => ({ t: i * 2, hit: "kick" as const, vel: 0.85 })),
             ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.8 })),
-            // 踩镲每拍一下(四分),不再每半拍——留出呼吸感
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.5 })),
+            // 踩镲每拍一下(四分),力度压低做背景
+            ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.36 })),
             { t: 0, hit: "openhat", vel: 0.6 },
           ],
         },

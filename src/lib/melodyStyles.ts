@@ -117,7 +117,8 @@ export const STYLES: StyleArrangement[] = [
             ["F2", "C3", "F3"],
             ["G2", "D3", "G3"],
           ].flatMap((ch, u) =>
-            Array.from({ length: 4 }, (_, i) => ({ t: unit(u) + i * 0.5, notes: ch, dur: 0.28, vel: 0.8 })),
+            // 四分扫弦(每拍一下),余音 0.8 拍
+            Array.from({ length: 2 }, (_, i) => ({ t: unit(u) + i, notes: ch, dur: 0.8, vel: 0.8 })),
           ),
         },
         {
@@ -132,8 +133,8 @@ export const STYLES: StyleArrangement[] = [
           events: [
             ...Array.from({ length: 8 }, (_, i) => ({ t: i * 2, hit: "kick" as const, vel: 0.85 })),
             ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.8 })),
-            // 踩镲每拍一下(四分),不再每半拍
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.5 })),
+            // 踩镲每拍一下(四分),力度压低做背景
+            ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.36 })),
             { t: 0, hit: "openhat", vel: 0.6 },
           ],
         },
