@@ -46,7 +46,7 @@ async function getTone(): Promise<ToneModule> {
 /** 采样音色:锚点音 → 文件名(不含扩展名);音量相对主链路校准 */
 const SAMPLES: Record<
   Exclude<Timbre, "synth" | "chip">,
-  { files: Record<string, string>; volume: number; release: number }
+  { files: Record<string, string>; volume: number; release: number; attack?: number }
 > = {
   // 鼓组(Freesound CC0,BaDokick/blakengouda/Cringegaming64yt 上传):
   // 伪音名映射到五个单响——触发时打对应"音名"即为对应鼓件
@@ -124,7 +124,10 @@ const SAMPLES: Record<
   eguitar: {
     files: { E2: "E2", A2: "A2", "D#3": "Ds3", A3: "A3", "D#4": "Ds4", A4: "A4" },
     volume: -2,
-    release: 0.4,
+    // ISU MIS 电吉他采样是持续音(无拨弦起音),短促重触发时切口会"咔嗒"——
+    // 8ms 淡入 + 短释放把切口磨圆,听感变为干净的清音 swell
+    attack: 0.008,
+    release: 0.2,
   },
   ukulele: {
     files: { E4: "E4", A4: "A4", D5: "D5", G5: "G5" },
@@ -213,6 +216,7 @@ async function ensureAudio(timbre: Timbre = "piano") {
           urls,
           baseUrl: `/audio/${timbre}/`,
           release: cfg.release,
+          ...(cfg.attack != null ? { attack: cfg.attack } : {}),
           onload: () => resolve(s),
         });
         s.volume.value = cfg.volume;
