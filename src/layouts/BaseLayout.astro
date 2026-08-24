@@ -13,6 +13,18 @@ const { title, description, ogImage, jsonLd } = Astro.props;
 <html lang="zh-CN">
   <head>
     <HeadSEO title={title} description={description} ogImage={ogImage} jsonLd={jsonLd} />
+    {/* 匿名统计(umami 自托管,搭建见 deploy/umami/):未配置 .env 时完全不渲染,
+        本地 dev 与未配置的构建零上报;data-domains 限定只统计本站,
+        防止别人拿到 Website ID 在别的站刷假数据 */}
+    {import.meta.env.UMAMI_URL && import.meta.env.UMAMI_WEBSITE_ID && (
+      <script
+        is:inline
+        defer
+        src={`${import.meta.env.UMAMI_URL}/script.js`}
+        data-website-id={import.meta.env.UMAMI_WEBSITE_ID}
+        data-domains="ambermoon.wiki"
+      />
+    )}
     <script is:inline>
       (() => {
         try {

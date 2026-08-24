@@ -1,0 +1,30 @@
+# umami 匿名统计:umami + PostgreSQL,一次性搭建步骤见同目录 README.md
+# 部署位置:服务器 /opt/umami/docker-compose.yml(数据存在命名卷 umami-db-data)
+services:
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    # 只绑回环地址,不对外暴露;外部一律经 nginx(443)反代进来
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      DATABASE_URL: postgresql://umami:umami@db:5432/umami
+      DATABASE_TYPE: postgresql
+      # 随机密钥:搭建时 `echo "APP_SECRET=$(openssl rand -hex 32)" > .env` 生成,
+      # compose 自动读取同目录 .env;.env 不要提交仓库
+      APP_SECRET: ${APP_SECRET}
+    depends_on:
+      - db
+    restart: unless-stopped
+  db:
+    # 不发布端口,仅 docker 内网可达,umami/umami 内部凭据够用
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: umami
+    volumes:
+      - umami-db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  umami-db-data:

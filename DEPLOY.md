@@ -107,6 +107,12 @@ ICP 备案通过后:把自定义域名 CNAME 到 `<桶名>.<OSS_REGION>.aliyuncs
 - **百度 API 推送(可选)**:在百度搜索资源平台(普通收录 → API 推送)拿 token,填入本地 `.env` 的 `BAIDU_PUSH_TOKEN`,之后每次部署自动把全站 URL 推给百度;未配置时脚本自动跳过
 - **404 页**:nginx 配置 `error_page 404 /404.html;` 指向站内品牌 404 页(`src/pages/404.astro` 构建产物);注意 `deploy-server.sh` 不会动 nginx 配置,改配置需手动 ssh
 
+## 统计(umami,自托管)
+
+匿名访问统计跑在同一台服务器的 Docker 里(`stats.ambermoon.wiki`),一次性搭建见 **[deploy/umami/README.md](deploy/umami/README.md)**。搭好后在本机 `.env` 填 `UMAMI_URL` / `UMAMI_WEBSITE_ID`(模板见 `.env.example`),`deploy-server.sh` 构建出的页面即带统计脚本;不配置则构建产物完全不含统计。
+
+---
+
 ## 海外备用
 
 `https://music-wiki-3pf.pages.dev`(Cloudflare Pages)。注意不要用 CF 的 Git 自动部署(会自动加 @astrojs/cloudflare 适配器,与 astro@7.1.6 版本不匹配,构建报 `MISSING_EXPORT beginContentEntryCollection`)。
