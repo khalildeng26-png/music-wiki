@@ -55,10 +55,11 @@ export function PlayChip({ sig, label }: { sig: SoundSig; label: string }) {
     const my = ++session.current;
     starting.current = true;
     setState("playing");
+    // 播放函数的同步"自打断"广播发生在调用内部,微任务后即解除豁免(否则播放中无法停止)
+    void Promise.resolve().then(() => (starting.current = false));
     try {
       await play(sig);
       if (my !== session.current) return; // 期间又被取代
-      starting.current = false;
       // play() 只负责排队,等序列自然结束再复位
       const ms =
         sig.kind === "notes"

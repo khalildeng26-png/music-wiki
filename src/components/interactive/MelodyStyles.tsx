@@ -39,12 +39,13 @@ export function MelodyStyles() {
     starting.current = true;
     setPlaying(id);
     setLast(id);
+    // playPattern 的同步"自打断"广播发生在调用内部,微任务后即解除豁免(否则播放中无法停止)
+    void Promise.resolve().then(() => (starting.current = false));
     try {
       await playPattern(style.pattern); // 引擎先打断已有播放(广播被 starting 挡下)
       if (my !== session.current) return; // 期间又被取代
-      starting.current = false;
-      const ms = ((style.pattern.beats * 60) / style.pattern.bpm) * 1000 + 900;
-      timer.current = window.setTimeout(() => setPlaying(null), ms);
+      // playPattern 在播完时 resolve,这里只留一点采样收尾余量
+      timer.current = window.setTimeout(() => setPlaying(null), 600);
     } catch {
       if (my === session.current) {
         starting.current = false;

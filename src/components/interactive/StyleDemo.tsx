@@ -44,13 +44,13 @@ export function StyleDemo({ title, hint, note, pattern }: Props) {
     const my = ++session.current;
     starting.current = true;
     setState("playing");
+    // playPattern 的同步"自打断"广播发生在调用内部,微任务后即解除豁免(否则播放中无法停止)
+    void Promise.resolve().then(() => (starting.current = false));
     try {
       await playPattern(pattern);
       if (my !== session.current) return; // 期间又被取代
-      starting.current = false;
-      // playPattern 排完时间线即返回,按总时长 + 收尾余量复位按钮
-      const ms = ((pattern.beats * 60) / pattern.bpm) * 1000 + 900;
-      timer.current = window.setTimeout(() => setState("idle"), ms);
+      // playPattern 在播完时 resolve,这里只留一点采样收尾余量
+      timer.current = window.setTimeout(() => setState("idle"), 600);
     } catch {
       if (my === session.current) {
         starting.current = false;

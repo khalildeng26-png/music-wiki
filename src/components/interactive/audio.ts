@@ -408,9 +408,13 @@ async function ensureDrums(Tone: ToneModule): Promise<DrumKit> {
 }
 
 /**
- * 多轨 pattern 播放:旋律/和弦轨(采样或合成音色)+ 鼓轨(合成示意)。
+ * 多轨 pattern 播放:旋律/和弦轨(采样或合成音色)+ 鼓轨(采样/合成)。
  * 时间以拍计,bpm 换算;swing 会把落在正拍后半拍(t 的小数部分恰为 0.5)的事件后移,
  * 模拟摇摆八分——爵士/布鲁斯的节奏灵魂。
+ *
+ * 调度采用「滚动窗口」:每 100ms 只把未来 ~300ms 内的事件排进音频时间线,
+ * 切歌/停止即停排。整段一次性预排会在打断时留下上百个无法取消的幽灵声源,
+ * 快速切歌几次就叠声+卡顿(2026-08-24 实测教训)。
  */
 export async function playPattern(pattern: Pattern): Promise<void> {
   stopAllAudio(); // 新片段打断旧片段(全局一次只播一个)
@@ -418,7 +422,7 @@ export async function playPattern(pattern: Pattern): Promise<void> {
   const spb = 60 / pattern.bpm; // 每拍秒数
   const swing = pattern.swing ?? 0.5;
 
-  // 用到的音色先并行就绪(含采样下载),再一次性排进时间线
+  // 用到的音色先并行就绪(含采样下载)
   const timbres = [
     ...new Set(pattern.tracks.flatMap((tr) => (tr.kind === "notes" ? [tr.timbre] : []))),
   ];
@@ -444,47 +448,74 @@ export async function playPattern(pattern: Pattern): Promise<void> {
     return 0;
   };
 
-  const start = Tone.now() + 0.08;
-  for (const track of pattern.tracks) {
+  const start = Tone.now() + 0.12;
+  const fire = (track: PatternTrack, ev: { t: number }, when: number) => {
     if (track.kind === "notes") {
-      const inst = instruments.get(track.timbre);
-      if (!inst) continue;
-      for (const ev of track.events) {
-        const t = start + ev.t * spb + swingOffset(ev.t);
-        const dur = (ev.dur ?? 0.5) * spb;
-        const vel = ev.vel ?? 1;
-        inst.triggerAttackRelease(ev.notes, dur, t, vel);
-      }
-    } else if (track.kind === "drums") {
-      const useSynth = track.kit === "synth";
-      for (const ev of track.events) {
-        const t = start + ev.t * spb + swingOffset(ev.t);
-        const vel = ev.vel ?? 1;
-        if (!useSynth && drumSampler) {
-          // 真实采样鼓:伪音名 → 鼓件;dur 给足让采样自然衰减(ride 余音最长)
-          const note = DRUM_NOTE[ev.hit];
-          const dur = ev.hit === "ride" || ev.hit === "openhat" ? 2.2 : 1.4;
-          drumSampler.triggerAttackRelease(note, dur, t, vel);
-        } else if (useSynth && kit) {
-          switch (ev.hit) {
-            case "kick":
-              kit.kick.triggerAttackRelease("C1", "16n", t, vel);
-              break;
-            case "snare":
-              kit.snare.triggerAttackRelease("16n", t, vel);
-              break;
-            case "hihat":
-              kit.hihat.triggerAttackRelease("32n", t, vel);
-              break;
-            case "openhat":
-              kit.openhat.triggerAttackRelease("8n", t, vel);
-              break;
-            case "ride":
-              kit.openhat.triggerAttackRelease("4n", t, vel * 0.8);
-              break;
-          }
+      const e = ev as NoteEvent;
+      instruments.get(track.timbre)?.triggerAttackRelease(
+        e.notes,
+        (e.dur ?? 0.5) * spb,
+        when,
+        e.vel ?? 1,
+      );
+    } else {
+      const e = ev as { hit: DrumHit; vel?: number };
+      const vel = e.vel ?? 1;
+      if (track.kit !== "synth" && drumSampler) {
+        // 真实采样鼓:伪音名 → 鼓件;dur 给足让采样自然衰减(ride 余音最长)
+        const dur = e.hit === "ride" || e.hit === "openhat" ? 2.2 : 1.4;
+        drumSampler.triggerAttackRelease(DRUM_NOTE[e.hit], dur, when, vel);
+      } else if (kit) {
+        switch (e.hit) {
+          case "kick":
+            kit.kick.triggerAttackRelease("C1", "16n", when, vel);
+            break;
+          case "snare":
+            kit.snare.triggerAttackRelease("16n", when, vel);
+            break;
+          case "hihat":
+            kit.hihat.triggerAttackRelease("32n", when, vel);
+            break;
+          case "openhat":
+            kit.openhat.triggerAttackRelease("8n", when, vel);
+            break;
+          case "ride":
+            kit.openhat.triggerAttackRelease("4n", when, vel * 0.8);
+            break;
         }
       }
     }
-  }
+  };
+
+  // 每轨事件按时间排序,配合队头指针做滚动调度
+  const queues = pattern.tracks.map((track) =>
+    [...(track.events as { t: number }[])].sort((a, b) => a.t - b.t).map((ev) => ({ ev, track })),
+  );
+  const heads = queues.map(() => 0);
+  const total = pattern.beats * spb;
+
+  await new Promise<void>((resolve) => {
+    const tick = () => {
+      if (mySession !== playSession) return resolve(); // 会话失效:停止排入,已排声部由 stopAllAudio 清理
+      const now = Tone.now();
+      const horizon = now + 0.3;
+      let allDone = true;
+      queues.forEach((q, qi) => {
+        while (heads[qi] < q.length) {
+          const { ev, track } = q[heads[qi]];
+          const when = start + ev.t * spb + swingOffset(ev.t);
+          if (when > horizon) {
+            allDone = false;
+            break;
+          }
+          if (when >= now - 0.05) fire(track, ev, when); // 因切换/卡顿过期的直接跳过
+          heads[qi]++;
+        }
+        if (heads[qi] < q.length) allDone = false;
+      });
+      if (allDone && now > start + total) return resolve();
+      window.setTimeout(tick, 100);
+    };
+    tick();
+  });
 }
