@@ -10,11 +10,19 @@ faq:
     a: 弱化旋律与和声,强调电贝斯与鼓的强烈律动(groove);以十六分音符为基础,大量切分音、重音移位,并强调每小节第一拍("On the One")。
   - q: 放克里的贝斯有什么特别?
     a: 贝斯是放克的律动核心,常用切分、重复、大跨度的线条,标志性技巧是 Slap(击勾弦),产生鼓点般的爆裂音色。
+  - q: 什么是"On the One"?
+    a: James Brown 确立的放克铁律:全乐队把重音砸在每小节第一拍上。与传统流行把重音放在 2、4 拍(backbeat)相反,放克先在第一拍砸下去,再靠后面的切分勾住身体。
+  - q: 放克和灵魂乐是什么关系?
+    a: 放克从灵魂乐与 R&B 里长出来:把和声做薄、把节奏做厚,让贝斯与鼓当主角。可以理解为「把灵魂乐的旋律换成律动」。
+  - q: 什么是 Slap?
+    a: 放克贝斯的招牌技巧:拇指击打低音弦发出「啪」的打击感,食指勾高音弦弹响亮的回弹音,一击一勾,让贝斯听起来像一组打击乐器。
 order: 13
 ---
 
 import { Metronome } from "../../components/interactive/Metronome";
 import { StyleDemo } from "../../components/interactive/StyleDemo";
+import { StaffNotation } from "../../components/interactive/StaffNotation";
+import { ChordPlayer } from "../../components/interactive/ChordPlayer";
 import { GENRES } from "../../lib/genrePatterns";
 
 **放克**(Funk)诞生于 1960 年代中后期的美国,由非裔音乐家把 [灵魂乐](/entries/soul)、[爵士](/entries/jazz)、[R&B](/entries/rnb) 揉在一起,做成一种**节奏极强、让人想跳舞**的音乐。它被尊为「迪斯科的前身」,也直接孕育了 [嘻哈](/entries/hiphop)。
@@ -41,6 +49,47 @@ import { GENRES } from "../../lib/genrePatterns";
 - **Funky 吉他**:细碎的十六分切音、闷音扫弦,常配 [哇音效果器](/entries/electric-guitar);
 - **铜管短促爆破**:萨克斯、小号、长号吹出短而尖的「stabs」,给节奏加冲击;
 - **呼应式演唱(Call & Response)**:主唱喊一句,和声或铜管回一句,满是舞蹈驱动力。
+
+## 名曲与人物
+
+- James Brown ——《Papa's Got a Brand New Bag》(1965):把重音搬上第一拍的宣言式单曲,放克由此成型。
+- James Brown ——《Get Up (I Feel Like Being a) Sex Machine》(1970):乐队两把吉他一贝斯一鼓织出的节奏网,放克编制的标准答案。
+- Sly & the Family Stone ——《Everyday People》(1968):把放克律动带进主流榜单的先行者;乐队黑白乐手混编的编制,在当年的美国也是突破。
+- Parliament-Funkadelic ——《Give Up the Funk (Tear the Roof Off the Sucker)》(1976):P-Funk 的派对圣歌,也是嘻哈被采样最多的素材之一。
+- Earth, Wind & Fire ——《September》(1978):放克、灵魂乐与迪斯科交界处的传世金曲,前奏响起人人会唱。
+
+## 常见误区
+
+1. 放克就是快——决定性的参数是重音位置与切分密度,不是速度;90 BPM 的放克照样能把人钉在地板上。
+2. 贝斯只是跟着鼓走——放克里贝斯是和鼓平等的另一半,贝斯线本身就是主旋律;听放克不盯贝斯,等于没听。
+3. 切分就是把重音乱挪——放克的切分有严格纪律:乐队所有人都知道「One」在哪,正因为第一拍被共识锁死,其余位置的重音才产生拉扯感。
+
+## 试一试
+
+先用贝斯听一条放克式的低音线:第一拍整拍按住,第二、四拍的空隙塞进十六分音型,落点都躲着正拍走:
+
+<StaffNotation
+  client:visible
+  notes={["E2", "E2", "G2", "B2", "C3", "B2", "G2", "E2"]}
+  label="放克贝斯线:第一拍站住,后面切分绕着走。"
+  timbre="bass"
+  clef="bass"
+/>
+
+再用鼓听「On the One」的基本节拍:四组「和弦」是小节的四拍,第 1 拍底鼓踩镲齐下,2、4 拍留给军鼓:
+
+<ChordPlayer
+  client:visible
+  label="放克鼓架:重音砸在第一拍"
+  desc="底鼓踩 1、3 拍,军鼓砸 2、4 拍,踩镲每拍都在。"
+  chords={[
+    ["C1", "E1"],
+    ["D1", "E1"],
+    ["C1", "E1"],
+    ["D1", "E1"],
+  ]}
+  timbre="drums"
+/>
 
 > 判断一首歌「带不带感」,放克是最好的试金石:如果听 10 秒你的身体还没开始动,那它就不是好放克。
 

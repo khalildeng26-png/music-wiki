@@ -4,12 +4,20 @@ titleEn: Soul
 category: 曲风
 summary: 起源于福音与R&B的黑人音乐,以灵魂唱腔、和声丰富与真挚情感著称,连接爵士与现代流行。
 tags: [曲风, 灵魂乐, Soul]
-related: [rnb, jazz, vocal-registers]
+related: [rnb, jazz, vocal-registers, funk, pop]
 faq:
   - q: 灵魂乐的核心特征是什么?
     a: 灵魂唱腔(转音、假声、真假声切换)、福音和声(唱诗班厚重感)、真挚的情感("唱得真",不炫技)。
   - q: 灵魂乐对流行的影响是什么?
     a: Soul 直接孕育了现代 R&B,并通过放克影响了嘻哈与电子。
+  - q: 灵魂乐和 R&B 有什么区别?
+    a: 灵魂乐特指 1950–60 年代把福音唱腔与节奏布鲁斯融合的曲风,以真乐队演奏为主;今天说的"R&B"(当代节奏布鲁斯)是它的后代,制作上更多依赖电子节拍与录音室技术。
+  - q: 灵魂乐和福音音乐有什么关系?
+    a: 两者音乐上同源:灵魂乐直接借用了福音的唱腔、和声与领唱伴唱呼应的形式。区别在题材:福音唱信仰,灵魂乐唱世俗情感。许多灵魂乐歌手都是在教堂唱诗班起步的。
+  - q: 灵魂乐唱腔要听什么?
+    a: 听转音(melisma)的线条、真声假声的切换、主唱与伴唱及号角的呼应;更要听真诚度——灵魂乐的评判标准从来不看转音数量,只看唱得让人信不信。
+  - q: 灵魂乐必听的代表作有哪些?
+    a: Aretha Franklin 的《Respect》(1967)、Marvin Gaye 的专辑《What's Going On》(1971)、Stevie Wonder 的《Superstition》(1972)、Sam Cooke 的《A Change Is Gonna Come》(1964),分别对应女声灵魂、概念专辑、放克化灵魂与抒情灵魂四个方向。
 order: 10
 ---
 
@@ -23,10 +31,45 @@ order: 10
 
 import { StyleDemo } from "../../components/interactive/StyleDemo";
 import { GENRES } from "../../lib/genrePatterns";
+import { ChordPlayer } from "../../components/interactive/ChordPlayer";
 
 听一段灵魂乐的律动——比 R&B 更用力:
 
 <StyleDemo client:visible {...GENRES.soul} />
+
+## 简史
+
+- 1950 年代中期,Ray Charles 把福音音乐的唱腔与钢琴语汇搬进节奏布鲁斯题材,1954 年的《I Got a Woman》被广泛视为最早的灵魂乐唱片之一。教堂的唱腔就此进入世俗音乐。
+- Sam Cooke 从福音组合唱进主流流行榜,证明了教堂唱腔同样能打动流行听众,也为后来的灵魂乐歌手铺好了路。
+- 1959 年,Berry Gordy 在底特律创立摩城唱片(Motown):严格的创作与制作流程、精致的编曲,让灵魂乐大规模进入流行榜单,路线更靠近 [流行](/entries/pop)。孟菲斯的 Stax 则走粗粝、直接的路线,与摩城形成对照。
+- 1967 年,Aretha Franklin 的《Respect》把女性灵魂唱腔推向新的高度,她"灵魂女王"的称号由此而来。
+- 1970 年代,灵魂乐继续分化:Marvin Gaye 1971 年的专辑《What's Going On》把社会观察带进灵魂乐;放克([Funk](/entries/funk))从灵魂乐的节奏里长大,之后的嘻哈又从这两者那里大量取样。
+- 1990 年代出现的 neo-soul(新灵魂乐)重新回到真乐队与有机音色,把这一传统带进了当代。
+
+## 名曲用例
+
+- Aretha Franklin《Respect》(1967):主唱与伴唱一问一答,中段把单词逐字母拼唱,是灵魂乐编曲与唱腔配合的范例。
+- Sam Cooke《A Change Is Gonna Come》(1964):弦乐铺底、福音式长句推进,常被引用为灵魂乐的宣言式作品。
+- Marvin Gaye《What's Going On》(1971):主打曲用多轨人声层叠、彼此呼应展开,题材转向社会议题与反战。
+- Stevie Wonder《Superstition》(1972):克拉维网琴(clavinet)的重复段落推动全曲,是放克化灵魂乐的代表。
+
+## 常见误区
+
+1. 转音越多越灵魂:转音只是表层,真诚与律动才是核心。把转音堆满而不动情,只剩技巧展示。
+2. 把灵魂乐和今天的 R&B 混为一谈:灵魂乐是 1950–70 年代的曲风,当代 R&B 已经混入嘻哈与 [电子](/entries/electronic) 制作,两者隔着好几代变化。
+3. 以为灵魂乐只关乎唱歌:号角的呼应、风琴的铺垫、节奏组的律动同样是灵魂乐的语言,摩城的编曲就与唱腔一样讲究。
+4. 用力唱才有灵魂:灵魂乐的张力来自强弱对比与控制,轻声细语也可以很有灵魂。
+
+## 试一试:听一组福音式和声
+
+灵魂乐的和声语言来自教堂。下面这组 I–IV–I–V7–I 进行,有从稳定到紧张再落回稳定的完整过程,是福音与灵魂乐最常见的和声底色:
+
+<ChordPlayer
+  client:visible
+  label="福音式和声进行:I–IV–I–V7–I"
+  desc="留意最后的属七和弦(V7)如何把人拉回主和弦,这就是灵魂乐和声里张力的来源与解决。"
+  chords={[["C4", "E4", "G4"], ["F4", "A4", "C5"], ["C4", "E4", "G4"], ["G4", "B4", "D5", "F5"], ["C4", "E4", "G4"]]}
+/>
 
 ## 代表与影响
 

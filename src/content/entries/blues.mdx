@@ -10,12 +10,19 @@ faq:
     a: 小调五声音阶(1、b3、4、5、b7)加一个降五音(b5/#4)构成的六声音阶。以 C 为例是 C–E♭–F–F♯–G–B♭。
   - q: 12 小节布鲁斯是什么?
     a: 最经典的和声框架,用 I、IV、V 三个属七和弦,共 12 小节。以 C 为例是 C7 四小节、F7 两小节、C7 两小节、G7–F7–C7–G7。
+  - q: 布鲁斯为什么全用属七和弦?
+    a: 12 小节布鲁斯的 I、IV、V 全部用属七和弦。属七天生不稳定、想解决,一路用到底,和声始终悬着,整首歌就有了往前推进的张力。这也是属七和弦在爵士与 R&B 里地位特殊的原因。
+  - q: 布鲁斯的 shuffle 律动怎么打?
+    a: shuffle 是把八分音符打成「长–短」(接近三连音感觉):「哒-哒 哒-哒」,而不是均匀的「哒哒哒哒」。慢速下先把四拍循环走稳,再把八分换成长短分法。
+  - q: 布鲁斯和爵士有什么区别?
+    a: 布鲁斯更早,结构更简单(12 小节框架 + 蓝调音阶),情感表达直接;爵士在布鲁斯基础上发展,继承了蓝调音阶与即兴传统,但和声、节奏复杂得多,更强调乐手间的即兴互动。
 order: 12
 ---
 
 import { StaffNotation } from "../../components/interactive/StaffNotation";
 import { ChordPlayer } from "../../components/interactive/ChordPlayer";
 import { StyleDemo } from "../../components/interactive/StyleDemo";
+import { RhythmTap } from "../../components/interactive/RhythmTap";
 import { GENRES } from "../../lib/genrePatterns";
 
 **布鲁斯**(Blues)诞生于 19 世纪末的美国南方,由非裔美国人的田间劳动歌、灵歌与吟唱演化而来。它是现代流行音乐最重要的「母体」——[爵士](/entries/jazz)、[摇滚](/entries/rock)、[R&B](/entries/rnb)、[灵魂乐](/entries/soul)几乎都能一路追溯回它。
@@ -67,6 +74,41 @@ import { GENRES } from "../../lib/genrePatterns";
 />
 
 为什么全用属七?因为属七和弦天生「不稳定、想解决」——12 小节里一路都是半吊着的张力,反而让整首歌有股「往下走的冲劲」。这也是为什么 [七和弦](/entries/seventh-chords) 一节里,属七是最特殊的一个。
+
+## 简史
+
+- 19 世纪末,密西西比三角洲等地的田间呼号、劳动歌与灵歌汇成早期布鲁斯,常常只有一副嗓子或一把木吉他。
+- 1910 年代起,布鲁斯被写进乐谱、灌成唱片:W.C. Handy 的《Memphis Blues》(1912)是最早出版的布鲁斯乐谱之一;1920 年代,Bessie Smith 等女歌手把布鲁斯带进了剧院与唱片店。
+- 1940–50 年代,黑人迁徙把布鲁斯带到北方:Muddy Waters 给吉他插上电,加上口琴与节奏组,芝加哥电声布鲁斯成型,为摇滚乐的出现做好了准备。
+- 1960 年代,滚石乐队、Eric Clapton 等英国摇滚乐手翻出老布鲁斯唱片,把它弹得更响、更重——布鲁斯完成了从乡村到城市、从美国到世界的传播。
+
+## 名曲与人物
+
+- Bessie Smith ——《St. Louis Blues》(1925 年录音):W.C. Handy 的名曲,早期布鲁斯演唱的代表版本。
+- Robert Johnson ——《Cross Road Blues》(1936):密西西比三角洲布鲁斯的一人一琴,他的吉他与歌词被后世无数摇滚乐队翻唱。
+- Muddy Waters ——《Hoochie Coochie Man》(1954):芝加哥电声布鲁斯的代表作,标志性的 riff 加口琴,是入门必听版本。
+- B.B. King ——《The Thrill Is Gone》(1969):「布鲁斯之王」的招牌曲目,他的推弦与揉弦确立了电声布鲁斯吉他 solo 的基本语汇。
+
+## 常见误区
+
+1. 布鲁斯就是悲伤的音乐——blue 一词确有忧郁色彩,但布鲁斯在诞生地同样是跳舞用的音乐:蓝音的核心是张力与释放,不是悲伤。大量快节奏 shuffle 完全为舞蹈服务。
+2. 弹五声音阶就是弹布鲁斯——蓝调音阶比小调五声多一个 b5,更重要的是蓝音要靠滑音、推弦「落在缝里」;把每个音都弹在标准音高上,那只是五声音阶练习,没有蓝味。
+3. 12 小节是唯一形式——12 小节是最常见的框架,此外还有 8 小节、16 小节的布鲁斯,以及第 2 小节就提前进入 IV 级的「quick change」变体。先学透 12 小节这个骨架,变体都是它的变形。
+
+## 试一试
+
+用吉他弹一条下行的布鲁斯乐句,经过 F♯(b5)的那一下最有蓝味:
+
+<StaffNotation
+  client:visible
+  notes={["C5", "Bb4", "G4", "F#4", "F4", "Eb4", "C4"]}
+  label="C 布鲁斯下行乐句:经过 b5 时多停留一点。"
+  timbre="guitar"
+/>
+
+再用手跟住拍子。布鲁斯的 shuffle 常在 70–100 BPM,先用 92 BPM 跟 8 拍,体会那种摇摆:
+
+<RhythmTap client:visible bpm={92} beats={8} />
 
 ## 它给了后世什么
 

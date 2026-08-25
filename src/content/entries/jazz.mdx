@@ -4,16 +4,26 @@ titleEn: Jazz
 category: 曲风
 summary: 起源于美国、以即兴、摇摆节奏和蓝调音阶为标志的音乐风格,极重乐手间的互动。
 tags: [曲风, 爵士]
-related: [pop, scale, lead-sheet, aaba-form]
+related: [pop, scale, lead-sheet, aaba-form, seventh-chords]
 faq:
   - q: 爵士的核心特征是什么?
     a: 即兴演奏(灵魂)、摇摆节奏(swing,八分音符带长–短律动)、蓝调音阶(降三降五降七)。
   - q: 听爵士应该关注什么?
     a: 重点不是"听懂结构",而是感受乐手之间对话般的即兴互动。
+  - q: 什么是 ii–V–I?为什么爵士里到处都是它?
+    a: ii–V–I 是爵士最核心的和弦进行:二级小七 → 五级属七 → 一级大七。以 C 大调为例是 Dm7–G7–Cmaj7。大量爵士标准曲就是由不同调的 ii–V–I 串起来的。
+  - q: 摇摆节奏和均匀八分音符差在哪?
+    a: 摇摆把每拍拆成不均匀的两份,前长后短,接近三连音的感觉。同一份谱子,均匀弹是练习曲,摇摆弹才成爵士。
+  - q: 比波普和摇摆乐有什么区别?
+    a: 摇摆乐是 1930 年代的大乐队舞曲,为跳舞服务;比波普是 1940 年代中期出现的小编制风格,速度快、和声复杂,是给乐手演奏、给听众坐定细听的音乐。
+  - q: 新手从哪张爵士专辑入门?
+    a: 首推 Miles Davis 的《Kind of Blue》(1959):调式爵士,旋律好记、节奏松弛,是史上销量最高的爵士专辑之一。
 order: 2
 ---
 
 import { StyleDemo } from "../../components/interactive/StyleDemo";
+import { ChordPlayer } from "../../components/interactive/ChordPlayer";
+import { Piano } from "../../components/interactive/Piano";
 import { GENRES } from "../../lib/genrePatterns";
 
 **爵士乐**(Jazz)起源于 19 世纪末至 20 世纪初的美国新奥尔良,融合了非洲律动、蓝调与欧洲和声。它最鲜明的标志是**即兴**、**摇摆感(swing)** 和**蓝调音阶**。
@@ -36,6 +46,53 @@ import { GENRES } from "../../lib/genrePatterns";
 
 从早期的新奥尔良爵士、摇摆乐,到比波普(Bebop)、冷爵士、自由爵士、融合爵士……风格众多。
 
+## 简史
+
+- 约 1900 年,新奥尔良的铜管乐队把进行曲、拉格泰姆与蓝调揉在一起,早期爵士成型;
+- 1920 年代,小号手 Louis Armstrong 把独奏即兴推到台前:一人独奏不再只是集体合奏的点缀,而成了爵士的重心;
+- 1930–40 年代,摇摆乐时代——Duke Ellington、Count Basie 率领的大乐队,让爵士成为美国最流行的舞曲;
+- 1940 年代中期,Charlie Parker 与 Dizzy Gillespie 掀起比波普:小编制、快速度、密集和声,爵士从舞曲变成需要坐定细听的艺术;
+- 1950 年代后分流加剧:冷爵士、硬波普、调式爵士,再到自由爵士与融合爵士,爵士一直在吸收新的语言。
+
+## 名曲与人物
+
+- Louis Armstrong ——《What a Wonderful World》(1967):爵士嗓音最被大众认识的一首歌,唱腔松弛、真诚。
+- Dave Brubeck 四重奏 ——《Take Five》(1959):罕见的 5/4 拍名曲,旋律出自乐队的萨克斯手 Paul Desmond。
+- Miles Davis —— 专辑《Kind of Blue》(1959):调式爵士的里程碑,第一首《So What》是公认的入门首选。
+- John Coltrane —— 专辑《A Love Supreme》(1965):四乐章的长篇组曲,爵士即兴在精神强度上的顶点。
+
+## 常见误区
+
+1. 爵士=即兴乱弹——即兴有框架:和弦进行、曲式、摇摆律动都在,听众听到的每一段独奏,都是乐手在同一套框架里做出的不同选择。
+2. 爵士一定难入口——摇摆乐、冷爵士、Bossa Nova 都有大量旋律清晰的作品。先挑旋律好听的听,再慢慢进入复杂编制。
+3. 摇摆只是把速度提上去——摇摆改变的是八分音符内部的长短比例,前长后短;把摇摆谱照均匀弹,味道立刻消失。
+4. 爵士乐手不看谱——爵士标准曲有固定的旋律与和声骨架(写在[和弦谱](/entries/lead-sheet)上),乐手先掌握骨架,再谈即兴。
+
+## 试一试
+
+翻开任何一本爵士标准曲集,出现频率最高的进行都是 ii–V–I:二级小七 → 五级属七 → 一级大七。属七的张力推着音乐解决回主和弦,爵士乐手就在这套「离—回」关系上做出无穷变奏。以 C 大调为例:
+
+<ChordPlayer
+  client:visible
+  label="C 大调 ii–V–I(Dm7–G7–Cmaj7)"
+  desc="二级小七 → 五级属七 → 一级大七,爵士最核心的解决。"
+  chords={[
+    ["D3", "F3", "A3", "C4"],
+    ["G2", "B2", "D3", "F3"],
+    ["C3", "E3", "G3", "B3"],
+  ]}
+/>
+
+在钢琴上找到这三个和弦的根音,感受根音从 D 到 G、再落回 C 的方向感:
+
+<Piano client:visible startOct={3} octaves={2} label="按 D–G–C 的顺序弹三个根音:这就是 ii–V–I 的骨架。" />
+
+## 听法入门
+
+1. 先听旋律清晰的标准曲,如《Kind of Blue》的第一首、《Take Five》,一遍只听主题。
+2. 第二遍跟一段独奏:听演奏者如何围绕主题变形,抓大线条,不追每个音。
+3. 第三遍只盯节奏组:鼓与贝斯如何回应独奏者——爵士的「对话」就在那里。
+
 > 想感受爵士,重点不是"听懂结构",而是感受乐手之间**对话般的即兴互动**。
 
-延伸:爵士大量使用 [音阶](/entries/scale) 与 [和弦](/entries/chord) 的即兴变化。
+延伸:爵士大量使用 [音阶](/entries/scale) 与 [和弦](/entries/chord) 的即兴变化;爵士曲式常建立在 [AABA](/entries/aaba-form) 之上。

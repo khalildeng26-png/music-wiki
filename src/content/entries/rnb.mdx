@@ -3,12 +3,20 @@ title: R&B
 category: 曲风
 summary: 以灵魂唱腔、律动与和声丰富著称的风格,连接爵士、灵魂乐与现代流行。
 tags: [曲风, R&B, 节奏布鲁斯]
-related: [vocal-registers, jazz, soul]
+related: [vocal-registers, jazz, soul, funk]
 faq:
   - q: R&B 的核心特征是什么?
     a: 灵魂唱腔(转音、假声、真假声切换)、律动(Groove,节奏"松"而"黏")、丰富的和声(9、11、13 延伸音)、制作细腻。
   - q: R&B 为什么是"唱功的试金石"?
     a: 它要求歌者既有律动感,又有细腻的声音控制。
+  - q: R&B 和灵魂乐有什么区别?
+    a: 灵魂乐保留了福音和声与乐队编制,气质更传统;R&B 的外延更广,从 1980 年代起不断吸收流行、电子、嘻哈元素。今天大量"有灵魂味"的流行歌,准确说是当代 R&B。
+  - q: R&B 这个词是怎么来的?
+    a: 1940 年代末,《公告牌》杂志编辑 Jerry Wexler 用 Rhythm and Blues(节奏布鲁斯)取代旧称"种族唱片",用来指代当时的黑人流行音乐。此后这个词的含义随时代一再更新。
+  - q: 什么是转音?
+    a: 转音(melisma)指一个音节唱出多个音,也就是俗称的"拐弯"。R&B 的转音大多沿和弦内音滑行,同时服务于和声与情绪,考验的是音准与节奏控制。
+  - q: R&B 入门听什么?
+    a: 先听 Marvin Gaye 的《What's Going On》(1971)和 Stevie Wonder 的《Superstition》(1972),感受灵魂乐时代的律动;再听 Boyz II Men 与 Alicia Keys,进入当代 R&B 的唱腔与制作。
 order: 7
 ---
 
@@ -22,6 +30,8 @@ order: 7
 - **制作细腻**:人声层层叠加、混响讲究,听感精致。
 
 import { StyleDemo } from "../../components/interactive/StyleDemo";
+import { ChordPlayer } from "../../components/interactive/ChordPlayer";
+import { StaffNotation } from "../../components/interactive/StaffNotation";
 import { GENRES } from "../../lib/genrePatterns";
 
 听一段 R&B 的律动:
@@ -33,6 +43,54 @@ import { GENRES } from "../../lib/genrePatterns";
 - **早期 R&B**(40–60s):更接近布鲁斯与灵魂乐。
 - **当代 R&B**(80s 至今):融合流行、电子、嘻哈元素——今天大量流行歌都有 R&B 底色。
 - **华语 R&B**:陶喆、方大同等将 R&B 与中文咬字结合,是华语流行的重要分支。
+
+## 简史
+
+- 1940 年代末,《公告牌》杂志编辑 Jerry Wexler 造出 Rhythm and Blues 一词,替代带有歧视色彩的旧称"种族唱片",R&B 从此有了自己的名字。
+- 1950 年代,教会唱诗班的和声与唱法流入世俗歌曲,福音与布鲁斯合流,灵魂乐破土而出。
+- 1960 年代,底特律的 Motown 唱片公司把 R&B 打磨成精致的流行产品,Stevie Wonder、The Supremes 等名字从那里走向世界。
+- 1970 年代,灵魂乐与放克合流,Marvin Gaye、Stevie Wonder 把 R&B 从单曲思维推向整张专辑的艺术表达。
+- 1980–90 年代,嘻哈节拍与 R&B 唱腔嫁接出 new jack swing;Mariah Carey、Boyz II Men、Whitney Houston 把主歌—副歌式情歌的演唱难度推上新高度。
+- 2000 年代至今,R&B 与电子、嘻哈的边界几乎消失,中文世界里陶喆、方大同等人则证明了这套唱法与中文咬字可以相融。
+
+## 名曲与人物
+
+- Marvin Gaye ——《What's Going On》(1971):以社会关怀入题的概念专辑,历年"最伟大专辑"榜单的常客。
+- Stevie Wonder ——《Superstition》(1972):Clavinet 琴的招牌 riff 一响便知,放克与 R&B 交界处的标准曲目。
+- Boyz II Men ——《End of the Road》(1992):四声部和声的样板,当年在公告牌榜首停留了三个月。
+- Alicia Keys ——《Fallin'》(2001):钢琴前奏加灵魂唱腔,当代 R&B 的入门首选。
+- 陶喆 —— 专辑《David Tao》(1997):把美式 R&B 的制作与唱腔带进中文流行,华语 R&B 的起点之作。
+
+## 常见误区
+
+1. R&B = 慢情歌——速度与题材都不构成判定标准:R&B 有大量快歌与舞曲,真正的判据是律动、延伸和声与唱腔。
+2. 转音越密越高级——转音的每个音都应落在和声里、节奏上;音准失控、节奏拖沓的密集转音,听感只会更糟。先练慢速的三连音式转音,再谈密度。
+3. 延伸音只是"爵士化"的装饰——9、11、13 音塑造的正是 R&B 的辨识度:把和弦还原成普通三和弦再唱,味道立刻变成另一首歌。
+
+## 试一试
+
+先听一套带延伸音的 ii–V–I:和弦还是那三个,叠上 9 音、13 音之后,色彩马上往"灵魂"的方向走:
+
+<ChordPlayer
+  client:visible
+  label="R&B 式 ii–V–I(Dm9–G13–Cmaj9)"
+  desc="普通三和弦叠上 9、13 延伸音,色彩立刻不同。"
+  chords={[
+    ["D3", "F3", "A3", "C4", "E4"],
+    ["G2", "B2", "D3", "F3", "E4"],
+    ["C3", "E3", "G3", "B3", "D4"],
+  ]}
+  timbre="synth"
+/>
+
+再听一条典型的转音轮廓:从主音出发向上滑,再沿着原路落回,整个过程都在五声音阶里:
+
+<StaffNotation
+  client:visible
+  notes={["C4", "D4", "E4", "G4", "E4", "D4", "C4"]}
+  label="转音轮廓:一个音节里的上行与回落。"
+  timbre="synth"
+/>
 
 > R&B 是"唱功的试金石":它要求歌者既有律动感,又有细腻的声音控制。
 

@@ -4,12 +4,20 @@ titleEn: Pop
 category: 曲风
 summary: 结构清晰、旋律上口、易于传唱的现代大众音乐风格,常围绕人声与抓耳副歌展开。
 tags: [曲风, 流行]
-related: [jazz, classical, electronic, verse-chorus]
+related: [jazz, classical, electronic, verse-chorus, pop-progressions]
 faq:
   - q: 流行音乐的特点是什么?
     a: 旋律上口(副歌最抓耳)、结构规整(主歌→预副歌→副歌→桥段)、制作精良、和声简明(常用 I–V–vi–IV)。
   - q: 流行音乐的核心是什么?
     a: 不是某种音色,而是"让尽可能多的人想跟着唱"。
+  - q: I–V–vi–IV 和弦进行是什么?
+    a: 在 C 大调里就是 C–G–Am–F(1 级、5 级、6 级小、4 级)。流行史上使用率最高的进行,大量金曲的副歌都是它或它的变体。
+  - q: 主歌、副歌、桥段分别是什么?
+    a: 主歌(verse)负责叙事,旋律相对平缓;副歌(chorus)是情绪与记忆点的核心,反复出现;桥段(bridge)提供对比,通常只在最后一个副歌前出现一次。
+  - q: 为什么流行歌听起来都很"重复"?
+    a: 重复是流行的核心策略:副歌只有被反复强化,才能一遍就跟着唱。经典结构让每一遍副歌都在重复最关键的材料。
+  - q: 什么是 hook?
+    a: hook 是钩住耳朵的那个片段,可能是一句副歌旋律、一个和弦循环、一段器乐乐句,甚至一个唱腔。一首流行歌往往围绕一个最强 hook 来搭建其余部分。
 order: 1
 ---
 
@@ -23,11 +31,52 @@ order: 1
 - **和声简明**:常用 I–V–vi–IV 等经典和弦进行(见 [和弦进行](/entries/chord-progression))。
 
 import { StyleDemo } from "../../components/interactive/StyleDemo";
+import { ChordPlayer } from "../../components/interactive/ChordPlayer";
 import { GENRES } from "../../lib/genrePatterns";
 
 听一遍流行音乐最眼熟的四和弦:
 
 <StyleDemo client:visible {...GENRES.pop} />
+
+## 简史
+
+- 19 世纪末,纽约的锡盘街(Tin Pan Alley)形成了商业歌曲出版业,"写出一首热门歌"从此成为一种职业;
+- 1950 年代,摇滚乐与青少年文化合流,Elvis Presley 让流行音乐成为年轻人的语言;
+- 1960 年代,The Beatles 重新定义了流行乐队:自己写歌、自己演唱、把录音室当作乐器;
+- 1981 年,音乐电视频道 MTV 开播,画面成为流行音乐的一部分;Michael Jackson 的《Thriller》(1982)至今仍是全球销量最高的专辑之一;
+- 1990 年代,男孩团体与女孩组合把「副歌大合唱」做成全球产业,北欧与美国的职业制作团队为不同歌手批量供应金曲,流行工业的分工就此定型;
+- 21 世纪以来,数字制作与流媒体改变了流行的生产与发行,电子流行、K-Pop、华语流行各自长成庞大的分支。
+
+## 名曲与人物
+
+- The Beatles ——《Hey Jude》(1968):结尾长达数分钟的「na-na-na」大合唱,是副歌传唱的原型。
+- 邓丽君 ——《月亮代表我的心》(1977):华语流行抒情歌的坐标,影响了几代人的演唱审美。
+- Michael Jackson —— 专辑《Thriller》(1982):流行制作、舞曲律动与音乐录影结合的顶点。
+- Whitney Houston ——《I Will Always Love You》(1992):情歌演唱难度与人声控制力的极限之作,原唱是乡村歌手 Dolly Parton。
+- Adele ——《Rolling in the Deep》(2010):在电子化的时代用复古灵魂乐音色重返榜首。
+
+## 常见误区
+
+1. 流行=没深度——写出「大多数人一遍就会唱」的旋律是极难的手艺,许多金曲是制作团队反复打磨数年的结果。
+2. 流行没有固定的"音色"——流行更像一套生产逻辑:[主歌–副歌](/entries/verse-chorus) 的曲式、副歌记忆点、录音室制作,它可以吸收任何风格的声音。
+3. 四个和弦的歌就是偷懒——I–V–vi–IV 提供「张力—释放」的基础弧线,真正的功夫花在旋律与编曲上。更多常用进行见 [流行和弦进行](/entries/pop-progressions)。
+4. 流行歌谁唱都一样——流行唱法对音色辨识度、咬字与情绪传达的要求极高,同一首歌换一个嗓音,市场反应可能完全不同。制作团队挑选歌手,本身就是一道核心工序。
+
+## 试一试
+
+把流行歌最常用的四和弦放出来,每小节换一个;趁它循环的时候,随便哼一段你记得的副歌,十有八九能对上:
+
+<ChordPlayer
+  client:visible
+  label="流行四和弦 I–V–vi–IV(C–G–Am–F)"
+  desc="每个和弦一小节,循环播放时哼你熟悉的副歌试试。"
+  chords={[
+    ["C4", "E4", "G4"],
+    ["G3", "B3", "D4"],
+    ["A3", "C4", "E4"],
+    ["F3", "A3", "C4"],
+  ]}
+/>
 
 ## 流变
 

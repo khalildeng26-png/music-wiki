@@ -10,6 +10,14 @@ faq:
     a: 电子乐不是一种风格,而是以电子乐器和电脑为核心工具的音乐世界,涵盖 House、Techno、Trance、Dubstep 等,声音由合成器与采样设计出来。
   - q: 电子乐有什么标志性特征?
     a: 四四拍底鼓每拍都踩(four-on-the-floor)、Loop 循环思维、Drop 情绪落下、音色即乐器(音色设计就是作曲)。
+  - q: House 和 Techno 有什么区别?
+    a: House 诞生于 1980 年代初的芝加哥,底鼓四四拍加切分贝斯,音色偏温暖、带人声;Techno 诞生于底特律,更冷、更机械,靠音色与节奏的细微变化推进。
+  - q: 什么是 four-on-the-floor?
+    a: 底鼓踩在每拍上:一拍一脚,四拍一循环。它是 House、Techno、Trance 等舞曲的共同心跳,也是「电子乐听起来想让人跳舞」的第一原因。
+  - q: 什么是 Drop?
+    a: 情绪攒到顶点后「落下」的那一下:build-up 段先把织体收薄、音高推上去,然后全编制同时砸进来。现代 EDM 的高潮几乎都用这个语法。
+  - q: 808 为什么到处都在提?
+    a: 罗兰 TR-808 鼓机(1980 年)的低音鼓又深又长,被嘻哈、Trap、R&B 当作低频骨架沿用至今,「808」成了「深沉低音鼓」的代名词。
 order: 9
 ---
 
@@ -23,6 +31,8 @@ order: 9
 - **音色即乐器**:同一个合成器换滤波、换包络就是另一种声音——音色设计本身就是作曲。
 
 import { StyleDemo } from "../../components/interactive/StyleDemo";
+import { ChordPlayer } from "../../components/interactive/ChordPlayer";
+import { StaffNotation } from "../../components/interactive/StaffNotation";
 import { GENRES } from "../../lib/genrePatterns";
 
 听一段舞曲的基本骨架——four-on-the-floor:
@@ -35,9 +45,51 @@ import { GENRES } from "../../lib/genrePatterns";
 - 1990 年代 Trance 在欧洲壮大,2000 年代后 Dubstep、EDM 把电子乐推上主流音乐节;
 - 工具史就是风格史:鼓机 TR-808、MIDI(1983 年)、DAW 普及,每一步都催生了新流派。
 
+## 名曲与人物
+
+- Kraftwerk —— 专辑《Autobahn》(1974):德国电子先驱,用合成器描绘高速公路的行驶感,直接影响了后来的 House、Techno 与嘻哈。
+- Donna Summer ——《I Feel Love》(1977):Giorgio Moroder 制作,全曲脉冲式合成器贝斯线,是电子舞曲的源头之一。
+- Daft Punk ——《One More Time》(2000):法式 House 的代表,把迪斯科的愉悦感重新装进电子乐。
+- Avicii ——《Wake Me Up》(2013):EDM 与原声吉他、民谣唱腔的融合,音乐节时代的代表作之一。
+- Skrillex ——《Bangarang》(2011):把 Dubstep 的低频轰炸带进主流视野的代表作。
+
+## 常见误区
+
+1. 电子乐都是夜店音乐——电子乐还包括氛围音乐、电影配乐、游戏音乐等大量不跳舞的场景;共同点是「声音是设计出来的」,不是「用来蹦的」。
+2. 电子乐不算作曲——一段好的合成器贝斯线,对音高、节奏、音色的考量与传统作曲无异,只是工具换成了合成器与 DAW。
+3. 所有电子乐都一个速度——House、Techno、Trance 各有习惯的速度区间,Drum & Bass 和 Dubstep 的差别首先就在速度与节拍组织上;听前先对表,差别立刻显形。
+4. 做电子乐不用学和声——音高关系与和弦进行同样是电子乐的底层功课,DAW 只是把乐器换成软件;同样一段 Am–F–C–G,配不同的音色与律动就是完全不同的两首歌,但换掉进行本身,味道就变了。常用进行可先看 [和弦进行](/entries/chord-progression)。
+
 ## 和流行的关系
 
 今天的**流行乐几乎全部是电子化制作**的:鼓是采样的、贝斯是合成的、人声是修过的。电子乐不是流行的对立面,而是它的"引擎房"。
+
+## 试一试
+
+先用鼓听 four-on-the-floor 的律动:四组「和弦」对应一小节的四拍,每一拍底鼓都在,踩镲补上(鼓件音高约定见[鼓记谱](/entries/drum-notation)):
+
+<ChordPlayer
+  client:visible
+  label="Four-on-the-floor:C1 底鼓每拍都踩"
+  desc="底鼓踩满四拍,踩镲补位,舞曲的基本律动。"
+  chords={[
+    ["C1", "E1"],
+    ["C1", "E1"],
+    ["C1", "E1"],
+    ["C1", "E1"],
+  ]}
+  timbre="drums"
+/>
+
+再听一条合成器贝斯线:底鼓踩满四拍,贝斯用重复的十六分音型填补拍点之间的空隙,构成 House 的主要推进力:
+
+<StaffNotation
+  client:visible
+  notes={["C2", "C2", "G2", "C2", "F2", "F2", "G2", "Bb2"]}
+  label="House 风格的合成器贝斯线。"
+  timbre="synth"
+  clef="bass"
+/>
 
 > 听一首 EDM,试着只盯底鼓数四拍一循环,再听它在 drop 前后织体的变化——你会立刻"看懂"这个流派的骨架。
 

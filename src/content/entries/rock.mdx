@@ -10,10 +10,20 @@ faq:
     a: 失真吉他音色、强烈的 backbeat(鼓点在 2、4 拍重击)、riff(抓耳吉他旋律反复)、大声直接。
   - q: 摇滚有哪些主要分支?
     a: 经典摇滚、朋克(更快更简单)、垃圾摇滚(厚重阴郁)、独立摇滚、金属(更重更快)。
+  - q: 摇滚和摇滚乐(rock and roll)是一回事吗?
+    a: 广义的"摇滚"泛指从 1950 年代摇滚乐分化出的整片风格家族(朋克、金属、垃圾摇滚、独立摇滚);说"摇滚乐"作子流派时,通常特指 1950 年代早期的那种风格。
+  - q: 什么是 backbeat?
+    a: 军鼓重击落在每小节的 2、4 拍上,1、3 拍交给底鼓与贝斯。这套重心分配给了摇滚向前的推进感。
+  - q: 什么是 riff?
+    a: 一段反复出现、撑起整首歌的抓耳乐句。大量经典摇滚的开场就是一段 riff,几秒钟钩住耳朵。
+  - q: 强力和弦是什么?
+    a: 只含根音与五度音(常加八度重复)的和弦,不含三度,所以不分大小。它接上失真音色依然干净有力,是摇滚吉他的标配。
 order: 4
 ---
 
 import { StyleDemo } from "../../components/interactive/StyleDemo";
+import { StaffNotation } from "../../components/interactive/StaffNotation";
+import { ChordPlayer } from "../../components/interactive/ChordPlayer";
 import { GENRES } from "../../lib/genrePatterns";
 
 **摇滚**(Rock)是 20 世纪中叶以来最有影响力的音乐风格之一。它脱胎于 1950 年代的摇滚乐(Rock and Roll),以**电吉他、贝斯、架子鼓**为核心编制,强调**能量、节奏冲击和态度表达**。
@@ -40,6 +50,54 @@ import { GENRES } from "../../lib/genrePatterns";
 ## 乐队编制
 
 典型摇滚乐队:主唱 + 主音/节奏吉他 + 贝斯 + 鼓。吉他和贝斯负责 riff 与低音,鼓负责推进,人声负责态度。
+
+## 简史
+
+- 1950 年代,节奏布鲁斯与乡村音乐在美国相遇,摇滚乐诞生:Chuck Berry 确立了电吉他独奏的语法,Elvis Presley 让它席卷全世界。
+- 1960 年代,「不列颠入侵」:The Beatles、The Rolling Stones 把摇滚带回美国并重新发明,摇滚从跳舞伴奏变成写作的艺术。
+- 1970 年代走向分化:Led Zeppelin 把音量推到极限,Queen 把歌剧结构搬进摇滚,朋克则以「三个和弦」把摇滚拉回车库。
+- 1990 年代,西雅图的垃圾摇滚让失真重新变得阴郁;1992 年初,Nirvana 的专辑《Nevermind》登上美国专辑榜榜首,垃圾摇滚就此进入主流;此后摇滚不断与电子、嘻哈互相渗透,至今仍在变形。
+
+## 名曲与人物
+
+- Chuck Berry ——《Johnny B. Goode》(1958):摇滚乐吉他前奏的开山模板,后辈乐队照抄了几十年。
+- The Beatles ——《Hey Jude》(1968):主歌叙事加长篇副歌大合唱,流行摇滚结构的教科书。
+- Led Zeppelin ——《Stairway to Heaven》(1971,专辑《Led Zeppelin IV》):从原声吉他到电声爆发的完整弧线,摇滚长篇曲式的代表作。
+- Queen ——《Bohemian Rhapsody》(1975,专辑《A Night at the Opera》):把歌剧、抒情曲与硬摇滚缝进一首六分钟的歌。
+- Nirvana ——《Smells Like Teen Spirit》(1991,专辑《Nevermind》):四和弦的 riff 加爆发式副歌,垃圾摇滚进入主流的标志。
+
+## 常见误区
+
+1. 摇滚=嗓门大——真正的识别特征是编制与重音:电吉他中心、2/4 拍 backbeat、riff 思维。音量可以不大,态度与结构在那儿,摇滚就在那儿。
+2. 摇滚只有嘶吼一种唱法——从 The Beatles 的旋律线到金属的极端嗓,摇滚唱法跨度极大;共同点是直接,不是嘶吼。
+3. 学摇滚必须技术惊人——朋克的信条恰恰相反:三个和弦、直接、真诚。入门摇滚只需要把强力和弦换得干净、把节奏打稳。
+4. 摇滚是「白人音乐」——摇滚乐的直接源头是非裔美国人的节奏布鲁斯:Chuck Berry、Little Richard 是最早的奠基人,Elvis Presley 的成名曲《Hound Dog》原唱也是布鲁斯歌手 Big Mama Thornton。摇滚从出生起就是多种血统的混合。
+
+## 试一试
+
+先用鼓听一遍 backbeat:四组「和弦」分别是一小节的四拍——第 1 拍底鼓加踩镲,第 2 拍军鼓加踩镲,依此循环(鼓件音高约定见[架子鼓](/entries/drums)):
+
+<ChordPlayer
+  client:visible
+  label="摇滚 backbeat:C1 底鼓、D1 军鼓、E1 踩镲"
+  desc="1、3 拍底鼓,2、4 拍军鼓,每拍都带踩镲。"
+  chords={[
+    ["C1", "E1"],
+    ["D1", "E1"],
+    ["C1", "E1"],
+    ["D1", "E1"],
+  ]}
+  timbre="drums"
+/>
+
+再听一条电吉他 riff 的形状——乐句在 E 与 A 两个根音区之间往返,这就是无数经典摇滚的开场姿势:
+
+<StaffNotation
+  client:visible
+  notes={["E3", "G3", "E3", "A3", "B3", "A3", "E3"]}
+  label="经典摇滚 riff 的轮廓:在 E 与 A 两个根音区之间移动。"
+  timbre="eguitar"
+/>
 
 > 摇滚的魅力在于"现场感"——同样的歌,现场版的能量往往是录音室版的数倍。
 

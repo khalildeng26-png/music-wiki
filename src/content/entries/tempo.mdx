@@ -4,16 +4,25 @@ titleEn: Tempo
 category: 乐理
 summary: 速度用 BPM(每分钟拍数)衡量,决定音乐的性格:同一首歌放慢可以催人泪下,加快则让人起舞。
 tags: [乐理, 速度, 术语]
-related: [rhythm-and-time-signature, dynamics-and-articulation]
+related: [rhythm-and-time-signature, dynamics-and-articulation, note-values]
 faq:
   - q: 速度用什么衡量?
     a: 用 BPM(每分钟拍数)精确衡量,BPM 60 = 每秒一拍。古典音乐用意大利语标注,如 Largo 广板、Adagio 慢板、Allegro 快板。
   - q: 速度怎么变化?
     a: accel. 渐快、rit. 渐慢、a tempo 回到原速、rubato 弹性速度。练习铁律是先慢后快。
+  - q: Allegro 一定是快板吗?各个术语大概什么范围?
+    a: Allegro 本义是"欢快的",后来固定为快板,大致 120–156 BPM。常见区间:Adagio 60–76、Andante 76–108、Moderato 108–120、Presto 176 以上。不同时代的作曲家用法略有出入。
+  - q: rubato 是不是随便变速?
+    a: 不是。rubato(弹性速度)是在整体节拍框架内局部借时间、再还回去,整体拍子不散;随意忽快忽慢不叫弹性,叫不稳。
+  - q: 为什么同一首曲子不同版本的节拍器标记不一样?
+    a: 节拍器标记是作曲家或编订者给出的建议,不同版本的编订者常有不同意见;演奏家也会根据作品风格在合理范围内调整。标记是参考值,不是必须执行的精确指令。
+  - q: 流行歌的速度一般怎么分布?
+    a: 抒情慢歌多在 60–90 BPM,中速歌曲约 90–110,舞曲与嗨歌普遍在 120 BPM 以上。DJ 混音时对齐的就是 BPM。
 order: 9
 ---
 
 import { Metronome } from "../../components/interactive/Metronome";
+import { RhythmTap } from "../../components/interactive/RhythmTap";
 
 **速度**(tempo)是音乐进行的快慢,用 **BPM**(Beats Per Minute,每分钟拍数)精确衡量:BPM 60 = 每秒一拍。
 
@@ -42,12 +51,43 @@ import { Metronome } from "../../components/interactive/Metronome";
 - 正常步行 ≈ Andante;心跳静息 ≈ 60–80 BPM;
 - 流行抒情歌多在 60–90 BPM,舞曲/嗨歌多在 120 BPM 以上。
 
+## 速度标记简史
+
+- 节拍器出现之前,速度只能靠文字暗示。17 世纪起,意大利术语逐渐标准化:Allegro 本义"欢快的"、Andante 本义"行走的",先描述情绪,再固定为速度区间。
+- 1815 年梅尔策尔取得节拍器专利,贝多芬是最早一批在乐谱上标注节拍器数字的作曲家——速度从此有了可复核的数字,不再只靠师徒相传。
+- 20 世纪以来,录音让速度变成可以测量的对象:同一首曲子,不同年代指挥家给出的实际速度差异不小——演奏趣味一直在变。
+
+## 常见误区
+
+1. 把术语当精确值——Allegro 只是区间,不是某个固定 BPM;同一术语在不同作品里速度并不相同。
+2. 练琴直接上目标速度——铁律是先慢后快:慢到每个音都干净,再逐步提速。
+3. 把 rubato 弹成随意——弹性是局部借时间、整体不失框架;忽快忽慢收不回来,是不稳,不是风格。
+4. 混淆速度与节奏——速度是一拍走多快,节奏是长短音的排列;同一节奏型换速度,性格大变。
+
+## 名曲里的速度
+
+- 巴伯《弦乐柔板》:Adagio,是 20 世纪最著名的慢板乐章之一,缓慢的推进本身即是情感。
+- 里姆斯基-科萨科夫《野蜂飞舞》:Presto,十六分音符几乎从头跑到尾,是认识"极快"速度的著名例子。
+- 莫扎特《G 大调弦乐小夜曲》第一乐章:Allegro,明快端正,常被用作认识快板的入门曲目。
+- 肖邦的夜曲与练习曲里大量写着 rubato——弹性速度与他的名字紧紧绑在一起。
+
 ## 试一试
 
 用下面的节拍器感受不同速度:**60 → 100 → 140**,体会同一拍点从"庄严"到"奔跑"的变化。
 
 <Metronome client:visible />
 
+再用跟打直接体验速度的落差:先跟 60 BPM 打 8 拍,再跟 120 BPM 打 8 拍——同样的 8 拍,后者用时只有一半。
+
+<RhythmTap client:visible bpm={60} beats={8} />
+<RhythmTap client:visible bpm={120} beats={8} />
+
+## 练习
+
+1. 速度阶梯:节拍器从 60 开始,每遍 +10,走到跟不住为止,记下那个临界值。自查:每一档都能稳定跟满 8 拍再升。
+2. 内心默拍:节拍器打 4 拍后关掉,自己默数 8 拍再打开,看是否对得上。自查:误差在一拍以内。
+3. 慢练一首熟悉的歌:把速度压到平时的 60%,把每个音弹清楚,再逐步提速。自查:提速后手型与清晰度没有劣化。
+
 > 练习铁律:**先慢后快**。慢到每个音都干净,再逐步提速——速度是结果,不是目标。
 
-延伸:速度与 [节奏与拍号](/entries/rhythm-and-time-signature) 一起构成音乐的"时间骨架";快慢之外的强弱变化见 [强弱与演奏记号](/entries/dynamics-and-articulation)。
+延伸:速度与 [节奏与拍号](/entries/rhythm-and-time-signature) 一起构成音乐的"时间骨架";快慢之外的强弱变化见 [强弱与演奏记号](/entries/dynamics-and-articulation);音符长短本身见 [音符时值](/entries/note-values)。
