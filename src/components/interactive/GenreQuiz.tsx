@@ -108,7 +108,7 @@ export function GenreQuiz() {
               <>
                 <div className="font-medium">随机播一段曲风签名(前几秒),猜猜它是谁</div>
                 <div className="mt-0.5 text-sm text-muted-foreground">
-                  13 种曲风盲听测试——连对越多,说明耳朵越灵。
+                  {GENRE_LIST.length} 种曲风盲听测试——连对越多,说明耳朵越灵。
                 </div>
               </>
             ) : (

@@ -1,0 +1,60 @@
+---
+title: 拉格泰姆
+titleEn: Ragtime
+category: 曲风
+summary: 1890 年代美国的钢琴风:左手像行军一样打拍,右手偏偏错半拍——切分音第一次大规模登上舞台,爵士的直系祖先。
+tags: [曲风, 拉格泰姆, Ragtime, 钢琴]
+related: [classical, jazz, piano]
+faq:
+  - q: 拉格泰姆的核心特征是什么?
+    a: 钢琴独奏为主:左手规整地"低音-和弦"行进(2/4 进行曲感),右手旋律大量切分(错开正拍);不即兴、完全记谱,是"写出来的摇摆"。
+  - q: 拉格泰姆和爵士什么关系?
+    a: 拉格泰姆是爵士的前一站:同样依赖切分与律动,但拉格泰姆基本不即兴、以记谱为准;新奥尔良乐手把它的曲调拿来即兴演奏,爵士就长出来了。
+  - q: 「ragged time」 是什么意思?
+    a: 风格名的来源:把规整的拍子"扯破/撕碎"(ragged)——说的就是右手旋律总踩不到正拍上。
+  - q: 为什么 1970 年代拉格泰姆又火了一次?
+    a: 1973 年电影《骗中骗》(The Sting)全片用 Scott Joplin 的拉格配乐,奥斯卡加冕,《The Entertainer》重回榜单,掀起全球复古潮。
+  - q: 想入门听什么?
+    a: Joplin 的《Maple Leaf Rag》(1899)与《The Entertainer》(1902)是双峰;再听 James Scott、Joseph Lamb 的作品补全"三大匠"。
+order: 21
+---
+
+import { StyleDemo } from "../../components/interactive/StyleDemo";
+import { Piano } from "../../components/interactive/Piano";
+import { GENRES } from "../../lib/genrePatterns";
+
+**拉格泰姆**(Ragtime)是 1890 年代到一战前席卷美国的钢琴风潮。它干了一件影响深远的事:**把切分音从民间小酒馆带上了印刷乐谱**——左手老实打拍,右手到处"使坏",一种滑稽又高级的抖包袱。
+
+听一段左规右野的对话:
+
+<StyleDemo client:visible {...GENRES.ragtime} />
+
+## 从妓院钢琴到全美风尚
+
+- 切分钢琴风在 19 世纪末的美国黑人社区流传多年,多亏流浪钢琴师口传心授;
+- 1899 年,Scott Joplin 的《Maple Leaf Rag》出版,一张乐谱卖出几十万份,风格正式命名并登堂入室;
+- 1900–1917 年是黄金期;拉格渗入舞厅、剧场与家庭钢琴,是那时美国的"流行乐";
+- 1917 年后,更野、会即兴的新奥尔良爵士接管舞台;拉格退居复古——直到 1970 年代《骗中骗》让它复活。
+
+## 名曲与人物
+
+- Scott Joplin ——《Maple Leaf Rag》(1899):拉格的国歌,切分写作的示范本。
+- Scott Joplin ——《The Entertainer》(1902):因电影《骗中骗》成为 20 世纪最著名的钢琴旋律之一。
+- Joseph Lamb ——《Ragtime Nightingale》(1915):白人作曲家写出的最优雅拉格。
+- James Scott ——《Frog Legs Rag》(1906):与 Joplin 并称的巧匠,旋律更俏皮。
+
+## 常见误区
+
+1. 拉格泰姆=爵士——差一个"即兴":拉格完全记谱、精确演奏;爵士的灵魂是现场改编。两者是父子不是双胞胎。
+2. 右手乱踩就是拉格——拉格的切分是精确设计过的错位,乐谱上每一个休止都有讲究;"乱"是听感,不是写法。
+3. 它过时了——今天任何"左手伴奏右手错位"的键盘写法(动漫配乐、游戏 BGM)都在吃它的老本。
+
+## 试一试
+
+在键盘上自己试一个"错半拍":左手按拍子弹 C,右手试试每次都晚半拍出现——拉格的幽默感就在这半拍里:
+
+<Piano client:visible startOct={4} octaves={1} label="试着左手按正拍、右手找反拍——切分的体感实验。" />
+
+> 拉格泰姆一句话:左手是绅士,右手是淘气包——美国流行音乐的第一组相声搭档。
+
+延伸:它古典化的血统见 [古典](/entries/classical);接过切分火炬的后代见 [爵士](/entries/jazz);键盘知识见 [钢琴](/entries/piano)。

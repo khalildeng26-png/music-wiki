@@ -1,0 +1,63 @@
+---
+title: 探戈
+titleEn: Tango
+category: 曲风
+summary: 1880 年代诞生于布宜诺斯艾利斯的舞曲:顿挫的钢琴与贝斯、戏剧性的旋律,从码头贫民区的双人舞长成阿根廷的文化名片。
+tags: [曲风, 探戈, 阿根廷]
+related: [classical, waltz, jazz]
+faq:
+  - q: 探戈的核心音乐特征是什么?
+    a: 顿挫 marcato 节奏(贝斯与钢琴一顿一顿)、大量小调与变化音、戏剧性旋律;灵魂乐器是班多钮琴(手风琴近亲),钢琴与小提琴也常担纲。
+  - q: 什么是新探戈?
+    a: 皮亚佐拉(Astor Piazzolla)1950 年代起的革命:把爵士与古典的语汇揉进探戈,让它从伴舞音乐变成可以正襟危坐听的音乐。
+  - q: 探戈和华尔兹都是舞曲,差别在哪?
+    a: 华尔兹是三拍子的圆舞,飘着摇摆;探戈多为 2/4 或 4/4 的顿挫走步,重心低、动作干脆,音乐也一停一顿。
+  - q: 想入门听什么?
+    a: Carlos Gardel 的《Por Una Cabeza》(1935)听黄金时代,Piazzolla 的《Libertango》(1974)听新探戈的锋利,《Adiós Nonino》听他的抒情。
+order: 18
+---
+
+import { StyleDemo } from "../../components/interactive/StyleDemo";
+import { StaffNotation } from "../../components/interactive/StaffNotation";
+import { GENRES } from "../../lib/genrePatterns";
+
+**探戈**(Tango)约 1880 年诞生于布宜诺斯艾利斯的码头与贫民区——非洲节奏、欧洲移民的旋律、双人贴身舞,在红灯区里发酵成一种**又情欲又忧伤**的音乐,百年后成为阿根廷的文化名片。
+
+听一段探戈的戏剧感:
+
+<StyleDemo client:visible {...GENRES.tango} />
+
+## 从码头到世界舞台
+
+- 1880–1900 年代:布宜诺斯艾利斯下城区成形,班多钮琴(德国移民带来的)加入并成为灵魂音色;
+- 1910–1930 年代"黄金时代":Carlos Gardel 把歌探戈唱到巴黎与纽约,探戈席卷欧美;
+- 1950 年代起 Piazzolla 掀起"新探戈"革命——传统派骂他叛徒,他说"探戈是一种悲伤的、可以起舞的思想";
+- 今天:布宜诺斯艾利斯的探戈舞会(milonga)仍在每周运转;《Libertango》被无数跨界改编。
+
+## 名曲与人物
+
+- Carlos Gardel ——《Por Una Cabeza》(1935):"差一个马头"的赌徒叹息,《女人香》里那支名舞用的就是它。
+- Astor Piazzolla ——《Libertango》(1974):新探戈的宣言,锋利到能切开空气。
+- Piazzolla ——《Adiós Nonino》(1959):悼念父亲的挽歌,探戈抒情的顶点。
+- 《La Cumparsita》(1916):乌拉圭人写的这首,是全世界舞会结束曲的默认答案。
+
+## 常见误区
+
+1. 探戈=舞蹈音乐——Piazzolla 之后,大量探戈是纯聆听音乐;伴舞与音乐会两条线并行至今。
+2. 探戈都很慢很缠绵——黄金时代有大量快速诙谐的探戈;顿挫的弹性才是共性,"慢"不是。
+3. 没有班多钮琴就不算探戈——班多钮琴是灵魂色,但节奏语法(顿挫、切分、低重心)才是骨架;本站演示用钢琴与小提琴示意,正是这个道理。
+
+## 试一试
+
+听一条探戈式的小提琴旋律,注意乐句"说话般"的松紧——一顿、一拖,全在呼吸里:
+
+<StaffNotation
+  client:visible
+  timbre="violin"
+  notes={["A4", "B4", "C5", "B4", "A4", "G#4", "A4"]}
+  label="探戈乐句:结尾的 G#(变化音)是那口'叹息'。"
+/>
+
+> 一句话认探戈:音乐在走路,但每一步都想踩进你心里。
+
+延伸:同属"舞曲出身"的对照见 [华尔兹](/entries/waltz);Piazzolla 的古典血统见 [古典](/entries/classical)。

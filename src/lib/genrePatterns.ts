@@ -13,7 +13,7 @@ export type GenreDemo = {
   pattern: Pattern;
 };
 
-/** 4/4 一小节的鼓件便捷生成 */
+/** 4/4 一小节的鼓件便捷生成(踩镲为四分——每半拍的八分密度已证实听感过碎) */
 const drums = (bars: number, kick: number[], snare: number[], hatVel = 0.45) => [
   ...Array.from({ length: bars }, (_, b) =>
     kick.map((t) => ({ t: b * 4 + t, hit: "kick" as const, vel: 0.85 })),
@@ -21,8 +21,8 @@ const drums = (bars: number, kick: number[], snare: number[], hatVel = 0.45) => 
   ...Array.from({ length: bars }, (_, b) =>
     snare.map((t) => ({ t: b * 4 + t, hit: "snare" as const, vel: 0.75 })),
   ).flat(),
-  ...Array.from({ length: bars * 8 }, (_, i) => ({
-    t: i * 0.5,
+  ...Array.from({ length: bars * 4 }, (_, i) => ({
+    t: i,
     hit: "hihat" as const,
     vel: hatVel,
   })),
@@ -786,6 +786,352 @@ export const GENRES: Record<string, GenreDemo> = {
               hit: "hihat" as const,
               vel: 0.3,
             })),
+          ],
+        },
+      ],
+    },
+  },
+
+  disco: {
+    slug: "disco",
+    title: "迪斯科 · 四踩底鼓 + 切分贝斯",
+    hint: "底鼓每一拍都踩,贝斯在拍子缝隙里蹦——1970 年代舞池的标准配置。",
+    note: "电吉他/贝斯/鼓组均为真实采样",
+    pattern: {
+      bpm: 120,
+      beats: 16,
+      tracks: [
+        {
+          kind: "notes",
+          timbre: "eguitar",
+          events: ["C3", "F2", "C3", "G2"].flatMap((root, bar) =>
+            // 吉他切碎音:每小节第 2、4 拍后半各一下
+            [
+              { t: bar * 4 + 1.5, notes: [root, root === "C3" ? "G3" : "D3"], dur: 0.2, vel: 0.7 },
+              { t: bar * 4 + 3.5, notes: [root, root === "C3" ? "G3" : "D3"], dur: 0.2, vel: 0.7 },
+            ],
+          ),
+        },
+        {
+          kind: "notes",
+          timbre: "bass",
+          events: ["C2", "F1", "C2", "G1"].flatMap((root, bar) =>
+            // 迪斯科标志:根音-高八度 蹦跳线
+            [
+              { t: bar * 4, notes: [root], dur: 0.45 },
+              { t: bar * 4 + 0.5, notes: [root], dur: 0.2 },
+              { t: bar * 4 + 1.5, notes: [root], dur: 0.45 },
+              { t: bar * 4 + 2, notes: [root], dur: 0.2 },
+              { t: bar * 4 + 2.5, notes: [root], dur: 0.45 },
+              { t: bar * 4 + 3.5, notes: [root], dur: 0.45 },
+            ],
+          ),
+        },
+        { kind: "drums", events: drums(4, [0, 1, 2, 3], [1, 3], 0.3) },
+      ],
+    },
+  },
+  reggae: {
+    slug: "reggae",
+    title: "雷鬼 · 反拍吉他 + 下沉贝斯",
+    hint: "吉他和弦全落在反拍上(正拍反而空着),贝斯慢慢下沉——牙买加的慵懒律动。",
+    note: "木吉他/贝斯/鼓组均为真实采样",
+    pattern: {
+      bpm: 78,
+      beats: 16,
+      tracks: [
+        {
+          kind: "notes",
+          timbre: "guitar",
+          events: [
+            ["C3", ["C4", "E4", "G4"]],
+            ["C3", ["C4", "E4", "G4"]],
+            ["F2", ["A3", "C4", "F4"]],
+            ["G2", ["B3", "D4", "G4"]],
+          ].flatMap(([, ch], bar) =>
+            // skank:每个正拍的后半扫一下,正拍留空
+            Array.from({ length: 4 }, (_, i) => ({
+              t: bar * 4 + i + 0.5,
+              notes: ch,
+              dur: 0.16,
+              vel: 0.7,
+            })),
+          ),
+        },
+        {
+          kind: "notes",
+          timbre: "bass",
+          events: [
+            { t: 0, notes: ["C2"], dur: 1.4 },
+            { t: 2, notes: ["G1"], dur: 1.9 },
+            { t: 4, notes: ["E1"], dur: 1.4 },
+            { t: 6, notes: ["C2"], dur: 1.9 },
+            { t: 8, notes: ["F1"], dur: 1.4 },
+            { t: 10, notes: ["C2"], dur: 1.4 },
+            { t: 12, notes: ["G1"], dur: 1.4 },
+            { t: 14, notes: ["D2"], dur: 1.9 },
+          ],
+        },
+        {
+          kind: "drums",
+          events: [
+            // one-drop:底鼓和军鼓一起砸在第 3 拍,第 1 拍空着
+            ...Array.from({ length: 4 }, (_, b) => ({ t: b * 4 + 2, hit: "kick" as const, vel: 0.8 })),
+            ...Array.from({ length: 4 }, (_, b) => ({ t: b * 4 + 2, hit: "snare" as const, vel: 0.7 })),
+            ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.26 })),
+          ],
+        },
+      ],
+    },
+  },
+  country: {
+    slug: "country",
+    title: "乡村 · boom-chick + 口琴",
+    hint: "低音-和弦的 boom-chick(和民谣同源),末尾口琴滑出一句——美国南方的乡土味。",
+    note: "木吉他/口琴/贝斯/鼓组均为真实采样",
+    pattern: {
+      bpm: 112,
+      beats: 16,
+      tracks: [
+        {
+          kind: "notes",
+          timbre: "guitar",
+          events: [
+            ["G2", ["G3", "B3", "D4"]],
+            ["C3", ["C4", "E4", "G4"]],
+            ["G2", ["G3", "B3", "D4"]],
+            ["D3", ["F#4", "A3", "D4"]],
+          ].flatMap(([root, ch], bar) => [
+            { t: bar * 4, notes: [root], dur: 0.9, vel: 0.8 },
+            ...ch.flatMap((n, i) => ({ t: bar * 4 + 1 + i * 0.02, notes: [n], dur: 0.8, vel: 0.6 })),
+            { t: bar * 4 + 2, notes: [root], dur: 0.9, vel: 0.8 },
+            ...ch.flatMap((n, i) => ({ t: bar * 4 + 3 + i * 0.02, notes: [n], dur: 0.8, vel: 0.6 })),
+          ]),
+        },
+        {
+          kind: "notes",
+          timbre: "harmonica",
+          events: [
+            { t: 12, notes: ["C4"], dur: 0.35, vel: 0.6 },
+            { t: 12.5, notes: ["D4"], dur: 0.35, vel: 0.6 },
+            { t: 13, notes: ["E4"], dur: 0.35, vel: 0.65 },
+            { t: 13.5, notes: ["G4"], dur: 0.4, vel: 0.65 },
+            { t: 14, notes: ["A4"], dur: 1.8, vel: 0.7 },
+          ],
+        },
+        {
+          kind: "notes",
+          timbre: "bass",
+          events: ["G1", "C2", "G1", "D2"].flatMap((root, bar) => [
+            { t: bar * 4, notes: [root], dur: 1.6, vel: 0.55 },
+            { t: bar * 4 + 2, notes: [root], dur: 1.6, vel: 0.5 },
+          ]),
+        },
+        { kind: "drums", events: drums(4, [0, 2], [1, 3], 0.26) },
+      ],
+    },
+  },
+  punk: {
+    slug: "punk",
+    title: "朋克 · 三和弦高速冲撞",
+    hint: "168 BPM、强力和弦八分连扫、一分钟唱完一首歌——把摇滚的『简』推到极端。",
+    note: "电吉他/贝斯/鼓组均为真实采样(朋克本就追求粗糙直给,清音电吉他意外地合适)",
+    pattern: {
+      bpm: 168,
+      beats: 16,
+      tracks: [
+        {
+          kind: "notes",
+          timbre: "eguitar",
+          events: [
+            ...Array.from({ length: 8 }, (_, i) => ({ t: i * 0.5, notes: ["E3", "B3", "E4"], dur: 0.22, vel: 0.8 })),
+            ...Array.from({ length: 4 }, (_, i) => ({ t: 4 + i * 0.5, notes: ["A2", "E3", "A3"], dur: 0.22, vel: 0.8 })),
+            ...Array.from({ length: 4 }, (_, i) => ({ t: 6 + i * 0.5, notes: ["E3", "B3", "E4"], dur: 0.22, vel: 0.8 })),
+            ...Array.from({ length: 8 }, (_, i) => ({ t: 8 + i * 0.5, notes: ["E3", "B3", "E4"], dur: 0.22, vel: 0.8 })),
+            ...Array.from({ length: 4 }, (_, i) => ({ t: 12 + i * 0.5, notes: ["G2", "D3", "G3"], dur: 0.22, vel: 0.8 })),
+            ...Array.from({ length: 4 }, (_, i) => ({ t: 14 + i * 0.5, notes: ["A2", "E3", "A3"], dur: 0.22, vel: 0.8 })),
+          ],
+        },
+        {
+          kind: "notes",
+          timbre: "bass",
+          events: [
+            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, notes: ["E1"], dur: 0.22 })),
+            ...Array.from({ length: 8 }, (_, i) => ({ t: 8 + i * 0.5, notes: ["E1"], dur: 0.22 })),
+            ...Array.from({ length: 4 }, (_, i) => ({ t: 12 + i * 0.5, notes: ["G1"], dur: 0.22 })),
+            ...Array.from({ length: 4 }, (_, i) => ({ t: 14 + i * 0.5, notes: ["A1"], dur: 0.22 })),
+          ],
+        },
+        { kind: "drums", events: drums(4, [0, 2], [1, 3], 0.4) },
+      ],
+    },
+  },
+  tango: {
+    slug: "tango",
+    title: "探戈 · 钢琴顿挫 + 小提琴咏叹",
+    hint: "钢琴短促砸下、贝斯一顿一顿,小提琴在上面唱戏剧性的旋律——布宜诺斯艾利斯的深夜。",
+    note: "钢琴/小提琴/贝斯均为真实采样;探戈的灵魂乐器班多钮琴暂无采样,以钢琴示意",
+    pattern: {
+      bpm: 116,
+      beats: 16,
+      tracks: [
+        {
+          kind: "notes",
+          timbre: "piano",
+          events: [
+            ...["Am", "Am", "Dm", "E7"].flatMap((ch, bar) => {
+              const v = ch === "Am" ? ["A3", "C4", "E4"] : ch === "Dm" ? ["D4", "F4", "A4"] : ["G3", "B3", "D4", "F4"];
+              return [
+                { t: bar * 4, notes: v, dur: 0.3, vel: 0.65 },
+                { t: bar * 4 + 1, notes: v, dur: 0.3, vel: 0.55 },
+                { t: bar * 4 + 2, notes: v, dur: 0.3, vel: 0.65 },
+                { t: bar * 4 + 3, notes: v, dur: 0.3, vel: 0.55 },
+              ];
+            }),
+          ],
+        },
+        {
+          kind: "notes",
+          timbre: "violin",
+          events: [
+            { t: 0, notes: ["A4"], dur: 1.9 },
+            { t: 2, notes: ["B4"], dur: 0.45 },
+            { t: 2.5, notes: ["C5"], dur: 1.4 },
+            { t: 4, notes: ["E5"], dur: 1.9 },
+            { t: 6, notes: ["D5"], dur: 1.9 },
+            { t: 8, notes: ["D5"], dur: 0.45 },
+            { t: 8.5, notes: ["C5"], dur: 0.45 },
+            { t: 9, notes: ["B4"], dur: 0.45 },
+            { t: 9.5, notes: ["A4"], dur: 1.4 },
+            { t: 11, notes: ["B4"], dur: 0.9 },
+            { t: 12, notes: ["G#4"], dur: 1.9 },
+            { t: 14, notes: ["A4"], dur: 1.9 },
+          ],
+        },
+        {
+          kind: "notes",
+          timbre: "bass",
+          events: ["A1", "A1", "D2", "E1"].flatMap((root, bar) =>
+            Array.from({ length: 4 }, (_, i) => ({ t: bar * 4 + i, notes: [root], dur: 0.7, vel: 0.75 })),
+          ),
+        },
+      ],
+    },
+  },
+  waltz: {
+    slug: "waltz",
+    title: "华尔兹 · 三拍子『蓬-嚓-嚓』",
+    hint: "全站唯一的 3/4 拍:第一拍低音沉下去,第二三拍和弦轻轻荡——舞会从这一步开始。",
+    note: "钢琴/贝斯均为真实采样",
+    pattern: {
+      bpm: 150,
+      beats: 12,
+      tracks: [
+        {
+          kind: "notes",
+          timbre: "piano",
+          events: [
+            ...["C", "G", "C", "F"].flatMap((ch, bar) => {
+              const off = bar * 3;
+              const root = ch === "C" ? "C2" : ch === "G" ? "G1" : "F1";
+              const triad = ch === "C" ? ["C4", "E4", "G4"] : ch === "G" ? ["B3", "D4", "G4"] : ["A3", "C4", "F4"];
+              return [
+                { t: off, notes: [root], dur: 0.8, vel: 0.7 },
+                { t: off + 1, notes: triad, dur: 0.6, vel: 0.42 },
+                { t: off + 2, notes: triad, dur: 0.6, vel: 0.42 },
+              ];
+            }),
+            // 旋律:小圆舞曲一句
+            { t: 0, notes: ["E5"], dur: 2.2, vel: 0.6 },
+            { t: 3, notes: ["D5"], dur: 0.9, vel: 0.55 },
+            { t: 4, notes: ["C5"], dur: 1.6, vel: 0.55 },
+            { t: 6, notes: ["E5"], dur: 2.2, vel: 0.6 },
+            { t: 9, notes: ["A4"], dur: 2.2, vel: 0.6 },
+          ],
+        },
+      ],
+    },
+  },
+  "bossa-nova": {
+    slug: "bossa-nova",
+    title: "波萨诺瓦 · 凉下来的桑巴",
+    hint: "吉他把和弦错落着轻轻摆(像海浪),贝斯几乎不动——巴西海滩边的下午。",
+    note: "木吉他/贝斯均为真实采样",
+    pattern: {
+      bpm: 130,
+      beats: 16,
+      tracks: [
+        {
+          kind: "notes",
+          timbre: "guitar",
+          events: [
+            ...[
+              ["C3", ["G3", "B3", "E4"]],
+              ["C3", ["G3", "B3", "E4"]],
+              ["F2", ["A3", "C4", "E4"]],
+              ["G2", ["G3", "B3", "E4"]],
+            ].flatMap(([, ch], bar) => [
+              { t: bar * 4 + 0, notes: ch, dur: 0.5, vel: 0.55 },
+              { t: bar * 4 + 1.5, notes: ch, dur: 0.35, vel: 0.5 },
+              { t: bar * 4 + 3, notes: ch, dur: 0.5, vel: 0.5 },
+              { t: bar * 4 + 3.5, notes: ch, dur: 0.35, vel: 0.45 },
+            ]),
+          ],
+        },
+        {
+          kind: "notes",
+          timbre: "bass",
+          events: ["C2", "C2", "F1", "G1"].flatMap((root, bar) => [
+            { t: bar * 4, notes: [root], dur: 0.9, vel: 0.55 },
+            { t: bar * 4 + 2, notes: [root], dur: 0.9, vel: 0.45 },
+          ]),
+        },
+      ],
+    },
+  },
+  ragtime: {
+    slug: "ragtime",
+    title: "拉格泰姆 · 左手行进,右手切分",
+    hint: "左手像打拍子的节拍器,右手偏不听话地错半拍——爵士的钢琴祖先,滑稽又上头。",
+    note: "钢琴独奏,真实采样",
+    pattern: {
+      bpm: 96,
+      beats: 16,
+      tracks: [
+        {
+          kind: "notes",
+          timbre: "piano",
+          events: [
+            // 左手:2/4 行进感(低音-和弦),4/4 网格下每拍交替
+            ...Array.from({ length: 16 }, (_, i) => {
+              const bar = Math.floor(i / 4);
+              const chord = bar === 3 ? ["G3", "B3", "D4"] : ["C4", "E4", "G4"];
+              const bass = bar === 3 ? "G2" : i % 4 === 0 || i % 4 === 2 ? "C3" : "G2";
+              return i % 2 === 0
+                ? { t: i, notes: [bass], dur: 0.4, vel: 0.6 }
+                : { t: i, notes: chord, dur: 0.4, vel: 0.45 };
+            }),
+            // 右手:切分旋律(正拍躲着走)
+            { t: 0.5, notes: ["E5"], dur: 0.4, vel: 0.7 },
+            { t: 1, notes: ["G5"], dur: 0.4, vel: 0.7 },
+            { t: 1.5, notes: ["C6"], dur: 0.4, vel: 0.75 },
+            { t: 2.5, notes: ["G5"], dur: 0.4, vel: 0.7 },
+            { t: 3.5, notes: ["E5"], dur: 0.4, vel: 0.7 },
+            { t: 4.5, notes: ["G5"], dur: 0.4, vel: 0.7 },
+            { t: 5, notes: ["C6"], dur: 0.4, vel: 0.75 },
+            { t: 5.5, notes: ["E6"], dur: 0.4, vel: 0.75 },
+            { t: 6.5, notes: ["C6"], dur: 0.4, vel: 0.7 },
+            { t: 7.5, notes: ["G5"], dur: 0.4, vel: 0.7 },
+            { t: 8.5, notes: ["A5"], dur: 0.4, vel: 0.7 },
+            { t: 9, notes: ["C6"], dur: 0.4, vel: 0.7 },
+            { t: 9.5, notes: ["A5"], dur: 0.4, vel: 0.7 },
+            { t: 10.5, notes: ["G5"], dur: 0.4, vel: 0.7 },
+            { t: 11.5, notes: ["E5"], dur: 0.4, vel: 0.7 },
+            { t: 12.5, notes: ["D5"], dur: 0.4, vel: 0.7 },
+            { t: 13, notes: ["B4"], dur: 0.4, vel: 0.7 },
+            { t: 13.5, notes: ["D5"], dur: 0.4, vel: 0.7 },
+            { t: 14.5, notes: ["G4"], dur: 0.4, vel: 0.7 },
+            { t: 15.5, notes: ["C5"], dur: 0.4, vel: 0.7 },
           ],
         },
       ],

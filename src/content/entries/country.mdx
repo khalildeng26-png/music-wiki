@@ -1,0 +1,66 @@
+---
+title: 乡村
+titleEn: Country Music
+category: 曲风
+summary: 美国南方乡土音乐的现代形态:木吉他 boom-chick、口琴与小提琴点缀,讲故事的歌词是它的心脏。
+tags: [曲风, 乡村, 乡村音乐]
+related: [folk, blues, rock, guitar]
+faq:
+  - q: 乡村音乐的核心特征是什么?
+    a: 木吉他的 boom-chick 律动(低音-和弦交替)、直白的叙事歌词、干净的编曲;常配口琴、小提琴(fiddle)与滑棒吉他。
+  - q: 乡村和民谣怎么区分?
+    a: 血缘很近,差别主要在律动与气质:乡村有明显的 boom-chick 舞蹈律动和乡村乐器音色;民谣更自由,围绕人声与叙事,律动可以很淡。
+  - q: 什么是 boom-chick?
+    a: 拇指弹低音(boom)、手指扫和弦(chick)的吉他手法,由 Merle Travis 发扬,是乡村与民谣吉他的共同心跳。
+  - q: 什么是 Nashvile 之声?
+    a: 1950–60 年代纳什维尔唱片工业确立的制作风格:去掉粗糙的乡土元素、加入和声与弦乐,让乡村进入主流电台。
+  - q: 想入门听什么?
+    a: Johnny Cash 的《Ring of Fire》听低音与号角, Dolly Parton 的《Jolene》听叙事与和声,John Denver 的《Take Me Home, Country Roads》听流行化的乡村。
+order: 16
+---
+
+import { StyleDemo } from "../../components/interactive/StyleDemo";
+import { StaffNotation } from "../../components/interactive/StaffNotation";
+import { GENRES } from "../../lib/genrePatterns";
+
+**乡村音乐**(Country)从美国南方的阿巴拉契亚民谣、蓝调与圣歌中长出来,1920 年代开始录音,如今是美国最大的音乐工业之一。它的心脏是**讲故事**——家人、公路、酒、信仰与悔恨,都用最直白的方式唱。
+
+听一段乡村的标准编制:
+
+<StyleDemo client:visible {...GENRES.country} />
+
+## 一条从山地到殿堂的路
+
+- 1927 年"布里斯托录音"录下 Jimmie Rodgers 与 Carter Family,被公认为乡村的起点;
+- 1940–50 年代,Hank Williams 用一嗓子碎裂感写下乡村的标准情绪;纳什维尔渐成工业中心;
+- 1950–60 年代"纳什维尔之声"抹平棱角,乡村进入主流;Johnny Cash 用黑衣与低音守住粗粝;
+- 1990 年代至今,Garth Brooks 等把乡村做成体育场级流行;Taylor Swift 则从乡村少女走向全球流行。
+
+## 名曲与人物
+
+- Johnny Cash ——《Ring of Fire》(1963):号角与低音的婚姻,黑衣人的招牌。
+- Dolly Parton ——《Jolene》(1973):一段哀求式的三角关系叙事,和声进行被后世反复借用。
+- John Denver ——《Take Me Home, Country Roads》(1971):乡村流行化的世界名片。
+- Hank Williams ——《I'm So Lonesome I Could Cry》(1949):乡村情绪的原点。
+- Willie Nelson ——《On the Road Again》(1980):公路乡村的标准答案。
+
+## 常见误区
+
+1. 乡村=美国红脖音乐——它是美国最大的叙事音乐传统之一,Bob Dylan、Ray Charles 都曾"乡村化";标签化会错过大量好歌。
+2. 乡村都是欢快舞曲——恰恰相反,伤心歌(sad song)才是它的半壁江山,酒与悔恨是高频词。
+3. 口琴、小提琴只是点缀——乡村的小提琴(fiddle)有独立的技巧体系,经典曲目里它常常是第二主角。
+
+## 试一试
+
+听一段口琴的小过门,感受乡村音乐的"口气"——简单几个音,情绪全在滑音与气息里:
+
+<StaffNotation
+  client:visible
+  timbre="harmonica"
+  notes={["C4", "D4", "E4", "G4", "A4"]}
+  label="乡村口琴过门:一句上行,尾音拖长。"
+/>
+
+> 一句话认乡村:吉他 boom-chick 打底,有人在认真给你讲一个故事。
+
+延伸:同源的叙事传统见 [民谣](/entries/folk);乡村与 [摇滚](/entries/rock) 的混血是 1950 年代摇滚乐的产房之一。
