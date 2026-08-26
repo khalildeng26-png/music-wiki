@@ -292,7 +292,11 @@ export type NoteEvent = { t: number; notes: string[]; dur?: number; vel?: number
 export type PatternTrack =
   | { kind: "notes"; timbre: Timbre; events: NoteEvent[] }
   /** kit 默认 acoustic(真实采样);synth = 芯片/电子风格的原生噪声鼓 */
-  | { kind: "drums"; kit?: "acoustic" | "synth"; events: { t: number; hit: DrumHit; vel?: number }[] };
+  | {
+      kind: "drums";
+      kit?: "acoustic" | "synth";
+      events: { t: number; hit: DrumHit; vel?: number }[];
+    };
 
 export type Pattern = {
   bpm: number;
@@ -302,7 +306,10 @@ export type Pattern = {
   tracks: PatternTrack[];
 };
 
-type DrumKit = Record<"kick" | "snare" | "hihat" | "openhat", InstanceType<ToneModule["MembraneSynth"] | ToneModule["NoiseSynth"]>>;
+type DrumKit = Record<
+  "kick" | "snare" | "hihat" | "openhat",
+  InstanceType<ToneModule["MembraneSynth"] | ToneModule["NoiseSynth"]>
+>;
 let drumKit: DrumKit | null = null;
 /** 鼓组各件的输出末端(kick 直连、三件噪声走滤波):断开/重连都作用在末端,链条内部不动 */
 let drumTerminals: unknown[] = [];
@@ -416,7 +423,10 @@ async function ensureDrums(Tone: ToneModule): Promise<DrumKit> {
  * 切歌/停止即停排。整段一次性预排会在打断时留下上百个无法取消的幽灵声源,
  * 快速切歌几次就叠声+卡顿(2026-08-24 实测教训)。
  */
-export async function playPattern(pattern: Pattern): Promise<void> {
+export async function playPattern(
+  pattern: Pattern,
+  opts?: { onStart?: () => void },
+): Promise<void> {
   stopAllAudio(); // 新片段打断旧片段(全局一次只播一个)
   const mySession = playSession;
   const spb = 60 / pattern.bpm; // 每拍秒数
@@ -438,6 +448,7 @@ export async function playPattern(pattern: Pattern): Promise<void> {
   ]);
   await Tone.start();
   if (mySession !== playSession) return; // 加载期间被新播放取代
+  opts?.onStart?.(); // 声音即将响起(首个声源约 120ms 后),动画由此刻同步起跑
   const kit = synthDrums ? (drumKit as DrumKit) : null;
   const drumSampler = acousticDrums ? instruments.get("drums") : null;
 
@@ -452,12 +463,9 @@ export async function playPattern(pattern: Pattern): Promise<void> {
   const fire = (track: PatternTrack, ev: { t: number }, when: number) => {
     if (track.kind === "notes") {
       const e = ev as NoteEvent;
-      instruments.get(track.timbre)?.triggerAttackRelease(
-        e.notes,
-        (e.dur ?? 0.5) * spb,
-        when,
-        e.vel ?? 1,
-      );
+      instruments
+        .get(track.timbre)
+        ?.triggerAttackRelease(e.notes, (e.dur ?? 0.5) * spb, when, e.vel ?? 1);
     } else {
       const e = ev as { hit: DrumHit; vel?: number };
       const vel = e.vel ?? 1;

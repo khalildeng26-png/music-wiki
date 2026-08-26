@@ -1,0 +1,24 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import { categories } from "@/lib/categories";
+import CategoryCards from "@/components/interactive/CategoryCards";
+
+// 分类卡 v2 预览页(隐藏,不进 sitemap)——确认设计后再接入首页
+const entries = await getCollection("entries", (e) => !e.data.draft);
+const byLabel = new Map<string, number>();
+for (const e of entries) byLabel.set(e.data.category, (byLabel.get(e.data.category) ?? 0) + 1);
+const counts = Object.fromEntries(categories.map((c) => [c.id, byLabel.get(c.label) ?? 0]));
+---
+
+<BaseLayout title="分类卡预览 · 橙月Wiki" description="分类卡设计预览">
+  <section class="container py-12 max-w-5xl">
+    <h1 class="text-2xl font-display font-bold tracking-tight">按分类探索</h1>
+    <p class="mt-2 text-muted-foreground">
+      每张卡右上角的播放键是它的「声音签名」——点开同时看动画演示。这是设计预览页,确认后接入首页。
+    </p>
+    <div class="mt-8">
+      <CategoryCards client:visible counts={counts} />
+    </div>
+  </section>
+</BaseLayout>
