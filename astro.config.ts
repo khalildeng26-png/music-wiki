@@ -20,9 +20,6 @@ export default defineConfig({
       filter: (page) =>
         !page.includes("/og/") &&
         !page.endsWith("search-index.json") &&
-        !page.includes("/debug-rock") &&
-        !page.includes("/debug-drums") &&
-        !page.includes("/debug-kick") &&
         !page.includes("/preview-"),
     }),
   ],

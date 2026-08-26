@@ -13,7 +13,7 @@ export type GenreDemo = {
   pattern: Pattern;
 };
 
-/** 4/4 一小节的鼓件便捷生成(踩镲为四分——每半拍的八分密度已证实听感过碎) */
+/** 4/4 一小节的鼓件便捷生成(踩镲八分——此前因坏军鼓误诊降为四分,换军鼓后复原) */
 const drums = (bars: number, kick: number[], snare: number[], hatVel = 0.45) => [
   ...Array.from({ length: bars }, (_, b) =>
     kick.map((t) => ({ t: b * 4 + t, hit: "kick" as const, vel: 0.85 })),
@@ -21,8 +21,8 @@ const drums = (bars: number, kick: number[], snare: number[], hatVel = 0.45) => 
   ...Array.from({ length: bars }, (_, b) =>
     snare.map((t) => ({ t: b * 4 + t, hit: "snare" as const, vel: 0.75 })),
   ).flat(),
-  ...Array.from({ length: bars * 4 }, (_, i) => ({
-    t: i,
+  ...Array.from({ length: bars * 8 }, (_, i) => ({
+    t: i * 0.5,
     hit: "hihat" as const,
     vel: hatVel,
   })),
@@ -111,45 +111,19 @@ export const GENRES: Record<string, GenreDemo> = {
           kind: "notes",
           timbre: "eguitar",
           events: [
-            // 四分音符扫弦(每拍一下):用户听感三连否决八分密度,全曲最高密度=每拍一击
-            ...Array.from({ length: 8 }, (_, i) => ({
-              t: i,
-              notes: ["E3", "B3", "E4"],
-              dur: 0.8,
-              vel: 0.85,
-            })),
-            ...Array.from({ length: 4 }, (_, i) => ({
-              t: 8 + i,
-              notes: ["G3", "D4", "G4"],
-              dur: 0.8,
-              vel: 0.85,
-            })),
-            ...Array.from({ length: 4 }, (_, i) => ({
-              t: 12 + i,
-              notes: ["A3", "E4", "A4"],
-              dur: 0.8,
-              vel: 0.85,
-            })),
+            // 八分音符扫弦(复原——此前的四分化是坏军鼓误诊的连坐)
+            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, notes: ["E3", "B3", "E4"], dur: 0.42, vel: 0.85 })),
+            ...Array.from({ length: 8 }, (_, i) => ({ t: 8 + i * 0.5, notes: ["G3", "D4", "G4"], dur: 0.42, vel: 0.85 })),
+            ...Array.from({ length: 8 }, (_, i) => ({ t: 12 + i * 0.5, notes: ["A3", "E4", "A4"], dur: 0.42, vel: 0.85 })),
           ],
         },
         {
           kind: "notes",
           timbre: "bass",
           events: [
-            // 四分音符根音(与踩镲同密度),不再八分连打——避免低频机关枪感
-            ...Array.from({ length: 8 }, (_, i) => ({ t: i, notes: ["E2"], dur: 0.9, vel: 0.8 })),
-            ...Array.from({ length: 4 }, (_, i) => ({
-              t: 8 + i,
-              notes: ["G2"],
-              dur: 0.9,
-              vel: 0.8,
-            })),
-            ...Array.from({ length: 4 }, (_, i) => ({
-              t: 12 + i,
-              notes: ["A2"],
-              dur: 0.9,
-              vel: 0.8,
-            })),
+            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, notes: ["E2"], dur: 0.45 })),
+            ...Array.from({ length: 8 }, (_, i) => ({ t: 8 + i * 0.5, notes: ["G2"], dur: 0.45 })),
+            ...Array.from({ length: 8 }, (_, i) => ({ t: 12 + i * 0.5, notes: ["A2"], dur: 0.45 })),
           ],
         },
         {
@@ -161,8 +135,7 @@ export const GENRES: Record<string, GenreDemo> = {
               hit: "snare" as const,
               vel: 0.8,
             })),
-            // 踩镲每拍一下(四分),力度再收,只做背景沙沙
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.26 })),
+            ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.45 })),
             { t: 0, hit: "openhat", vel: 0.6 },
           ],
         },
@@ -878,7 +851,7 @@ export const GENRES: Record<string, GenreDemo> = {
             // one-drop:底鼓和军鼓一起砸在第 3 拍,第 1 拍空着
             ...Array.from({ length: 4 }, (_, b) => ({ t: b * 4 + 2, hit: "kick" as const, vel: 0.8 })),
             ...Array.from({ length: 4 }, (_, b) => ({ t: b * 4 + 2, hit: "snare" as const, vel: 0.7 })),
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.26 })),
+            ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.35 })),
           ],
         },
       ],
@@ -927,7 +900,7 @@ export const GENRES: Record<string, GenreDemo> = {
             { t: bar * 4 + 2, notes: [root], dur: 1.6, vel: 0.5 },
           ]),
         },
-        { kind: "drums", events: drums(4, [0, 2], [1, 3], 0.26) },
+        { kind: "drums", events: drums(4, [0, 2], [1, 3], 0.35) },
       ],
     },
   },

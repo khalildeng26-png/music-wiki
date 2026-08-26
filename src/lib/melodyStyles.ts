@@ -152,11 +152,10 @@ export const STYLES: StyleArrangement[] = [
             ["F2", "C3", "F3"],
             ["G2", "D3", "G3"],
           ].flatMap((ch, u) =>
-            // 四分扫弦(每拍一下),余音 0.8 拍
-            Array.from({ length: 2 }, (_, i) => ({
-              t: unit(u) + i,
+            Array.from({ length: 4 }, (_, i) => ({
+              t: unit(u) + i * 0.5,
               notes: ch,
-              dur: 0.8,
+              dur: 0.42,
               vel: 0.8,
             })),
           ),
@@ -165,11 +164,10 @@ export const STYLES: StyleArrangement[] = [
           kind: "notes",
           timbre: "bass",
           events: ["C2", "G1", "A1", "E1", "F1", "C2", "F1", "G1"].flatMap((root, u) =>
-            Array.from({ length: 2 }, (_, i) => ({
-              t: unit(u) + i,
+            Array.from({ length: 4 }, (_, i) => ({
+              t: unit(u) + i * 0.5,
               notes: [root],
-              dur: 0.9,
-              vel: 0.8,
+              dur: 0.45,
             })),
           ),
         },
@@ -182,8 +180,7 @@ export const STYLES: StyleArrangement[] = [
               hit: "snare" as const,
               vel: 0.8,
             })),
-            // 踩镲每拍一下(四分),力度再收
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.26 })),
+            ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.45 })),
             { t: 0, hit: "openhat", vel: 0.6 },
           ],
         },
