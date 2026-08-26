@@ -1,0 +1,33 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import StyleDemo from "@/components/interactive/StyleDemo";
+import type { Pattern } from "@/components/interactive/audio";
+
+// 鼓件终审页:五件鼓逐件独奏(单响 + 每秒一响),定位「竹片刮擦」声源。
+const solo = (hit: "kick" | "snare" | "hihat" | "openhat" | "ride", times = 4): Pattern => ({
+  bpm: 60,
+  beats: times,
+  tracks: [
+    {
+      kind: "drums",
+      events: Array.from({ length: times }, (_, i) => ({ t: i, hit, vel: 0.9 })),
+    },
+  ],
+});
+---
+
+<BaseLayout title="鼓件排查 · 橙月Wiki" description="逐件试听定位异响">
+  <section class="container py-12 max-w-3xl">
+    <h1 class="text-2xl font-display font-bold tracking-tight">鼓件终审</h1>
+    <p class="mt-2 text-muted-foreground">
+      五件鼓,每件单独响四下(每秒一下)。「竹片刮擦」的声音在哪个编号里?记下来告诉我。
+    </p>
+    <div class="mt-8 space-y-4">
+      <StyleDemo client:visible title="① 底鼓(kick)" hint="只有底鼓,一秒一下" pattern={solo("kick")} />
+      <StyleDemo client:visible title="② 军鼓(snare)" hint="只有军鼓" pattern={solo("snare")} />
+      <StyleDemo client:visible title="③ 闭镲(hihat)" hint="只有闭镲" pattern={solo("hihat")} />
+      <StyleDemo client:visible title="④ 开镲(openhat)" hint="只有开镲" pattern={solo("openhat")} />
+      <StyleDemo client:visible title="⑤ 叮镲(ride)" hint="只有叮镲" pattern={solo("ride")} />
+    </div>
+  </section>
+</BaseLayout>

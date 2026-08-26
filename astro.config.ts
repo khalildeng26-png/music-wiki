@@ -21,6 +21,7 @@ export default defineConfig({
         !page.includes("/og/") &&
         !page.endsWith("search-index.json") &&
         !page.includes("/debug-rock") &&
+        !page.includes("/debug-drums") &&
         !page.includes("/preview-"),
     }),
   ],
