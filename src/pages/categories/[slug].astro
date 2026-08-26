@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import EntryGroups from "@/components/EntryGroups.astro";
+import CategoryFilter from "@/components/interactive/CategoryFilter";
 import { getCollection } from "astro:content";
 import { categories } from "@/lib/categories";
 
@@ -16,6 +17,20 @@ const { category } = Astro.props;
 const entries = (
   await getCollection("entries", (e) => !e.data.draft && e.data.category === category.label)
 ).sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+
+const paths = await getCollection("paths", (p) => !p.data.draft);
+const seriesNames = Object.fromEntries(paths.map((p) => [p.id, p.data.title]));
+
+// 分类内搜索的数据面(标题/译名/摘要/标签)
+const filterItems = entries.map((e) => ({
+  slug: e.id,
+  title: e.data.title,
+  titleEn: e.data.titleEn ?? "",
+  summary: e.data.summary,
+  tags: e.data.tags ?? [],
+  kind: e.data.series ? ("tutorial" as const) : ("encyclopedia" as const),
+  series: e.data.series ?? undefined,
+}));
 ---
 
 <BaseLayout title={`${category.label} · 橙月Wiki`} description={category.desc}>
@@ -33,7 +48,12 @@ const entries = (
       entries.length === 0 ? (
         <p class="mt-12 text-muted-foreground">这个分类下还没有词条,敬请期待。</p>
       ) : (
-        <EntryGroups entries={entries} />
+        <>
+          <CategoryFilter client:load items={filterItems} seriesNames={seriesNames} />
+          <div id="cat-static-list">
+            <EntryGroups entries={entries} />
+          </div>
+        </>
       )
     }
   </section>
