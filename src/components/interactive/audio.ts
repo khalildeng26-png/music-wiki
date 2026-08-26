@@ -29,6 +29,7 @@ export type Timbre =
   | "harmonica"
   | "synth"
   | "chip"
+  | "whistle"
   | "drums";
 
 type Instrument = InstanceType<ToneModule["Sampler"]> | InstanceType<ToneModule["PolySynth"]>;
@@ -51,9 +52,15 @@ const SAMPLES: Record<
   // 鼓组(Freesound CC0,BaDokick/blakengouda/Cringegaming64yt 上传):
   // 伪音名映射到五个单响——触发时打对应"音名"即为对应鼓件
   drums: {
-    files: { C1: "kick", D1: "snare", E1: "hihat", F1: "openhat", G1: "ride" },
+    files: { C1: "kick", D1: "snare", E1: "hihat", F1: "openhat", G1: "ride", A1: "bodhran", B1: "msnare" },
     volume: -10,
     release: 0.2,
+  },
+  // 爱尔兰锡哨:Freesound CC0(neild101),单锚点 E5 持续音,旋律靠重采样移调
+  whistle: {
+    files: { E5: "E5" },
+    volume: -12,
+    release: 0.35,
   },
   piano: {
     files: {
@@ -283,8 +290,8 @@ export async function playChordProgression(
 
 // ---------- 风格试听:多轨 pattern 播放(StyleDemo 用) ----------
 
-/** 合成鼓件(示意音色,非真实采样):底鼓/军鼓/踩镲。 */
-export type DrumHit = "kick" | "snare" | "hihat" | "openhat" | "ride";
+/** 鼓件:bodhran=爱尔兰宝思兰鼓,msnare=行进小军鼓(其余同前)。 */
+export type DrumHit = "kick" | "snare" | "hihat" | "openhat" | "ride" | "bodhran" | "msnare";
 
 /** 一条音符轨/和弦轨的事件。t/dur 以拍为单位。 */
 export type NoteEvent = { t: number; notes: string[]; dur?: number; vel?: number };
@@ -362,6 +369,8 @@ const DRUM_NOTE: Record<DrumHit, string> = {
   hihat: "E1",
   openhat: "F1",
   ride: "G1",
+  bodhran: "A1",
+  msnare: "B1",
 };
 
 /** 惰性构建合成鼓组:底鼓=膜鼓合成,军鼓/踩镲=噪声+滤波。示意用途,UI 需注明。 */
@@ -473,7 +482,7 @@ export async function playPattern(
       const vel = e.vel ?? 1;
       if (track.kit !== "synth" && drumSampler) {
         // 真实采样鼓:伪音名 → 鼓件;dur 给足让采样自然衰减(ride 余音最长)
-        const dur = e.hit === "ride" || e.hit === "openhat" ? 2.2 : 1.4;
+        const dur = e.hit === "ride" || e.hit === "openhat" ? 2.2 : e.hit === "msnare" ? 0.6 : 1.4;
         drumSampler.triggerAttackRelease(DRUM_NOTE[e.hit], dur, when, vel);
       } else if (kit) {
         switch (e.hit) {
@@ -491,6 +500,9 @@ export async function playPattern(
             break;
           case "ride":
             kit.openhat.triggerAttackRelease("4n", when, vel * 0.8);
+            break;
+          case "bodhran":
+          case "msnare":
             break;
         }
       }
