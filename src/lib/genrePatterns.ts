@@ -1110,6 +1110,236 @@ export const GENRES: Record<string, GenreDemo> = {
       ],
     },
   },
+  celtic: {
+    slug: "celtic",
+    title: "凯尔特 · 6/8 吉格舞曲(锡哨 × 宝思兰鼓)",
+    hint: "六拍分成两组三连:锡哨在上面转圈,宝思兰鼓「咚-哒-哒」地推——爱尔兰酒馆的空气。",
+    note: "锡哨/宝思兰鼓/小提琴/木吉他均为真实采样(风笛暂无,锡哨担纲)",
+    pattern: {
+      bpm: 132,
+      beats: 12,
+      tracks: [
+        {
+          kind: "notes",
+          timbre: "whistle",
+          events: [
+            { t: 0, notes: ["D5"], dur: 0.9 },
+            { t: 1, notes: ["E5"], dur: 0.45 },
+            { t: 1.5, notes: ["F#5"], dur: 0.45 },
+            { t: 2, notes: ["G5"], dur: 0.9 },
+            { t: 3, notes: ["F#5"], dur: 0.45 },
+            { t: 3.5, notes: ["E5"], dur: 0.45 },
+            { t: 4, notes: ["D5"], dur: 1.8 },
+            { t: 6, notes: ["G5"], dur: 0.9 },
+            { t: 7, notes: ["A5"], dur: 0.45 },
+            { t: 7.5, notes: ["G5"], dur: 0.45 },
+            { t: 8, notes: ["F#5"], dur: 0.9 },
+            { t: 9, notes: ["E5"], dur: 0.45 },
+            { t: 9.5, notes: ["F#5"], dur: 0.45 },
+            { t: 10, notes: ["D5"], dur: 1.8 },
+          ],
+        },
+        {
+          kind: "notes",
+          timbre: "violin",
+          events: [
+            { t: 0, notes: ["A4"], dur: 3.6, vel: 0.35 },
+            { t: 4, notes: ["A4"], dur: 1.8, vel: 0.3 },
+            { t: 6, notes: ["B4"], dur: 3.6, vel: 0.35 },
+            { t: 10, notes: ["A4"], dur: 1.8, vel: 0.3 },
+          ],
+        },
+        {
+          kind: "notes",
+          timbre: "guitar",
+          events: [
+            { t: 0, notes: ["D3"], dur: 0.85, vel: 0.7 },
+            { t: 1, notes: ["D4", "F#4"], dur: 0.4, vel: 0.5 },
+            { t: 1.5, notes: ["A3"], dur: 0.4, vel: 0.45 },
+            { t: 2, notes: ["D3"], dur: 0.85, vel: 0.7 },
+            { t: 3, notes: ["D4", "F#4"], dur: 0.4, vel: 0.5 },
+            { t: 3.5, notes: ["A3"], dur: 0.4, vel: 0.45 },
+            { t: 4, notes: ["G2"], dur: 0.85, vel: 0.7 },
+            { t: 5, notes: ["B3", "D4"], dur: 0.4, vel: 0.5 },
+            { t: 5.5, notes: ["G3"], dur: 0.4, vel: 0.45 },
+            { t: 6, notes: ["G2"], dur: 0.85, vel: 0.7 },
+            { t: 7, notes: ["B3", "D4"], dur: 0.4, vel: 0.5 },
+            { t: 7.5, notes: ["G3"], dur: 0.4, vel: 0.45 },
+            { t: 8, notes: ["A2"], dur: 0.85, vel: 0.7 },
+            { t: 9, notes: ["C#4", "E4"], dur: 0.4, vel: 0.5 },
+            { t: 9.5, notes: ["A3"], dur: 0.4, vel: 0.45 },
+            { t: 10, notes: ["A2"], dur: 0.85, vel: 0.7 },
+            { t: 11, notes: ["C#4", "E4"], dur: 0.4, vel: 0.5 },
+            { t: 11.5, notes: ["A3"], dur: 0.4, vel: 0.45 },
+          ],
+        },
+        {
+          kind: "drums",
+          events: [
+            ...Array.from({ length: 4 }, (_, b) => [
+              { t: b * 3, hit: "bodhran" as const, vel: 0.85 },
+              { t: b * 3 + 1, hit: "bodhran" as const, vel: 0.5 },
+              { t: b * 3 + 2, hit: "bodhran" as const, vel: 0.6 },
+            ]).flat(),
+          ],
+        },
+      ],
+    },
+  },
+  march: {
+    slug: "march",
+    title: "进行曲 · 铜管 + 行进军鼓",
+    hint: "军鼓密得像下雨,小号在上面齐步走——进行曲的一切都为了「整齐」。",
+    note: "小号/圆号/大号/行进军鼓均为真实采样",
+    pattern: {
+      bpm: 112,
+      beats: 16,
+      tracks: [
+        {
+          kind: "notes",
+          timbre: "trumpet",
+          events: [
+            { t: 0, notes: ["C5"], dur: 0.9, vel: 0.75 },
+            { t: 1, notes: ["C5"], dur: 0.45, vel: 0.6 },
+            { t: 1.5, notes: ["C5"], dur: 0.45, vel: 0.6 },
+            { t: 2, notes: ["G4"], dur: 0.9, vel: 0.7 },
+            { t: 3, notes: ["C5"], dur: 1.8, vel: 0.75 },
+            { t: 4, notes: ["E5"], dur: 0.9, vel: 0.75 },
+            { t: 5, notes: ["D5"], dur: 0.45, vel: 0.6 },
+            { t: 5.5, notes: ["C5"], dur: 0.45, vel: 0.6 },
+            { t: 6, notes: ["D5"], dur: 1.8, vel: 0.7 },
+            { t: 8, notes: ["G4"], dur: 0.9, vel: 0.7 },
+            { t: 9, notes: ["C5"], dur: 0.9, vel: 0.7 },
+            { t: 10, notes: ["E5"], dur: 0.9, vel: 0.75 },
+            { t: 11, notes: ["G5"], dur: 1.8, vel: 0.8 },
+            { t: 12, notes: ["F5"], dur: 0.9, vel: 0.7 },
+            { t: 13, notes: ["E5"], dur: 0.45, vel: 0.6 },
+            { t: 13.5, notes: ["D5"], dur: 0.45, vel: 0.6 },
+            { t: 14, notes: ["C5"], dur: 1.8, vel: 0.75 },
+          ],
+        },
+        {
+          kind: "notes",
+          timbre: "horn",
+          events: [
+            { t: 0, notes: ["C4", "E4", "G4"], dur: 3.6, vel: 0.4 },
+            { t: 4, notes: ["C4", "E4", "G4"], dur: 3.6, vel: 0.4 },
+            { t: 8, notes: ["G3", "C4", "E4"], dur: 3.6, vel: 0.4 },
+            { t: 12, notes: ["G3", "C4", "E4"], dur: 3.6, vel: 0.4 },
+          ],
+        },
+        {
+          kind: "notes",
+          timbre: "tuba",
+          events: ["C2", "C2", "G1", "C2"].flatMap((r, b) => [
+            { t: b * 4, notes: [r], dur: 1.8, vel: 0.55 },
+            { t: b * 4 + 2, notes: [r], dur: 1.8, vel: 0.5 },
+          ]),
+        },
+        {
+          kind: "drums",
+          events: [
+            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, hit: "msnare" as const, vel: i % 2 === 0 ? 0.55 : 0.35 })),
+            ...Array.from({ length: 4 }, (_, b) => ({ t: b * 4, hit: "kick" as const, vel: 0.5 })),
+          ],
+        },
+      ],
+    },
+  },
+  "new-age": {
+    slug: "new-age",
+    title: "新世纪 · 琶音与长音",
+    hint: "钢琴琶音像水波一圈圈荡开,小提琴长音悬在半空——空间感就是主角。",
+    note: "钢琴/小提琴均为真实采样",
+    pattern: {
+      bpm: 72,
+      beats: 16,
+      tracks: [
+        {
+          kind: "notes",
+          timbre: "piano",
+          events: Array.from({ length: 4 }, (_, b) => {
+            const off = b * 4;
+            const arp = b === 1 ? ["A3", "D4", "F#4", "A4"] : b === 2 ? ["B3", "D4", "G4", "B4"] : ["D3", "A3", "D4", "F#4"];
+            return arp.map((n, i) => ({ t: off + i, notes: [n], dur: 1.6, vel: 0.5 }));
+          }).flat(),
+        },
+        {
+          kind: "notes",
+          timbre: "violin",
+          events: [
+            { t: 0, notes: ["D5"], dur: 7.6, vel: 0.3 },
+            { t: 8, notes: ["B4"], dur: 7.6, vel: 0.3 },
+          ],
+        },
+      ],
+    },
+  },
+  bluegrass: {
+    slug: "bluegrass",
+    title: "蓝草 · 快速对奏(小提琴 × 吉他)",
+    hint: "132 BPM 的「呼应对答」:小提琴拉一句,吉他接一句——山地农舍前的斗琴。",
+    note: "小提琴/木吉他/贝斯均为真实采样;招牌音色班卓琴暂无合规采样(以吉他担纲并注明)",
+    pattern: {
+      bpm: 132,
+      beats: 16,
+      tracks: [
+        {
+          kind: "notes",
+          timbre: "violin",
+          events: [
+            { t: 0, notes: ["G4"], dur: 0.45 },
+            { t: 0.5, notes: ["A4"], dur: 0.45 },
+            { t: 1, notes: ["B4"], dur: 0.9 },
+            { t: 2, notes: ["D5"], dur: 0.45 },
+            { t: 2.5, notes: ["B4"], dur: 0.45 },
+            { t: 3, notes: ["G4"], dur: 0.9 },
+            { t: 4, notes: ["A4"], dur: 0.45 },
+            { t: 4.5, notes: ["B4"], dur: 0.45 },
+            { t: 5, notes: ["C5"], dur: 0.9 },
+            { t: 6, notes: ["E5"], dur: 0.45 },
+            { t: 6.5, notes: ["D5"], dur: 0.45 },
+            { t: 7, notes: ["A4"], dur: 0.9 },
+            { t: 8, notes: ["G4"], dur: 0.45 },
+            { t: 8.5, notes: ["A4"], dur: 0.45 },
+            { t: 9, notes: ["B4"], dur: 0.9 },
+            { t: 10, notes: ["G5"], dur: 0.45 },
+            { t: 10.5, notes: ["D5"], dur: 0.45 },
+            { t: 11, notes: ["B4"], dur: 0.9 },
+            { t: 12, notes: ["A4"], dur: 0.9 },
+            { t: 13, notes: ["B4"], dur: 0.45 },
+            { t: 13.5, notes: ["A4"], dur: 0.45 },
+            { t: 14, notes: ["G4"], dur: 1.8 },
+          ],
+        },
+        {
+          kind: "notes",
+          timbre: "guitar",
+          events: (
+            [
+              ["G2", ["G3", "B3", "D4"]],
+              ["C3", ["C4", "E4", "G4"]],
+              ["G2", ["G3", "B3", "D4"]],
+              ["D3", ["A3", "D4", "F#4"]],
+            ] as [string, string[]][]
+          ).flatMap(([root, ch], bar) => [
+            { t: bar * 4, notes: [root], dur: 0.85, vel: 0.75 },
+            ...ch.flatMap((n, i) => ({ t: bar * 4 + 1 + i * 0.02, notes: [n], dur: 0.7, vel: 0.55 })),
+            { t: bar * 4 + 2, notes: [root], dur: 0.85, vel: 0.75 },
+            ...ch.flatMap((n, i) => ({ t: bar * 4 + 3 + i * 0.02, notes: [n], dur: 0.7, vel: 0.55 })),
+          ]),
+        },
+        {
+          kind: "notes",
+          timbre: "bass",
+          events: ["G1", "C2", "G1", "D2"].flatMap((root, bar) => [
+            { t: bar * 4, notes: [root], dur: 1.6, vel: 0.55 },
+            { t: bar * 4 + 2, notes: [root], dur: 1.6, vel: 0.5 },
+          ]),
+        },
+      ],
+    },
+  },
 };
 
 // 演示时长:vamp 型曲风(循环段本质)转 3 遍,乐句型转 2 遍——比堆音符更符合各曲风的真实形态
