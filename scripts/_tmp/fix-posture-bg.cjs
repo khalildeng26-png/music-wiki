@@ -27,9 +27,7 @@ const TARGET = oklchToSrgb(0.965, 0.022, 85);
 console.log("target page bg sRGB:", TARGET);
 
 const DIR = path.join(__dirname, "..", "..", "public", "images");
-const FILES = fs
-  .readdirSync(DIR)
-  .filter((f) => f.endsWith(".png") && /posture|hand-shape/.test(f));
+const FILES = fs.readdirSync(DIR).filter((f) => f.endsWith(".png") && /posture|hand-shape/.test(f));
 
 for (const file of FILES) {
   const p = path.join(DIR, file);
@@ -100,8 +98,6 @@ for (const file of FILES) {
 
   fs.writeFileSync(p, PNG.sync.write(png));
   const pct = ((filled / (W * H)) * 100).toFixed(1);
-  console.log(
-    `${file}: bg avg(${bg.map((v) => v.toFixed(0))}) tol=${tol} filled=${pct}%`,
-  );
+  console.log(`${file}: bg avg(${bg.map((v) => v.toFixed(0))}) tol=${tol} filled=${pct}%`);
 }
 console.log("done");

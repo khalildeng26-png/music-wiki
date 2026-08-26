@@ -81,8 +81,16 @@ export const GENRES: Record<string, GenreDemo> = {
         {
           kind: "drums",
           events: [
-            ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "ride" as const, vel: 0.55 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "hihat" as const, vel: 0.5 })),
+            ...Array.from({ length: 32 }, (_, i) => ({
+              t: i * 0.5,
+              hit: "ride" as const,
+              vel: 0.55,
+            })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "hihat" as const,
+              vel: 0.5,
+            })),
             { t: 0, hit: "kick", vel: 0.3 },
             { t: 8, hit: "kick", vel: 0.3 },
           ],
@@ -104,9 +112,24 @@ export const GENRES: Record<string, GenreDemo> = {
           timbre: "eguitar",
           events: [
             // 四分音符扫弦(每拍一下):用户听感三连否决八分密度,全曲最高密度=每拍一击
-            ...Array.from({ length: 8 }, (_, i) => ({ t: i, notes: ["E3", "B3", "E4"], dur: 0.8, vel: 0.85 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 8 + i, notes: ["G3", "D4", "G4"], dur: 0.8, vel: 0.85 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 12 + i, notes: ["A3", "E4", "A4"], dur: 0.8, vel: 0.85 })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: i,
+              notes: ["E3", "B3", "E4"],
+              dur: 0.8,
+              vel: 0.85,
+            })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 8 + i,
+              notes: ["G3", "D4", "G4"],
+              dur: 0.8,
+              vel: 0.85,
+            })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 12 + i,
+              notes: ["A3", "E4", "A4"],
+              dur: 0.8,
+              vel: 0.85,
+            })),
           ],
         },
         {
@@ -115,17 +138,31 @@ export const GENRES: Record<string, GenreDemo> = {
           events: [
             // 四分音符根音(与踩镲同密度),不再八分连打——避免低频机关枪感
             ...Array.from({ length: 8 }, (_, i) => ({ t: i, notes: ["E2"], dur: 0.9, vel: 0.8 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 8 + i, notes: ["G2"], dur: 0.9, vel: 0.8 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 12 + i, notes: ["A2"], dur: 0.9, vel: 0.8 })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 8 + i,
+              notes: ["G2"],
+              dur: 0.9,
+              vel: 0.8,
+            })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 12 + i,
+              notes: ["A2"],
+              dur: 0.9,
+              vel: 0.8,
+            })),
           ],
         },
         {
           kind: "drums",
           events: [
             ...Array.from({ length: 8 }, (_, i) => ({ t: i * 2, hit: "kick" as const, vel: 0.85 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.8 })),
-            // 踩镲每拍一下(四分),力度压低做背景
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.36 })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.8,
+            })),
+            // 踩镲每拍一下(四分),力度再收,只做背景沙沙
+            ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.26 })),
             { t: 0, hit: "openhat", vel: 0.6 },
           ],
         },
@@ -145,18 +182,60 @@ export const GENRES: Record<string, GenreDemo> = {
           kind: "notes",
           timbre: "chip",
           events: eighth([
-            "C5", "E5", "G5", "E5", "C6", "G5", "E5", "G5",
-            "A4", "C5", "F5", "C5", "A5", "F5", "C5", "A4",
-            "C5", "E5", "G5", "E5", "C6", "G5", "E5", "G5",
-            "G4", "B4", "D5", "G5", "B5", "G5", "D5", "B4",
+            "C5",
+            "E5",
+            "G5",
+            "E5",
+            "C6",
+            "G5",
+            "E5",
+            "G5",
+            "A4",
+            "C5",
+            "F5",
+            "C5",
+            "A5",
+            "F5",
+            "C5",
+            "A4",
+            "C5",
+            "E5",
+            "G5",
+            "E5",
+            "C6",
+            "G5",
+            "E5",
+            "G5",
+            "G4",
+            "B4",
+            "D5",
+            "G5",
+            "B5",
+            "G5",
+            "D5",
+            "B4",
           ]),
         },
         {
           kind: "notes",
           timbre: "chip",
           events: [
-            "C3", "C3", "C4", "C3", "F2", "F2", "F3", "F2",
-            "C3", "C3", "C4", "C3", "G2", "G2", "G3", "G2",
+            "C3",
+            "C3",
+            "C4",
+            "C3",
+            "F2",
+            "F2",
+            "F3",
+            "F2",
+            "C3",
+            "C3",
+            "C4",
+            "C3",
+            "G2",
+            "G2",
+            "G3",
+            "G2",
           ].map((n, i) => ({ t: i, notes: [n], dur: 0.9, vel: 0.9 })),
         },
         { kind: "drums", kit: "synth", events: drums(4, [0, 2], [1, 3], 0.45) },
@@ -196,7 +275,10 @@ export const GENRES: Record<string, GenreDemo> = {
             ...Array.from({ length: 4 }, (_, i) => ({ t: 12 + i, notes: ["F1"], dur: 0.9 })),
           ],
         },
-        { kind: "drums", events: [...drums(4, [0, 2], [1, 3], 0.4), { t: 0, hit: "openhat", vel: 0.55 }] },
+        {
+          kind: "drums",
+          events: [...drums(4, [0, 2], [1, 3], 0.4), { t: 0, hit: "openhat", vel: 0.55 }],
+        },
       ],
     },
   },
@@ -225,9 +307,19 @@ export const GENRES: Record<string, GenreDemo> = {
                       : ["F2", "C3", "F3", "A3"];
               return [
                 { t: off, notes: [root], dur: 0.9, vel: 0.8 },
-                ...voicing.flatMap((n, i) => ({ t: off + 1 + i * 0.02, notes: [n], dur: 0.8, vel: 0.62 })),
+                ...voicing.flatMap((n, i) => ({
+                  t: off + 1 + i * 0.02,
+                  notes: [n],
+                  dur: 0.8,
+                  vel: 0.62,
+                })),
                 { t: off + 2, notes: [root], dur: 0.9, vel: 0.8 },
-                ...voicing.flatMap((n, i) => ({ t: off + 3 + i * 0.02, notes: [n], dur: 0.8, vel: 0.62 })),
+                ...voicing.flatMap((n, i) => ({
+                  t: off + 3 + i * 0.02,
+                  notes: [n],
+                  dur: 0.8,
+                  vel: 0.62,
+                })),
               ];
             }),
           ],
@@ -285,7 +377,11 @@ export const GENRES: Record<string, GenreDemo> = {
             ...["C", "Am", "C", "G"].flatMap((ch, bar) => {
               const off = bar * 4;
               const tones =
-                ch === "Am" ? ["A3", "C4", "E4", "A4"] : ch === "G" ? ["G3", "D4", "E4", "G4"] : ["A3", "C4", "E4", "G4"];
+                ch === "Am"
+                  ? ["A3", "C4", "E4", "A4"]
+                  : ch === "G"
+                    ? ["G3", "D4", "E4", "G4"]
+                    : ["A3", "C4", "E4", "G4"];
               return tones.map((n, i) => ({ t: off + i, notes: [n], dur: 0.9, vel: 0.55 }));
             }),
           ],
@@ -431,8 +527,16 @@ export const GENRES: Record<string, GenreDemo> = {
               { t: b * 4, hit: "kick" as const, vel: 0.9 },
               { t: b * 4 + 3.5, hit: "kick" as const, vel: 0.7 },
             ]).flat(),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.85 })),
-            ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.45 })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.85,
+            })),
+            ...Array.from({ length: 32 }, (_, i) => ({
+              t: i * 0.5,
+              hit: "hihat" as const,
+              vel: 0.45,
+            })),
             { t: 0, hit: "openhat", vel: 0.6 },
           ],
         },
@@ -487,12 +591,14 @@ export const GENRES: Record<string, GenreDemo> = {
           kind: "notes",
           timbre: "synth",
           events: [
-            ...Array.from({ length: 16 }, (_, i) => ["A4", "C5", "E5", "A5"][i % 4]).map((n, i) => ({
-              t: i * 0.5,
-              notes: [n],
-              dur: 0.42,
-              vel: 0.7,
-            })),
+            ...Array.from({ length: 16 }, (_, i) => ["A4", "C5", "E5", "A5"][i % 4]).map(
+              (n, i) => ({
+                t: i * 0.5,
+                notes: [n],
+                dur: 0.42,
+                vel: 0.7,
+              }),
+            ),
             ...Array.from({ length: 8 }, (_, i) => ["F4", "A4", "C5", "F5"][i % 4]).map((n, i) => ({
               t: 8 + i * 0.5,
               notes: [n],
@@ -511,17 +617,41 @@ export const GENRES: Record<string, GenreDemo> = {
           kind: "notes",
           timbre: "synth",
           events: [
-            ...Array.from({ length: 16 }, () => "A2").map((n, i) => ({ t: i * 0.5 + 0.25, notes: [n], dur: 0.3, vel: 0.8 })),
-            ...Array.from({ length: 8 }, () => "F2").map((n, i) => ({ t: 8 + i * 0.5 + 0.25, notes: [n], dur: 0.3, vel: 0.8 })),
-            ...Array.from({ length: 8 }, () => "G2").map((n, i) => ({ t: 12 + i * 0.5 + 0.25, notes: [n], dur: 0.3, vel: 0.8 })),
+            ...Array.from({ length: 16 }, () => "A2").map((n, i) => ({
+              t: i * 0.5 + 0.25,
+              notes: [n],
+              dur: 0.3,
+              vel: 0.8,
+            })),
+            ...Array.from({ length: 8 }, () => "F2").map((n, i) => ({
+              t: 8 + i * 0.5 + 0.25,
+              notes: [n],
+              dur: 0.3,
+              vel: 0.8,
+            })),
+            ...Array.from({ length: 8 }, () => "G2").map((n, i) => ({
+              t: 12 + i * 0.5 + 0.25,
+              notes: [n],
+              dur: 0.3,
+              vel: 0.8,
+            })),
           ],
         },
         {
           kind: "drums",
           events: [
             ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "kick" as const, vel: 0.85 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.6 })),
-            ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5 + 0.5, hit: "hihat" as const, vel: 0.5 })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.6,
+            })),
+            // 真反拍:只在每个正拍的后半(此前 i*0.5+0.5 误盖全部八分音,密度翻倍成"每秒四下")
+            ...Array.from({ length: 16 }, (_, i) => ({
+              t: i + 0.5,
+              hit: "hihat" as const,
+              vel: 0.45,
+            })),
             { t: 0, hit: "openhat", vel: 0.5 },
             { t: 8, hit: "openhat", vel: 0.5 },
           ],
@@ -574,8 +704,16 @@ export const GENRES: Record<string, GenreDemo> = {
         {
           kind: "drums",
           events: [
-            ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "ride" as const, vel: 0.5 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.5 })),
+            ...Array.from({ length: 32 }, (_, i) => ({
+              t: i * 0.5,
+              hit: "ride" as const,
+              vel: 0.5,
+            })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.5,
+            })),
             { t: 0, hit: "kick", vel: 0.5 },
             { t: 4, hit: "kick", vel: 0.4 },
             { t: 8, hit: "kick", vel: 0.5 },
@@ -638,8 +776,16 @@ export const GENRES: Record<string, GenreDemo> = {
               { t: b * 4 + 1.75, hit: "kick" as const, vel: 0.7 },
               { t: b * 4 + 2.5, hit: "kick" as const, vel: 0.6 },
             ]).flat(),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.7 })),
-            ...Array.from({ length: 64 }, (_, i) => ({ t: i * 0.25, hit: "hihat" as const, vel: 0.3 })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.7,
+            })),
+            ...Array.from({ length: 64 }, (_, i) => ({
+              t: i * 0.25,
+              hit: "hihat" as const,
+              vel: 0.3,
+            })),
           ],
         },
       ],

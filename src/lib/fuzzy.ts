@@ -18,7 +18,10 @@ type Token = { t: string; w: number };
 /** 分词:按空白/常见分隔切开;≥3 个汉字的词再补一组 2 字滑窗(权重打折)。
  *  「吉他乐理」→ 吉他/他乐/乐理,其中 吉他 和 乐理 命中、他乐 自然落空。 */
 function tokenize(q: string): Token[] {
-  const raw = q.toLowerCase().split(/[\s,、,。;;/|·]+/).filter(Boolean);
+  const raw = q
+    .toLowerCase()
+    .split(/[\s,、,。;;/|·]+/)
+    .filter(Boolean);
   const out: Token[] = [];
   for (const t of raw) {
     out.push({ t, w: 1 });

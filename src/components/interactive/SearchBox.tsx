@@ -158,7 +158,9 @@ export function SearchBox({ initial = "" }: { initial?: string }) {
               className="block rounded-lg border bg-card p-4 transition hover:border-signature/50"
             >
               <div className="font-medium hover:text-signature">
-                {r.tag && <span className="mr-1.5 text-xs font-normal text-signature">{r.tag}</span>}
+                {r.tag && (
+                  <span className="mr-1.5 text-xs font-normal text-signature">{r.tag}</span>
+                )}
                 {r.title}
               </div>
               {r.excerpt && (
@@ -176,7 +178,10 @@ export function SearchBox({ initial = "" }: { initial?: string }) {
 }
 
 function escapeHtml(s: string) {
-  return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
+  return s.replace(
+    /[&<>"]/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!,
+  );
 }
 
 export default SearchBox;

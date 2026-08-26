@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+
 import { getCollection } from "astro:content";
 
 // 搜索元数据索引:标题/译名/分类/摘要/标签。

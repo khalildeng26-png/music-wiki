@@ -31,7 +31,11 @@ export const STYLES: StyleArrangement[] = [
       bpm: 84,
       beats: 16,
       tracks: [
-        { kind: "notes", timbre: "piano", events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 1.0) },
+        {
+          kind: "notes",
+          timbre: "piano",
+          events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 1.0),
+        },
         {
           kind: "notes",
           timbre: "piano",
@@ -58,7 +62,11 @@ export const STYLES: StyleArrangement[] = [
       swing: 0.63,
       beats: 16,
       tracks: [
-        { kind: "notes", timbre: "piano", events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 0.75) },
+        {
+          kind: "notes",
+          timbre: "piano",
+          events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 0.75),
+        },
         {
           kind: "notes",
           timbre: "piano",
@@ -79,15 +87,38 @@ export const STYLES: StyleArrangement[] = [
         {
           kind: "notes",
           timbre: "bass",
-          events: ["C2", "E2", "G1", "D2", "A1", "E2", "E2", "B2", "F2", "C3", "C2", "G2", "F2", "C3", "G2", "D3"].map(
-            (n, i) => ({ t: i, notes: [n], dur: 0.95 }),
-          ),
+          events: [
+            "C2",
+            "E2",
+            "G1",
+            "D2",
+            "A1",
+            "E2",
+            "E2",
+            "B2",
+            "F2",
+            "C3",
+            "C2",
+            "G2",
+            "F2",
+            "C3",
+            "G2",
+            "D3",
+          ].map((n, i) => ({ t: i, notes: [n], dur: 0.95 })),
         },
         {
           kind: "drums",
           events: [
-            ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "ride" as const, vel: 0.5 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "hihat" as const, vel: 0.5 })),
+            ...Array.from({ length: 32 }, (_, i) => ({
+              t: i * 0.5,
+              hit: "ride" as const,
+              vel: 0.5,
+            })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "hihat" as const,
+              vel: 0.5,
+            })),
             { t: 0, hit: "kick", vel: 0.3 },
             { t: 8, hit: "kick", vel: 0.3 },
           ],
@@ -103,7 +134,11 @@ export const STYLES: StyleArrangement[] = [
       bpm: 132,
       beats: 16,
       tracks: [
-        { kind: "notes", timbre: "eguitar", events: theme(["E4", "D4", "C4", "B3", "A3", "G3", "A3", "B3"], 0.8) },
+        {
+          kind: "notes",
+          timbre: "eguitar",
+          events: theme(["E4", "D4", "C4", "B3", "A3", "G3", "A3", "B3"], 0.8),
+        },
         {
           kind: "notes",
           timbre: "eguitar",
@@ -118,23 +153,37 @@ export const STYLES: StyleArrangement[] = [
             ["G2", "D3", "G3"],
           ].flatMap((ch, u) =>
             // 四分扫弦(每拍一下),余音 0.8 拍
-            Array.from({ length: 2 }, (_, i) => ({ t: unit(u) + i, notes: ch, dur: 0.8, vel: 0.8 })),
+            Array.from({ length: 2 }, (_, i) => ({
+              t: unit(u) + i,
+              notes: ch,
+              dur: 0.8,
+              vel: 0.8,
+            })),
           ),
         },
         {
           kind: "notes",
           timbre: "bass",
           events: ["C2", "G1", "A1", "E1", "F1", "C2", "F1", "G1"].flatMap((root, u) =>
-            Array.from({ length: 2 }, (_, i) => ({ t: unit(u) + i, notes: [root], dur: 0.9, vel: 0.8 })),
+            Array.from({ length: 2 }, (_, i) => ({
+              t: unit(u) + i,
+              notes: [root],
+              dur: 0.9,
+              vel: 0.8,
+            })),
           ),
         },
         {
           kind: "drums",
           events: [
             ...Array.from({ length: 8 }, (_, i) => ({ t: i * 2, hit: "kick" as const, vel: 0.85 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.8 })),
-            // 踩镲每拍一下(四分),力度压低做背景
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.36 })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.8,
+            })),
+            // 踩镲每拍一下(四分),力度再收
+            ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.26 })),
             { t: 0, hit: "openhat", vel: 0.6 },
           ],
         },
@@ -149,7 +198,11 @@ export const STYLES: StyleArrangement[] = [
       bpm: 84,
       beats: 16,
       tracks: [
-        { kind: "notes", timbre: "dizi", events: theme(["E6", "D6", "C6", "B5", "A5", "G5", "A5", "B5"], 0.75) },
+        {
+          kind: "notes",
+          timbre: "dizi",
+          events: theme(["E6", "D6", "C6", "B5", "A5", "G5", "A5", "B5"], 0.75),
+        },
         {
           kind: "notes",
           timbre: "guzheng",
@@ -169,12 +222,21 @@ export const STYLES: StyleArrangement[] = [
       bpm: 140,
       beats: 16,
       tracks: [
-        { kind: "notes", timbre: "chip", events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 0.7) },
+        {
+          kind: "notes",
+          timbre: "chip",
+          events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 0.7),
+        },
         {
           kind: "notes",
           timbre: "chip",
           events: ["C3", "G1", "A1", "E1", "F1", "C2", "F1", "G1"].flatMap((root, u) =>
-            Array.from({ length: 4 }, (_, i) => ({ t: unit(u) + i * 0.5, notes: [root], dur: 0.4, vel: 0.85 })),
+            Array.from({ length: 4 }, (_, i) => ({
+              t: unit(u) + i * 0.5,
+              notes: [root],
+              dur: 0.4,
+              vel: 0.85,
+            })),
           ),
         },
         {
@@ -182,8 +244,16 @@ export const STYLES: StyleArrangement[] = [
           kit: "synth",
           events: [
             ...Array.from({ length: 8 }, (_, i) => ({ t: i * 2, hit: "kick" as const, vel: 0.9 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.75 })),
-            ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.45 })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.75,
+            })),
+            ...Array.from({ length: 32 }, (_, i) => ({
+              t: i * 0.5,
+              hit: "hihat" as const,
+              vel: 0.45,
+            })),
           ],
         },
       ],
@@ -200,23 +270,52 @@ export const STYLES: StyleArrangement[] = [
         {
           kind: "notes",
           timbre: "synth",
-          events: ["E5", "E5", "D5", "D5", "C5", "C5", "B4", "B4", "A4", "A4", "G4", "G4", "A4", "A4", "B4", "B4"].map(
-            (n, i) => ({ t: i, notes: [n], dur: 0.85, vel: 0.75 }),
-          ),
+          events: [
+            "E5",
+            "E5",
+            "D5",
+            "D5",
+            "C5",
+            "C5",
+            "B4",
+            "B4",
+            "A4",
+            "A4",
+            "G4",
+            "G4",
+            "A4",
+            "A4",
+            "B4",
+            "B4",
+          ].map((n, i) => ({ t: i, notes: [n], dur: 0.85, vel: 0.75 })),
         },
         {
           kind: "notes",
           timbre: "synth",
           events: ["C2", "G1", "A1", "E1", "F1", "C2", "F1", "G1"].flatMap((root, u) =>
-            Array.from({ length: 4 }, (_, i) => ({ t: unit(u) + i * 0.5 + 0.5, notes: [root], dur: 0.3, vel: 0.8 })),
+            Array.from({ length: 4 }, (_, i) => ({
+              t: unit(u) + i * 0.5 + 0.5,
+              notes: [root],
+              dur: 0.3,
+              vel: 0.8,
+            })),
           ),
         },
         {
           kind: "drums",
           events: [
             ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "kick" as const, vel: 0.85 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.6 })),
-            ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5 + 0.5, hit: "hihat" as const, vel: 0.5 })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.6,
+            })),
+            // 真反拍:只在每个正拍的后半
+            ...Array.from({ length: 16 }, (_, i) => ({
+              t: i + 0.5,
+              hit: "hihat" as const,
+              vel: 0.45,
+            })),
             { t: 0, hit: "openhat", vel: 0.5 },
           ],
         },

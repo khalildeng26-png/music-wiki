@@ -1,8 +1,9 @@
 import { Play, Square } from "lucide-react";
 import * as React from "react";
 
-import { onAudioInterrupt, playPattern, stopAllAudio } from "./audio";
 import { STYLES } from "@/lib/melodyStyles";
+
+import { onAudioInterrupt, playPattern, stopAllAudio } from "./audio";
 
 /** 首页「一首卡农,六种曲风」:同一段旋律一键换风格,听懂"曲风"到底是什么。
  *  播放中再点同款=停止,点别款=自动切歌(引擎全局互斥)。 */
@@ -64,7 +65,10 @@ export function MelodyStyles() {
           <span className="font-mono text-sm text-muted-foreground tabular-nums">
             C – G – Am – Em – F – C – F – G
           </span>
-          <a href="/entries/pop-progressions" className="text-xs text-muted-foreground hover:text-signature">
+          <a
+            href="/entries/pop-progressions"
+            className="text-xs text-muted-foreground hover:text-signature"
+          >
             (卡农进行:无数流行歌的祖先)
           </a>
         </div>

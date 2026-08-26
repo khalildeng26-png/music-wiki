@@ -1,7 +1,13 @@
 import { Play, Square } from "lucide-react";
 import * as React from "react";
 
-import { onAudioInterrupt, playChordProgression, playSequence, stopAllAudio, type Timbre } from "./audio";
+import {
+  onAudioInterrupt,
+  playChordProgression,
+  playSequence,
+  stopAllAudio,
+  type Timbre,
+} from "./audio";
 
 export type SoundSig =
   | { kind: "notes"; notes: string[]; timbre?: Timbre; dur?: number; gap?: number }

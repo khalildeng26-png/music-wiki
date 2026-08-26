@@ -81,7 +81,7 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
                     aria-label={k.note}
                     className={
                       // 键体固定白色,分隔线不能用主题 border(暗色下是浅色,贴白键会隐形)
-                      "flex flex-1 flex-col items-center justify-end rounded-b-md border border-x-neutral-300 border-t-0 pb-2 text-[10px] transition " +
+                      "flex flex-1 flex-col items-center justify-end rounded-b-md border border-t-0 border-x-neutral-300 pb-2 text-[10px] transition " +
                       (on
                         ? "bg-signature text-signature-foreground"
                         : "bg-white text-slate-400 hover:bg-slate-100")
