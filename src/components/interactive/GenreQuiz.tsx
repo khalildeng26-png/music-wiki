@@ -7,9 +7,10 @@ import { VARIANTS } from "@/lib/quizVariants";
 
 type Phase = "idle" | "asking" | "right" | "wrong";
 
-/** 截取 pattern 前 8 拍当题目(整段 6-12 秒太长,猜谜 4-5 秒正合适) */
+/** 截取 pattern 前 8 拍当题目(整段太长,猜谜 4-5 秒正合适);repeat 必须剥掉 */
 const clip = (p: Pattern): Pattern => ({
   ...p,
+  repeat: 1,
   beats: 8,
   tracks: p.tracks.map((tr) => ({ ...tr, events: tr.events.filter((e: { t: number }) => e.t < 8) })),
 });

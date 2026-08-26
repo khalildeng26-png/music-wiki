@@ -303,6 +303,8 @@ export type Pattern = {
   /** 摇摆:正拍后的八分音往后挪的比例位置。0.5=平直(默认),0.62~0.67≈三连音摇摆 */
   swing?: number;
   beats: number;
+  /** 整段循环遍数(默认 1)。舞曲系的 vamp 本质就是循环,拉长听感的正路是转圈而非堆音符 */
+  repeat?: number;
   tracks: PatternTrack[];
 };
 
@@ -495,12 +497,17 @@ export async function playPattern(
     }
   };
 
-  // 每轨事件按时间排序,配合队头指针做滚动调度
-  const queues = pattern.tracks.map((track) =>
-    [...(track.events as { t: number }[])].sort((a, b) => a.t - b.t).map((ev) => ({ ev, track })),
-  );
+  // 每轨事件按时间排序,配合队头指针做滚动调度;repeat>1 时以 beats 为周期复制
+  const loops = Math.max(1, pattern.repeat ?? 1);
+  const queues = pattern.tracks.map((track) => {
+    const sorted = [...(track.events as { t: number }[])].sort((a, b) => a.t - b.t);
+    const events = Array.from({ length: loops }, (_, c) =>
+      sorted.map((ev) => ({ ev: { ...ev, t: ev.t + c * pattern.beats }, track })),
+    ).flat();
+    return events.sort((a, b) => a.ev.t - b.ev.t);
+  });
   const heads = queues.map(() => 0);
-  const total = pattern.beats * spb;
+  const total = pattern.beats * loops * spb;
 
   await new Promise<void>((resolve) => {
     const tick = () => {

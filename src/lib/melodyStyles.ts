@@ -320,3 +320,6 @@ export const STYLES: StyleArrangement[] = [
     },
   },
 ];
+
+// 每版转 2 遍(8 小节卡农进行,更完整)
+STYLES.forEach((s) => (s.pattern.repeat = 2));

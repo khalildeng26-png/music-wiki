@@ -1112,4 +1112,10 @@ export const GENRES: Record<string, GenreDemo> = {
   },
 };
 
+// 演示时长:vamp 型曲风(循环段本质)转 3 遍,乐句型转 2 遍——比堆音符更符合各曲风的真实形态
+const REPEATS: Record<string, number> = {
+  funk: 3, disco: 3, reggae: 3, electronic: 3, hiphop: 3, rnb: 3, soul: 3, "bossa-nova": 3,
+};
+for (const [slug, g] of Object.entries(GENRES)) g.pattern.repeat = REPEATS[slug] ?? 2;
+
 export const GENRE_LIST = Object.values(GENRES);
