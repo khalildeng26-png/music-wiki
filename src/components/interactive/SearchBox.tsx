@@ -159,7 +159,7 @@ export function SearchBox({ initial = "" }: { initial?: string }) {
             >
               <div className="font-medium hover:text-signature">
                 {r.tag && (
-                  <span className="mr-1.5 text-xs font-normal text-signature">{r.tag}</span>
+                  <span className="mr-1.5 text-xs font-normal text-signature-ink">{r.tag}</span>
                 )}
                 {r.title}
               </div>

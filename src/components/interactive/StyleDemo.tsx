@@ -68,11 +68,12 @@ export function StyleDemo({ title, hint, note, pattern }: Props) {
           type="button"
           onClick={() => void go()}
           aria-label={state === "playing" ? `停止:${title}` : `试听:${title}`}
+          aria-pressed={state === "playing"}
           title={state === "playing" ? "停止" : "播放风格片段"}
           className={
             "inline-flex size-10 shrink-0 items-center justify-center rounded-full transition active:scale-90 " +
             (state === "playing"
-              ? "bg-signature text-signature-foreground"
+              ? "play-pulse bg-signature text-signature-foreground"
               : "bg-signature/10 text-signature hover:bg-signature hover:text-signature-foreground")
           }
         >

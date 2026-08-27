@@ -1,3 +1,4 @@
+import { Search } from "lucide-react";
 import * as React from "react";
 
 import { siteConfig } from "@/lib/config";
@@ -103,8 +104,20 @@ export function MobileNav({ className }: { className?: string }) {
               shown ? "translate-y-0" : "-translate-y-full",
             )}
           >
-            {/* 内容依次落位:链接 → 拖动条 */}
+            {/* 内容依次落位:搜索 → 链接 → 拖动条 */}
             <nav aria-label="主导航" className="flex flex-col gap-1">
+              {/* 搜索是工具不是分类,做成抽屉内独立的浅色行,与导航链接区分开 */}
+              <a
+                href="/search"
+                className={cn(
+                  "mb-1 flex items-center gap-3 rounded-lg border bg-card px-3 py-2.5 text-base text-muted-foreground transition-all duration-300 hover:border-signature/50 hover:text-signature-ink active:scale-[0.98] motion-reduce:transition-none",
+                  shown ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0",
+                )}
+                style={{ transitionDelay: shown ? "100ms" : "0ms" }}
+              >
+                <Search className="size-4" />
+                搜索词条、曲风、乐理……
+              </a>
               {siteConfig.navItems.map((item, i) => (
                 <a
                   key={item.href}
@@ -113,7 +126,7 @@ export function MobileNav({ className }: { className?: string }) {
                     "rounded-lg px-3 py-2.5 text-xl font-medium transition-all duration-300 hover:bg-muted active:scale-[0.98] motion-reduce:transition-none",
                     shown ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0",
                   )}
-                  style={{ transitionDelay: shown ? `${100 + i * 70}ms` : "0ms" }}
+                  style={{ transitionDelay: shown ? `${170 + i * 70}ms` : "0ms" }}
                 >
                   {item.label}
                 </a>
@@ -124,7 +137,7 @@ export function MobileNav({ className }: { className?: string }) {
                 "mx-auto mt-4 h-1 w-10 rounded-full bg-foreground/20 transition-all duration-300 motion-reduce:transition-none",
                 shown ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0",
               )}
-              style={{ transitionDelay: shown ? "320ms" : "0ms" }}
+              style={{ transitionDelay: shown ? "390ms" : "0ms" }}
             />
           </div>
         </>

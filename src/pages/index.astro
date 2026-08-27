@@ -2,7 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import StaffLines from "@/components/StaffLines.astro";
 import { getCollection } from "astro:content";
-import { categories } from "@/lib/categories";
+import { categories, catColor } from "@/lib/categories";
 import HomeSearch from "@/components/interactive/HomeSearch";
 import Piano from "@/components/interactive/Piano";
 import PlayableWord from "@/components/interactive/PlayableWord";
@@ -191,8 +191,13 @@ for (const e of entries) {
         categories.map((c) => (
           <a
             href={`/categories/${c.id}`}
-            class="rounded-full border bg-card px-4 py-1.5 text-sm transition hover:-translate-y-0.5 hover:border-signature/50 hover:text-signature"
+            style={`--cat:${catColor(c.hue)};--cat-d:${catColor(c.hue, "dark")}`}
+            class="rounded-full border bg-card px-4 py-1.5 text-sm transition hover:-translate-y-0.5 hover:border-signature/50 hover:bg-signature/10 hover:text-signature-ink"
           >
+            <span
+              aria-hidden="true"
+              class="mr-1.5 inline-block size-1.5 rounded-full bg-(--cat) dark:bg-(--cat-d)"
+            />
             {c.label}
             <span class="ml-1.5 text-xs text-muted-foreground">{countByCategory.get(c.label)}</span>
           </a>
@@ -240,7 +245,7 @@ for (const e of entries) {
             href={`/paths/${p!.id}`}
             class="group flex items-center gap-4 rounded-xl border bg-card p-5 transition hover:-translate-y-0.5 hover:border-signature/50 hover:shadow-md"
           >
-            <div class="flex shrink-0 flex-col items-center justify-center rounded-lg bg-signature/10 px-4 py-2 text-signature">
+            <div class="flex shrink-0 flex-col items-center justify-center rounded-lg bg-signature/10 px-4 py-2 text-signature-ink">
               <span class="text-2xl font-bold leading-none">{p!.data.steps.length}</span>
               <span class="text-xs">步</span>
             </div>

@@ -65,6 +65,7 @@
   --color-selection-foreground: var(--selection-foreground);
   --color-signature: var(--signature);
   --color-signature-foreground: var(--signature-foreground);
+  --color-signature-ink: var(--signature-ink);
 }
 
 :root {
@@ -84,7 +85,6 @@
   --destructive: oklch(0.58 0.22 27);
   --border: oklch(0.885 0.018 82);
   --input: oklch(0.885 0.018 82);
-  --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.809 0.105 251.813);
   --chart-2: oklch(0.623 0.214 259.815);
   --chart-3: oklch(0.546 0.245 262.881);
@@ -105,6 +105,11 @@
   --selection-foreground: oklch(0.22 0.03 71);
   --signature: oklch(0.78 0.15 71);
   --signature-foreground: oklch(0.22 0.03 71);
+  /* 文字级琥珀:亮琥珀(0.78)在米白底上对比度不足 2:1,只配做图形;
+     需要以琥珀色呈现的文字/细线(徽章、选中态、目录当前项)一律用 ink */
+  --signature-ink: oklch(0.47 0.1 66);
+  /* focus ring 用 ink 而非亮琥珀:焦点指示器需 3:1 对比度,亮琥珀在米白底上达不到 */
+  --ring: oklch(0.47 0.1 66);
 }
 
 .dark {
@@ -125,7 +130,6 @@
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.809 0.105 251.813);
   --chart-2: oklch(0.623 0.214 259.815);
   --chart-3: oklch(0.546 0.245 262.881);
@@ -144,6 +148,9 @@
   --selection-foreground: oklch(0.16 0.02 71);
   --signature: oklch(0.82 0.15 75);
   --signature-foreground: oklch(0.16 0.02 71);
+  /* 暗色下亮琥珀本身对比度充足,文字级琥珀直接沿用 */
+  --signature-ink: oklch(0.82 0.15 75);
+  --ring: oklch(0.82 0.15 75);
 }
 
 @layer base {
@@ -387,4 +394,31 @@
   .cat-media {
     animation: none !important;
   }
+}
+
+/* ---------- 播放中状态:声纳脉冲 ---------- */
+/* 一圈琥珀色环从按钮边缘扩散淡出,循环提示"正在响";仅挂在播放中的播放键上 */
+@keyframes play-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--signature) 45%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 10px transparent;
+  }
+}
+.play-pulse {
+  animation: play-pulse 1.15s ease-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .play-pulse {
+    animation: none;
+  }
+}
+
+/* ---------- 词条页目录(TOC) ---------- */
+/* 链接本体类名在模板里;这里只定义"当前小节"高亮态(由词条页内联脚本加/摘) */
+.toc-link.is-active {
+  border-color: var(--signature);
+  color: var(--signature-ink);
+  font-weight: 500;
 }

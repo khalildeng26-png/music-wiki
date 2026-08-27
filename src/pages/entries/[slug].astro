@@ -4,7 +4,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import StaffLines from "@/components/StaffLines.astro";
 import ShareButton from "@/components/interactive/ShareButton";
 import RandomEntryButton from "@/components/interactive/RandomEntryButton";
-import { categoryByLabel } from "@/lib/categories";
+import { categoryByLabel, catColor } from "@/lib/categories";
 
 export async function getStaticPaths() {
   const entries = await getCollection("entries", (e) => !e.data.draft);
@@ -15,7 +15,11 @@ export async function getStaticPaths() {
 }
 
 const { entry, allEntries } = Astro.props;
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
+
+// 目录只收 H2(H3 是 FAQ 问题,进来会刷屏);小节太少的短词条不出目录
+const toc = headings.filter((h) => h.depth === 2);
+const showToc = toc.length >= 3;
 
 const entryMap = new Map(allEntries.map((e) => [e.id, e]));
 const related = entry.data.related
@@ -101,7 +105,7 @@ const jsonLd = [
       inPaths.map(({ p, step, total, prev, next }) => (
         <div class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-signature/30 bg-signature/5 px-4 py-3 text-sm">
           <span>你在路线</span>
-          <a href={`/paths/${p.id}`} class="font-medium text-signature hover:underline">
+          <a href={`/paths/${p.id}`} class="font-medium text-signature-ink hover:underline">
             {p.data.title}
           </a>
           <span class="text-muted-foreground">· 第 {step} / {total} 步</span>
@@ -123,7 +127,14 @@ const jsonLd = [
     </h1>
     <p class="mt-3 text-lg text-muted-foreground">{entry.data.summary}</p>
     <div class="mt-4 flex flex-wrap gap-2 text-xs">
-      <span class="rounded-md bg-signature/10 px-2 py-0.5 font-medium text-signature">
+      <span
+        class="inline-flex items-center rounded-md bg-signature/10 px-2 py-0.5 font-medium text-signature-ink"
+        style={`--cat:${catColor(cat.hue)};--cat-d:${catColor(cat.hue, "dark")}`}
+      >
+        <span
+          aria-hidden="true"
+          class="mr-1 inline-block size-1.5 rounded-full bg-(--cat) dark:bg-(--cat-d)"
+        />
         {entry.data.category}
       </span>
       {
@@ -134,6 +145,57 @@ const jsonLd = [
     </div>
 
     <StaffLines class="mt-8 w-40 text-signature/40" />
+
+    {
+      showToc && (
+        <>
+          {/* 移动端:正文前的折叠目录,不挡阅读流 */}
+          <details
+            class="mt-8 rounded-lg border bg-card px-4 py-3 xl:hidden"
+            data-pagefind-ignore
+          >
+            <summary class="cursor-pointer text-sm font-medium">
+              本页内容 · {toc.length} 节
+            </summary>
+            <ul class="mt-2.5 space-y-1.5 text-sm">
+              {toc.map((h) => (
+                <li>
+                  <a href={`#${h.slug}`} class="text-muted-foreground hover:text-signature-ink">
+                    {h.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </details>
+          {/* 桌面 xl 起:右 gutter 固定目录(正文 max-w-3xl 居中后,两侧留白正好容纳);
+              条目少/窗口不够宽时不出现,绝不挤压正文。
+              注意(脆点,后续应容器化):right 算式里的 24rem=正文 max-w-3xl 的一半、
+              13rem=目录宽 w-52、2rem=栏间距——改正文宽度或目录宽度时必须同步改这里,
+              否则会错位且无任何报错。容器化方案:article 改 xl:grid 双列,目录进第二列。 */}
+          <aside
+            class="hidden xl:fixed xl:top-24 xl:right-[max(1.5rem,calc(50%-24rem-13rem-2rem))] xl:block xl:w-52"
+            data-pagefind-ignore
+          >
+            <nav aria-label="本页目录">
+              <p class="text-xs font-medium tracking-wide text-muted-foreground">本页内容</p>
+              <ul class="mt-3 space-y-2 text-sm">
+                {toc.map((h) => (
+                  <li>
+                    <a
+                      href={`#${h.slug}`}
+                      data-toc={h.slug}
+                      class="toc-link -ml-px block border-l-2 border-transparent pl-3 text-muted-foreground transition hover:text-foreground"
+                    >
+                      {h.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </aside>
+        </>
+      )
+    }
 
     <div class="prose dark:prose-invert mt-8 max-w-none">
       <Content />
@@ -151,7 +213,7 @@ const jsonLd = [
               class="group block rounded-xl border border-signature/40 bg-signature/5 p-5 transition hover:border-signature hover:shadow-md sm:p-6"
             >
               <div class="flex items-center gap-2 text-sm text-muted-foreground">
-                <span class="font-medium text-signature">{p.data.title}</span>
+                <span class="font-medium text-signature-ink">{p.data.title}</span>
                 <span aria-hidden="true">·</span>
                 <span>第 {step} / {total} 节读完</span>
               </div>
@@ -174,7 +236,7 @@ const jsonLd = [
           </section>
         ) : (
           <section class="not-prose mt-12 rounded-xl border border-signature/40 bg-signature/5 p-6 text-center sm:p-8">
-            <div class="text-sm font-medium text-signature">路线完成</div>
+            <div class="text-sm font-medium text-signature-ink">路线完成</div>
             <div class="mt-1.5 text-xl font-bold tracking-tight sm:text-2xl">
               你读完了「{p.data.title}」全部 {total} 节
             </div>
@@ -247,4 +309,33 @@ const jsonLd = [
       <span class="ml-auto text-xs text-muted-foreground">读完随手一转,是对这本百科最大的帮助</span>
     </section>
   </article>
+
+  {/* 目录当前小节高亮:视口上部命中的 H2 对应链接上色 */}
+  <script is:inline>
+    (() => {
+      const links = document.querySelectorAll("a[data-toc]");
+      if (!links.length) return;
+      const bySlug = new Map();
+      links.forEach((l) => bySlug.set(l.getAttribute("data-toc"), l));
+      const heads = Array.from(document.querySelectorAll(".prose h2[id]")).filter((h) =>
+        bySlug.has(h.id),
+      );
+      if (!heads.length) return;
+      let cur = null;
+      const activate = (id) => {
+        if (id === cur) return;
+        cur = id;
+        bySlug.forEach((l) => l.classList.remove("is-active"));
+        const link = bySlug.get(id);
+        if (link) link.classList.add("is-active");
+      };
+      const io = new IntersectionObserver(
+        (es) => {
+          for (const e of es) if (e.isIntersecting) activate(e.target.id);
+        },
+        { rootMargin: "-10% 0px -75% 0px" },
+      );
+      heads.forEach((h) => io.observe(h));
+    })();
+  </script>
 </BaseLayout>

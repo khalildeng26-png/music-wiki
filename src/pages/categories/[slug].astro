@@ -3,7 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import EntryGroups from "@/components/EntryGroups.astro";
 import CategoryFilter from "@/components/interactive/CategoryFilter";
 import { getCollection } from "astro:content";
-import { categories } from "@/lib/categories";
+import { categories, catColor } from "@/lib/categories";
 
 export async function getStaticPaths() {
   return categories.map((c) => ({
@@ -41,7 +41,22 @@ const filterItems = entries.map((e) => ({
       <a href="/entries" class="hover:text-signature">词条</a>
     </nav>
 
-    <h1 class="mt-4 text-3xl font-display font-bold tracking-tight">{category.label}</h1>
+    {/* 分类图标:记谱法记号手绘 SVG(见 categories.ts),直接浮动在标题旁,不用色块衬底 */}
+    <div
+      class="mt-4 flex items-center gap-3.5"
+      style={`--cat:${catColor(category.hue)};--cat-d:${catColor(category.hue, "dark")}`}
+    >
+      <svg
+        viewBox="0 0 44 44"
+        aria-hidden="true"
+        class="size-11 shrink-0 text-(--cat) dark:text-(--cat-d)"
+        fill="none"
+        stroke="currentColor"
+        stroke-linecap="round"
+        set:html={category.mark}
+      />
+      <h1 class="text-3xl font-display font-bold tracking-tight">{category.label}</h1>
+    </div>
     <p class="mt-2 text-muted-foreground">{category.desc}</p>
 
     {

@@ -16,7 +16,13 @@ type Item = {
  * 无输入时完全隐藏结果区(静态词条列表由 Astro 服务端渲染,不受影响);
  * 一旦有词,客户端渲染过滤结果并隐藏静态列表(两个根节点切换 display)。
  */
-export function CategoryFilter({ items, seriesNames }: { items: Item[]; seriesNames: Record<string, string> }) {
+export function CategoryFilter({
+  items,
+  seriesNames,
+}: {
+  items: Item[];
+  seriesNames: Record<string, string>;
+}) {
   const [q, setQ] = React.useState("");
 
   // 静态列表/结果列表由 id 约定切换显示
@@ -28,7 +34,8 @@ export function CategoryFilter({ items, seriesNames }: { items: Item[]; seriesNa
   const terms = q.trim().toLowerCase().split(/\s+/).filter(Boolean);
   const hits = terms.length
     ? items.filter((it) => {
-        const hay = `${it.title} ${it.titleEn ?? ""} ${it.summary} ${it.tags.join(" ")}`.toLowerCase();
+        const hay =
+          `${it.title} ${it.titleEn ?? ""} ${it.summary} ${it.tags.join(" ")}`.toLowerCase();
         return terms.every((t) => hay.includes(t));
       })
     : items;
@@ -63,13 +70,20 @@ export function CategoryFilter({ items, seriesNames }: { items: Item[]; seriesNa
       {terms.length > 0 && (
         <div id="cat-filter-result">
           <p className="mt-6 text-sm text-muted-foreground">
-            {hits.length > 0 ? `「${q.trim()}」命中 ${hits.length} 篇` : `本分类下没有匹配「${q.trim()}」的词条`}
+            {hits.length > 0
+              ? `「${q.trim()}」命中 ${hits.length} 篇`
+              : `本分类下没有匹配「${q.trim()}」的词条`}
           </p>
           {ency.length > 0 && <Grid items={ency} />}
           {tut.length > 0 && (
             <>
-              <h3 className="mt-8 text-lg font-display font-semibold">学习路线</h3>
-              <Grid items={tut.map((t) => ({ ...t, badge: t.series ? seriesNames[t.series] : undefined }))} />
+              <h3 className="mt-8 font-display text-lg font-semibold">学习路线</h3>
+              <Grid
+                items={tut.map((t) => ({
+                  ...t,
+                  badge: t.series ? seriesNames[t.series] : undefined,
+                }))}
+              />
             </>
           )}
         </div>
@@ -88,13 +102,15 @@ function Grid({ items }: { items: (Item & { badge?: string })[] }) {
           className="group flex flex-col gap-1.5 rounded-xl border bg-card p-4 transition hover:-translate-y-0.5 hover:border-signature/50 hover:shadow-md"
         >
           {it.badge && (
-            <span className="w-fit rounded-md bg-signature/10 px-2 py-0.5 text-xs font-medium text-signature">
+            <span className="w-fit rounded-md bg-signature/10 px-2 py-0.5 text-xs font-medium text-signature-ink">
               {it.badge}
             </span>
           )}
           <div className="font-display font-medium group-hover:text-signature">
             {it.title}
-            {it.titleEn && <span className="ml-1.5 text-sm font-normal text-muted-foreground">{it.titleEn}</span>}
+            {it.titleEn && (
+              <span className="ml-1.5 text-sm font-normal text-muted-foreground">{it.titleEn}</span>
+            )}
           </div>
           <div className="line-clamp-2 text-sm text-muted-foreground">{it.summary}</div>
         </a>

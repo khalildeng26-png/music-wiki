@@ -1,3 +1,4 @@
+import { HeaderSearch } from "@/components/HeaderSearch";
 import { MainNav } from "@/components/MainNav";
 import { MobileNav } from "@/components/MobileNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -17,6 +18,7 @@ export function Header() {
           <MainNav className="hidden lg:flex" />
 
           <div className="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
+            <HeaderSearch />
             <ThemeToggle />
           </div>
         </div>

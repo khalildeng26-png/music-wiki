@@ -29,9 +29,9 @@ export function DailyEntry({ candidates }: { candidates: Candidate[] }) {
     <div className="relative">
       <a
         href={pick.href}
-        className="group block overflow-hidden rounded-2xl border border-signature/30 bg-signature/5 p-6 transition hover:border-signature/60 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signature sm:p-8"
+        className="group block overflow-hidden rounded-2xl border border-l-4 border-signature/30 border-l-signature bg-signature/5 p-6 transition hover:border-signature/60 hover:border-l-signature hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signature sm:p-8"
       >
-        <div className="flex items-center gap-2 text-sm font-medium text-signature">
+        <div className="flex items-center gap-2 text-sm font-medium text-signature-ink">
           <span className="inline-flex size-2 rounded-full bg-signature" />
           今日词条
         </div>

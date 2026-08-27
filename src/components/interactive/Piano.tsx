@@ -32,13 +32,19 @@ type Props = {
   minWidth?: number;
 };
 
-/** 虚拟钢琴:点琴键用 Tone.js 发声,琥珀高亮当前键。 */
+/** 虚拟钢琴:点琴键用 Tone.js 发声,琥珀高亮当前键。
+ *  键盘可达:整个键盘只占一个 Tab 停点(roving tabindex),← → 移动、Enter/Space 发声。 */
 export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWidth }: Props) {
   const [active, setActive] = React.useState<string | null>(null);
   const { keys, whiteCount } = React.useMemo(
     () => buildKeys(startOct, octaves),
     [startOct, octaves],
   );
+  // roving tabindex:当前可 Tab 到的琴键下标(按音高顺序,与视觉左右一致)
+  const [focusIdx, setFocusIdx] = React.useState(0);
+  const btnRefs = React.useRef<(HTMLButtonElement | null)[]>([]);
+  const idxOf = React.useMemo(() => new Map(keys.map((k, i) => [k.note, i])), [keys]);
+
   const whiteW = 100 / whiteCount;
   const blackW = whiteW * 0.62;
   // 白键保底 44px(触控标准),多八度时键盘自动横向滚动
@@ -55,6 +61,32 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
     window.setTimeout(() => setActive((a) => (a === note ? null : a)), 250);
   }
 
+  function onKeyDown(e: React.KeyboardEvent) {
+    let next: number | null = null;
+    if (e.key === "ArrowRight" || e.key === "ArrowUp")
+      next = Math.min(focusIdx + 1, keys.length - 1);
+    else if (e.key === "ArrowLeft" || e.key === "ArrowDown") next = Math.max(focusIdx - 1, 0);
+    else if (e.key === "Home") next = 0;
+    else if (e.key === "End") next = keys.length - 1;
+    if (next === null) return;
+    e.preventDefault();
+    setFocusIdx(next);
+    btnRefs.current[next]?.focus();
+  }
+
+  // 琴键共享的键盘可达属性;focus 时接管 Tab 停点,保持"焦点在哪停点在哪"
+  const keyA11y = (note: string) => {
+    const i = idxOf.get(note)!;
+    return {
+      tabIndex: i === focusIdx ? 0 : -1,
+      onFocus: () => setFocusIdx(i),
+      onKeyDown,
+      ref: (el: HTMLButtonElement | null) => {
+        btnRefs.current[i] = el;
+      },
+    };
+  };
+
   const whites = keys.filter((k) => !k.black);
   const blacks = keys.filter((k) => k.black);
 
@@ -67,7 +99,13 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
       )}
       <div className="p-4">
         <div className="overflow-x-auto pb-2">
-          <div className="relative mx-auto" style={{ height: keyHeight, minWidth: minW }}>
+          <div
+            className="relative mx-auto"
+            style={{ height: keyHeight, minWidth: minW }}
+            // eslint-disable-next-line jsx-a11y/prefer-tag-over-role -- 琴键组是复合控件,group+aria-label 是正解;fieldset 的图例/边框语义不符
+            role="group"
+            aria-label="虚拟钢琴键盘"
+          >
             {/* 白键 */}
             <div className="flex h-full">
               {whites.map((k) => {
@@ -79,6 +117,7 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
                     type="button"
                     onClick={() => hit(k.note)}
                     aria-label={k.note}
+                    {...keyA11y(k.note)}
                     className={
                       // 键体固定白色,分隔线不能用主题 border(暗色下是浅色,贴白键会隐形)
                       "flex flex-1 flex-col items-center justify-end rounded-b-md border border-t-0 border-x-neutral-300 pb-2 text-[10px] transition " +
@@ -103,6 +142,7 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
                     type="button"
                     onClick={() => hit(k.note)}
                     aria-label={k.note}
+                    {...keyA11y(k.note)}
                     className={
                       "absolute top-0 rounded-b-md transition " +
                       (on ? "bg-signature" : "bg-neutral-900 hover:bg-neutral-700")
@@ -115,7 +155,7 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
           </div>
         </div>
         <p className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
-          <Volume2 className="size-3.5" /> 点任意琴键听音(白键上标了每个 C 的位置)
+          <Volume2 className="size-3.5" /> 点任意琴键听音;键盘 Tab 进入后,方向键选键、回车发声
         </p>
       </div>
     </figure>

@@ -89,11 +89,12 @@ export function PlayChip({ sig, label }: { sig: SoundSig; label: string }) {
         void go();
       }}
       aria-label={state === "playing" ? `停止:${label.replace(/^试听:/, "")}` : label}
+      aria-pressed={state === "playing"}
       title={state === "playing" ? "停止" : label}
       className={
         "inline-flex size-9 items-center justify-center rounded-full transition active:scale-90 " +
         (state === "playing"
-          ? "bg-signature text-signature-foreground"
+          ? "play-pulse bg-signature text-signature-foreground"
           : "bg-signature/10 text-signature hover:bg-signature hover:text-signature-foreground")
       }
     >
@@ -112,7 +113,7 @@ export function PlayableCards({ items }: { items: PlayableCard[] }) {
             href={c.href}
             className="group flex h-full flex-col gap-2 rounded-xl border bg-card p-5 pr-14 transition hover:-translate-y-0.5 hover:border-signature/50 hover:shadow-md"
           >
-            <span className="w-fit rounded-md bg-signature/10 px-2 py-0.5 text-xs font-medium text-signature">
+            <span className="w-fit rounded-md bg-signature/10 px-2 py-0.5 text-xs font-medium text-signature-ink">
               {c.category}
             </span>
             <div className="text-lg font-semibold group-hover:text-signature">

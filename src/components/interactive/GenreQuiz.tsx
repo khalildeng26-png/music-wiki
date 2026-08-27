@@ -1,9 +1,10 @@
 import { Play, RotateCcw, Square } from "lucide-react";
 import * as React from "react";
 
-import { onAudioInterrupt, playPattern, stopAllAudio, type Pattern } from "./audio";
 import { GENRE_LIST, type GenreDemo } from "@/lib/genrePatterns";
 import { VARIANTS } from "@/lib/quizVariants";
+
+import { onAudioInterrupt, playPattern, stopAllAudio, type Pattern } from "./audio";
 
 type Phase = "idle" | "asking" | "right" | "wrong";
 
@@ -12,7 +13,10 @@ const clip = (p: Pattern): Pattern => ({
   ...p,
   repeat: 1,
   beats: 8,
-  tracks: p.tracks.map((tr) => ({ ...tr, events: tr.events.filter((e: { t: number }) => e.t < 8) })),
+  tracks: p.tracks.map((tr) => ({
+    ...tr,
+    events: tr.events.filter((e: { t: number }) => e.t < 8),
+  })),
 });
 
 const shortName = (g: GenreDemo) => g.title.split(" · ")[0];
@@ -30,7 +34,10 @@ function pickQuestion(): { q: GenreDemo; pattern: Pattern; options: string[] } {
   return {
     q,
     pattern,
-    options: [q.slug, ...others].map((s) => ({ s, r: Math.random() })).sort((a, b) => a.r - b.r).map((x) => x.s),
+    options: [q.slug, ...others]
+      .map((s) => ({ s, r: Math.random() }))
+      .sort((a, b) => a.r - b.r)
+      .map((x) => x.s),
   };
 }
 
@@ -118,18 +125,23 @@ export function GenreQuiz() {
                   type="button"
                   onClick={() => q && pattern && void play(q, pattern)}
                   aria-label={playing ? "停止播放" : "再听一遍"}
+                  aria-pressed={playing}
                   title={playing ? "停止" : "再听一遍"}
                   className={
                     "inline-flex size-10 shrink-0 items-center justify-center rounded-full transition active:scale-90 " +
                     (playing
-                      ? "bg-signature text-signature-foreground"
+                      ? "play-pulse bg-signature text-signature-foreground"
                       : "bg-signature/10 text-signature hover:bg-signature hover:text-signature-foreground")
                   }
                 >
                   {playing ? <Square className="size-3.5" /> : <RotateCcw className="size-4" />}
                 </button>
                 <div className="font-medium">
-                  {phase === "asking" ? "这段是哪种曲风?" : phase === "right" ? "答对了!" : "差一点——"}
+                  {phase === "asking"
+                    ? "这段是哪种曲风?"
+                    : phase === "right"
+                      ? "答对了!"
+                      : "差一点——"}
                 </div>
               </div>
             )}
@@ -168,7 +180,7 @@ export function GenreQuiz() {
                       "rounded-lg border px-3 py-2.5 text-sm transition active:scale-95 " +
                       (answered
                         ? isAnswer
-                          ? "border-signature bg-signature/10 font-medium text-signature"
+                          ? "border-signature bg-signature/10 font-medium text-signature-ink"
                           : isChosen
                             ? "border-red-500/50 bg-red-500/5 text-red-600"
                             : "text-muted-foreground opacity-60"
@@ -182,10 +194,13 @@ export function GenreQuiz() {
             </div>
             {q && (phase === "right" || phase === "wrong") && (
               <p className="mt-4 min-h-6 text-sm text-muted-foreground">
-                <span className="font-medium text-signature">{shortName(q)}</span>
+                <span className="font-medium text-signature-ink">{shortName(q)}</span>
                 <span className="mx-1.5">·</span>
                 {q.hint}
-                <a href={`/entries/${q.slug}`} className="ml-2 whitespace-nowrap text-signature hover:underline">
+                <a
+                  href={`/entries/${q.slug}`}
+                  className="ml-2 whitespace-nowrap text-signature-ink hover:underline"
+                >
                   读词条 →
                 </a>
               </p>

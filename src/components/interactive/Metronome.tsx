@@ -108,15 +108,16 @@ export function Metronome() {
             <span className="font-mono text-5xl font-bold tabular-nums">{bpm}</span>
             <span className="text-sm text-muted-foreground">BPM</span>
           </div>
-          <div className="mt-1 text-sm text-signature">{tempoName(bpm)}</div>
+          <div className="mt-1 text-sm text-signature-ink">{tempoName(bpm)}</div>
         </div>
         <button
           type="button"
           onClick={toggle}
+          aria-pressed={running}
           className={
             "inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition " +
             (running
-              ? "bg-muted text-foreground hover:bg-muted/70"
+              ? "play-pulse bg-signature text-signature-foreground hover:opacity-90"
               : "bg-signature text-signature-foreground hover:opacity-90")
           }
         >
@@ -155,7 +156,7 @@ export function Metronome() {
             onClick={() => setBeats(b)}
             className={
               "rounded-md border px-2.5 py-1 text-xs " +
-              (beats === b ? "border-signature/50 text-signature" : "hover:border-signature/50")
+              (beats === b ? "border-signature/50 text-signature-ink" : "hover:border-signature/50")
             }
           >
             {b} 拍

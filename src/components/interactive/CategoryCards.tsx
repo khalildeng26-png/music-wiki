@@ -50,7 +50,11 @@ const CARDS: CardDef[] = [
             { t: 1, hit: "snare", vel: 0.75 },
             { t: 2, hit: "kick", vel: 0.85 },
             { t: 3, hit: "snare", vel: 0.75 },
-            ...Array.from({ length: 8 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.4 })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: i * 0.5,
+              hit: "hihat" as const,
+              vel: 0.4,
+            })),
           ],
         },
       ],
@@ -112,7 +116,11 @@ const CARDS: CardDef[] = [
           timbre: "guitar",
           events: [{ t: 0, notes: ["E3", "G3", "B3"], dur: 1.4, vel: 0.7 }],
         },
-        { kind: "notes", timbre: "trumpet", events: [{ t: 1.5, notes: ["G4"], dur: 1.2, vel: 0.55 }] },
+        {
+          kind: "notes",
+          timbre: "trumpet",
+          events: [{ t: 1.5, notes: ["G4"], dur: 1.2, vel: 0.55 }],
+        },
         { kind: "notes", timbre: "erhu", events: [{ t: 2.5, notes: ["A4"], dur: 1.4, vel: 0.5 }] },
       ],
     },
@@ -125,14 +133,18 @@ const CARDS: CardDef[] = [
   },
 ];
 
-const durMs = (p: Pattern) => (p.beats * 60) / p.bpm * 1000;
+const durMs = (p: Pattern) => ((p.beats * 60) / p.bpm) * 1000;
 
 /** 五线谱底纹 */
 function StaffLines() {
   return (
     <div className="absolute inset-0">
       {[22, 36, 50, 64, 78].map((top) => (
-        <div key={top} className="absolute right-3 left-3 h-px bg-border" style={{ top: `${top}%` }} />
+        <div
+          key={top}
+          className="absolute right-3 left-3 h-px bg-border"
+          style={{ top: `${top}%` }}
+        />
       ))}
     </div>
   );
@@ -326,7 +338,9 @@ export function CategoryCards({ counts }: { counts: Record<string, number> }) {
                 </span>
               ) : null}
             </div>
-            <div className="px-1 pb-1 text-sm leading-relaxed text-muted-foreground">{c.tagline}</div>
+            <div className="px-1 pb-1 text-sm leading-relaxed text-muted-foreground">
+              {c.tagline}
+            </div>
           </a>
           {c.sig && (
             <button
@@ -337,11 +351,12 @@ export function CategoryCards({ counts }: { counts: Record<string, number> }) {
                 void play(c);
               }}
               aria-label={playing === c.id ? `停止:${c.label}` : `试听:${c.label}的声音签名`}
+              aria-pressed={playing === c.id}
               title={playing === c.id ? "停止" : "这个分类的声音"}
               className={
                 "absolute top-7 right-7 inline-flex size-8 items-center justify-center rounded-full transition active:scale-90 " +
                 (playing === c.id
-                  ? "bg-signature text-signature-foreground"
+                  ? "play-pulse bg-signature text-signature-foreground"
                   : "bg-signature/10 text-signature hover:bg-signature hover:text-signature-foreground")
               }
             >

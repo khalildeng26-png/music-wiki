@@ -82,10 +82,11 @@ export function MelodyStyles() {
                 type="button"
                 onClick={() => void play(s.id)}
                 aria-label={on ? `停止${s.name}版` : `试听${s.name}版`}
+                aria-pressed={on}
                 className={
                   "inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm transition active:scale-95 " +
                   (on
-                    ? "border-signature bg-signature text-signature-foreground"
+                    ? "play-pulse border-signature bg-signature text-signature-foreground"
                     : "bg-card hover:border-signature/50 hover:text-signature")
                 }
               >
@@ -98,7 +99,7 @@ export function MelodyStyles() {
 
         {active && (
           <p className="mt-4 min-h-6 text-sm text-muted-foreground">
-            <span className="font-medium text-signature">{active.name}版</span>
+            <span className="font-medium text-signature-ink">{active.name}版</span>
             <span className="mx-1.5">·</span>
             {active.desc}
           </p>

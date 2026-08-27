@@ -1,8 +1,9 @@
-import { Loader2, Play } from "lucide-react";
+import { Play, Square } from "lucide-react";
 import * as React from "react";
 
 import { playSequence, type Timbre } from "./audio";
 import { toAbc } from "./noteUtils";
+import { usePlayToggle } from "./usePlayToggle";
 
 type Props = {
   notes: string[];
@@ -16,7 +17,7 @@ type Props = {
 /** 渲染一段五线谱(abcjs),点琥珀播放键用 Tone.js 依次发声。 */
 export function StaffNotation({ notes, label, timbre = "piano", clef = "treble" }: Props) {
   const ref = React.useRef<HTMLDivElement>(null);
-  const [playing, setPlaying] = React.useState(false);
+  const { playing, start, stop } = usePlayToggle();
 
   React.useEffect(() => {
     let cancelled = false;
@@ -37,16 +38,10 @@ export function StaffNotation({ notes, label, timbre = "piano", clef = "treble" 
     };
   }, [notes.join(","), clef]);
 
-  async function handlePlay() {
-    if (playing) return;
-    setPlaying(true);
-    try {
-      await playSequence(notes, 0.45, 0.08, timbre);
-    } catch {
-      /* 忽略音频错误 */
-    }
+  function handlePlay() {
+    if (playing) return stop();
     const total = notes.length * (0.45 + 0.08) * 1000 + 300;
-    window.setTimeout(() => setPlaying(false), total);
+    void start(() => playSequence(notes, 0.45, 0.08, timbre), total);
   }
 
   return (
@@ -61,11 +56,14 @@ export function StaffNotation({ notes, label, timbre = "piano", clef = "treble" 
         <button
           type="button"
           onClick={handlePlay}
-          disabled={playing}
-          className="mt-3 inline-flex items-center gap-2 rounded-lg bg-signature px-4 py-2 text-sm font-medium text-signature-foreground transition hover:opacity-90 disabled:opacity-60"
+          aria-pressed={playing}
+          className={
+            "mt-3 inline-flex items-center gap-2 rounded-lg bg-signature px-4 py-2 text-sm font-medium text-signature-foreground transition hover:opacity-90 " +
+            (playing ? "play-pulse" : "")
+          }
         >
-          {playing ? <Loader2 className="size-4 animate-spin" /> : <Play className="size-4" />}
-          {playing ? "播放中…" : "播放"}
+          {playing ? <Square className="size-3.5" /> : <Play className="size-4" />}
+          {playing ? "停止" : "播放"}
         </button>
       </div>
     </figure>
