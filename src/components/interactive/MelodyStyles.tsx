@@ -4,12 +4,15 @@ import * as React from "react";
 import { STYLES } from "@/lib/melodyStyles";
 
 import { onAudioInterrupt, playPattern, stopAllAudio } from "./audio";
+import { TransposePicker } from "./TransposePicker";
 
 /** 首页「一首卡农,六种曲风」:同一段旋律一键换风格,听懂"曲风"到底是什么。
- *  播放中再点同款=停止,点别款=自动切歌(引擎全局互斥)。 */
+ *  播放中再点同款=停止,点别款=自动切歌(引擎全局互斥)。
+ *  附 ±5 半音换调:同一套和弦关系搬到任何调都成立——这正是「调」的本质。 */
 export function MelodyStyles() {
   const [playing, setPlaying] = React.useState<string | null>(null);
   const [last, setLast] = React.useState<string>(STYLES[0].id);
+  const [semis, setSemis] = React.useState(0);
   const timer = React.useRef(0);
   // 自己启动播放的瞬间,playPattern 会先广播一次"打断"——那一次要忽略
   const starting = React.useRef(false);
@@ -43,7 +46,7 @@ export function MelodyStyles() {
     // playPattern 的同步"自打断"广播发生在调用内部,微任务后即解除豁免(否则播放中无法停止)
     void Promise.resolve().then(() => (starting.current = false));
     try {
-      await playPattern(style.pattern); // 引擎先打断已有播放(广播被 starting 挡下)
+      await playPattern(style.pattern, { transpose: semis }); // 引擎先打断已有播放(广播被 starting 挡下)
       if (my !== session.current) return; // 期间又被取代
       // playPattern 在播完时 resolve,这里只留一点采样收尾余量
       timer.current = window.setTimeout(() => setPlaying(null), 600);
@@ -104,6 +107,13 @@ export function MelodyStyles() {
             {active.desc}
           </p>
         )}
+
+        <div className="mt-4 border-t pt-3">
+          <TransposePicker value={semis} onChange={setSemis} label="换个调弹(关系不变)" />
+          <p className="mt-1.5 text-xs text-muted-foreground">
+            换调后重按任意风格:同一套和弦关系原样搬到新调——这就是「调」的全部秘密。
+          </p>
+        </div>
       </div>
       <figcaption className="border-t bg-muted/40 px-5 py-1.5 text-xs text-muted-foreground">
         同一串音符,不同的节奏、和声与音色包装——这就是「曲风」。各版本的完整版在对应曲风词条里

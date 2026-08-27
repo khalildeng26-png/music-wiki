@@ -7,6 +7,9 @@
 // 统一走主链路(增益→限幅)防 boom,音量按音色分别校准。
 type ToneModule = typeof import("tone");
 
+// 音名移调(±5 半音采样舒适区,见 src/lib/transpose.ts)
+import { transposeNotes } from "@/lib/transpose";
+
 export type Timbre =
   | "piano"
   | "guitar"
@@ -436,7 +439,7 @@ async function ensureDrums(Tone: ToneModule): Promise<DrumKit> {
  */
 export async function playPattern(
   pattern: Pattern,
-  opts?: { onStart?: () => void },
+  opts?: { onStart?: () => void; transpose?: number },
 ): Promise<void> {
   stopAllAudio(); // 新片段打断旧片段(全局一次只播一个)
   const mySession = playSession;
@@ -474,9 +477,10 @@ export async function playPattern(
   const fire = (track: PatternTrack, ev: { t: number }, when: number) => {
     if (track.kind === "notes") {
       const e = ev as NoteEvent;
+      const notes = opts?.transpose ? transposeNotes(e.notes, opts.transpose) : e.notes;
       instruments
         .get(track.timbre)
-        ?.triggerAttackRelease(e.notes, (e.dur ?? 0.5) * spb, when, e.vel ?? 1);
+        ?.triggerAttackRelease(notes, (e.dur ?? 0.5) * spb, when, e.vel ?? 1);
     } else {
       const e = ev as { hit: DrumHit; vel?: number };
       const vel = e.vel ?? 1;
