@@ -32,8 +32,9 @@ export function MelodyStyles() {
     };
   }, []);
 
-  async function play(id: string) {
-    if (playing === id) {
+  // overrideSemis:换调重播时显式传入——此时 setSemis 还没提交,闭包里的 semis 是旧值
+  async function play(id: string, overrideSemis?: number) {
+    if (playing === id && overrideSemis === undefined) {
       stopAllAudio(); // 回调自动复位
       return;
     }
@@ -46,7 +47,7 @@ export function MelodyStyles() {
     // playPattern 的同步"自打断"广播发生在调用内部,微任务后即解除豁免(否则播放中无法停止)
     void Promise.resolve().then(() => (starting.current = false));
     try {
-      await playPattern(style.pattern, { transpose: semis }); // 引擎先打断已有播放(广播被 starting 挡下)
+      await playPattern(style.pattern, { transpose: overrideSemis ?? semis }); // 引擎先打断已有播放(广播被 starting 挡下)
       if (my !== session.current) return; // 期间又被取代
       // playPattern 在播完时 resolve,这里只留一点采样收尾余量
       timer.current = window.setTimeout(() => setPlaying(null), 600);
@@ -56,6 +57,12 @@ export function MelodyStyles() {
         setPlaying(null);
       }
     }
+  }
+
+  // 播放中换调:立刻打断并以新调重播当前风格;没在播就只记账,等下次开播生效
+  function onTranspose(v: number) {
+    setSemis(v);
+    if (playing) void play(playing, v);
   }
 
   const active = STYLES.find((s) => s.id === (playing ?? last));
@@ -109,9 +116,9 @@ export function MelodyStyles() {
         )}
 
         <div className="mt-4 border-t pt-3">
-          <TransposePicker value={semis} onChange={setSemis} label="换个调弹(关系不变)" />
+          <TransposePicker value={semis} onChange={onTranspose} label="换个调弹(关系不变)" />
           <p className="mt-1.5 text-xs text-muted-foreground">
-            换调后重按任意风格:同一套和弦关系原样搬到新调——这就是「调」的全部秘密。
+            播放中换调会立刻用新调重播:同一套和弦关系原样搬到新调——这就是「调」的全部秘密。
           </p>
         </div>
       </div>

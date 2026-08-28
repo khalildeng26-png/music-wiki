@@ -37,8 +37,15 @@ export function TransposeDemo({ melody, chords, timbre = "piano", label }: Props
   };
   const totalMs = pattern.beats * SPB * 1000 + 400;
 
-  function play() {
-    void start(() => playPattern(pattern, { transpose: semis }), totalMs);
+  // s 显式传调:换调重播时 setSemis 尚未提交,闭包里的 semis 是旧值
+  function play(s = semis) {
+    void start(() => playPattern(pattern, { transpose: s }), totalMs);
+  }
+
+  // 播放中换调:立刻打断并以新调重播;没在播就只记账,等下次开播生效
+  function onTranspose(v: number) {
+    setSemis(v);
+    if (playing) play(v);
   }
 
   return (
@@ -62,7 +69,7 @@ export function TransposeDemo({ melody, chords, timbre = "piano", label }: Props
         {label && <div className="min-w-0 flex-1 text-sm text-muted-foreground">{label}</div>}
       </div>
       <div className="border-t bg-muted/30 px-4 py-3">
-        <TransposePicker value={semis} onChange={setSemis} />
+        <TransposePicker value={semis} onChange={onTranspose} />
       </div>
       <figcaption className="border-t bg-muted/40 px-4 py-1.5 text-xs text-muted-foreground">
         换调 = 整体平移:音与音的距离不变,只是起点变了

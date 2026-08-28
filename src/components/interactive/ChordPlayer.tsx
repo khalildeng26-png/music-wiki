@@ -23,15 +23,26 @@ export function ChordPlayer({ chords, label, desc, timbre = "piano", transpose }
   const { playing, start, stop } = usePlayToggle();
   const [semis, setSemis] = React.useState(0);
 
-  function handle() {
-    if (playing) return stop();
+  // s 显式传调:换调重播时 setSemis 尚未提交,闭包里的 semis 是旧值
+  function beginPlay(s: number) {
     const dur = 0.9;
     const gap = 0.25;
-    const play = transposeChords(chords, semis);
+    const transposed = transposeChords(chords, s);
     void start(
-      () => playChordProgression(play, dur, gap, timbre),
+      () => playChordProgression(transposed, dur, gap, timbre),
       chords.length * (dur + gap) * 1000 + 300,
     );
+  }
+
+  function handle() {
+    if (playing) return stop();
+    beginPlay(semis);
+  }
+
+  // 播放中换调:立刻打断并以新调重播;没在播就只记账,等下次开播生效
+  function onTranspose(v: number) {
+    setSemis(v);
+    if (playing) beginPlay(v);
   }
 
   return (
@@ -57,7 +68,7 @@ export function ChordPlayer({ chords, label, desc, timbre = "piano", transpose }
       </div>
       {transpose && (
         <div className="mt-3 border-t pt-3">
-          <TransposePicker value={semis} onChange={setSemis} />
+          <TransposePicker value={semis} onChange={onTranspose} />
         </div>
       )}
     </div>

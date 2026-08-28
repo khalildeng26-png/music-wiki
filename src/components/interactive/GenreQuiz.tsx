@@ -1,4 +1,4 @@
-import { Play, RotateCcw, Square } from "lucide-react";
+import { RotateCcw, Square } from "lucide-react";
 import * as React from "react";
 
 import { GENRE_LIST, type GenreDemo } from "@/lib/genrePatterns";
@@ -54,10 +54,13 @@ export function GenreQuiz() {
   const [playing, setPlaying] = React.useState(false);
   const timer = React.useRef(0);
   const starting = React.useRef(false);
+  // 播放会话号:被新播放取代后,旧的 await 续体不得再动状态(否则旧定时器会掐掉新题的播放态)
+  const session = React.useRef(0);
 
   React.useEffect(() => {
     const off = onAudioInterrupt(() => {
       if (starting.current) return;
+      session.current++;
       window.clearTimeout(timer.current);
       setPlaying(false);
     });
@@ -67,20 +70,25 @@ export function GenreQuiz() {
     };
   }, []);
 
-  async function play(g: GenreDemo, p: Pattern) {
-    if (playing) {
+  // force:出题/切题专用——不管上一段是否还在响都直接开新题。
+  // 否则会掉进"播放中→当停止键"的开关分支:猜错后点过「再听一遍」再点「下一题」,
+  // 新题就被当成停止指令吃掉,只剩静音。
+  async function play(g: GenreDemo, p: Pattern, force = false) {
+    if (playing && !force) {
       stopAllAudio();
       return;
     }
+    const my = ++session.current;
     starting.current = true;
     setPlaying(true);
     void Promise.resolve().then(() => (starting.current = false));
     try {
       await playPattern(clip(p));
+      if (my !== session.current) return;
       window.clearTimeout(timer.current);
       timer.current = window.setTimeout(() => setPlaying(false), 600);
     } catch {
-      setPlaying(false);
+      if (my === session.current) setPlaying(false);
     }
   }
 
@@ -91,7 +99,7 @@ export function GenreQuiz() {
     setOptions(no);
     setChosen(null);
     setPhase("asking");
-    void play(nq, np); // 出题自动播一遍
+    void play(nq, np, true); // 出题自动播一遍
   }
 
   function answer(slug: string) {
