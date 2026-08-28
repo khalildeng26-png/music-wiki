@@ -52,28 +52,31 @@ function Keyboard({
   // 白键保底 44px(触控标准),多八度时键盘自动横向滚动;全屏模式传 0 恰好铺满
   const minW = minWidth ?? whiteCount * 44;
 
+  // 立即熄灭单个键(pointercancel 与定时器共用)
+  function clearKey(note: string) {
+    setActive((prev) => {
+      if (!prev.has(note)) return prev;
+      const next = new Set(prev);
+      next.delete(note);
+      return next;
+    });
+  }
+
   async function hit(note: string) {
     setActive((prev) => {
       const next = new Set(prev);
       next.add(note);
       return next;
     });
+    // 熄灭定时器必须先于音频 await 注册:playNote 首次要加载采样,弱网/失败时
+    // 这个 await 会挂很久甚至不返回——排在后面高亮就永不熄灭(移动端滚动卡高亮的根因)
+    window.setTimeout(() => clearKey(note), 250);
     try {
       // 虚拟钢琴键 → 永远用钢琴音色
       await playNote(note, 0.9, "piano");
     } catch {
       /* 忽略 */
     }
-    window.setTimeout(
-      () =>
-        setActive((prev) => {
-          if (!prev.has(note)) return prev;
-          const next = new Set(prev);
-          next.delete(note);
-          return next;
-        }),
-      250,
-    );
   }
 
   function onPointerDownKey(note: string) {
@@ -135,6 +138,7 @@ function Keyboard({
                 key={k.note}
                 type="button"
                 onPointerDown={() => onPointerDownKey(k.note)}
+                onPointerCancel={() => clearKey(k.note)}
                 onClick={() => onClickKey(k.note)}
                 aria-label={k.note}
                 {...keyA11y(k.note)}
@@ -162,6 +166,7 @@ function Keyboard({
                 key={k.note}
                 type="button"
                 onPointerDown={() => onPointerDownKey(k.note)}
+                onPointerCancel={() => clearKey(k.note)}
                 onClick={() => onClickKey(k.note)}
                 aria-label={k.note}
                 {...keyA11y(k.note)}
