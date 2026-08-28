@@ -1,4 +1,4 @@
-import { Maximize2, Volume2, X } from "lucide-react";
+import { Maximize2, X } from "lucide-react";
 import * as React from "react";
 import { createPortal } from "react-dom";
 
@@ -257,11 +257,7 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
         <div style={{ height: keyHeight }}>
           <Keyboard startOct={startOct} octaves={octaves} minWidth={minWidth} />
         </div>
-        <div className="mt-2 flex items-center justify-between gap-2">
-          <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <Volume2 className="size-3.5" />{" "}
-            点任意琴键听音,多指同按就是和弦;键盘 Tab 进入后,方向键选键、回车发声
-          </p>
+        <div className="mt-2 flex items-center justify-end gap-2">
           <button
             type="button"
             onClick={openFullscreen}
