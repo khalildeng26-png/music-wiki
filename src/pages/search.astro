@@ -14,34 +14,5 @@ const q = Astro.url.searchParams.get("q") ?? "";
     <div class="mt-8">
       <SearchBox client:load initial={q} />
     </div>
-
-    <!-- 临时诊断浮层:定位移动端跳转后左滑的溢出元素(问题定位后即删) -->
-    <div
-      id="dbg-slide"
-      style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#000;color:#0f0;font:11px/1.6 monospace;padding:8px 12px;max-height:35vh;overflow:auto;white-space:pre-wrap;pointer-events:none;"
-    >
-    </div>
-    <script is:inline>
-      (() => {
-        const el = document.getElementById("dbg-slide");
-        function tick() {
-          const vw = document.documentElement.clientWidth;
-          const out = [];
-          document.querySelectorAll("body *").forEach((n) => {
-            const r = n.getBoundingClientRect();
-            if (r.right > vw + 1 && r.width > 0 && getComputedStyle(n).position !== "fixed") {
-              out.push(
-                `<${n.tagName.toLowerCase()} class="${String(n.className).slice(0, 50)}"> w=${Math.round(r.width)} right=${Math.round(r.right)}`,
-              );
-            }
-          });
-          el.textContent =
-            `scrollX=${window.scrollX} 页面宽=${document.documentElement.scrollWidth} 屏幕=${vw} dpr=${devicePixelRatio}\n` +
-            (out.length ? "右溢出元素:\n" + out.slice(0, 5).join("\n") : "无右溢出元素");
-        }
-        tick();
-        setInterval(tick, 500);
-      })();
-    </script>
   </section>
 </BaseLayout>
