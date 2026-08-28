@@ -116,7 +116,7 @@ export function SearchBox({ initial = "" }: { initial?: string }) {
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="搜索词条、曲风、乐理……"
-          className="flex-1 bg-transparent text-lg outline-none placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-lg outline-none placeholder:text-muted-foreground"
         />
         {status === "loading" && <Loader2 className="size-4 animate-spin text-muted-foreground" />}
       </div>
