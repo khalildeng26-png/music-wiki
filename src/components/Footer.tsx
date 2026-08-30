@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import { categories } from "@/lib/categories";
 
 // 入门路线五件套(footer 直链,免一跳)
@@ -9,7 +11,7 @@ const INTRO_PATHS = [
   { id: "harmonica-intro", label: "口琴入门" },
 ];
 
-export function Footer() {
+export function Footer({ children }: { children?: ReactNode }) {
   const year = new Date().getFullYear();
   return (
     <footer className="group-has-[.section-soft]/body:bg-surface/40 dark:bg-transparent 3xl:fixed:bg-transparent">
@@ -25,8 +27,11 @@ export function Footer() {
             </p>
           </div>
 
-          {/* 导航链接全部横向流式,任何断点都不竖排堆高(避免"页面重复一遍"的观感) */}
+          {/* 导航链接全部横向流式,任何断点都不竖排堆高(避免"页面重复一遍"的观感)。
+              children 是 BaseLayout 注入的联系方式岛(FooterContact)——静态 React
+              组件里写不了 client: 指令,只能从 .astro 层往里传 */}
           <div className="grid flex-1 grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
+            {children}
             <nav aria-label="分类导航">
               <div className="text-sm font-medium">按分类浏览</div>
               <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-muted-foreground">

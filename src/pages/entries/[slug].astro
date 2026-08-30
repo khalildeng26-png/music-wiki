@@ -4,6 +4,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import StaffLines from "@/components/StaffLines.astro";
 import ShareButton from "@/components/interactive/ShareButton";
 import RandomEntryButton from "@/components/interactive/RandomEntryButton";
+import EntryVote from "@/components/interactive/EntryVote";
 import { categoryByLabel, catColor } from "@/lib/categories";
 
 export async function getStaticPaths() {
@@ -308,6 +309,9 @@ const jsonLd = [
       />
       <span class="ml-auto text-xs text-muted-foreground">读完随手一转,是对这本百科最大的帮助</span>
     </section>
+
+    <!-- 有用没用一票:进 umami 聚合看板,告诉我哪些词条该加厚 -->
+    <EntryVote client:visible slug={entry.id} />
   </article>
 
   {/* 目录当前小节高亮:视口上部命中的 H2 对应链接上色 */}
