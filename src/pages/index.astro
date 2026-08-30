@@ -183,27 +183,43 @@ for (const e of entries) {
     </div>
   </section>
 
-  <!-- 分类:一行 chips,不再占三行大卡 -->
+  <!-- 分类:移动端 2 列大格(记号图标),平板 3 列,桌面回到一行 chips -->
   <section class="container pt-12">
-    <div class="reveal flex flex-wrap items-center gap-2">
-      <h2 class="mr-2 text-sm font-medium text-muted-foreground">按分类</h2>
-      {
-        categories.map((c) => (
-          <a
-            href={`/categories/${c.id}`}
-            style={`--cat:${catColor(c.hue)};--cat-d:${catColor(c.hue, "dark")}`}
-            class="rounded-full border bg-card px-4 py-1.5 text-sm transition hover:-translate-y-0.5 hover:border-signature/50 hover:bg-signature/10 hover:text-signature-ink"
-          >
-            <span
-              aria-hidden="true"
-              class="mr-1.5 inline-block size-1.5 rounded-full bg-(--cat) dark:bg-(--cat-d)"
-            />
-            {c.label}
-            <span class="ml-1.5 text-xs text-muted-foreground">{countByCategory.get(c.label)}</span>
-          </a>
-        ))
-      }
-      <a href="/entries" class="ml-1 text-sm text-muted-foreground hover:text-signature">全部 →</a>
+    <div class="reveal">
+      <div class="flex items-center justify-between gap-3">
+        <h2 class="text-sm font-medium text-muted-foreground">按分类</h2>
+        <a href="/entries" class="text-sm text-muted-foreground hover:text-signature">全部 →</a>
+      </div>
+      <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:flex md:flex-wrap md:items-center">
+        {
+          categories.map((c) => (
+            <a
+              href={`/categories/${c.id}`}
+              style={`--cat:${catColor(c.hue)};--cat-d:${catColor(c.hue, "dark")}`}
+              class="flex items-center gap-2.5 rounded-xl border bg-card px-4 py-3 text-sm transition hover:-translate-y-0.5 hover:border-signature/50 hover:bg-signature/10 hover:text-signature-ink active:scale-[0.98] md:gap-1.5 md:rounded-full md:py-1.5"
+            >
+              {/* 大格里放分类记号(记谱法图标),桌面 chip 收敛回色点 */}
+              <svg
+                viewBox="0 0 44 44"
+                aria-hidden="true"
+                class="size-8 shrink-0 text-(--cat) md:hidden dark:text-(--cat-d)"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                set:html={c.mark}
+              />
+              <span
+                aria-hidden="true"
+                class="mr-1.5 hidden size-1.5 rounded-full bg-(--cat) md:inline-block dark:bg-(--cat-d)"
+              />
+              <span class="font-medium md:font-normal">{c.label}</span>
+              <span class="ml-auto text-xs tabular-nums text-muted-foreground md:ml-1.5">
+                {countByCategory.get(c.label)}
+              </span>
+            </a>
+          ))
+        }
+      </div>
     </div>
   </section>
 
