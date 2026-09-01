@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { track } from "@/lib/track";
 
 import { playNote } from "./audio";
+import { noteToMidi } from "./noteUtils";
 
 const CHROM = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
@@ -48,6 +49,29 @@ function Keyboard({
   const idxOf = React.useMemo(() => new Map(keys.map((k, i) => [k.note, i])), [keys]);
   // pointerdown 已发声的键,随后的兼容 click 在时间窗内忽略(键盘/读屏无 pointerdown,照常响)
   const pointerHits = React.useRef(new Map<string, number>());
+
+  // 暗色模式监听:主题类挂在 <html> 上,可中途切换,MutationObserver 保持同步
+  const [dark, setDark] = React.useState(false);
+  React.useEffect(() => {
+    const el = document.documentElement;
+    const sync = () => setDark(el.classList.contains("dark"));
+    sync();
+    const mo = new MutationObserver(sync);
+    mo.observe(el, { attributes: true, attributeFilter: ["class"] });
+    return () => mo.disconnect();
+  }, []);
+
+  // 夜光琴键(仅暗色):按音高定色,C=0°红起每半音 30°,八度循环——同键同色,
+  // 弹音阶会在琴键上扫出一道彩虹,颜色可视化音高方向;亮色模式保持品牌琥珀。
+  // 黄绿~青区段(45°–210°)背景偏亮,文字用深色保对比度
+  function pitchColor(note: string): { bg: string; fg: string } | null {
+    if (!dark) return null;
+    const hue = (((noteToMidi(note) % 12) + 12) % 12) * 30;
+    return {
+      bg: `hsl(${hue} 85% 55%)`,
+      fg: hue >= 45 && hue < 210 ? "#1c1917" : "#ffffff",
+    };
+  }
 
   const whiteW = 100 / whiteCount;
   const blackW = whiteW * 0.62;
@@ -136,6 +160,7 @@ function Keyboard({
           {whites.map((k) => {
             const on = active.has(k.note);
             const isC = k.note.startsWith("C");
+            const pc = on ? pitchColor(k.note) : null;
             return (
               <button
                 key={k.note}
@@ -145,6 +170,7 @@ function Keyboard({
                 onClick={() => onClickKey(k.note)}
                 aria-label={k.note}
                 {...keyA11y(k.note)}
+                style={pc ? { backgroundColor: pc.bg, color: pc.fg } : undefined}
                 className={
                   // 键体固定白色,分隔线不能用主题 border(暗色下是浅色,贴白键会隐形)
                   "flex flex-1 flex-col items-center justify-end rounded-b-md border border-t-0 border-x-neutral-300 pb-2 text-[10px] transition " +
@@ -164,6 +190,7 @@ function Keyboard({
           {blacks.map((k) => {
             const on = active.has(k.note);
             const left = k.whiteBefore * whiteW - blackW / 2;
+            const pc = on ? pitchColor(k.note) : null;
             return (
               <button
                 key={k.note}
@@ -177,7 +204,11 @@ function Keyboard({
                   "pointer-events-auto absolute top-0 rounded-b-md transition " +
                   (on ? "bg-signature" : "bg-neutral-900 hover:bg-neutral-700")
                 }
-                style={{ left: `${left}%`, width: `${blackW}%`, height: "100%" }}
+                style={
+                  pc
+                    ? { left: `${left}%`, width: `${blackW}%`, height: "100%", backgroundColor: pc.bg }
+                    : { left: `${left}%`, width: `${blackW}%`, height: "100%" }
+                }
               />
             );
           })}
