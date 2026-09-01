@@ -22,7 +22,6 @@ export function Footer({ children }: { children?: ReactNode }) {
             children 是 BaseLayout 注入的联系方式岛(FooterContact)——静态 React
             组件里写不了 client: 指令,只能从 .astro 层往里传 */}
         <div className="grid grid-cols-1 gap-x-8 gap-y-5 border-t pt-8 sm:grid-cols-2 lg:grid-cols-3">
-          {children}
           <nav aria-label="分类导航">
               <div className="text-sm font-medium">词条分类</div>
               <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
@@ -58,6 +57,9 @@ export function Footer({ children }: { children?: ReactNode }) {
                 </li>
               </ul>
             </nav>
+
+            {/* 联系方式岛排最右 */}
+            {children}
           </div>
 
         <div className="mt-8 flex flex-col items-center justify-between gap-2 border-t pt-5 text-xs text-muted-foreground sm:flex-row">
