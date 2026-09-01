@@ -16,23 +16,14 @@ export function Footer({ children }: { children?: ReactNode }) {
   return (
     <footer className="group-has-[.section-soft]/body:bg-surface/40 dark:bg-transparent 3xl:fixed:bg-transparent">
       <div className="container-wrapper px-4 pb-8 xl:px-6">
-        <div className="flex flex-col gap-8 border-t pt-8 lg:flex-row lg:items-start lg:gap-12">
-          <div className="max-w-sm shrink-0">
-            <div className="flex items-center gap-2.5">
-              <img src="/logo.png" alt="" className="size-7 rounded-md" />
-              <span className="font-display text-base font-bold tracking-tight">橙月Wiki</span>
-            </div>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              一本会发声的音乐百科——看不懂的地方点一下就响。
-            </p>
-          </div>
-
-          {/* 导航链接全部横向流式,任何断点都不竖排堆高(避免"页面重复一遍"的观感)。
-              children 是 BaseLayout 注入的联系方式岛(FooterContact)——静态 React
-              组件里写不了 client: 指令,只能从 .astro 层往里传 */}
-          <div className="grid flex-1 grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
-            {children}
-            <nav aria-label="分类导航">
+        {/* 品牌块已删:顶栏 logo 与底部 © 行已承载身份,slogan 与 hero 重复——
+            footer 只留纯功能导航(联系/分类/路线)。
+            导航链接全部横向流式,任何断点都不竖排堆高(避免"页面重复一遍"的观感)。
+            children 是 BaseLayout 注入的联系方式岛(FooterContact)——静态 React
+            组件里写不了 client: 指令,只能从 .astro 层往里传 */}
+        <div className="grid grid-cols-1 gap-x-8 gap-y-5 border-t pt-8 sm:grid-cols-2 lg:grid-cols-3">
+          {children}
+          <nav aria-label="分类导航">
               <div className="text-sm font-medium">词条分类</div>
               <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
                 {categories.map((c) => (
@@ -68,7 +59,6 @@ export function Footer({ children }: { children?: ReactNode }) {
               </ul>
             </nav>
           </div>
-        </div>
 
         <div className="mt-8 flex flex-col items-center justify-between gap-2 border-t pt-5 text-xs text-muted-foreground sm:flex-row">
           <span>© {year} 橙月Wiki · 一本可交互的音乐百科全书</span>
