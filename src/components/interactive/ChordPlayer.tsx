@@ -4,6 +4,7 @@ import * as React from "react";
 import { playChordProgression, type Timbre } from "./audio";
 import { usePlayToggle } from "./usePlayToggle";
 import { TransposePicker } from "./TransposePicker";
+import { track } from "@/lib/track";
 import { transposeChords } from "@/lib/transpose";
 
 type Props = {
@@ -25,6 +26,7 @@ export function ChordPlayer({ chords, label, desc, timbre = "piano", transpose }
 
   // s 显式传调:换调重播时 setSemis 尚未提交,闭包里的 semis 是旧值
   function beginPlay(s: number) {
+    track("chord-play", { label, semis: s });
     const dur = 0.9;
     const gap = 0.25;
     const transposed = transposeChords(chords, s);

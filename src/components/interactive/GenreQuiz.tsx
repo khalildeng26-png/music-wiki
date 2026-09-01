@@ -3,6 +3,7 @@ import * as React from "react";
 
 import { GENRE_LIST, type GenreDemo } from "@/lib/genrePatterns";
 import { VARIANTS } from "@/lib/quizVariants";
+import { track } from "@/lib/track";
 
 import { onAudioInterrupt, playPattern, stopAllAudio, type Pattern } from "./audio";
 
@@ -99,19 +100,22 @@ export function GenreQuiz() {
     setOptions(no);
     setChosen(null);
     setPhase("asking");
+    track("quiz-start", { genre: nq.slug });
     void play(nq, np, true); // 出题自动播一遍
   }
 
   function answer(slug: string) {
     if (phase !== "asking" || !q) return;
+    const correct = slug === q.slug;
     setChosen(slug);
-    if (slug === q.slug) {
+    if (correct) {
       setStreak((s) => s + 1);
       setPhase("right");
     } else {
       setStreak(0);
       setPhase("wrong");
     }
+    track("quiz-answer", { genre: q.slug, chose: slug, correct });
     stopAllAudio(); // 猜完不用再响
   }
 

@@ -1,6 +1,8 @@
 import { Play, Square } from "lucide-react";
 import * as React from "react";
 
+import { track } from "@/lib/track";
+
 import {
   onAudioInterrupt,
   playChordProgression,
@@ -20,6 +22,8 @@ export type PlayableCard = {
   summary: string;
   href: string;
   sig?: SoundSig;
+  /** 试听键播放时的一句话解说:「你在听到什么」 */
+  sigNote?: string;
 };
 
 async function play(sig: SoundSig) {
@@ -31,8 +35,17 @@ async function play(sig: SoundSig) {
 }
 
 /** 声音签名试听键:点一下就地播放这条内容的"代表声音"。
- *  播放中再点=停止;其他地方开始播放会自动打断并复位这里。 */
-export function PlayChip({ sig, label }: { sig: SoundSig; label: string }) {
+ *  播放中再点=停止;其他地方开始播放会自动打断并复位这里。
+ *  caption:播放时浮出的「你在听到什么」一句解说,把"响一下"变成微型教学。 */
+export function PlayChip({
+  sig,
+  label,
+  caption,
+}: {
+  sig: SoundSig;
+  label: string;
+  caption?: string;
+}) {
   const [state, setState] = React.useState<"idle" | "playing">("idle");
   const timer = React.useRef(0);
   // 自己启动播放的瞬间,播放函数会先广播一次"打断"——那一次要忽略
@@ -61,6 +74,7 @@ export function PlayChip({ sig, label }: { sig: SoundSig; label: string }) {
     const my = ++session.current;
     starting.current = true;
     setState("playing");
+    track("sig-play", { label });
     // 播放函数的同步"自打断"广播发生在调用内部,微任务后即解除豁免(否则播放中无法停止)
     void Promise.resolve().then(() => (starting.current = false));
     try {
@@ -81,25 +95,32 @@ export function PlayChip({ sig, label }: { sig: SoundSig; label: string }) {
   }
 
   return (
-    <button
-      type="button"
-      onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        void go();
-      }}
-      aria-label={state === "playing" ? `停止:${label.replace(/^试听:/, "")}` : label}
-      aria-pressed={state === "playing"}
-      title={state === "playing" ? "停止" : label}
-      className={
-        "inline-flex size-9 items-center justify-center rounded-full transition active:scale-90 " +
-        (state === "playing"
-          ? "play-pulse bg-signature text-signature-foreground"
-          : "bg-signature/10 text-signature hover:bg-signature hover:text-signature-foreground")
-      }
-    >
-      {state === "playing" ? <Square className="size-3.5" /> : <Play className="size-4" />}
-    </button>
+    <span className="flex items-center justify-end gap-2">
+      {state === "playing" && caption && (
+        <span className="max-w-60 rounded-full border border-signature/30 bg-card/95 px-2.5 py-1 text-xs text-signature-ink shadow-sm">
+          {caption}
+        </span>
+      )}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          void go();
+        }}
+        aria-label={state === "playing" ? `停止:${label.replace(/^试听:/, "")}` : label}
+        aria-pressed={state === "playing"}
+        title={state === "playing" ? "停止" : label}
+        className={
+          "inline-flex size-9 shrink-0 items-center justify-center rounded-full transition active:scale-90 " +
+          (state === "playing"
+            ? "play-pulse bg-signature text-signature-foreground"
+            : "bg-signature/10 text-signature hover:bg-signature hover:text-signature-foreground")
+        }
+      >
+        {state === "playing" ? <Square className="size-3.5" /> : <Play className="size-4" />}
+      </button>
+    </span>
   );
 }
 
@@ -126,7 +147,7 @@ export function PlayableCards({ items }: { items: PlayableCard[] }) {
           </a>
           {c.sig && (
             <div className="absolute right-4 bottom-4">
-              <PlayChip sig={c.sig} label={`试听:${c.title}`} />
+              <PlayChip sig={c.sig} label={`试听:${c.title}`} caption={c.sigNote} />
             </div>
           )}
         </div>

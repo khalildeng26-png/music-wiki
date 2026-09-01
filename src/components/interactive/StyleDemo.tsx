@@ -1,6 +1,8 @@
 import { Play, Square } from "lucide-react";
 import * as React from "react";
 
+import { track } from "@/lib/track";
+
 import { onAudioInterrupt, playPattern, stopAllAudio, type Pattern } from "./audio";
 
 type Props = {
@@ -44,6 +46,7 @@ export function StyleDemo({ title, hint, note, pattern }: Props) {
     const my = ++session.current;
     starting.current = true;
     setState("playing");
+    track("style-demo-play", { title });
     // playPattern 的同步"自打断"广播发生在调用内部,微任务后即解除豁免(否则播放中无法停止)
     void Promise.resolve().then(() => (starting.current = false));
     try {

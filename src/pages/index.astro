@@ -25,6 +25,7 @@ const FEATURED: PlayableCard[] = [
     category: "记谱",
     summary: "五条线怎么装下所有音乐?看完这篇,谱子不再是天书。",
     sig: { kind: "notes", notes: ["C4", "D4", "E4", "F4", "G4"] },
+    sigNote: "正在听:C–D–E–F–G 逐级上行,在五线谱上正好一线一间交替往上爬。",
   },
   {
     href: "/entries/interval",
@@ -33,6 +34,7 @@ const FEATURED: PlayableCard[] = [
     category: "乐理",
     summary: "两个音的距离决定情绪:大三度明亮,小三度忧伤。",
     sig: { kind: "notes", notes: ["C4", "E4", "C4", "Eb4"] },
+    sigNote: "正在听:大三度(明亮)对照小三度(暗淡)——同一起点,距离差半音,情绪就变了。",
   },
   {
     href: "/entries/pitch-training",
@@ -41,6 +43,7 @@ const FEATURED: PlayableCard[] = [
     category: "唱法",
     summary: "开麦克风唱一个音,实时看音名与偏差——跑调不可怕,看不见才可怕。",
     sig: { kind: "notes", notes: ["A4"], dur: 0.9 },
+    sigNote: "正在听:标准音 A4(440Hz)——乐团调音、校音器对的那个「la」。试着跟它唱齐。",
   },
   {
     href: "/entries/scale",
@@ -49,6 +52,7 @@ const FEATURED: PlayableCard[] = [
     category: "乐理",
     summary: "同一个 C,换成五声音阶立刻中国风。选着听,差别立现。",
     sig: { kind: "notes", notes: ["C4", "D4", "E4", "G4", "A4", "C5"] },
+    sigNote: "正在听:C 五声音阶——去掉 fa、si 两个半音,「中国风」就出来了。",
   },
   {
     href: "/entries/tempo",
@@ -57,6 +61,7 @@ const FEATURED: PlayableCard[] = [
     category: "乐理",
     summary: "60 到 180 BPM 差多少?拖一下滑块,耳朵马上懂。",
     sig: { kind: "notes", notes: ["C5", "C5", "C5", "C5"], dur: 0.09, gap: 0.41 },
+    sigNote: "正在听:每秒一拍(120 BPM)——心里跟着数,再进词条拖滑块对比。",
   },
   {
     href: "/entries/church-modes",
@@ -65,6 +70,7 @@ const FEATURED: PlayableCard[] = [
     category: "乐理",
     summary: "七种中世纪'口味'——流行歌都在偷偷用 Dorian 和 Mixolydian。",
     sig: { kind: "notes", notes: ["D4", "F4", "G4", "A4", "D5"] },
+    sigNote: "正在听:以 D 为家的小调色彩乐句;词条里七种调式各自「扭」其中一个音,口味全变。",
   },
   {
     href: "/entries/chord-symbols",
@@ -73,6 +79,7 @@ const FEATURED: PlayableCard[] = [
     category: "记谱",
     summary: "C、C7、Cadd9 这些字母密码,一篇全破译。",
     sig: { kind: "chords", chords: [["C4", "E4", "G4", "Bb4"]] },
+    sigNote: "正在听:C7(C–E–G–B♭)——里面那个三全音让它「痒着想解决」,这就是属七的驱动力。",
   },
   {
     href: "/entries/pop-progressions",
@@ -84,6 +91,7 @@ const FEATURED: PlayableCard[] = [
       kind: "chords",
       chords: [["C4", "E4", "G4"], ["G3", "B3", "D4"], ["A3", "C4", "E4"], ["F3", "A3", "C4"]],
     },
+    sigNote: "正在听:I–V–vi–IV(1564)——上万首流行歌共用的开头;4536251 在词条里等你。",
   },
   {
     href: "/entries/blues",
@@ -92,6 +100,7 @@ const FEATURED: PlayableCard[] = [
     category: "曲风",
     summary: "把音'弹歪'一点,为什么反而更动人?蓝调的苦味点开就懂。",
     sig: { kind: "notes", notes: ["C4", "Eb4", "F4", "Gb4", "G4", "Bb4"], timbre: "guitar" },
+    sigNote: "正在听:布鲁斯音阶——「弹歪」的 ♭3 和 ♭5 两个蓝音,就是苦味的来源。",
   },
 ];
 
@@ -102,6 +111,7 @@ const DAILY = FEATURED.map((c) => ({
   hook: c.summary,
   href: c.href,
   sig: c.sig,
+  sigNote: c.sigNote,
 }));
 
 // 入门路线五件套
@@ -137,7 +147,7 @@ for (const e of entries) {
       </h1>
 
       <p class="hero-in hero-in-2 mt-5 max-w-2xl text-lg text-muted-foreground md:text-xl">
-        看不懂的地方,点一下就响给你听——乐理、记谱、和声、曲风,零基础也能跟着路线从识谱走到第一首弹唱。
+        看不懂的地方,点一下就响给你听。
       </p>
 
       <div class="hero-in hero-in-3 mt-8 flex max-w-2xl flex-col gap-3 sm:flex-row sm:items-center">
@@ -187,7 +197,7 @@ for (const e of entries) {
   <section class="container pt-12">
     <div class="reveal">
       <div class="flex items-center justify-between gap-3">
-        <h2 class="text-sm font-medium text-muted-foreground">按分类</h2>
+        <h2 class="text-sm font-medium text-muted-foreground">词条分类</h2>
         <a href="/entries" class="text-sm text-muted-foreground hover:text-signature">全部 →</a>
       </div>
       <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:flex md:flex-wrap md:items-center">

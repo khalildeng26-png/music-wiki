@@ -10,6 +10,8 @@ type Candidate = {
   hook: string;
   href: string;
   sig?: SoundSig;
+  /** 试听时的一句解说:「你在听到什么」 */
+  sigNote?: string;
 };
 
 /** 今日词条:按当天日期在候选里轮换(客户端取日期,每天一换、当天刷新稳定)。 */
@@ -50,7 +52,7 @@ export function DailyEntry({ candidates }: { candidates: Candidate[] }) {
       </a>
       {pick.sig && (
         <div className="absolute right-5 bottom-5 sm:right-7 sm:bottom-7">
-          <PlayChip sig={pick.sig} label={`试听:${pick.title}`} />
+          <PlayChip sig={pick.sig} label={`试听:${pick.title}`} caption={pick.sigNote} />
         </div>
       )}
     </div>

@@ -2,6 +2,7 @@ import { Play, Square } from "lucide-react";
 import * as React from "react";
 
 import { STYLES } from "@/lib/melodyStyles";
+import { track } from "@/lib/track";
 
 import { onAudioInterrupt, playPattern, stopAllAudio } from "./audio";
 import { TransposePicker } from "./TransposePicker";
@@ -44,6 +45,7 @@ export function MelodyStyles() {
     starting.current = true;
     setPlaying(id);
     setLast(id);
+    track("canon-play", { style: id, semis: overrideSemis ?? semis });
     // playPattern 的同步"自打断"广播发生在调用内部,微任务后即解除豁免(否则播放中无法停止)
     void Promise.resolve().then(() => (starting.current = false));
     try {

@@ -2,6 +2,8 @@ import { Maximize2, X } from "lucide-react";
 import * as React from "react";
 import { createPortal } from "react-dom";
 
+import { track } from "@/lib/track";
+
 import { playNote } from "./audio";
 
 const CHROM = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
@@ -63,6 +65,7 @@ function Keyboard({
   }
 
   async function hit(note: string) {
+    track("piano-play", { note });
     setActive((prev) => {
       const next = new Set(prev);
       next.add(note);
@@ -205,6 +208,7 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
   const portrait = dims ? dims.h > dims.w : false;
 
   function openFullscreen() {
+    track("piano-fullscreen", {});
     // 先量尺寸再展开,避免首帧未旋转的闪烁
     setDims({ w: window.innerWidth, h: window.innerHeight });
     setExpanded(true);

@@ -33,7 +33,7 @@ export function Footer({ children }: { children?: ReactNode }) {
           <div className="grid flex-1 grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
             {children}
             <nav aria-label="分类导航">
-              <div className="text-sm font-medium">按分类浏览</div>
+              <div className="text-sm font-medium">词条分类</div>
               <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
                 {categories.map((c) => (
                   <li key={c.id}>

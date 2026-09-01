@@ -4,6 +4,7 @@ import * as React from "react";
 import { playPattern, type Pattern, type Timbre } from "./audio";
 import { usePlayToggle } from "./usePlayToggle";
 import { TransposePicker } from "./TransposePicker";
+import { track } from "@/lib/track";
 
 type Props = {
   /** 旋律音名(科学记法) */
@@ -39,6 +40,7 @@ export function TransposeDemo({ melody, chords, timbre = "piano", label }: Props
 
   // s 显式传调:换调重播时 setSemis 尚未提交,闭包里的 semis 是旧值
   function play(s = semis) {
+    track("transpose-demo-play", { semis: s });
     void start(() => playPattern(pattern, { transpose: s }), totalMs);
   }
 
