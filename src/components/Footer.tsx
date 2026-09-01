@@ -23,7 +23,7 @@ export function Footer({ children }: { children?: ReactNode }) {
               <span className="font-display text-base font-bold tracking-tight">橙月Wiki</span>
             </div>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              一本会发声的音乐百科——看不懂的地方点一下就响。免费,无需注册。
+              一本会发声的音乐百科——看不懂的地方点一下就响。
             </p>
           </div>
 
