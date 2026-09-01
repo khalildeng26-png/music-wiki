@@ -26,16 +26,35 @@ function buildKeys(startOct: number, octaves: number): { keys: Key[]; whiteCount
   return { keys, whiteCount: whiteCount + 1 };
 }
 
+// 电脑键盘演奏布局(virtual-piano 惯例):下排字母=白键,上排错位=黑键——
+// W 恰好在 A/S 之间= C#,E 在 S/D 之间= D#,以此类推,物理位置与琴键一一对应。
+// 黑键的偏移量是相对起始 C 的半音数:D#=3、F#=6、G#=8、A#=10(不是白键序号)
+const KB_WHITE = ["KeyA", "KeyS", "KeyD", "KeyF", "KeyG", "KeyH", "KeyJ", "KeyK", "KeyL", "Semicolon", "Quote"];
+const KB_BLACK: [string, number][] = [
+  ["KeyW", 1], ["KeyE", 3],              // C# D#
+  ["KeyT", 6], ["KeyY", 8], ["KeyU", 10], // F# G# A#
+  ["KeyO", 13], ["KeyP", 15],            // 高八度 C# D#
+];
+
+function chromNote(startOct: number, semi: number): string {
+  return `${CHROM[semi % 12]}${startOct + Math.floor(semi / 12)}`;
+}
+
 /** 琴键组:多指触控按下即响(pointerdown),可同时按多个键奏和弦;
- *  click 仅作键盘/读屏激活的兜底(与 pointerdown 按时间窗去重,防一键双响)。 */
+ *  click 仅作键盘/读屏激活的兜底(与 pointerdown 按时间窗去重,防一键双响)。
+ *  电脑键盘可演奏(键盘属性):字母按键映射琴键,按住发声、松开熄灭,
+ *  多键同按即和弦;焦点在输入框/文本域时不抢键。 */
 function Keyboard({
   startOct,
   octaves,
   minWidth,
+  keyboardEnabled = true,
 }: {
   startOct: number;
   octaves: number;
   minWidth?: number;
+  /** 键盘映射开关;全屏时内联键盘关掉,防止两个实例双响 */
+  keyboardEnabled?: boolean;
 }) {
   // 和弦会同时亮起多个键,高亮必须是集合
   const [active, setActive] = React.useState<ReadonlySet<string>>(new Set());
@@ -78,7 +97,7 @@ function Keyboard({
   // 白键保底 44px(触控标准),多八度时键盘自动横向滚动;全屏模式传 0 恰好铺满
   const minW = minWidth ?? whiteCount * 44;
 
-  // 立即熄灭单个键(pointercancel 与定时器共用)
+  // 立即熄灭单个键(pointercancel、键盘 keyup 与定时器共用)
   function clearKey(note: string) {
     setActive((prev) => {
       if (!prev.has(note)) return prev;
@@ -145,6 +164,47 @@ function Keyboard({
 
   const whites = keys.filter((k) => !k.black);
   const blacks = keys.filter((k) => k.black);
+
+  // 电脑键盘演奏:按下发声+点亮(不设 250ms 熄灭,按住持续亮),松开熄灭;
+  // 失焦兜底全灭(切窗口时按住的键不会卡亮)
+  React.useEffect(() => {
+    if (!keyboardEnabled) return;
+    const map = new Map<string, string>();
+    whites.forEach((k, i) => {
+      if (KB_WHITE[i]) map.set(KB_WHITE[i], k.note);
+    });
+    for (const [code, semi] of KB_BLACK) {
+      const n = chromNote(startOct, semi);
+      if (idxOf.has(n)) map.set(code, n);
+    }
+    const typing = (t: EventTarget | null) =>
+      t instanceof HTMLElement &&
+      (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable);
+    const down = (e: KeyboardEvent) => {
+      if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (typing(e.target)) return;
+      const note = map.get(e.code);
+      if (!note) return;
+      e.preventDefault();
+      setActive((p) => new Set(p).add(note));
+      track("piano-play", { note, src: "kbd" });
+      void playNote(note, 0.9, "piano").catch(() => {});
+    };
+    const up = (e: KeyboardEvent) => {
+      const note = map.get(e.code);
+      if (note) clearKey(note);
+    };
+    const onBlur = () => setActive(new Set());
+    window.addEventListener("keydown", down);
+    window.addEventListener("keyup", up);
+    window.addEventListener("blur", onBlur);
+    return () => {
+      window.removeEventListener("keydown", down);
+      window.removeEventListener("keyup", up);
+      window.removeEventListener("blur", onBlur);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- whites 随 keys 派生,依赖 keys 即可
+  }, [keys, startOct, keyboardEnabled]);
 
   return (
     <div className="h-full overflow-x-auto pb-2">
@@ -295,9 +355,13 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
       )}
       <div className="p-4">
         <div style={{ height: keyHeight }}>
-          <Keyboard startOct={startOct} octaves={octaves} minWidth={minWidth} />
+          <Keyboard startOct={startOct} octaves={octaves} minWidth={minWidth} keyboardEnabled={!expanded} />
         </div>
-        <div className="mt-2 flex items-center justify-end gap-2">
+        <div className="mt-2 flex items-center justify-between gap-2">
+          {/* 桌面端提示键盘演奏(触屏设备隐藏) */}
+          <span className="hidden text-xs text-muted-foreground md:inline">
+            键盘演奏:A S D F G H J K… 白键 · W E T Y U… 黑键
+          </span>
           <button
             type="button"
             onClick={openFullscreen}
@@ -336,7 +400,9 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
             >
               <div className="flex items-center justify-between gap-3 px-4 py-2">
                 <span className="text-xs text-muted-foreground">
-                  {portrait ? "把手机横过来,琴键更宽更好弹" : "全屏演奏中"}
+                  {portrait
+                    ? "把手机横过来,琴键更宽更好弹"
+                    : "全屏演奏中 · 电脑可用键盘:A S D F… 白键,W E T… 黑键"}
                 </span>
                 <button
                   type="button"
