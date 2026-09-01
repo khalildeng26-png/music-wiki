@@ -29,3 +29,4 @@ scripts/_tmp/raw/
 
 # 验证截图(playwright 临时产物)
 scripts/_tmp/shots/
+.baidu-pushed-urls
