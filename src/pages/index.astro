@@ -124,6 +124,33 @@ for (const e of entries) {
   const n = countByCategory.get(e.data.category);
   if (n !== undefined) countByCategory.set(e.data.category, n + 1);
 }
+
+// 全站互动组件种数:构建时扫描词条 MDX + pages + layouts 里对
+// components/interactive 的 import 动态统计——词条用相对路径,页面/布局用
+// @ 别名,两种都收。新组件接入任何一处,首页数字自动跟上(此前写死 14 早已过期)
+const { readFileSync, readdirSync, statSync } = await import("node:fs");
+const { join } = await import("node:path");
+const walkAstro = (dir: string): string[] =>
+  readdirSync(join(process.cwd(), dir)).flatMap((f) => {
+    const p = join(dir, f);
+    return statSync(join(process.cwd(), p)).isDirectory()
+      ? walkAstro(p)
+      : p.endsWith(".astro")
+        ? [readFileSync(join(process.cwd(), p), "utf8")]
+        : [];
+  });
+const interactiveSources = [
+  ...entries.map((e) => e.body ?? ""),
+  ...["src/pages", "src/layouts"].flatMap(walkAstro),
+];
+const interactiveCount = new Set(
+  interactiveSources.flatMap((src) =>
+    [
+      ...src.matchAll(/from\s+"(?:\.\.\/)+components\/interactive\/([A-Za-z]+)"/g),
+      ...src.matchAll(/from\s+"@\/components\/interactive\/([A-Za-z]+)"/g),
+    ].map((m) => m[1]),
+  ),
+).size;
 ---
 
 <BaseLayout
@@ -167,7 +194,7 @@ for (const e of entries) {
         <span aria-hidden="true">·</span>
         <span><strong class="font-mono tabular-nums text-foreground">{entries.length}</strong> 篇词条</span>
         <span><strong class="font-mono tabular-nums text-foreground">{paths.length}</strong> 条路线</span>
-        <span><strong class="font-mono tabular-nums text-foreground">14</strong> 个互动组件</span>
+        <span><strong class="font-mono tabular-nums text-foreground">{interactiveCount}</strong> 个互动组件</span>
         <span>免费,无需注册</span>
       </div>
 

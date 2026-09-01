@@ -76,12 +76,16 @@ import { TransposeDemo } from "../../components/interactive/TransposeDemo";
 
 ## 试一试
 
-把《小星星》开头整体上移纯五度,从 C 大调搬到 G 大调——每个音都移动同样的距离,旋律形状分毫不差:
+把《小星星》开头整体上移纯五度,从 C 大调搬到 G 大调——每个音都移动同样的距离,旋律形状分毫不差。下面的谱面可以一键换调:拖到 +5 就是 G 大调,谱上每个音一起搬家,再点播放用耳朵验证:
 
-<StaffNotation client:visible notes={["C4", "C4", "G4", "G4", "A4", "A4", "G4"]} label="《小星星》开头(C 大调)。" />
-<StaffNotation client:visible notes={["G4", "G4", "D5", "D5", "E5", "E5", "D5"]} label="整体上行纯五度(G 大调):音程关系与原版完全一致。" />
+<StaffNotation
+  client:visible
+  notes={["C4", "C4", "G4", "G4", "A4", "A4", "G4"]}
+  label="《小星星》开头(原调 C 大调,拖动换调看谱面平移)。"
+  transpose
+/>
 
-亲手试:同一段旋律,一键换到任何调,耳朵验证「形状不变、整体搬家」:
+亲手试:同一段旋律,一键换到任何调,加上和弦一起听「形状不变、整体搬家」:
 
 <TransposeDemo
   client:visible
