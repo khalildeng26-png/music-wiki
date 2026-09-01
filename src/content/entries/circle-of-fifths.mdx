@@ -4,7 +4,7 @@ titleEn: Circle of Fifths
 category: 乐理
 summary: 把 12 个调按五度关系排成圆圈,顺时针每步多一个升号;它是记调号、找近关系调与转调的万能地图。
 tags: [乐理, 五度圈, 调号]
-related: [key-and-mode, scale, chord-progression]
+related: [key-and-mode, scale, chord-progression, closely-related-keys, tritone-substitution, secondary-dominants, cadences, pop-progressions]
 faq:
   - q: 五度圈是什么?
     a: 五度圈是把 12 个调按纯五度关系排成一圈的"调性地图",用于理解调号、近关系调与转调。
@@ -43,6 +43,40 @@ import { ChordPlayer } from "../../components/interactive/ChordPlayer";
 
 - G 大调是 C 的近邻(只差一个 F♯)——所以 C 调的歌常借 G 调的和弦。
 - 每个大调的**关系小调**在它内侧:如 C 大调 ↔ a 小调,G 大调 ↔ e 小调。
+
+把"相邻"量化就是严格定义:调号相差不超过一个升降号的调互为近关系调,C 大调的近关系调共五个(G、F、a、e、d)——它们与 C 共用六个自然和弦,是转调最顺的目的地,详见 [近关系调](/entries/closely-related-keys)。
+
+## 和声功能:圈上的 T–S–D 三区
+
+圈不只是调号地图,还是**功能地图**。以 C 为中心:
+
+- **顺时针一步(G)** 是属方向(D):比 C 多一个升号,色彩更"亮"、张力更强,天生想拉回 C;
+- **逆时针一步(F)** 是下属方向(S):比 C 多一个降号,色彩更"松",常把音乐送出主和弦;
+- 于是 [终止式](/entries/cadences) 的两大支柱 IV 与 V,正好是 I 在圈上的左右邻居——这不是巧合:功能和声的"出发(S)→ 紧张(D)→ 回家(T)"就是绕着 C 逆时针出去、顺时针回来。
+
+再看**正对面**:C 的直径对面是 F♯/G♭,根音相距三全音。G7 与 D♭7 共享同一个三全音、可以互换——[三全音替代](/entries/tritone-substitution) 的几何根源就在圈上这条直径里。
+
+## 五度圈进行:引力引擎
+
+根音**下行纯五度**(= 圈上逆时针一步的反向读法,即沿圈连续走)是西方和声里最强的推进力。把自然音阶内的七和弦沿圈排成链,就是公共时期的"引力引擎":
+
+**vii° → iii → vi → ii → V → I** —— 每一步根音都下行五度,一路被推着回家。
+
+这条链在流行里依然活着:[4536251](/entries/pop-progressions) 的 **3→6→2→5→1**(Em→Am→Dm→G→C)正是其中一段;爵士的 **ii–V–I** 是它的最后两步;《秋叶》整曲几乎走完一圈。理解了这条链,就理解了为什么这些进行"听起来 inevitable"。
+
+听一段沿圈下行的进行:
+
+<ChordPlayer
+  client:visible
+  label="五度圈链:Am → Dm → G → C(6–2–5–1)"
+  desc="根音逐个下行五度,每一步都被下一个「吸」过去"
+  chords={[
+    ["A3", "C4", "E4"],
+    ["D4", "F4", "A4"],
+    ["G3", "B3", "D4"],
+    ["C4", "E4", "G4"],
+  ]}
+/>
 
 ## 三个实用场景
 
