@@ -73,14 +73,25 @@ export function Footer({ children }: { children?: ReactNode }) {
         <div className="mt-8 flex flex-col items-center justify-between gap-2 border-t pt-5 text-xs text-muted-foreground sm:flex-row">
           <span>© {year} 橙月Wiki · 一本可交互的音乐百科全书</span>
           <span>音频采样:Salamander(CC-BY)· ISU MIS · Freesound(CC0)</span>
-          <a
-            href="https://beian.miit.gov.cn/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-signature"
-          >
-            蜀ICP备2026046666号-1
-          </a>
+          {/* 双备案:工信部网站备案号(带 -1 后缀)+公安联网备案号,各自链接官方查询 */}
+          <span className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+            <a
+              href="https://beian.miit.gov.cn/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-signature"
+            >
+              蜀ICP备2026046666号-1
+            </a>
+            <a
+              href="https://beian.mps.gov.cn/#/query/webSearch?code=51040202000403"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-signature"
+            >
+              川公网安备51040202000403号
+            </a>
+          </span>
         </div>
       </div>
     </footer>
