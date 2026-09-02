@@ -1,4 +1,4 @@
-import { Maximize2, X } from "lucide-react";
+import { Keyboard as KeyboardIcon, Maximize2, X } from "lucide-react";
 import * as React from "react";
 import { createPortal } from "react-dom";
 
@@ -43,18 +43,22 @@ function chromNote(startOct: number, semi: number): string {
 /** 琴键组:多指触控按下即响(pointerdown),可同时按多个键奏和弦;
  *  click 仅作键盘/读屏激活的兜底(与 pointerdown 按时间窗去重,防一键双响)。
  *  电脑键盘可演奏(键盘属性):字母按键映射琴键,按住发声、松开熄灭,
- *  多键同按即和弦;焦点在输入框/文本域时不抢键。 */
+ *  多键同按即和弦;焦点在输入框/文本域时不抢键。
+ *  showKbd:键位引导——在琴键上印出对应的电脑键盘字母(白键底部徽章/黑键下部)。 */
 function Keyboard({
   startOct,
   octaves,
   minWidth,
   keyboardEnabled = true,
+  showKbd = false,
 }: {
   startOct: number;
   octaves: number;
   minWidth?: number;
   /** 键盘映射开关;全屏时内联键盘关掉,防止两个实例双响 */
   keyboardEnabled?: boolean;
+  /** 在琴键上显示键盘字母引导(与键盘映射同开同关:不响应键盘的实例也不标) */
+  showKbd?: boolean;
 }) {
   // 和弦会同时亮起多个键,高亮必须是集合
   const [active, setActive] = React.useState<ReadonlySet<string>>(new Set());
@@ -165,25 +169,37 @@ function Keyboard({
   const whites = keys.filter((k) => !k.black);
   const blacks = keys.filter((k) => k.black);
 
+  // code → 音名 的映射(键盘演奏与键位引导共用一份)
+  const codeNote = React.useMemo(() => {
+    const m = new Map<string, string>();
+    whites.forEach((k, i) => {
+      if (KB_WHITE[i]) m.set(KB_WHITE[i], k.note);
+    });
+    for (const [code, semi] of KB_BLACK) {
+      const n = chromNote(startOct, semi);
+      if (idxOf.has(n)) m.set(code, n);
+    }
+    return m;
+  }, [whites, startOct, idxOf]);
+  // 音名 → 展示字母(; 与 ' 两个标点键单独写,其余去掉 Key 前缀)
+  const kbdLabel = React.useMemo(() => {
+    const m = new Map<string, string>();
+    for (const [code, note] of codeNote)
+      m.set(note, code === "Semicolon" ? ";" : code === "Quote" ? "'" : code.slice(3));
+    return m;
+  }, [codeNote]);
+
   // 电脑键盘演奏:按下发声+点亮(不设 250ms 熄灭,按住持续亮),松开熄灭;
   // 失焦兜底全灭(切窗口时按住的键不会卡亮)
   React.useEffect(() => {
     if (!keyboardEnabled) return;
-    const map = new Map<string, string>();
-    whites.forEach((k, i) => {
-      if (KB_WHITE[i]) map.set(KB_WHITE[i], k.note);
-    });
-    for (const [code, semi] of KB_BLACK) {
-      const n = chromNote(startOct, semi);
-      if (idxOf.has(n)) map.set(code, n);
-    }
     const typing = (t: EventTarget | null) =>
       t instanceof HTMLElement &&
       (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable);
     const down = (e: KeyboardEvent) => {
       if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
       if (typing(e.target)) return;
-      const note = map.get(e.code);
+      const note = codeNote.get(e.code);
       if (!note) return;
       e.preventDefault();
       setActive((p) => new Set(p).add(note));
@@ -191,7 +207,7 @@ function Keyboard({
       void playNote(note, 0.9, "piano").catch(() => {});
     };
     const up = (e: KeyboardEvent) => {
-      const note = map.get(e.code);
+      const note = codeNote.get(e.code);
       if (note) clearKey(note);
     };
     const onBlur = () => setActive(new Set());
@@ -203,8 +219,7 @@ function Keyboard({
       window.removeEventListener("keyup", up);
       window.removeEventListener("blur", onBlur);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- whites 随 keys 派生,依赖 keys 即可
-  }, [keys, startOct, keyboardEnabled]);
+  }, [codeNote, keyboardEnabled]);
 
   return (
     <div className="h-full overflow-x-auto pb-2">
@@ -221,6 +236,7 @@ function Keyboard({
             const on = active.has(k.note);
             const isC = k.note.startsWith("C");
             const pc = on ? pitchColor(k.note) : null;
+            const kbd = showKbd && keyboardEnabled ? kbdLabel.get(k.note) : undefined;
             return (
               <button
                 key={k.note}
@@ -239,6 +255,11 @@ function Keyboard({
                     : "bg-white text-slate-400 hover:bg-slate-100")
                 }
               >
+                {kbd && (
+                  <span className="mb-1 inline-flex h-4 min-w-4 items-center justify-center rounded border border-neutral-300 bg-white px-1 font-mono text-[9px] leading-none text-slate-500">
+                    {kbd}
+                  </span>
+                )}
                 {isC && <span className={on ? "" : "text-slate-500"}>{k.note}</span>}
               </button>
             );
@@ -251,6 +272,7 @@ function Keyboard({
             const on = active.has(k.note);
             const left = k.whiteBefore * whiteW - blackW / 2;
             const pc = on ? pitchColor(k.note) : null;
+            const kbd = showKbd && keyboardEnabled ? kbdLabel.get(k.note) : undefined;
             return (
               <button
                 key={k.note}
@@ -269,7 +291,13 @@ function Keyboard({
                     ? { left: `${left}%`, width: `${blackW}%`, height: "100%", backgroundColor: pc.bg }
                     : { left: `${left}%`, width: `${blackW}%`, height: "100%" }
                 }
-              />
+              >
+                {kbd && (
+                  <span className="pointer-events-none absolute inset-x-0 bottom-0.5 text-center font-mono text-[9px] leading-none text-white/70">
+                    {kbd}
+                  </span>
+                )}
+              </button>
             );
           })}
         </div>
@@ -295,6 +323,28 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
   const [expanded, setExpanded] = React.useState(false);
   // 展开时的视口尺寸:竖屏状态下要把键盘旋转 90°,需要实时 w/h;null = 未展开(SSR 安全)
   const [dims, setDims] = React.useState<{ w: number; h: number } | null>(null);
+  // 键位引导:在琴键上印电脑键盘字母;SSR 后从 localStorage 恢复记忆(放 effect 里,防注水错配)
+  const [showKbd, setShowKbd] = React.useState(false);
+  React.useEffect(() => {
+    try {
+      setShowKbd(localStorage.getItem("piano-kbd-guide") === "1");
+    } catch {
+      /* 忽略 */
+    }
+  }, []);
+
+  function toggleKbd() {
+    setShowKbd((v) => {
+      const next = !v;
+      try {
+        localStorage.setItem("piano-kbd-guide", next ? "1" : "0");
+      } catch {
+        /* 记不住也不影响本次会话 */
+      }
+      track("piano-kbd-guide", { on: next });
+      return next;
+    });
+  }
 
   const portrait = dims ? dims.h > dims.w : false;
 
@@ -355,22 +405,44 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
       )}
       <div className="p-4">
         <div style={{ height: keyHeight }}>
-          <Keyboard startOct={startOct} octaves={octaves} minWidth={minWidth} keyboardEnabled={!expanded} />
+          <Keyboard
+            startOct={startOct}
+            octaves={octaves}
+            minWidth={minWidth}
+            keyboardEnabled={!expanded}
+            showKbd={showKbd}
+          />
         </div>
         <div className="mt-2 flex items-center justify-between gap-2">
           {/* 桌面端提示键盘演奏(触屏设备隐藏) */}
           <span className="hidden text-xs text-muted-foreground md:inline">
-            键盘演奏:A S D F G H J K… 白键 · W E T Y U… 黑键
+            键盘演奏:A S D F… 白键 · W E T Y U… 黑键,点「键位」在琴面看标注
           </span>
-          <button
-            type="button"
-            onClick={openFullscreen}
-            className="inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-xs text-muted-foreground transition hover:border-signature/50 hover:text-signature active:scale-95"
-            aria-label="全屏演奏,手机请横屏"
-            title="全屏演奏(手机横屏更宽)"
-          >
-            <Maximize2 className="size-3.5" /> 全屏演奏
-          </button>
+          <span className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={toggleKbd}
+              aria-pressed={showKbd}
+              title="在琴键上显示键盘字母"
+              className={
+                "hidden shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-xs transition active:scale-95 md:inline-flex " +
+                (showKbd
+                  ? "border-signature/60 text-signature"
+                  : "text-muted-foreground hover:border-signature/50 hover:text-signature")
+              }
+            >
+              <KeyboardIcon className="size-3.5" /> 键位
+            </button>
+            <button
+              type="button"
+              onClick={openFullscreen}
+              className="inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-xs text-muted-foreground transition hover:border-signature/50 hover:text-signature active:scale-95"
+              aria-label="全屏演奏,手机请横屏"
+              title="全屏演奏(手机横屏更宽)"
+            >
+              <Maximize2 className="size-3.5" /> 全屏演奏
+            </button>
+          </span>
         </div>
       </div>
       {expanded &&
@@ -414,7 +486,7 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
                 </button>
               </div>
               <div className="flex-1 p-3">
-                <Keyboard startOct={3} octaves={3} minWidth={0} />
+                <Keyboard startOct={3} octaves={3} minWidth={0} showKbd={showKbd} />
               </div>
             </div>
           </div>,
