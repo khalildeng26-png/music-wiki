@@ -26,18 +26,25 @@ function buildKeys(startOct: number, octaves: number): { keys: Key[]; whiteCount
   return { keys, whiteCount: whiteCount + 1 };
 }
 
-// 电脑键盘演奏布局(virtual-piano 惯例):下排字母=白键,上排错位=黑键——
-// W 恰好在 A/S 之间= C#,E 在 S/D 之间= D#,以此类推,物理位置与琴键一一对应。
-// 黑键的偏移量是相对起始 C 的半音数:D#=3、F#=6、G#=8、A#=10(不是白键序号)
-const KB_WHITE = ["KeyA", "KeyS", "KeyD", "KeyF", "KeyG", "KeyH", "KeyJ", "KeyK", "KeyL", "Semicolon", "Quote"];
-const KB_BLACK: [string, number][] = [
-  ["KeyW", 1], ["KeyE", 3],              // C# D#
-  ["KeyT", 6], ["KeyY", 8], ["KeyU", 10], // F# G# A#
-  ["KeyO", 13], ["KeyP", 15],            // 高八度 C# D#
+// 电脑键盘演奏布局(virtual-piano 惯例),按绝对音高映射(基准 C4,不随组件起始八度漂移):
+// 字母排 A S D F…=白键,W E T Y U…=上排错位黑键,覆盖 C4–F5;
+// 数字排 1–7 按半音阶补完 F#5–C6(数字排本无黑白错位,当半音阶弹最顺)。
+// semi 为相对 C4 的半音数:D#=3、F#=6、G#=8、A#=10、F#5=18、C6=24。
+const KB_BINDINGS: [string, number][] = [
+  ["KeyA", 0], ["KeyS", 2], ["KeyD", 4], ["KeyF", 5], ["KeyG", 7], ["KeyH", 9],
+  ["KeyJ", 11], ["KeyK", 12], ["KeyL", 14], ["Semicolon", 16], ["Quote", 17],
+  ["KeyW", 1], ["KeyE", 3], ["KeyT", 6], ["KeyY", 8], ["KeyU", 10],
+  ["KeyO", 13], ["KeyP", 15],
+  ["Digit1", 18], ["Digit2", 19], ["Digit3", 20], ["Digit4", 21],
+  ["Digit5", 22], ["Digit6", 23], ["Digit7", 24],
 ];
 
-function chromNote(startOct: number, semi: number): string {
-  return `${CHROM[semi % 12]}${startOct + Math.floor(semi / 12)}`;
+/** 绑定键的展示字母(印在琴键上的徽章) */
+function kbChar(code: string): string {
+  if (code === "Semicolon") return ";";
+  if (code === "Quote") return "'";
+  if (code.startsWith("Digit")) return code.slice(5);
+  return code.slice(3);
 }
 
 /** 琴键组:多指触控按下即响(pointerdown),可同时按多个键奏和弦;
@@ -169,23 +176,20 @@ function Keyboard({
   const whites = keys.filter((k) => !k.black);
   const blacks = keys.filter((k) => k.black);
 
-  // code → 音名 的映射(键盘演奏与键位引导共用一份)
+  // code → 音名 的映射(键盘演奏与键位引导共用一份);绝对基准 C4,
+  // 组件音域外的绑定静默丢弃(如低音区起点的琴挂不上高音数字排)
   const codeNote = React.useMemo(() => {
     const m = new Map<string, string>();
-    whites.forEach((k, i) => {
-      if (KB_WHITE[i]) m.set(KB_WHITE[i], k.note);
-    });
-    for (const [code, semi] of KB_BLACK) {
-      const n = chromNote(startOct, semi);
+    for (const [code, semi] of KB_BINDINGS) {
+      const n = `${CHROM[semi % 12]}${4 + Math.floor(semi / 12)}`;
       if (idxOf.has(n)) m.set(code, n);
     }
     return m;
-  }, [whites, startOct, idxOf]);
-  // 音名 → 展示字母(; 与 ' 两个标点键单独写,其余去掉 Key 前缀)
+  }, [idxOf]);
+  // 音名 → 展示字母(印在琴键徽章上)
   const kbdLabel = React.useMemo(() => {
     const m = new Map<string, string>();
-    for (const [code, note] of codeNote)
-      m.set(note, code === "Semicolon" ? ";" : code === "Quote" ? "'" : code.slice(3));
+    for (const [code, note] of codeNote) m.set(note, kbChar(code));
     return m;
   }, [codeNote]);
 
@@ -413,11 +417,7 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
             showKbd={showKbd}
           />
         </div>
-        <div className="mt-2 flex items-center justify-between gap-2">
-          {/* 桌面端提示键盘演奏(触屏设备隐藏) */}
-          <span className="hidden text-xs text-muted-foreground md:inline">
-            键盘演奏:A S D F… 白键 · W E T Y U… 黑键,点「键位」在琴面看标注
-          </span>
+        <div className="mt-2 flex items-center justify-end gap-2">
           <span className="flex items-center gap-2">
             <button
               type="button"
@@ -472,18 +472,33 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
             >
               <div className="flex items-center justify-between gap-3 px-4 py-2">
                 <span className="text-xs text-muted-foreground">
-                  {portrait
-                    ? "把手机横过来,琴键更宽更好弹"
-                    : "全屏演奏中 · 电脑可用键盘:A S D F… 白键,W E T… 黑键"}
+                  {portrait ? "把手机横过来,琴键更宽更好弹" : "全屏演奏中"}
                 </span>
-                <button
-                  type="button"
-                  onClick={closeFullscreen}
-                  aria-label="退出全屏演奏"
-                  className="inline-flex size-8 items-center justify-center rounded-full border text-muted-foreground transition hover:border-signature/50 hover:text-signature active:scale-95"
-                >
-                  <X className="size-4" />
-                </button>
+                <span className="flex items-center gap-2">
+                  {/* 全屏里琴底栏不可见,键位开关在这里也要有一个 */}
+                  <button
+                    type="button"
+                    onClick={toggleKbd}
+                    aria-pressed={showKbd}
+                    title="在琴键上显示键盘字母"
+                    className={
+                      "hidden shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-xs transition active:scale-95 md:inline-flex " +
+                      (showKbd
+                        ? "border-signature/60 text-signature"
+                        : "text-muted-foreground hover:border-signature/50 hover:text-signature")
+                    }
+                  >
+                    <KeyboardIcon className="size-3.5" /> 键位
+                  </button>
+                  <button
+                    type="button"
+                    onClick={closeFullscreen}
+                    aria-label="退出全屏演奏"
+                    className="inline-flex size-8 items-center justify-center rounded-full border text-muted-foreground transition hover:border-signature/50 hover:text-signature active:scale-95"
+                  >
+                    <X className="size-4" />
+                  </button>
+                </span>
               </div>
               <div className="flex-1 p-3">
                 <Keyboard startOct={3} octaves={3} minWidth={0} showKbd={showKbd} />
