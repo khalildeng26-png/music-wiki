@@ -3,6 +3,7 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 
 import { track } from "@/lib/track";
+import { transposeNote } from "@/lib/transpose";
 
 import { playNote } from "./audio";
 import { noteToMidi } from "./noteUtils";
@@ -186,35 +187,53 @@ function Keyboard({
     }
     return m;
   }, [idxOf]);
-  // 音名 → 展示字母(印在琴键徽章上)
+  // 音名 → 展示字母(印在琴键徽章上)。Shift+键 = 降一个八度:低八度琴键
+  // 显示 ⇧ 前缀(如 C3 显示 ⇧A),仅在琴域内且无直接绑定的键才补 shift 标注
   const kbdLabel = React.useMemo(() => {
     const m = new Map<string, string>();
     for (const [code, note] of codeNote) m.set(note, kbChar(code));
+    for (const [code, note] of codeNote) {
+      const low = transposeNote(note, -12);
+      if (idxOf.has(low) && !m.has(low)) m.set(low, "⇧" + kbChar(code));
+    }
     return m;
-  }, [codeNote]);
+  }, [codeNote, idxOf]);
 
   // 电脑键盘演奏:按下发声+点亮(不设 250ms 熄灭,按住持续亮),松开熄灭;
-  // 失焦兜底全灭(切窗口时按住的键不会卡亮)
+  // Shift+键降一个八度(域外忽略);失焦兜底全灭(切窗口时按住的键不会卡亮)。
+  // heldNotes 记住每个物理键实际触发的音——先松 Shift 再松键也能正确熄灭
   React.useEffect(() => {
     if (!keyboardEnabled) return;
+    const held = new Map<string, string>();
     const typing = (t: EventTarget | null) =>
       t instanceof HTMLElement &&
       (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable);
     const down = (e: KeyboardEvent) => {
       if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
       if (typing(e.target)) return;
-      const note = codeNote.get(e.code);
+      let note = codeNote.get(e.code);
       if (!note) return;
+      if (e.shiftKey) {
+        note = transposeNote(note, -12);
+        if (!idxOf.has(note)) return;
+      }
       e.preventDefault();
+      held.set(e.code, note);
       setActive((p) => new Set(p).add(note));
-      track("piano-play", { note, src: "kbd" });
+      track("piano-play", { note, src: "kbd", shift: e.shiftKey });
       void playNote(note, 0.9, "piano").catch(() => {});
     };
     const up = (e: KeyboardEvent) => {
-      const note = codeNote.get(e.code);
-      if (note) clearKey(note);
+      const note = held.get(e.code);
+      if (note) {
+        held.delete(e.code);
+        clearKey(note);
+      }
     };
-    const onBlur = () => setActive(new Set());
+    const onBlur = () => {
+      held.clear();
+      setActive(new Set());
+    };
     window.addEventListener("keydown", down);
     window.addEventListener("keyup", up);
     window.addEventListener("blur", onBlur);
@@ -223,7 +242,7 @@ function Keyboard({
       window.removeEventListener("keyup", up);
       window.removeEventListener("blur", onBlur);
     };
-  }, [codeNote, keyboardEnabled]);
+  }, [codeNote, idxOf, keyboardEnabled]);
 
   return (
     <div className="h-full overflow-x-auto pb-2">
