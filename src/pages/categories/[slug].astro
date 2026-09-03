@@ -41,20 +41,12 @@ const filterItems = entries.map((e) => ({
       <a href="/entries" class="hover:text-signature">词条</a>
     </nav>
 
-    {/* 分类图标:记谱法记号手绘 SVG(见 categories.ts),直接浮动在标题旁,不用色块衬底 */}
+    {/* 分类身份由色相承载:标题前一枚分类色点(旧记谱图标已删) */}
     <div
-      class="mt-4 flex items-center gap-3.5"
+      class="mt-4 flex items-center gap-2.5"
       style={`--cat:${catColor(category.hue)};--cat-d:${catColor(category.hue, "dark")}`}
     >
-      <svg
-        viewBox="0 0 44 44"
-        aria-hidden="true"
-        class="size-11 shrink-0 text-(--cat) dark:text-(--cat-d)"
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        set:html={category.mark}
-      />
+      <span aria-hidden="true" class="size-2.5 shrink-0 rounded-full bg-(--cat) dark:bg-(--cat-d)"></span>
       <h1 class="text-3xl font-display font-bold tracking-tight">{category.label}</h1>
     </div>
     <p class="mt-2 text-muted-foreground">{category.desc}</p>

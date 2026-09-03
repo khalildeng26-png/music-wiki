@@ -234,19 +234,10 @@ const interactiveCount = new Set(
               style={`--cat:${catColor(c.hue)};--cat-d:${catColor(c.hue, "dark")}`}
               class="flex items-center gap-2.5 rounded-xl border bg-card px-4 py-3 text-sm transition hover:-translate-y-0.5 hover:border-signature/50 hover:bg-signature/10 hover:text-signature-ink active:scale-[0.98] md:gap-1.5 md:rounded-full md:py-1.5"
             >
-              {/* 大格里放分类记号(记谱法图标),桌面 chip 收敛回色点 */}
-              <svg
-                viewBox="0 0 44 44"
-                aria-hidden="true"
-                class="size-8 shrink-0 text-(--cat) md:hidden dark:text-(--cat-d)"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                set:html={c.mark}
-              />
+              {/* 分类身份由色相承载:色点全断点统一(旧记谱图标已删) */}
               <span
                 aria-hidden="true"
-                class="mr-1.5 hidden size-1.5 rounded-full bg-(--cat) md:inline-block dark:bg-(--cat-d)"
+                class="size-1.5 shrink-0 rounded-full bg-(--cat) dark:bg-(--cat-d)"
               />
               <span class="font-medium md:font-normal">{c.label}</span>
               <span class="ml-auto text-xs tabular-nums text-muted-foreground md:ml-1.5">
