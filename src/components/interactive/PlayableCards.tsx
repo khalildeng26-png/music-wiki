@@ -97,7 +97,10 @@ export function PlayChip({
   return (
     <span className="flex items-center justify-end gap-2">
       {state === "playing" && caption && (
-        <span className="max-w-60 rounded-full border border-signature/30 bg-card/95 px-2.5 py-1 text-xs text-signature-ink shadow-sm">
+        <span
+          aria-live="polite"
+          className="max-w-60 rounded-full border border-signature/30 bg-card/95 px-2.5 py-1 text-xs text-signature-ink shadow-sm"
+        >
           {caption}
         </span>
       )}
