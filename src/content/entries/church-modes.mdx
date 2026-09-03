@@ -22,6 +22,7 @@ order: 8
 ---
 
 import { StaffNotation } from "../../components/interactive/StaffNotation";
+import { ChordPlayer } from "../../components/interactive/ChordPlayer";
 import { Piano } from "../../components/interactive/Piano";
 
 **教会调式**(中古调式 / Modes)是在[大调与小调](/entries/key-and-mode)之外的一族音阶。它们都以自然音为材料,但**起点不同**,于是各自有独特的色彩——爵士、融合、影视配乐、摇滚里大量使用。
@@ -63,6 +64,40 @@ import { Piano } from "../../components/interactive/Piano";
 ## 七个调式全家福
 
 按白键起点排列,正好七个:**伊奥尼亚(Ionian,即大调)、多利亚、弗里几亚、利底亚、混合利底亚、伊奥利亚(Aeolian,即自然小调)、洛克里亚(Locrian)**。
+
+## 特征音:每个调式的名片
+
+辨调式不必逐音比对,抓**特征音**(characteristic tone)——调式与普通大小调不同的那一两个音:多利亚的升六级、弗里几亚的降二级、利底亚的升四级、混合利底亚的降七级。耳朵只盯「主音与特征音的关系」,多利亚和自然小调立刻分开:两者只差一个六级。写旋律时反过来用:特征音出现的位置越讲究,调式身份越清楚。
+
+## 调式和声速成
+
+配和声最稳的抓手是**特征音自带的招牌进行**:多利亚的 i–IV(小主和弦接大下属,D 多利亚里即 Dm–G,G 的大三度 B 正是升六级);混合利底亚的 I–♭VII(如 C–B♭),摇滚的常用套路。听对比:
+
+<ChordPlayer
+  client:visible
+  label="多利亚 i–IV(Dm–G)"
+  desc="小主和弦接大下属,亮色全在升六级"
+  chords={[
+    ["D3", "F3", "A3"],
+    ["G3", "B3", "D4"],
+    ["D3", "F3", "A3"],
+    ["G3", "B3", "D4"],
+  ]}
+/>
+
+<ChordPlayer
+  client:visible
+  label="混合利底亚 I–♭VII–IV(C–B♭–F)"
+  desc="降七级接下属再回家,大开阔的摇滚味"
+  chords={[
+    ["C4", "E4", "G4"],
+    ["Bb3", "D4", "F4"],
+    ["F3", "A3", "C4"],
+    ["C4", "E4", "G4"],
+  ]}
+/>
+
+利底亚通常不做功能进行:Imaj7♯11 长踏板铺底,色彩即内容。
 
 ## 历史:从修道院到爵士俱乐部
 
