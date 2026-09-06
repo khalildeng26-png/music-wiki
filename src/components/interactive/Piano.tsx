@@ -120,7 +120,7 @@ function Keyboard({
   }
 
   async function hit(note: string) {
-    track("piano-play", { note });
+    track("piano-play", { note, src: "ptr" });
     setActive((prev) => {
       const next = new Set(prev);
       next.add(note);
