@@ -26,6 +26,20 @@ const paths = defineCollection({
     description: z.string(),
     steps: z.array(z.string()), // entry id 的有序列表
     cover: z.string().optional(),
+    /** 训练层(2026-09-08 起):路线不只是阅读顺序,还是带练习量与过关标准的训练计划 */
+    plan: z
+      .object({
+        total: z.string(), // 总练习量,如「约 3–4 周 · 每天 20–30 分钟」
+        milestones: z.array(
+          z.object({
+            days: z.string(), // 建议练习量,与 steps 按下标对齐
+            pass: z.string(), // 过关标准:可检验的具体行为
+          }),
+        ),
+      })
+      .optional(),
+    /** 走完之后:进阶去向的 entry id 列表 */
+    next: z.array(z.string()).optional(),
     draft: z.boolean().default(false),
   }),
 });
