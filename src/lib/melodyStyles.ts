@@ -1,12 +1,11 @@
 // 「一首卡农,六种曲风」的编曲数据——帕赫贝尔卡农移到 C 大调,
 // 地面低音 8 个和弦 × 2 拍 = 16 拍:C G Am Em F C F G(卡农进行)。
 // 主题旋律(二分音符):E5 D5 C5 B4 A4 G4 A4 B4,各版本按乐器音域移位。
-// 2026-09-03 换血:换下爵士/摇滚/民乐/8bit/舞曲(它们仍在各自词条与
-// 猜曲风游戏里),换上凯尔特/进行曲/新世纪/蓝调/放克——B 档新音色
-// (锡哨/宝思兰/行进军鼓)首次上首页;钢琴保留作「原形」对照组。
+// 2026-09-03 换血:凯尔特/进行曲/新世纪/蓝调/放克;2026-09-10 第三批:
+// 古典/蓝草/R&B/嘻哈/流行,且「钢琴·原形」升级为迷你原曲结构——
+// 主题 → 第二声部隔一小节追进来(真卡农) → 左手八分跑动(加花变奏),
+// 对应帕赫贝尔原曲「固定低音上的多声部变奏」,不再原地重复。
 import type { Pattern } from "@/components/interactive/audio";
-
-import { transposeNote } from "@/lib/transpose";
 
 export type StyleArrangement = {
   id: string;
@@ -27,185 +26,283 @@ const theme = (melody: string[], vel = 0.8) =>
 /** 每和弦单元(u:0-7,起拍 u*2)的工具 */
 const unit = (u: number) => u * 2;
 
-/** 卡农各级根音(低八度,供 bass/tuba 用) */
+/** 卡农各级根音(低八度,供 bass 用) */
 const ROOTS = ["C2", "G1", "A1", "E1", "F1", "C2", "F1", "G1"] as const;
-/** 根音上五度(om-pah 的 pah) */
+/** 根音上五度(oom-pah 的 pah / 蓝草贝斯的 5) */
 const FIFTHS = ["G2", "D2", "E2", "B1", "C2", "G2", "C2", "D2"] as const;
 
 export const STYLES: StyleArrangement[] = [
   {
     id: "pure",
     name: "钢琴",
-    desc: "没有风格包装的对照版:钢琴主题 + 原样和弦——下面五个版本都由它「变装」而来。",
+    desc: "迷你版原曲:先主题,再让第二个声部隔一小节追进来(这才是「卡农」),最后左手跑起来——原曲就是这样一遍遍加花的。",
     pattern: {
       bpm: 84,
-      beats: 16,
+      beats: 32,
+      repeat: 1,
       tracks: [
         {
           kind: "notes",
           timbre: "piano",
-          events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 1.0),
+          // 第一遍:主题(二分音符);第二遍:五度-三度四分音符变奏(原曲第三变奏的形态)
+          events: [
+            ...theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 0.9),
+            ...[
+              ["G5", "E5"], ["D5", "B4"], ["E5", "C5"], ["B4", "G4"],
+              ["C5", "A4"], ["G5", "E5"], ["C5", "A4"], ["D5", "B4"],
+            ].flatMap((pair, u) =>
+              pair.map((n, i) => ({ t: 16 + unit(u) + i, notes: [n], dur: 0.9, vel: 0.8 })),
+            ),
+          ],
         },
         {
           kind: "notes",
           timbre: "piano",
-          events: [
-            ["C4", "E4", "G4"],
-            ["G3", "B3", "D4"],
-            ["A3", "C4", "E4"],
-            ["G3", "B3", "E4"],
-            ["F3", "A3", "C4"],
-            ["C4", "E4", "G4"],
-            ["F3", "A3", "C4"],
-            ["G3", "B3", "D4"],
-          ].map((ch, u) => ({ t: unit(u), notes: ch, dur: 1.8, vel: 0.6 })),
-        },
-      ],
-    },
-  },
-  {
-    id: "celtic",
-    name: "凯尔特",
-    desc: "锡哨把主题高高挑起,木吉他只在反拍切分,宝思兰鼓咚哒哒地推——卡农踏进了爱尔兰酒馆。",
-    pattern: {
-      bpm: 116,
-      beats: 16,
-      tracks: [
-        {
-          kind: "notes",
-          timbre: "whistle",
-          events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 0.7),
-        },
-        {
-          kind: "notes",
-          timbre: "guitar",
-          // 反拍切分:每拍的后半拍轻切一下,凯尔特节奏组的招牌伴奏法
-          events: [
-            ["C3", "G3", "E4"],
-            ["G2", "D3", "B3"],
-            ["A2", "E3", "C4"],
-            ["E2", "B2", "G3"],
-            ["F2", "C3", "A3"],
-            ["C3", "G3", "E4"],
-            ["F2", "C3", "A3"],
-            ["G2", "D3", "B3"],
-          ].flatMap((ch, u) => [
-            { t: unit(u) + 0.5, notes: ch, dur: 0.35, vel: 0.5 },
-            { t: unit(u) + 1.5, notes: ch, dur: 0.35, vel: 0.55 },
-          ]),
-        },
-        {
-          kind: "drums",
-          // 宝思兰鼓:每拍一击,强-弱-中-弱的酒馆律动
-          events: Array.from({ length: 16 }, (_, i) => ({
-            t: i,
-            hit: "bodhran" as const,
-            vel: i % 4 === 0 ? 0.85 : i % 4 === 2 ? 0.6 : 0.4,
+          // 第二声部:同一主题晚 4 拍(一小节)追进来——两声部互相追赶,卡农本义
+          events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 0.55).map((e) => ({
+            ...e,
+            t: e.t + 4,
           })),
         },
-      ],
-    },
-  },
-  {
-    id: "march",
-    name: "进行曲",
-    desc: "小号齐步走主题,大号在底下 oom-pah,行进军鼓密如雨点——卡农列队过街。",
-    pattern: {
-      bpm: 112,
-      beats: 16,
-      tracks: [
         {
           kind: "notes",
-          timbre: "trumpet",
-          events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 0.8),
-        },
-        {
-          kind: "notes",
-          timbre: "tuba",
-          // oom-pah:正拍根音、次拍五度
-          events: ROOTS.flatMap((root, u) => [
-            { t: unit(u), notes: [root], dur: 0.9, vel: 0.65 },
-            { t: unit(u) + 1, notes: [FIFTHS[u]], dur: 0.9, vel: 0.5 },
-          ]),
-        },
-        {
-          kind: "drums",
-          // 行进军鼓:连续八分,重音按 4/4 分句;低音鼓钉正拍
+          timbre: "piano",
+          // 第一遍:柱式和弦;第二遍:左手八音跑动(加花)
           events: [
-            ...Array.from({ length: 32 }, (_, i) => ({
-              t: i * 0.5,
-              hit: "msnare" as const,
-              vel: i % 8 === 0 ? 0.8 : i % 2 === 0 ? 0.55 : 0.3,
-            })),
-            ...Array.from({ length: 8 }, (_, u) => ({ t: unit(u), hit: "kick" as const, vel: 0.7 })),
+            ...[
+              ["C4", "E4", "G4"],
+              ["G3", "B3", "D4"],
+              ["A3", "C4", "E4"],
+              ["G3", "B3", "E4"],
+              ["F3", "A3", "C4"],
+              ["C4", "E4", "G4"],
+              ["F3", "A3", "C4"],
+              ["G3", "B3", "D4"],
+            ].map((ch, u) => ({ t: unit(u), notes: ch, dur: 1.8, vel: 0.5 })),
+            ...[
+              ["C3", "G3", "E3", "G3"],
+              ["G2", "D3", "B3", "D3"],
+              ["A2", "E3", "C3", "E3"],
+              ["E2", "B2", "G2", "B2"],
+              ["F2", "C3", "A3", "C3"],
+              ["C3", "G3", "E3", "G3"],
+              ["F2", "C3", "A3", "C3"],
+              ["G2", "D3", "B3", "D3"],
+            ].flatMap((arp, u) =>
+              arp.map((n, i) => ({ t: 16 + unit(u) + i * 0.5, notes: [n], dur: 0.42, vel: 0.5 })),
+            ),
           ],
         },
       ],
     },
   },
   {
-    id: "newage",
-    name: "新世纪",
-    desc: "小提琴把主题拉成长线悬在半空,钢琴琶音一圈圈荡开,没有鼓——空间感就是主角。",
+    id: "classical",
+    name: "古典",
+    desc: "小提琴在上面规整地唱,钢琴左手「低-高-中-高」地分解(阿尔贝蒂低音)——卡农回到了古典时期的客厅。",
     pattern: {
-      bpm: 72,
+      bpm: 96,
       beats: 16,
       tracks: [
         {
           kind: "notes",
           timbre: "violin",
-          events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 0.4),
+          events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 0.75),
         },
         {
           kind: "notes",
           timbre: "piano",
-          // 每和弦一组八分琶音,自下而上「荡开」
+          // 阿尔贝蒂低音:每和弦「根-五-三-五」四分音符
           events: [
-            ["C4", "E4", "G4", "C5"],
-            ["G3", "B3", "D4", "G4"],
-            ["A3", "C4", "E4", "A4"],
-            ["E3", "G3", "B3", "E4"],
-            ["F3", "A3", "C4", "F4"],
-            ["C4", "E4", "G4", "C5"],
-            ["F3", "A3", "C4", "F4"],
-            ["G3", "B3", "D4", "G4"],
+            ["C3", "G3", "E3", "G3"],
+            ["G2", "D3", "B3", "D3"],
+            ["A2", "E3", "C3", "E3"],
+            ["E2", "B2", "G2", "B2"],
+            ["F2", "C3", "A3", "C3"],
+            ["C3", "G3", "E3", "G3"],
+            ["F2", "C3", "A3", "C3"],
+            ["G2", "D3", "B3", "D3"],
           ].flatMap((arp, u) =>
-            arp.map((n, i) => ({ t: unit(u) + i * 0.5, notes: [n], dur: 1.6, vel: 0.4 })),
+            arp.map((n, i) => ({ t: unit(u) + i, notes: [n], dur: 0.9, vel: 0.5 })),
           ),
         },
       ],
     },
   },
   {
-    id: "blues",
-    name: "蓝调",
-    desc: "吉他把主题唱得松松垮垮,和弦全换成七和弦,swing 八分一长一短——卡农进了烟熏酒吧。",
+    id: "bluegrass",
+    name: "蓝草",
+    desc: "132 BPM 的山地快车:小提琴扛主题,吉他根音-扫弦地弹,贝斯一五一十——卡农开进了蓝草 jam 场。",
     pattern: {
-      bpm: 96,
-      swing: 0.64,
+      bpm: 132,
       beats: 16,
       tracks: [
         {
           kind: "notes",
-          timbre: "guitar",
-          events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 0.75),
+          timbre: "violin",
+          events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 0.8),
         },
         {
           kind: "notes",
           timbre: "guitar",
-          // 七和弦在摇摆八分上焖着:每和弦两下,swing 把它晃成 shuffle
+          // boom-chuck:正拍低音、反拍轻扫
           events: [
-            ["C3", "E3", "Bb3"],
-            ["G2", "B2", "F3"],
-            ["A2", "C3", "G3"],
-            ["E2", "G2", "D3"],
-            ["F2", "A2", "Eb3"],
-            ["C3", "E3", "Bb3"],
-            ["F2", "A2", "Eb3"],
-            ["G2", "B2", "F3"],
+            ["C3", "E3", "G3"],
+            ["G2", "B2", "D3"],
+            ["A2", "C3", "E3"],
+            ["E2", "G2", "B2"],
+            ["F2", "A2", "C3"],
+            ["C3", "E3", "G3"],
+            ["F2", "A2", "C3"],
+            ["G2", "B2", "D3"],
           ].flatMap((ch, u) => [
-            { t: unit(u), notes: ch, dur: 0.4, vel: 0.6 },
-            { t: unit(u) + 1, notes: ch, dur: 0.4, vel: 0.5 },
+            { t: unit(u), notes: [ch[0]], dur: 0.4, vel: 0.6 },
+            { t: unit(u) + 1, notes: ch, dur: 0.35, vel: 0.5 },
+          ]),
+        },
+        {
+          kind: "notes",
+          timbre: "bass",
+          // 站立贝斯:根音与五度各占一拍
+          events: ROOTS.flatMap((root, u) => [
+            { t: unit(u), notes: [root], dur: 0.85, vel: 0.75 },
+            { t: unit(u) + 1, notes: [FIFTHS[u]], dur: 0.85, vel: 0.65 },
+          ]),
+        },
+      ],
+    },
+  },
+  {
+    id: "rnb",
+    name: "R&B",
+    desc: "和弦全泡进 7 音,落点总比拍子晚半口气(黏),鼓点松松地拖——卡农换上了丝绒西装。",
+    pattern: {
+      bpm: 86,
+      swing: 0.6,
+      beats: 16,
+      tracks: [
+        {
+          kind: "notes",
+          timbre: "piano",
+          events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 0.7),
+        },
+        {
+          kind: "notes",
+          timbre: "piano",
+          // 七和弦:正拍长按 + 反拍推一下(「黏」的落点)
+          events: [
+            ["C4", "E4", "G4", "B4"], // Cmaj7
+            ["G3", "B3", "D4", "F4"], // G7
+            ["A3", "C4", "E4", "G4"], // Am7
+            ["E3", "G3", "B3", "D4"], // Em7
+            ["F3", "A3", "C4", "E4"], // Fmaj7
+            ["C4", "E4", "G4", "B4"],
+            ["F3", "A3", "C4", "E4"],
+            ["G3", "B3", "D4", "F4"],
+          ].flatMap((ch, u) => [
+            { t: unit(u), notes: ch, dur: 1.1, vel: 0.55 },
+            { t: unit(u) + 1.5, notes: ch, dur: 0.6, vel: 0.45 },
+          ]),
+        },
+        {
+          kind: "notes",
+          timbre: "bass",
+          events: ROOTS.flatMap((root, u) => [
+            { t: unit(u), notes: [root], dur: 1.0, vel: 0.8 },
+            { t: unit(u) + 1.25, notes: [root], dur: 0.5, vel: 0.6 },
+          ]),
+        },
+        {
+          kind: "drums",
+          events: [
+            ...ROOTS.flatMap((_, u) => [
+              { t: unit(u), hit: "kick" as const, vel: 0.5 },
+              { t: unit(u) + 1.25, hit: "kick" as const, vel: 0.4 },
+              { t: unit(u) + 1, hit: "snare" as const, vel: 0.5 },
+            ]),
+            ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.28 })),
+          ],
+        },
+      ],
+    },
+  },
+  {
+    id: "hiphop",
+    name: "嘻哈",
+    desc: "慢而沉的 boom bap:军鼓钉 2、4 拍,底鼓拖到后半拍才落,钢琴七和弦稀疏地戳——卡农躺进了说唱的节拍床。",
+    pattern: {
+      bpm: 88,
+      swing: 0.58,
+      beats: 16,
+      tracks: [
+        {
+          kind: "notes",
+          timbre: "piano",
+          events: theme(["E4", "D4", "C4", "B3", "A3", "G3", "A3", "B3"], 0.7),
+        },
+        {
+          kind: "notes",
+          timbre: "piano",
+          // 七和弦短戳:隔一个和弦戳一次,留呼吸;压低八度给主题让路
+          events: [
+            ["C3", "E3", "G3", "B3"],
+            ["A2", "C3", "E3", "G3"],
+            ["F2", "A2", "C3", "E3"],
+            ["G2", "B2", "D3", "F3"],
+          ].flatMap((ch, u) => [
+            { t: unit(u * 2), notes: ch, dur: 1.2, vel: 0.5 },
+            { t: unit(u * 2) + 1.25, notes: ch, dur: 0.4, vel: 0.4 },
+          ]),
+        },
+        {
+          kind: "notes",
+          timbre: "bass",
+          // 拖拍贝斯:正拍 + 1.75 的迟推
+          events: ROOTS.flatMap((root, u) => [
+            { t: unit(u), notes: [root], dur: 1.3, vel: 0.85 },
+            { t: unit(u) + 1.75, notes: [root], dur: 0.3, vel: 0.6 },
+          ]),
+        },
+        {
+          kind: "drums",
+          events: [
+            ...[0, 2.75, 8, 10.75].map((t) => ({ t, hit: "kick" as const, vel: 0.75 })),
+            ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.65 })),
+            ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.25 })),
+          ],
+        },
+      ],
+    },
+  },
+  {
+    id: "pop",
+    name: "流行",
+    desc: "钢琴在正拍和反拍后半各落一下,贝斯一步一步走,鼓组干净利落——卡农穿上了电台主打歌的外套。",
+    pattern: {
+      bpm: 120,
+      beats: 16,
+      tracks: [
+        {
+          kind: "notes",
+          timbre: "piano",
+          events: theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 0.85),
+        },
+        {
+          kind: "notes",
+          timbre: "piano",
+          // 流行落点:每和弦第 1 拍与第 2 拍后半
+          events: [
+            ["C4", "E4", "G4"],
+            ["G3", "B3", "D4"],
+            ["A3", "C4", "E4"],
+            ["E3", "G3", "B3"],
+            ["F3", "A3", "C4"],
+            ["C4", "E4", "G4"],
+            ["F3", "A3", "C4"],
+            ["G3", "B3", "D4"],
+          ].flatMap((ch, u) => [
+            { t: unit(u), notes: ch, dur: 1.1, vel: 0.55 },
+            { t: unit(u) + 1.5, notes: ch, dur: 0.6, vel: 0.45 },
           ]),
         },
         {
@@ -213,74 +310,17 @@ export const STYLES: StyleArrangement[] = [
           timbre: "bass",
           // 根音-五度交替,一拍一音
           events: ROOTS.flatMap((root, u) => [
-            { t: unit(u), notes: [root], dur: 0.9, vel: 0.8 },
-            { t: unit(u) + 1, notes: [FIFTHS[u]], dur: 0.9, vel: 0.7 },
+            { t: unit(u), notes: [root], dur: 0.9, vel: 0.75 },
+            { t: unit(u) + 1, notes: [FIFTHS[u]], dur: 0.9, vel: 0.65 },
           ]),
         },
         {
           kind: "drums",
           events: [
-            ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "ride" as const, vel: 0.45 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.5 })),
-            ...Array.from({ length: 8 }, (_, u) => ({ t: unit(u), hit: "kick" as const, vel: 0.4 })),
-          ],
-        },
-      ],
-    },
-  },
-  {
-    id: "funk",
-    name: "放克",
-    desc: "九和弦只在想不到的位置冒头,贝斯用八度蹦跳抢戏,十六分镲擦个不停——秘诀是「哪里不弹」。",
-    pattern: {
-      bpm: 100,
-      beats: 16,
-      tracks: [
-        {
-          kind: "notes",
-          timbre: "eguitar",
-          events: theme(["E4", "D4", "C4", "B3", "A3", "G3", "A3", "B3"], 0.75),
-        },
-        {
-          kind: "notes",
-          timbre: "eguitar",
-          // 九和弦切分短刺:反拍进,十六分缝里收
-          events: [
-            ["C3", "E3", "Bb3", "D4"], // C9(省五音)
-            ["G2", "B2", "F3", "A3"], // G9
-            ["A2", "C3", "E3", "G3"], // Am7
-            ["E2", "G2", "B2", "D3"], // Em7
-            ["F2", "A2", "C3", "Eb3"], // F9(♭7 在位)
-            ["C3", "E3", "Bb3", "D4"],
-            ["F2", "A2", "C3", "Eb3"],
-            ["G2", "B2", "F3", "A3"],
-          ].flatMap((ch, u) => [
-            { t: unit(u) + 0.5, notes: ch, dur: 0.18, vel: 0.6 },
-            { t: unit(u) + 1.75, notes: ch, dur: 0.18, vel: 0.55 },
-          ]),
-        },
-        {
-          kind: "notes",
-          timbre: "bass",
-          // 八度蹦跳的 funk ostinato:正拍根音、后半拍同音、第二拍高八度
-          events: ROOTS.flatMap((root, u) => [
-            { t: unit(u), notes: [root], dur: 0.2, vel: 0.9 },
-            { t: unit(u) + 0.75, notes: [root], dur: 0.15, vel: 0.7 },
-            { t: unit(u) + 1.5, notes: [transposeNote(root, 12)], dur: 0.2, vel: 0.8 },
-          ]),
-        },
-        {
-          kind: "drums",
-          events: [
-            ...Array.from({ length: 64 }, (_, i) => ({
-              t: i * 0.25,
-              hit: "hihat" as const,
-              vel: i % 4 === 0 ? 0.4 : i % 2 === 0 ? 0.3 : 0.2,
-            })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.75 })),
-            ...Array.from({ length: 8 }, (_, u) => ({ t: unit(u), hit: "kick" as const, vel: 0.8 })),
-            { t: 2.75, hit: "kick", vel: 0.6 },
-            { t: 10.75, hit: "kick", vel: 0.6 },
+            ...Array.from({ length: 8 }, (_, u) => ({ t: unit(u), hit: "kick" as const, vel: 0.7 })),
+            ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.6 })),
+            ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.35 })),
+            { t: 0, hit: "openhat", vel: 0.5 },
           ],
         },
       ],
@@ -288,5 +328,5 @@ export const STYLES: StyleArrangement[] = [
   },
 ];
 
-// 每版转 2 遍(8 小节卡农进行,更完整)
-STYLES.forEach((s) => (s.pattern.repeat = 2));
+// 每版默认转 2 遍(原形自定为 32 拍单遍结构,不翻倍)
+STYLES.forEach((s) => (s.pattern.repeat ??= 2));
