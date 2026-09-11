@@ -16,9 +16,12 @@ faq:
     a: A4 = 440 Hz 是今天通行的标准音高。历史上各地音高并不统一,1939 年一次国际会议建议以 440 Hz 为标准,此后逐渐成为乐团调音的通行做法。
   - q: 怎么快速认出五线谱上的音?
     a: 先记锚点(高音谱号第二线 = G、下加一线 = 中央 C),再按"线上数一格高一个音、间上同理"逐格推算。认熟了几个锚点,其余的音都能推出来。
+  - q: 什么是绝对音感?普通人能练出来吗?
+    a: 不给任何参照、听到音就能报出音名的能力叫绝对音感,多在 4–6 岁前形成,成年人极难真正获得。但「锚点音 + 推算」的准绝对音感人人可练——记住 A 或 C 的音色,其余音从锚点推,准确率会稳步上升。
 order: 1
 ---
 
+import { AbsolutePitch } from "../../components/interactive/AbsolutePitch";
 import { NoteDemo } from "../../components/interactive/NoteDemo";
 import { StaffNotation } from "../../components/interactive/StaffNotation";
 import { Piano } from "../../components/interactive/Piano";
@@ -73,5 +76,11 @@ import { Piano } from "../../components/interactive/Piano";
 学完音名,来测一下——下面谱上的音,音名是什么?点播放听一听,再选答案。
 
 <NoteDemo client:visible />
+
+## 进阶试一试:听音点名(绝对音感)
+
+上面是「看着认」,现在反过来——不给谱、不给参照,听一个音直接报出它的音名。这叫**绝对音感**(absolute pitch),与[音准](/entries/pitch-training)词条里「比较两个音」的相对音感是两种能力。普通人靠锚点音也能推算,试试你的底子:
+
+<AbsolutePitch client:visible />
 
 下一步:理解了音高,接着看 [节奏与拍号](/entries/rhythm-and-time-signature),学习音的长短。变化音与升降号的细节见 [变音记号](/entries/accidentals)。
