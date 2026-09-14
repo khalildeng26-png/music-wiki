@@ -453,6 +453,51 @@ export const GENRES: Record<string, GenreDemo> = {
       ],
     },
   },
+  gospel: {
+    slug: "gospel",
+    title: "福音 · 教堂和声与小四级(C–C7–F–Fm6–C)",
+    hint: "慢摇的 12/8 律动,和声从大调一路走到小四级(Fm)再回家——教堂里那种温暖又「弯」了一下的色彩,领唱与唱诗班就在这上面一呼一应。",
+    note: "钢琴/贝斯/鼓组均为真实采样(理想音色是哈蒙德电风琴与唱诗班和声、铃鼓,暂无采样,以钢琴示意)",
+    pattern: {
+      bpm: 76,
+      swing: 0.67,
+      beats: 16,
+      tracks: [
+        {
+          kind: "notes",
+          timbre: "piano",
+          events: [
+            ["C4", "E4", "G4"], // C
+            ["C4", "E4", "G4", "Bb4"], // C7——走向 IV 的桥
+            ["F3", "A3", "C4"], // F
+            ["F3", "Ab3", "C4", "D4"], // Fm6——小四级,福音的招牌弯折
+            ["C4", "E4", "G4"], // C/G(低音踩在属音上)
+            ["D4", "F4", "A4", "C5"], // Dm7
+            ["G3", "B3", "D4", "F4"], // G7
+            ["C4", "E4", "G4"], // C
+          ].flatMap((ch, u) => [
+            { t: u * 2, notes: ch, dur: 1.5, vel: 0.6 },
+            { t: u * 2 + 1.5, notes: ch, dur: 0.4, vel: 0.45 },
+          ]),
+        },
+        {
+          kind: "notes",
+          timbre: "bass",
+          // 行走感:换和弦前用三音/半音级进接近新根音(E→F、Ab→G)
+          events: [
+            "C2", "C3", "E2", "E2",
+            "F2", "C3", "F2", "Ab2",
+            "G2", "G2", "D2", "D2",
+            "G1", "B1", "C2", "C3",
+          ].map((n, i) => ({ t: i, notes: [n], dur: 0.9, vel: 0.7 })),
+        },
+        {
+          kind: "drums",
+          events: drums(4, [0, 2], [1, 3], 0.35),
+        },
+      ],
+    },
+  },
   soul: {
     slug: "soul",
     title: "灵魂乐 · C7–F7 律动(重 backbeat)",

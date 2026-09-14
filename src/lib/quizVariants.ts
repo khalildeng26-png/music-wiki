@@ -275,6 +275,47 @@ export const VARIANTS: Record<string, Pattern[]> = {
       ],
     },
   ],
+  gospel: [
+    {
+      // 与主素材同语法(12/8 慢摇 + 小四级弯折)但进行不同,防止背答案
+      bpm: 72,
+      swing: 0.67,
+      beats: 8,
+      tracks: [
+        {
+          kind: "notes",
+          timbre: "piano",
+          events: [
+            { t: 0, notes: ["F3", "A3", "C4"], dur: 1.5, vel: 0.6 },
+            { t: 1.5, notes: ["F3", "A3", "C4"], dur: 0.4, vel: 0.45 },
+            { t: 2, notes: ["F3", "Ab3", "C4", "D4"], dur: 1.5, vel: 0.6 },
+            { t: 3.5, notes: ["F3", "Ab3", "C4", "D4"], dur: 0.4, vel: 0.45 },
+            { t: 4, notes: ["C4", "E4", "G4"], dur: 1.5, vel: 0.6 },
+            { t: 5.5, notes: ["C4", "E4", "G4"], dur: 0.4, vel: 0.45 },
+            { t: 6, notes: ["G3", "B3", "D4", "F4"], dur: 1.9, vel: 0.55 },
+          ],
+        },
+        {
+          kind: "notes",
+          timbre: "bass",
+          events: ["F2", "C3", "F2", "Ab2", "C3", "G2", "G1", "B1"].map((n, i) => ({
+            t: i,
+            notes: [n],
+            dur: 0.9,
+            vel: 0.7,
+          })),
+        },
+        {
+          kind: "drums",
+          events: [
+            ...[0, 2, 4, 6].map((t) => ({ t, hit: "kick" as const, vel: 0.85 })),
+            ...[1, 3, 5, 7].map((t) => ({ t, hit: "snare" as const, vel: 0.75 })),
+            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.35 })),
+          ],
+        },
+      ],
+    },
+  ],
   soul: [
     {
       bpm: 104,
