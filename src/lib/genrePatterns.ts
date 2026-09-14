@@ -146,7 +146,7 @@ export const GENRES: Record<string, GenreDemo> = {
     slug: "8bit",
     title: "8bit · 方波旋律 + 芯片贝斯 + 噪声鼓",
     hint: "这就是当年游戏机音频芯片的三大件:方波负责旋律,方波低八度当贝斯,白噪声当鼓。",
-    note: "全合成音色(方波/噪声)——这正是 8bit 的原生声音,无需「真实」",
+    note: "全合成音色(方波/噪声):这正是 8bit 的原生声音,无需「真实」",
     pattern: {
       bpm: 160,
       beats: 16,
@@ -419,7 +419,7 @@ export const GENRES: Record<string, GenreDemo> = {
   rnb: {
     slug: "rnb",
     title: "R&B · Cmaj7–Am7–Dm7–Em7(黏律动)",
-    hint: "全是带 7 音的和弦;速度不快、鼓点松松地落在拍子后面——这就是「黏」的感觉。",
+    hint: "全是带 7 音的和弦;速度不快、鼓点松松地落在拍子后面:这就是「黏」的感觉。",
     note: "钢琴/贝斯/鼓组均为真实采样(理想音色是电钢琴 Rhodes,暂无采样,以原声钢琴示意)",
     pattern: {
       bpm: 86,
@@ -456,7 +456,7 @@ export const GENRES: Record<string, GenreDemo> = {
   gospel: {
     slug: "gospel",
     title: "福音 · 教堂和声与小四级(C–C7–F–Fm6–C)",
-    hint: "慢摇的 12/8 律动,和声从大调一路走到小四级(Fm)再回家——教堂里那种温暖又「弯」了一下的色彩,领唱与唱诗班就在这上面一呼一应。",
+    hint: "慢摇的 12/8 律动,和声从大调一路走到小四级(Fm)再回家:教堂里那种温暖又「弯」了一下的色彩,领唱与唱诗班就在这上面一呼一应。",
     note: "钢琴/贝斯/鼓组均为真实采样(理想音色是哈蒙德电风琴与唱诗班和声、铃鼓,暂无采样,以钢琴示意)",
     pattern: {
       bpm: 76,
@@ -501,7 +501,7 @@ export const GENRES: Record<string, GenreDemo> = {
   soul: {
     slug: "soul",
     title: "灵魂乐 · C7–F7 律动(重 backbeat)",
-    hint: "7 和弦 + 军鼓在 2、4 拍狠狠地打——从教堂唱诗班长出来的那股劲儿。",
+    hint: "7 和弦 + 军鼓在 2、4 拍狠狠地打:从教堂唱诗班长出来的那股劲儿。",
     note: "钢琴/贝斯/鼓组均为真实采样;福音标配的铃鼓/拍手暂无采样,从略",
     pattern: {
       bpm: 100,
@@ -564,7 +564,7 @@ export const GENRES: Record<string, GenreDemo> = {
   hiphop: {
     slug: "hiphop",
     title: "嘻哈 · Am7–Dm7 boom bap",
-    hint: "慢而沉:军鼓在 2、4 拍打重,底鼓拖在第 3 拍后半才落,贝斯松松地跟着走——说唱就踩在这上面。",
+    hint: "慢而沉:军鼓在 2、4 拍打重,底鼓拖在第 3 拍后半才落,贝斯松松地跟着走:说唱就踩在这上面。",
     note: "钢琴/贝斯/鼓组均为真实采样;808 合成鼓与唱机采样(scratch)是嘻哈原生元素,暂无采样,以原声鼓组示意",
     pattern: {
       bpm: 88,
@@ -599,7 +599,7 @@ export const GENRES: Record<string, GenreDemo> = {
   electronic: {
     slug: "electronic",
     title: "电子乐 · 舞曲骨架(four-on-the-floor)",
-    hint: "底鼓每一拍都踩、踩镲全落在反拍上——舞池的心跳;合成器琶音在上面飘。",
+    hint: "底鼓每一拍都踩、踩镲全落在反拍上:舞池的心跳;合成器琶音在上面飘。",
     note: "合成器为电子乐原生音色(同 8bit 的逻辑,不是「代替」);鼓组为真实采样",
     pattern: {
       bpm: 124,
@@ -680,7 +680,7 @@ export const GENRES: Record<string, GenreDemo> = {
   blues: {
     slug: "blues",
     title: "布鲁斯 · E 调 shuffle 律动",
-    hint: "八分音符一长一短(shuffle),吉他走的 E–E–G–A 音型——把音「弹歪」一点,苦味就出来了。",
+    hint: "八分音符一长一短(shuffle),吉他走的 E–E–G–A 音型:把音「弹歪」一点,苦味就出来了。",
     note: "吉他/贝斯/鼓组均为真实采样",
     pattern: {
       bpm: 100,
@@ -744,7 +744,7 @@ export const GENRES: Record<string, GenreDemo> = {
   funk: {
     slug: "funk",
     title: "放克 · 切分十六分音型",
-    hint: "音符都挤在意想不到的位置(切分),中间留空——放克的秘诀不是弹得多,而是「哪里不弹」。",
+    hint: "音符都挤在意想不到的位置(切分),中间留空:放克的秘诀不是弹得多,而是「哪里不弹」。",
     note: "电吉他/贝斯/鼓组均为真实采样",
     pattern: {
       bpm: 100,
@@ -813,7 +813,7 @@ export const GENRES: Record<string, GenreDemo> = {
   disco: {
     slug: "disco",
     title: "迪斯科 · 四踩底鼓 + 切分贝斯",
-    hint: "底鼓每一拍都踩,贝斯在拍子缝隙里蹦——1970 年代舞池的标准配置。",
+    hint: "底鼓每一拍都踩,贝斯在拍子缝隙里蹦:1970 年代舞池的标准配置。",
     note: "电吉他/贝斯/鼓组均为真实采样",
     pattern: {
       bpm: 120,
@@ -852,7 +852,7 @@ export const GENRES: Record<string, GenreDemo> = {
   reggae: {
     slug: "reggae",
     title: "雷鬼 · 反拍吉他 + 下沉贝斯",
-    hint: "吉他和弦全落在反拍上(正拍反而空着),贝斯慢慢下沉——牙买加的慵懒律动。",
+    hint: "吉他和弦全落在反拍上(正拍反而空着),贝斯慢慢下沉:牙买加的慵懒律动。",
     note: "木吉他/贝斯/鼓组均为真实采样",
     pattern: {
       bpm: 78,
@@ -905,7 +905,7 @@ export const GENRES: Record<string, GenreDemo> = {
   country: {
     slug: "country",
     title: "乡村 · boom-chick + 口琴",
-    hint: "低音-和弦的 boom-chick(和民谣同源),末尾口琴滑出一句——美国南方的乡土味。",
+    hint: "低音-和弦的 boom-chick(和民谣同源),末尾口琴滑出一句:美国南方的乡土味。",
     note: "木吉他/口琴/贝斯/鼓组均为真实采样",
     pattern: {
       bpm: 112,
@@ -952,7 +952,7 @@ export const GENRES: Record<string, GenreDemo> = {
   punk: {
     slug: "punk",
     title: "朋克 · 三和弦高速冲撞",
-    hint: "168 BPM、强力和弦八分连扫、一分钟唱完一首歌——把摇滚的『简』推到极端。",
+    hint: "168 BPM、强力和弦八分连扫、一分钟唱完一首歌:把摇滚的『简』推到极端。",
     note: "电吉他/贝斯/鼓组均为真实采样(朋克本就追求粗糙直给,清音电吉他意外地合适)",
     pattern: {
       bpm: 168,
@@ -987,7 +987,7 @@ export const GENRES: Record<string, GenreDemo> = {
   tango: {
     slug: "tango",
     title: "探戈 · 钢琴顿挫 + 小提琴咏叹",
-    hint: "钢琴短促砸下、贝斯一顿一顿,小提琴在上面唱戏剧性的旋律——布宜诺斯艾利斯的深夜。",
+    hint: "钢琴短促砸下、贝斯一顿一顿,小提琴在上面唱戏剧性的旋律:布宜诺斯艾利斯的深夜。",
     note: "钢琴/小提琴/贝斯均为真实采样;探戈的灵魂乐器班多钮琴暂无采样,以钢琴示意",
     pattern: {
       bpm: 116,
@@ -1039,7 +1039,7 @@ export const GENRES: Record<string, GenreDemo> = {
   waltz: {
     slug: "waltz",
     title: "华尔兹 · 三拍子『蓬-嚓-嚓』",
-    hint: "全站唯一的 3/4 拍:第一拍低音沉下去,第二三拍和弦轻轻荡——舞会从这一步开始。",
+    hint: "全站唯一的 3/4 拍:第一拍低音沉下去,第二三拍和弦轻轻荡:舞会从这一步开始。",
     note: "钢琴/贝斯均为真实采样",
     pattern: {
       bpm: 150,
@@ -1073,7 +1073,7 @@ export const GENRES: Record<string, GenreDemo> = {
   "bossa-nova": {
     slug: "bossa-nova",
     title: "波萨诺瓦 · 凉下来的桑巴",
-    hint: "吉他把和弦错落着轻轻摆(像海浪),贝斯几乎不动——巴西海滩边的下午。",
+    hint: "吉他把和弦错落着轻轻摆(像海浪),贝斯几乎不动:巴西海滩边的下午。",
     note: "木吉他/贝斯均为真实采样",
     pattern: {
       bpm: 130,
@@ -1110,7 +1110,7 @@ export const GENRES: Record<string, GenreDemo> = {
   ragtime: {
     slug: "ragtime",
     title: "拉格泰姆 · 左手行进,右手切分",
-    hint: "左手像打拍子的节拍器,右手偏不听话地错半拍——爵士的钢琴祖先,滑稽又上头。",
+    hint: "左手像打拍子的节拍器,右手偏不听话地错半拍:爵士的钢琴祖先,滑稽又上头。",
     note: "钢琴独奏,真实采样",
     pattern: {
       bpm: 96,
@@ -1158,7 +1158,7 @@ export const GENRES: Record<string, GenreDemo> = {
   celtic: {
     slug: "celtic",
     title: "凯尔特 · 6/8 吉格舞曲(锡哨 × 宝思兰鼓)",
-    hint: "六拍分成两组三连:锡哨在上面转圈,宝思兰鼓「咚-哒-哒」地推——爱尔兰酒馆的空气。",
+    hint: "六拍分成两组三连:锡哨在上面转圈,宝思兰鼓「咚-哒-哒」地推:爱尔兰酒馆的空气。",
     note: "锡哨/宝思兰鼓/小提琴/木吉他均为真实采样(风笛暂无,锡哨担纲)",
     pattern: {
       bpm: 132,
@@ -1234,7 +1234,7 @@ export const GENRES: Record<string, GenreDemo> = {
   march: {
     slug: "march",
     title: "进行曲 · 铜管 + 行进军鼓",
-    hint: "军鼓密得像下雨,小号在上面齐步走——进行曲的一切都为了「整齐」。",
+    hint: "军鼓密得像下雨,小号在上面齐步走:进行曲的一切都为了「整齐」。",
     note: "小号/圆号/大号/行进军鼓均为真实采样",
     pattern: {
       bpm: 112,
@@ -1294,7 +1294,7 @@ export const GENRES: Record<string, GenreDemo> = {
   "new-age": {
     slug: "new-age",
     title: "新世纪 · 琶音与长音",
-    hint: "钢琴琶音像水波一圈圈荡开,小提琴长音悬在半空——空间感就是主角。",
+    hint: "钢琴琶音像水波一圈圈荡开,小提琴长音悬在半空:空间感就是主角。",
     note: "钢琴/小提琴均为真实采样",
     pattern: {
       bpm: 72,
@@ -1323,7 +1323,7 @@ export const GENRES: Record<string, GenreDemo> = {
   bluegrass: {
     slug: "bluegrass",
     title: "蓝草 · 快速对奏(小提琴 × 吉他)",
-    hint: "132 BPM 的「呼应对答」:小提琴拉一句,吉他接一句——山地农舍前的斗琴。",
+    hint: "132 BPM 的「呼应对答」:小提琴拉一句,吉他接一句:山地农舍前的斗琴。",
     note: "小提琴/木吉他/贝斯均为真实采样;招牌音色班卓琴暂无合规采样(以吉他担纲并注明)",
     pattern: {
       bpm: 132,
@@ -1399,7 +1399,7 @@ export const GENRE_LIST = Object.values(GENRES);
 export const SOUL_CALLOUT: GenreDemo = {
   slug: "soul-callout",
   title: "号角 ↔ 钢琴的一呼一应",
-  hint: "小号每次说完话,钢琴立刻在空拍里接住——注意军鼓只在 2、4 拍重击",
+  hint: "小号每次说完话,钢琴立刻在空拍里接住:注意军鼓只在 2、4 拍重击",
   note: "小号/钢琴/贝斯/鼓组均为真实采样",
   pattern: {
     bpm: 92,

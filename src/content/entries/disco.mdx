@@ -11,7 +11,7 @@ faq:
   - q: 迪斯科和放克是什么关系?
     a: 迪斯科从放克与灵魂乐的律动里长出来,但把律动简化得更"平":放克的复杂切分被规整成连绵的四踩,专为跳舞服务。
   - q: 「迪斯科毁灭之夜」是什么?
-    a: 1979 年美国芝加哥的现场活动,白人摇滚乐迷当众炸毁迪斯科唱片,被视为摇滚文化对迪斯科主流化的激烈反弹——迪斯科随即从榜单退潮,但其血脉进入了 House 等电子舞曲。
+    a: 1979 年美国芝加哥的现场活动,白人摇滚乐迷当众炸毁迪斯科唱片,被视为摇滚文化对迪斯科主流化的激烈反弹。迪斯科随即从榜单退潮,但其血脉进入了 House 等电子舞曲。
   - q: 想入门听什么?
     a: Bee Gees 的《Stayin' Alive》听四踩与假声,Donna Summer 的《I Feel Love》听全合成器编制的先声,Chic 的《Le Freak》听吉他切碎音与贝斯线的对话。
   - q: 迪斯科对今天的音乐还有什么影响?
@@ -23,7 +23,14 @@ import { StyleDemo } from "../../components/interactive/StyleDemo";
 import { RhythmTap } from "../../components/interactive/RhythmTap";
 import { GENRES } from "../../lib/genrePatterns";
 
-**迪斯科**(Disco)是 1970 年代中期席卷全球的舞曲风潮。它把 [放克](/entries/funk) 与 [灵魂乐](/entries/soul) 的律动简化、拉平,做成一套人人能跳的"舞池语法":底鼓每一拍都踩,贝斯在缝隙里蹦,弦乐负责华丽。
+**迪斯科**(Disco)是 1970 年代中期席卷全球的舞曲风潮。它把 [放克](/entries/funk) 与 [灵魂乐](/entries/soul) 的律动简化、拉平,做成一套人人能跳的"舞池语法"。
+
+## 核心特征
+
+- **四踩底鼓**(four-on-the-floor):4/4 拍的底鼓每一拍都踩,速度多在 110–130 BPM,稳定是它唯一的任务。
+- **蹦跳的切分贝斯与碎音吉他**:贝斯在底鼓的缝隙里走切分线,吉他弹短促的高音切碎音,在平的地基上做出律动。
+- **弦乐与合成器点缀**:华丽是它的面子,制作上多是放克黄金一代的手艺。
+- **与放克的分工**:放克的复杂切分被规整成连绵的四踩,专为跳舞服务。
 
 听一段迪斯科的标准配置:
 
@@ -37,10 +44,10 @@ import { GENRES } from "../../lib/genrePatterns";
 
 ## 名曲与人物
 
-- Bee Gees :《Stayin' Alive》(1977):那声底鼓一响,全世界都知道怎么点头。
-- Donna Summer :《I Feel Love》(1977):与制作人 Giorgio Moroder 用全合成器打造的未来之声,电子舞曲的直系祖先。
-- Chic :《Le Freak》(1978):尼罗·罗杰斯的吉他把切分写作教科书;他后来给 Madonna 制作《Like a Virgin》。
-- Gloria Gaynor :《I Will Survive》(1978):迪斯科外壳下的自立宣言,至今是 KTV 与派对的双料常客。
+- Bee Gees《Stayin' Alive》(1977):那声底鼓一响,全世界都知道怎么点头。
+- Donna Summer《I Feel Love》(1977):与制作人 Giorgio Moroder 用全合成器打造的未来之声,电子舞曲的直系祖先。
+- Chic《Le Freak》(1978):尼罗·罗杰斯的吉他把切分写作教科书;他后来给 Madonna 制作《Like a Virgin》。
+- Gloria Gaynor《I Will Survive》(1978):迪斯科外壳下的自立宣言,至今是 KTV 与派对的双料常客。
 
 ## 常见误区
 
@@ -54,6 +61,6 @@ import { GENRES } from "../../lib/genrePatterns";
 
 <RhythmTap client:visible bpm={120} beats={8} />
 
-> 判断一首歌"迪不迪",只盯底鼓:每一拍都踩、且踩得很稳,舞池的门就开了。
+> 判断迪斯科只盯底鼓:每一拍都踩且踩得稳,再看贝斯与吉他的切分怎么错开它。
 
 延伸:律动的近亲见 [放克](/entries/funk);它的电子乐后代见 [电子乐](/entries/electronic)。
