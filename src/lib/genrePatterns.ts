@@ -1394,3 +1394,67 @@ const REPEATS: Record<string, number> = {
 for (const [slug, g] of Object.entries(GENRES)) g.pattern.repeat = REPEATS[slug] ?? 2;
 
 export const GENRE_LIST = Object.values(GENRES);
+
+/** 灵魂乐词条专用:号角↔钢琴一呼一应的编曲骨架演示(MDX 内不能写 as const,故住在这里) */
+export const SOUL_CALLOUT: GenreDemo = {
+  slug: "soul-callout",
+  title: "号角 ↔ 钢琴的一呼一应",
+  hint: "小号每次说完话,钢琴立刻在空拍里接住——注意军鼓只在 2、4 拍重击",
+  note: "小号/钢琴/贝斯/鼓组均为真实采样",
+  pattern: {
+    bpm: 92,
+    beats: 16,
+    tracks: [
+      {
+        kind: "notes",
+        timbre: "trumpet",
+        events: [
+          { t: 0, notes: ["E4"], dur: 0.45, vel: 0.7 },
+          { t: 0.5, notes: ["G4"], dur: 0.45, vel: 0.7 },
+          { t: 1, notes: ["C5"], dur: 0.9, vel: 0.75 },
+          { t: 4, notes: ["C5"], dur: 0.45, vel: 0.7 },
+          { t: 4.5, notes: ["A4"], dur: 0.45, vel: 0.7 },
+          { t: 5, notes: ["E4"], dur: 0.9, vel: 0.75 },
+          { t: 8, notes: ["D5"], dur: 0.45, vel: 0.7 },
+          { t: 8.5, notes: ["C5"], dur: 0.45, vel: 0.7 },
+          { t: 9, notes: ["A4"], dur: 0.9, vel: 0.75 },
+          { t: 12, notes: ["B4"], dur: 0.45, vel: 0.7 },
+          { t: 12.5, notes: ["D5"], dur: 0.45, vel: 0.7 },
+          { t: 13, notes: ["G4"], dur: 0.9, vel: 0.75 },
+        ],
+      },
+      {
+        kind: "notes",
+        timbre: "piano",
+        events: [
+          ["C4", "E4", "G4"],
+          ["A3", "C4", "E4"],
+          ["D4", "F4", "A4"],
+          ["G3", "B3", "D4", "F4"],
+        ].flatMap((ch, bar) => [
+          { t: bar * 4 + 2.5, notes: ch, dur: 0.3, vel: 0.6 },
+          { t: bar * 4 + 3.5, notes: ch, dur: 0.35, vel: 0.55 },
+        ]),
+      },
+      {
+        kind: "notes",
+        timbre: "bass",
+        events: ["C2", "A1", "D2", "G1"].flatMap((root, bar) => [
+          { t: bar * 4, notes: [root], dur: 1.2, vel: 0.75 },
+          { t: bar * 4 + 2.5, notes: [root], dur: 0.5, vel: 0.6 },
+        ]),
+      },
+      {
+        kind: "drums",
+        events: [
+          ...Array.from({ length: 4 }, (_, b) => [
+            { t: b * 4, hit: "kick" as const, vel: 0.85 },
+            { t: b * 4 + 2, hit: "kick" as const, vel: 0.6 },
+          ]).flat(),
+          ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.8 })),
+          ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.3 })),
+        ],
+      },
+    ],
+  },
+};

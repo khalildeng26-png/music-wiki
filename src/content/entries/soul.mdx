@@ -4,7 +4,7 @@ titleEn: Soul
 category: 曲风
 summary: 起源于福音与R&B的黑人音乐,以灵魂唱腔、和声丰富与真挚情感著称,连接爵士与现代流行。
 tags: [曲风, 灵魂乐, Soul]
-related: [rnb, jazz, vocal-registers, funk, pop]
+related: [gospel, rnb, jazz, vocal-registers, funk, pop]
 faq:
   - q: 灵魂乐的核心特征是什么?
     a: 灵魂唱腔(转音、假声、真假声切换)、福音和声(唱诗班厚重感)、真挚的情感("唱得真",不炫技)。
@@ -21,21 +21,34 @@ faq:
 order: 10
 ---
 
+import { StyleDemo } from "../../components/interactive/StyleDemo";
+import { GENRES, SOUL_CALLOUT } from "../../lib/genrePatterns";
+
 **灵魂乐**(Soul)是 1950 年代起源于美国的黑人音乐,由[福音](/entries/gospel)与节奏布鲁斯(R&B)融合而来。它把教堂里的灵魂唱腔带进了世俗音乐,以真挚、饱满的情感表达著称。
 
-## 核心特征
+## 核心特征:每一条都有来路
 
-- **灵魂唱腔**:大量转音、假声、真假声切换,唱功展示度高(技术参考 [真假声与混声](/entries/vocal-registers))。
-- **福音和声**:丰富的和声进行与和声伴唱,有教堂唱诗班的厚重感。
-- **真挚的情感**:Soul 的灵魂在于"唱得真",不炫技、为情发声。
+**灵魂唱腔,是教堂声学逼出来的**。扩音器普及之前,领唱要让声音穿透整个会众,胸声与力量是生存技能;而[福音](/entries/gospel)一呼一应的形式,要求领唱当场即兴「接住」唱诗班的回应——转音与真假声切换因此从装饰变成了必备技术。这身本事进了世俗音乐,直接拿来唱爱情,就是灵魂乐的嗓音。
 
-import { StyleDemo } from "../../components/interactive/StyleDemo";
-import { GENRES } from "../../lib/genrePatterns";
-import { ChordPlayer } from "../../components/interactive/ChordPlayer";
+**律动:鼓更稀,backbeat 更重**。福音的 12/8 拍手律动摊平成 4/4,推动力集中到 2、4 拍的军鼓上;乐队编制小,吉他与键盘留出的空隙由鼓和贝斯来填,贝斯也从行走变成短句。结果就是「比 R&B 更用力」——同一个速度,灵魂乐的军鼓每一记都像在推人一把。
 
-听一段灵魂乐的律动——比 R&B 更用力:
+**和声与编曲:把教堂搬进录音室**。七和弦的厚重底色直接继承福音;号角组的短句(stab)本质是「会众回应」的器乐化——人声抛一句、号角答一句,一段编曲就是一场礼拜的世俗重演。
+
+听一段灵魂乐的律动,对照上面三条听:
 
 <StyleDemo client:visible {...GENRES.soul} />
+
+## 试一试:和 R&B 摆在一起听
+
+上面说「比 R&B 更用力」,这句话应该听得见。先听 R&B(注意它的三处「松」:86 BPM 的慢、swing 拖着的黏、清一色 maj7/min7 的柔和色彩),再回头放上面的灵魂乐(100 BPM、军鼓正拍直给、属七和弦的冲)——差别不在音量,在落点:
+
+<StyleDemo client:visible {...GENRES.rnb} />
+
+## 试一试:号角与「人声」的呼应
+
+灵魂乐编曲的招牌是呼应对答。下面这段把小号当领唱、钢琴当答句:小号抛出短句,钢琴在空拍里接话,鼓组只在 2、4 拍狠推——就是《Respect》那类编曲的骨架:
+
+<StyleDemo client:visible {...SOUL_CALLOUT} />
 
 ## 简史
 
@@ -60,22 +73,11 @@ import { ChordPlayer } from "../../components/interactive/ChordPlayer";
 3. 以为灵魂乐只关乎唱歌:号角的呼应、风琴的铺垫、节奏组的律动同样是灵魂乐的语言,摩城的编曲就与唱腔一样讲究。
 4. 用力唱才有灵魂:灵魂乐的张力来自强弱对比与控制,轻声细语也可以很有灵魂。
 
-## 试一试:听一组福音式和声
-
-灵魂乐的和声语言来自教堂。下面这组 I–IV–I–V7–I 进行,有从稳定到紧张再落回稳定的完整过程,是福音与灵魂乐最常见的和声底色:
-
-<ChordPlayer
-  client:visible
-  label="福音式和声进行:I–IV–I–V7–I"
-  desc="留意最后的属七和弦(V7)如何把人拉回主和弦,这就是灵魂乐和声里张力的来源与解决。"
-  chords={[["C4", "E4", "G4"], ["F4", "A4", "C5"], ["C4", "E4", "G4"], ["G4", "B4", "D5", "F5"], ["C4", "E4", "G4"]]}
-/>
-
 ## 代表与影响
 
 - **代表人物**:Aretha Franklin("灵魂女王")、Stevie Wonder、Marvin Gaye、Sam Cooke。
 - **流派分支**:Motown(摩城,更流行)、Stax(更粗粝)、Philadelphia Soul(更精致)。
-- **对流行的影响**:Soul 直接孕育了现代 [R&B](/entries/rnb),并通过放克(Funk)影响了嘻哈与电子。
+- **对流行的影响**:Soul 直接孕育了现代 [R&B](/entries/rnb),并通过[放克](/entries/funk)影响了嘻哈与电子。
 
 > Soul 是"唱功的试金石":它要求歌者既有律动感,又有细腻的声音控制,更要有真挚的情感。
 
