@@ -12,7 +12,7 @@ faq:
     a: 血缘很近,差别主要在律动与气质:乡村有明显的 boom-chick 舞蹈律动和乡村乐器音色;民谣更自由,围绕人声与叙事,律动可以很淡。
   - q: 什么是 boom-chick?
     a: 拇指弹低音(boom)、手指扫和弦(chick)的吉他手法,由 Merle Travis 发扬,是乡村与民谣吉他的共同心跳。
-  - q: 什么是 Nashvile 之声?
+  - q: 什么是 Nashville 之声?
     a: 1950–60 年代纳什维尔唱片工业确立的制作风格:去掉粗糙的乡土元素、加入和声与弦乐,让乡村进入主流电台。
   - q: 想入门听什么?
     a: Johnny Cash 的《Ring of Fire》听低音与号角, Dolly Parton 的《Jolene》听叙事与和声,John Denver 的《Take Me Home, Country Roads》听流行化的乡村。
@@ -23,9 +23,15 @@ import { StyleDemo } from "../../components/interactive/StyleDemo";
 import { StaffNotation } from "../../components/interactive/StaffNotation";
 import { GENRES } from "../../lib/genrePatterns";
 
-**乡村音乐**(Country)从美国南方的阿巴拉契亚民谣、蓝调与圣歌中长出来,1920 年代开始录音,如今是美国最大的音乐工业之一。它的心脏是**讲故事**:家人、公路、酒、信仰与悔恨,都用最直白的方式唱。
+**乡村音乐**(Country)从美国南方的阿巴拉契亚[民谣](/entries/folk)、[蓝调](/entries/blues)与圣歌中长出来,1920 年代开始录音,如今是美国最大的音乐工业之一。
 
-听一段乡村的标准编制:
+## 核心特征
+
+- **boom-chick 吉他底**:拇指弹低音(boom)、手指扫和弦(chick),Merle Travis 发扬的指弹手法,乡村与民谣吉他的共同心跳。
+- **直白的叙事歌词**:家人、公路、酒、信仰与悔恨,用最直白的方式唱。乡村是美国最大的叙事音乐传统之一,伤心歌占半壁江山。
+- **干净的编曲与乡村乐器**:口琴、小提琴(fiddle)、滑棒吉他点缀,各自有独立的技巧体系,经典曲目里 fiddle 常常是第二主角。
+
+听一段乡村的标准编制,底下的 boom-chick 和上面的叙事句:
 
 <StyleDemo client:visible {...GENRES.country} />
 
@@ -38,11 +44,11 @@ import { GENRES } from "../../lib/genrePatterns";
 
 ## 名曲与人物
 
-- Johnny Cash :《Ring of Fire》(1963):号角与低音的婚姻,黑衣人的招牌。
-- Dolly Parton :《Jolene》(1973):一段哀求式的三角关系叙事,和声进行被后世反复借用。
-- John Denver :《Take Me Home, Country Roads》(1971):乡村流行化的世界名片。
-- Hank Williams :《I'm So Lonesome I Could Cry》(1949):乡村情绪的原点。
-- Willie Nelson :《On the Road Again》(1980):公路乡村的标准答案。
+- Johnny Cash《Ring of Fire》(1963):号角与低音的搭配,黑衣人的招牌。
+- Dolly Parton《Jolene》(1973):一段哀求式的三角关系叙事,和声进行被后世反复借用。
+- John Denver《Take Me Home, Country Roads》(1971):乡村流行化的世界名片。
+- Hank Williams《I'm So Lonesome I Could Cry》(1949):乡村情绪的原点。
+- Willie Nelson《On the Road Again》(1980):公路乡村的代表作。
 
 ## 常见误区
 
@@ -52,7 +58,7 @@ import { GENRES } from "../../lib/genrePatterns";
 
 ## 试一试
 
-听一段口琴的小过门,感受乡村音乐的"口气"——简单几个音,情绪全在滑音与气息里:
+听一段口琴的小过门,感受乡村音乐的"口气"。简单几个音,情绪全在滑音与气息里:
 
 <StaffNotation
   client:visible
@@ -61,6 +67,6 @@ import { GENRES } from "../../lib/genrePatterns";
   label="乡村口琴过门:一句上行,尾音拖长。"
 />
 
-> 一句话认乡村:吉他 boom-chick 打底,有人在认真给你讲一个故事。
+> 乡村的两件识别标志:吉他的 boom-chick 打底,歌词在讲一个具体的故事。
 
 延伸:同源的叙事传统见 [民谣](/entries/folk);乡村与 [摇滚](/entries/rock) 的混血是 1950 年代摇滚乐的产房之一。
