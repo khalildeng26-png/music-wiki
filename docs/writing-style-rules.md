@@ -1,5 +1,11 @@
 # 词条写作风格规则(增量记录)
 
+> **分层说明**:通用中文写作规则已装入项目技能 `.claude/skills/chinese-writing/`
+> (来源 [miantiao-me/aigc-weekly](https://github.com/miantiao-me/aigc-weekly),经
+> [Smithery](https://smithery.ai/skills/miantiao-me/chinese-writing) 编入,2026-09-14),
+> 写作与修订时通用层看技能、项目层看本文件,两层叠加生效——本文件只记
+> 技能没覆盖、或本项目口径更严的条目。
+>
 > 用法:用户指出一处,记录一条;写新内容与修订旧内容时对照本表执行。
 > 与 thickening-standard.md 的「二、文风约束」「七、写作层约束 v1.2」并行生效。
 > 起因:2026-09-14 灵魂乐样板的三条批评。
