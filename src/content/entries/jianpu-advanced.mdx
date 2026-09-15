@@ -2,7 +2,7 @@
 title: 简谱进阶
 titleEn: "Numbered Notation: Rhythm & More"
 category: 记谱
-summary: 增时线、减时线、附点、连音、变音与转调——会认 1-7 之后,真正卡人的是这些节奏记号。
+summary: 增时线、减时线、附点、连音、变音与转调。会认 1-7 之后,真正卡人的是这些节奏记号。
 tags: [记谱, 简谱, 节奏]
 related: [jianpu, note-values, transposition]
 faq:
@@ -24,7 +24,7 @@ order: 3.5
 import { StaffNotation } from "../../components/interactive/StaffNotation";
 import { Metronome } from "../../components/interactive/Metronome";
 
-[简谱](/entries/jianpu)的门槛不在认数字——**1-7 加上下点**看两遍就会。真正卡人的是节奏记号:一排数字之间那些横线、圆点、弧线,决定了每个音**多长**。这篇把它们一次讲完。
+[简谱](/entries/jianpu)的门槛不在认数字,**1-7 加上下点**看两遍就会。真正卡人的是节奏记号:一排数字之间那些横线、圆点、弧线,决定了每个音**多长**。这篇把它们一次讲完。
 
 ## 时值的三件工具
 
@@ -41,7 +41,7 @@ import { Metronome } from "../../components/interactive/Metronome";
 - **长音靠增时线,不靠附点**:`5 - - -`(四拍)是标准写法;简谱里一般只有四分及更短的音符才加附点(这是它和五线谱的差别之一)。
 - **休止符 0 不加增时线**:休止几拍就写几个 0(`0 0 0` = 休止三拍)。
 
-听感对照:一拍一个音(四分)的"走路感"长这样——
+听感对照:一拍一个音(四分)的"走路感"长这样:
 
 <StaffNotation
   client:visible
@@ -64,12 +64,12 @@ import { Metronome } from "../../components/interactive/Metronome";
 5 6 1    ← 三个音,总共占两拍
 ```
 
-听感上三连音自带"赶路感"——流行歌前奏里一串均匀的"哒哒哒"多半是它。
+听感上三连音自带"赶路感",流行歌前奏里一串均匀的"哒哒哒"多半是它。
 
 ## 变音记号与转调
 
 - **临时升降**:`#`、`b` 记在数字**左上方**(如 `#4` = 升 fa),通常对同小节的同音生效;还原记号 `♮` 同理。
-- **曲中转调**:在转调处直接标新调号,如 `1 = C` 进行到一半标 `1 = G`——数字不动,唱名对应的高度整体上移。这正是简谱**移调友好**的延伸:首调思维下,"换成别的调唱"不改一个数字。详见 [移调](/entries/transposition)。
+- **曲中转调**:在转调处直接标新调号,如 `1 = C` 进行到一半标 `1 = G`,数字不动,唱名对应的高度整体上移。这正是简谱**移调友好**的延伸:首调思维下,"换成别的调唱"不改一个数字。详见 [移调](/entries/transposition)。
 
 ## 常见误区
 
@@ -89,7 +89,7 @@ import { Metronome } from "../../components/interactive/Metronome";
   label="视唱素材:每音等长播放,自己按谱面记号配长短。"
 />
 
-跟着节拍器数拍,把"一拍"的骨架打稳——节奏记号都是在这根骨架上做加减:
+跟着节拍器数拍,把"一拍"的骨架打稳,节奏记号都是在这根骨架上做加减:
 
 <Metronome client:visible />
 
