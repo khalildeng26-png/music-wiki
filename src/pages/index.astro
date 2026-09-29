@@ -4,7 +4,7 @@ import StaffLines from "@/components/StaffLines.astro";
 import { getCollection } from "astro:content";
 import { categories, catColor } from "@/lib/categories";
 import HomeSearch from "@/components/interactive/HomeSearch";
-import Piano from "@/components/interactive/Piano";
+import InstrumentSwitch from "@/components/interactive/InstrumentSwitch";
 import PlayableWord from "@/components/interactive/PlayableWord";
 import RandomEntryButton from "@/components/interactive/RandomEntryButton";
 import DailyEntry from "@/components/interactive/DailyEntry";
@@ -198,13 +198,14 @@ const interactiveCount = new Set(
       </div>
 
       <div class="hero-in hero-in-4 mt-10 max-w-4xl">
-        <Piano
+        <InstrumentSwitch
           client:visible
           startOct={4}
           octaves={2}
           keyHeight={256}
           minWidth={720}
-          label="先玩一下 —— 点琴键听音。"
+          pianoLabel="先玩一下 —— 点琴键听音。"
+          guitarLabel="先玩一下 —— 点和弦,听一段扫弦。"
         />
       </div>
 
