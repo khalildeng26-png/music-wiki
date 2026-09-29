@@ -271,11 +271,12 @@ function Keyboard({
                 {...keyA11y(k.note)}
                 style={pc ? { backgroundColor: pc.bg, color: pc.fg } : undefined}
                 className={
-                  // 键体固定白色,分隔线不能用主题 border(暗色下是浅色,贴白键会隐形)
+                  // 键体固定白色,分隔线不能用主题 border(暗色下是浅色,贴白键会隐形);
+                  // 纵向渐变+底部内阴影做立体键面,点亮的键下沉 2px 模拟按下
                   "flex flex-1 flex-col items-center justify-end rounded-b-md border border-t-0 border-x-neutral-300 pb-2 text-[10px] transition " +
                   (on
-                    ? "bg-signature text-signature-foreground"
-                    : "bg-white text-slate-400 hover:bg-slate-100")
+                    ? "translate-y-[2px] bg-signature text-signature-foreground shadow-none"
+                    : "bg-gradient-to-b from-white via-white to-stone-200 text-slate-400 shadow-[inset_0_-3px_2px_rgba(0,0,0,0.10)] hover:to-stone-300")
                 }
               >
                 {kbd && (
@@ -306,8 +307,11 @@ function Keyboard({
                 aria-label={k.note}
                 {...keyA11y(k.note)}
                 className={
+                  // 烤漆黑键:高光渐变+顶部光泽+底部深影;点亮下沉 2px
                   "pointer-events-auto absolute top-0 rounded-b-md transition " +
-                  (on ? "bg-signature" : "bg-neutral-900 hover:bg-neutral-700")
+                  (on
+                    ? "translate-y-[2px] bg-signature"
+                    : "bg-gradient-to-b from-neutral-700 via-neutral-900 to-black shadow-[inset_0_1px_2px_rgba(255,255,255,0.25),inset_0_-3px_3px_rgba(0,0,0,0.55)] hover:from-neutral-600")
                 }
                 style={
                   pc
@@ -427,14 +431,18 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
         </figcaption>
       )}
       <div className="p-4">
-        <div style={{ height: keyHeight }}>
-          <Keyboard
-            startOct={startOct}
-            octaves={octaves}
-            minWidth={minWidth}
-            keyboardEnabled={!expanded}
-            showKbd={showKbd}
-          />
+        {/* 琴体木壳:胡桃木渐变外壳 + 键槽上方的深红呢毡条(真钢琴的细节) */}
+        <div className="rounded-xl bg-gradient-to-b from-[#4A362A] to-[#2B1F17] p-1.5 pb-1 shadow-[inset_0_1px_2px_rgba(255,220,170,0.15),0_2px_6px_rgba(0,0,0,0.3)]">
+          <div className="h-[5px] rounded-sm bg-gradient-to-b from-[#A03A2C] to-[#7C2A1F]" aria-hidden="true" />
+          <div className="mt-[2px] overflow-hidden rounded-b-md" style={{ height: keyHeight }}>
+            <Keyboard
+              startOct={startOct}
+              octaves={octaves}
+              minWidth={minWidth}
+              keyboardEnabled={!expanded}
+              showKbd={showKbd}
+            />
+          </div>
         </div>
         <div className="mt-2 flex items-center justify-end gap-2">
           <span className="flex items-center gap-2">
