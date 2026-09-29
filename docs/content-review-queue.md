@@ -1,0 +1,85 @@
+# 词条待审核队列(2026-09-29 整理)
+
+内容深化批次 1-4 的全部 26 篇,均已部署线上。每篇给三样:深化时加了什么、这篇 specifically 要核什么、线上地址。审完在状态列打勾记日期即可。
+
+## 审核方法(每篇 3-5 分钟)
+
+只问三个问题,任何一题不过就记下来报修:
+
+1. **机制是否成立**:新增的解释段落,因果链你作为懂行的人认不认;
+2. **交互与正文是否一致**:组件演示的音,和正文的说法对不对得上(尤其是「听辨 XX」类练习);
+3. **有没有为深度而深度**:有没有看着唬人但信息量为零的段落。
+
+---
+
+## 批次 1 · 和声簇(5 篇)
+
+| 状态 | 词条 | 深化内容 | 重点核 |
+|---|---|---|---|
+| ☐ | [和弦进行](https://ambermoon.wiki/entries/chord-progression) | 根音运动语法:相邻两和弦根音的音程决定进行强弱 | 「倾向排序」各例的谱面与文案对照 |
+| ☐ | [终止式](https://ambermoon.wiki/entries/cadences) | 完满/不完满分级、终止四六、弗里吉亚半终止、皮卡迪三度 | 每个 ChordPlayer 的音与段落说法一致 |
+| ☐ | [副属和弦](https://ambermoon.wiki/entries/secondary-dominants) | 副属链条、ii/x–V/x–x 迷你 251 | 「组成所谓的」笔误已修(09-29);重点转为迷你 251 的谱面 |
+| ☐ | [借用和弦](https://ambermoon.wiki/entries/borrowed-chords) | 可借和弦全景表(♭III/iv/♭VI/♭VII/iiø7)、后门进行 | 全景表五个和弦的音逐一核对 |
+| ☐ | [流行经典进行](https://ambermoon.wiki/entries/pop-progressions)(新词条) | 4536251 / 卡农线 / 1645 三组的功能视角分析 | 功能标注(S–D–T)与听觉直觉吻合 |
+
+## 批次 2 · 调式/色彩簇(5 篇)
+
+| 状态 | 词条 | 深化内容 | 重点核 |
+|---|---|---|---|
+| ☐ | [教会调式](https://ambermoon.wiki/entries/church-modes) | 特征音方法论:找招牌音→配招牌进行 | 七调式表格每个特征音 |
+| ☐ | [音程的色彩](https://ambermoon.wiki/entries/intervals-flavor)(新词条) | 协和度分层+频率比解释 | 大小三度试听与「亮/暗」方向一致 |
+| ☐ | [爵士](https://ambermoon.wiki/entries/jazz) | 爵士语法:swing/comping/即兴框架 | 与切分音词条的口径是否一致 |
+| ☐ | [调式与调性](https://ambermoon.wiki/entries/key-and-mode) | 同主音大小调对比、判断调性的四条线索 | 四线索顺序与逻辑 |
+| ☐ | [音阶](https://ambermoon.wiki/entries/scale) | 和声/旋律小调的成因、爵士小调 | 升音说明与谱面 |
+
+## 批次 3 · 节奏簇(4 篇)
+
+| 状态 | 词条 | 深化内容 | 重点核 |
+|---|---|---|---|
+| ☐ | [节奏与拍号](https://ambermoon.wiki/entries/rhythm-and-time-signature) | 拍感层级(小节>拍>半拍>缝) | 各层例子可操作性 |
+| ☐ | [切分音与摇摆节奏](https://ambermoon.wiki/entries/syncopation) | 切分四型分类学、groove 与 micro-timing | 四型是否互斥、归类对不对 |
+| ☐ | [速度](https://ambermoon.wiki/entries/tempo) | 速度错觉、BPM 参考区间 | 意大利术语表与区间数值 |
+| ☐ | [音符时值](https://ambermoon.wiki/entries/note-values) | 附点/连音机制、英国古名 | 时值换算表 |
+
+## 批次 4 · 曲风簇(12 篇,2026-09-28~29 三波完成)
+
+### 第一波
+
+| 状态 | 词条 | 深化内容 | 重点核 |
+|---|---|---|---|
+| ☐ | [蓝草](https://ambermoon.wiki/entries/bluegrass) | 不插电的生存策略(速度与密度由来)、三指滚奏传动、break 接力制度、high lonesome 人声 | 「130–160 BPM」区间;《Blue Moon of Kentucky》原版为圆舞曲的说法 |
+| ☐ | [新世纪](https://ambermoon.wiki/entries/new-age) | 低冲突和声=无「等解决」悬念、循环短句放弃发展、混响三参数、音色身份 | 「几乎不用属七」与演示一致;学习歌单 FAQ 的两个理由 |
+| ☐ | [进行曲](https://ambermoon.wiki/entries/march) | 步频生理约束(108–120 由来)、乐句方正给口令留缝、户外铜管=扩音问题、军鼓 roll=同步声 | 步频数字口径(112/116/120)前后一致 |
+| ☐ | [凯尔特](https://ambermoon.wiki/entries/celtic) | 6/8 分组产生旋转、教会调式活化石、装饰音三职能(填长音/定风格/传版本)、session 传承机制 | jig/reel 区分法;装饰音术语(roll 打音/cut 切音) |
+
+### 第二波
+
+| 状态 | 词条 | 深化内容 | 重点核 |
+|---|---|---|---|
+| ☐ | [波萨诺瓦](https://ambermoon.wiki/entries/bossa-nova) | 两小节错落网格、低音钟摆是锚、低音量改变和声口味(maj9 张力→凉色)、气声与留白 | 「挪回正拍即变舞曲」的证伪逻辑;两小节网格描述 |
+| ☐ | [雷鬼](https://ambermoon.wiki/entries/reggae) | one-drop 延迟锚力学、skank 反拍让位、贝斯当旋律的层级倒置、慢速×厚贝斯×稀疏 | one-drop「第 1 拍空、第 3 拍砸」与演示鼓型一致 |
+| ☐ | [拉格泰姆](https://ambermoon.wiki/entries/ragtime) | 左右手拍子契约、切分=预期-落点错半拍、乐谱商品决定不即兴、strain 多段曲式 | AABBACCDD 曲式说法;「乐谱卖出几十万份」 |
+| ☐ | [朋克](https://ambermoon.wiki/entries/punk) | 三和弦门槛设计(强力和弦→指型平移)、全下拨的均匀重量、锋利 vs 厚度的频率物理、两分钟经济学 | 「150 BPM 以上低频来不及衰减」的物理表述;CBGB 一晚十几支乐队 |
+
+### 第三波
+
+| 状态 | 词条 | 深化内容 | 重点核 |
+|---|---|---|---|
+| ☐ | [探戈](https://ambermoon.wiki/entries/tango) | marcato 走步重音与 parada 整拍刹车、班多钮琴风箱呼吸与当铺出身、变化音叹息与应答、骨架方整皮肉松 | 「班多钮琴无全尺寸键盘」表述;parada 对应停顿的说法 |
+| ☐ | [迪斯科](https://ambermoon.wiki/entries/disco) | 四踩的三层舞池工程、贝斯/吉他/开镲错缝排布、弦乐合成器黏合层、12 寸唱片反塑编曲 | 三层错缝的描述与演示;12 寸单曲的编曲影响 |
+| ☐ | [乡村](https://ambermoon.wiki/entries/country) | boom-chick 无鼓传统由来、叙事三要素(人物-场景-转折)、twang 与编曲禁令清单、fiddle 另一套语法 | 「教堂文化不待见鼓」的因果;《Jolene》例证贴切度 |
+| ☐ | [华尔兹](https://ambermoon.wiki/entries/waltz) | 一重两轻=升降口令、奇数拍不可对半产生圆、两档速度的生理极限、从丑闻到殿堂路径 | 「180 附近是人的极限」;拿破仑宫廷率先接纳的时序 |
+
+---
+
+## 发现问题的处理
+
+- 单篇问题直接报词条名+段落,我修;
+- 批量问题(某个解释套路各篇都在用且不对)标注「通用」,一并返工;
+- 审核完成的批次,状态列打勾,整张表我定期归档进 metrics-log。
+
+## 完成记录
+
+| 日期 | 审完批次/篇目 | 发现问题数 | 已修复 |
+|---|---|---|---|
+| | | | |
