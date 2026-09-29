@@ -310,7 +310,7 @@ function Keyboard({
                   // 烤漆黑键:高光渐变+顶部光泽+底部深影;点亮下沉 2px
                   "pointer-events-auto absolute top-0 rounded-b-md transition " +
                   (on
-                    ? "translate-y-[2px] bg-signature"
+                    ? "origin-top scale-y-[0.94] bg-signature"
                     : "bg-gradient-to-b from-neutral-700 via-neutral-900 to-black shadow-[inset_0_1px_2px_rgba(255,255,255,0.25),inset_0_-3px_3px_rgba(0,0,0,0.55)] hover:from-neutral-600")
                 }
                 style={
@@ -329,6 +329,22 @@ function Keyboard({
           })}
         </div>
       </div>
+    </div>
+  );
+}
+
+/** 琴体木壳:胡桃木渐变外壳 + 键槽上方的深红呢毡条;内联卡片与全屏演奏共用同一份样式。
+ *  内容区高度用 calc(100%-7px):外层有高度时(全屏)铺满,auto 时回退为自适应。 */
+function PianoCase({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div
+      className={
+        "rounded-xl bg-gradient-to-b from-[#4A362A] to-[#2B1F17] p-1.5 pb-1 shadow-[inset_0_1px_2px_rgba(255,220,170,0.15),0_2px_6px_rgba(0,0,0,0.3)] " +
+        className
+      }
+    >
+      <div className="h-[5px] rounded-sm bg-gradient-to-b from-[#A03A2C] to-[#7C2A1F]" aria-hidden="true" />
+      <div className="mt-[2px] h-[calc(100%-7px)] overflow-hidden rounded-b-md">{children}</div>
     </div>
   );
 }
@@ -431,10 +447,8 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
         </figcaption>
       )}
       <div className="p-4">
-        {/* 琴体木壳:胡桃木渐变外壳 + 键槽上方的深红呢毡条(真钢琴的细节) */}
-        <div className="rounded-xl bg-gradient-to-b from-[#4A362A] to-[#2B1F17] p-1.5 pb-1 shadow-[inset_0_1px_2px_rgba(255,220,170,0.15),0_2px_6px_rgba(0,0,0,0.3)]">
-          <div className="h-[5px] rounded-sm bg-gradient-to-b from-[#A03A2C] to-[#7C2A1F]" aria-hidden="true" />
-          <div className="mt-[2px] overflow-hidden rounded-b-md" style={{ height: keyHeight }}>
+        <PianoCase>
+          <div style={{ height: keyHeight }}>
             <Keyboard
               startOct={startOct}
               octaves={octaves}
@@ -443,7 +457,7 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
               showKbd={showKbd}
             />
           </div>
-        </div>
+        </PianoCase>
         <div className="mt-2 flex items-center justify-end gap-2">
           <span className="flex items-center gap-2">
             <button
@@ -528,7 +542,9 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
                 </span>
               </div>
               <div className="flex-1 p-3">
-                <Keyboard startOct={3} octaves={3} minWidth={0} showKbd={showKbd} />
+                <PianoCase className="h-full">
+                  <Keyboard startOct={3} octaves={3} minWidth={0} showKbd={showKbd} />
+                </PianoCase>
               </div>
             </div>
           </div>,
