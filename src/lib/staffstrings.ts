@@ -158,6 +158,7 @@ export function initStaffPlay(root: HTMLElement): () => void {
     lastPX: null,
     sweepAcc: 0,
     sweepDir: 0,
+    lastPluckAt: 0,
     lineC: "",
     sigC: "",
     fontFamily: "",
@@ -244,6 +245,7 @@ export function initStaffPlay(root: HTMLElement): () => void {
   const lineY = (i: number) => cv.height * 0.1 + (i * cv.height * 0.8) / 4;
 
   const pluck = (i: number, pos: number, vel: number) => {
+    st.lastPluckAt = performance.now();
     const s = st.strings[i];
     s.amp = clamp(0.5 + vel * 0.09, 0.5, 1.3);
     s.born = performance.now() / 1000;
@@ -252,17 +254,47 @@ export function initStaffPlay(root: HTMLElement): () => void {
     ensureLoop();
   };
 
-  const onMove = (e: PointerEvent) => {
+  /* 跨线检测:prevY→y 之间穿过哪些线就拨哪些(移动与离场共用) */
+  const crossPluck = (prevY: number, y: number, x: number) => {
+    if (x <= 0.01 || x >= 0.99) return;
+    for (let i = 0; i < 5; i++) {
+      const ly = lineY(i);
+      if ((prevY - ly) * (y - ly) < 0) pluck(i, x, Math.abs(y - prevY));
+    }
+  };
+  const evY = (e: PointerEvent) => {
     const r = root.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width;
-    const y = ((e.clientY - r.top) / r.height) * cv.height;
-    if (st.lastPY !== null && x > 0.01 && x < 0.99) {
-      const dyN = (y - st.lastPY) / cv.height; // 归一化的纵向位移(每高度)
-      // 纵向跨线:精确拨过线的那根(上下蹭)
+    return ((e.clientY - r.top) / r.height) * cv.height;
+  };
+  const evX = (e: PointerEvent) => {
+    const r = root.getBoundingClientRect();
+    return (e.clientX - r.left) / r.width;
+  };
+
+  const onEnter = (e: PointerEvent) => {
+    const y = evY(e);
+    const x = evX(e);
+    st.lastPY = y;
+    st.lastPX = x;
+    st.sweepAcc = 0;
+    st.sweepDir = 0;
+    /* 进入即拨最近的一根:触摸反馈(快速甩过时,这就是那一下) */
+    if (performance.now() - st.lastPluckAt > 120) {
+      let best = 0, bd = Infinity;
       for (let i = 0; i < 5; i++) {
-        const ly = lineY(i);
-        if ((st.lastPY - ly) * (y - ly) < 0) pluck(i, x, Math.abs(y - st.lastPY));
+        const d = Math.abs(y - lineY(i));
+        if (d < bd) { bd = d; best = i; }
       }
+      pluck(best, clamp(x, 0.06, 0.94), 6);
+    }
+  };
+
+  const onMove = (e: PointerEvent) => {
+    const x = evX(e);
+    const y = evY(e);
+    if (st.lastPY !== null) {
+      crossPluck(st.lastPY, y, x);
+      const dyN = (y - st.lastPY) / cv.height; // 归一化的纵向位移(每高度)
       // 横向扫弦:像拨片横掠,快扫慢扫都算——累计横程超过 1/3 宽度即触发一次,
       // 五根按扫动方向依次拨响;纵向为主的移动不计入(那是跨线拨弦的事)
       const dxN = x - (st.lastPX ?? x);
@@ -286,7 +318,9 @@ export function initStaffPlay(root: HTMLElement): () => void {
     st.lastPY = y;
     st.lastPX = x;
   };
-  const onLeave = () => {
+  const onLeave = (e: PointerEvent) => {
+    /* 离场坐标也参与跨线判定:快速甩过整个窄条(帧间无内部移动)也能拨到 */
+    if (st.lastPY !== null) crossPluck(st.lastPY, evY(e), evX(e));
     st.lastPY = null;
     st.lastPX = null;
     st.sweepAcc = 0;
@@ -321,6 +355,7 @@ export function initStaffPlay(root: HTMLElement): () => void {
   st.resize();
   instances.push(st);
 
+  root.addEventListener("pointerenter", onEnter);
   root.addEventListener("pointermove", onMove);
   root.addEventListener("pointerleave", onLeave);
   root.addEventListener("pointerdown", onDown);
@@ -339,6 +374,7 @@ export function initStaffPlay(root: HTMLElement): () => void {
   st.redraw(performance.now() / 1000);
 
   return () => {
+    root.removeEventListener("pointerenter", onEnter);
     root.removeEventListener("pointermove", onMove);
     root.removeEventListener("pointerleave", onLeave);
     root.removeEventListener("pointerdown", onDown);
