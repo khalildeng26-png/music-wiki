@@ -36,6 +36,10 @@ interface StaffInstance {
   dpr: number;
   strings: StringState[];
   lastPY: number | null;
+  /** 横向扫弦状态:上次指针 x、累计扫程(0..1 宽度)、扫动方向 */
+  lastPX: number | null;
+  sweepAcc: number;
+  sweepDir: number;
   lineC: string;
   sigC: string;
   fontFamily: string;
@@ -151,6 +155,9 @@ export function initStaffPlay(root: HTMLElement): () => void {
       phases: Array.from({ length: 6 }, () => Math.random() * TAU),
     })),
     lastPY: null,
+    lastPX: null,
+    sweepAcc: 0,
+    sweepDir: 0,
     lineC: "",
     sigC: "",
     fontFamily: "",
@@ -249,15 +256,41 @@ export function initStaffPlay(root: HTMLElement): () => void {
     const r = root.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width;
     const y = ((e.clientY - r.top) / r.height) * cv.height;
-    if (st.lastPY !== null && x > 0.01 && x < 0.99)
+    if (st.lastPY !== null && x > 0.01 && x < 0.99) {
+      const dyN = (y - st.lastPY) / cv.height; // 归一化的纵向位移(每高度)
+      // 纵向跨线:精确拨过线的那根(上下蹭)
       for (let i = 0; i < 5; i++) {
         const ly = lineY(i);
         if ((st.lastPY - ly) * (y - ly) < 0) pluck(i, x, Math.abs(y - st.lastPY));
       }
+      // 横向扫弦:像拨片横掠,快扫慢扫都算——累计横程超过 1/3 宽度即触发一次,
+      // 五根按扫动方向依次拨响;纵向为主的移动不计入(那是跨线拨弦的事)
+      const dxN = x - (st.lastPX ?? x);
+      if (Math.abs(dxN) > 0.0005 && Math.abs(dxN) > Math.abs(dyN) / 2) {
+        const dir = Math.sign(dxN);
+        if (dir === st.sweepDir) st.sweepAcc += Math.abs(dxN);
+        else {
+          st.sweepDir = dir;
+          st.sweepAcc = Math.abs(dxN);
+        }
+        if (st.sweepAcc > 0.3) {
+          const order = dir > 0 ? [0, 1, 2, 3, 4] : [4, 3, 2, 1, 0];
+          order.forEach((i, k) =>
+            window.setTimeout(() => pluck(i, clamp(x, 0.06, 0.94), 8), k * 26),
+          );
+          st.sweepAcc = 0;
+          st.sweepDir = 0;
+        }
+      }
+    }
     st.lastPY = y;
+    st.lastPX = x;
   };
   const onLeave = () => {
     st.lastPY = null;
+    st.lastPX = null;
+    st.sweepAcc = 0;
+    st.sweepDir = 0;
   };
   const onDown = (e: PointerEvent) => {
     const r = root.getBoundingClientRect();
