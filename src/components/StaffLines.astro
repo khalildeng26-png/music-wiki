@@ -1,17 +1,54 @@
 ---
 // 签名视觉元素:五线谱(从左到右渐隐)+ 音符点缀,音符"落"在谱线上
+// JS 可用时升级为「可拨的弦」:划过谱线即拨响(G 谱表 E4-G4-B4-D5-F5),
+// 拨弦位置决定音色(Karplus-Strong);reduce-motion / 老内核 / 无 JS 时保持静态版
 const { class: className = "" } = Astro.props;
 ---
 
-<div aria-hidden="true" class:list={["relative flex h-3 flex-col justify-between", className]}>
-  <!-- 音符:bottom 对齐到五线中的某一条线,符头"坐"在线上 -->
-  <span class="absolute bottom-[9px] left-[8%] text-[12px] leading-none">♪</span>
-  <span class="absolute bottom-[3px] left-[36%] text-[10px] leading-none opacity-80">♫</span>
-  <span class="absolute bottom-[6px] left-[62%] text-[14px] leading-none opacity-90">♩</span>
+<div
+  class:list={["staff-play relative flex h-10 items-center select-none", className]}
+  role="img"
+  tabindex="0"
+  aria-label="五线谱装饰:五条谱线自下而上为 E4、G4、B4、D5、F5,划过谱线或按 1 到 5 可拨响"
+>
+  <!-- 静态回退层:JS 初始化后隐藏,改由 canvas 绘制 -->
+  <div class="staff-static relative flex h-3 flex-col justify-between" aria-hidden="true">
+    <!-- 音符:bottom 对齐到五线中的某一条线,符头"坐"在线上 -->
+    <span class="absolute bottom-[9px] left-[8%] text-[12px] leading-none">♪</span>
+    <span class="absolute bottom-[3px] left-[36%] text-[10px] leading-none opacity-80">♫</span>
+    <span class="absolute bottom-[6px] left-[62%] text-[14px] leading-none opacity-90">♩</span>
 
-  <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
-  <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
-  <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
-  <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
-  <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
+    <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
+    <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
+    <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
+    <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
+    <span class="block h-px w-full bg-linear-to-r from-current to-transparent"></span>
+  </div>
 </div>
+
+<style is:global>
+  /* canvas 由 JS 运行时创建,不带 Astro 作用域属性,故用全局块 */
+  .staff-play {
+    cursor: crosshair;
+    touch-action: pan-y; /* 移动端竖滑仍可滚动页面,点按可拨弦 */
+  }
+  .staff-play:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 4px;
+    border-radius: 6px;
+  }
+  .staff-play canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .staff-play.staff-on .staff-static {
+    visibility: hidden;
+  }
+</style>
+
+<script>
+  import { initStaffPlay } from "../lib/staffstrings";
+  document.querySelectorAll<HTMLElement>(".staff-play").forEach((el) => initStaffPlay(el));
+</script>
