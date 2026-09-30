@@ -29,7 +29,6 @@ const { class: className = "" } = Astro.props;
 <style is:global>
   /* canvas 由 JS 运行时创建,不带 Astro 作用域属性,故用全局块 */
   .staff-play {
-    cursor: pointer;
     touch-action: pan-y; /* 移动端竖滑仍可滚动页面,点按可拨弦 */
   }
   .staff-play:focus-visible {
