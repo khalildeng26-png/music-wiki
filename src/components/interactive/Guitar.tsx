@@ -266,7 +266,6 @@ function Fretboard({
   /** 点单音时让对应弦也闪一下(反馈) */
   flashString: (s: number) => void;
 }) {
-  const FRETS = 15;
   const SH = 30; // 弦距(固定)
   const NUT = 54; // 弦枕 x 位
   const TAIL = 24; // 右端琴桥+余量
@@ -292,6 +291,8 @@ function Fretboard({
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
+  // 手机端(<480px 容器)默认 9 品:格子热区宽裕一倍;更宽恢复 15 品
+  const FRETS = cw < 480 ? 9 : 15;
 
   // 品丝位置:pos[0]=弦枕,pos[f]=累加递收品距;首品品距由可用宽度反解
   const geom = React.useMemo(() => {
@@ -412,8 +413,12 @@ function Fretboard({
         {[3, 5, 7, 9].map((f) => (
           <circle key={f} cx={cx(f)} cy={midY} r={6.2} fill={`url(#pearl${k})`} />
         ))}
-        <circle cx={cx(12)} cy={midY - 9} r={6.2} fill={`url(#pearl${k})`} />
-        <circle cx={cx(12)} cy={midY + 9} r={6.2} fill={`url(#pearl${k})`} />
+        {FRETS >= 12 && (
+          <>
+            <circle cx={cx(12)} cy={midY - 9} r={6.2} fill={`url(#pearl${k})`} />
+            <circle cx={cx(12)} cy={midY + 9} r={6.2} fill={`url(#pearl${k})`} />
+          </>
+        )}
         {/* 和弦位置格底光:药丸形常亮,与悬停热区同形,一眼锁定「按这里」 */}
         {grp.pressed.map(({ s: s2, fret: f2 }) => (
           <rect
@@ -647,8 +652,8 @@ function Fretboard({
           {/* 主题双渲染:亮/暗各一层实体琴颈 */}
           <g className="dark:hidden">{neckLayer(false)}</g>
           <g className="hidden dark:block">{neckLayer(true)}</g>
-          {/* 品号:只标记号位,12 品加重 */}
-          {NUMS.map((f) => (
+          {/* 品号:只标记号位(按当前品数截断),12 品加重 */}
+          {NUMS.filter((f) => f <= FRETS).map((f) => (
             <text
               key={f}
               x={cx(f)}
