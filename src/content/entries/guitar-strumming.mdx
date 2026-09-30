@@ -24,6 +24,7 @@ order: 16
 
 import { Metronome } from "../../components/interactive/Metronome";
 import { RhythmTap } from "../../components/interactive/RhythmTap";
+import { Guitar } from "../../components/interactive/Guitar";
 
 同一个[和弦](/entries/chord),换一种扫法就是另一首歌,**右手是[吉他](/entries/guitar)的发动机**。左手按和弦只是备好材料,真正把歌推往前走的是右手的节奏。这一篇讲三件事:怎么发力、怎么读节奏型、怎么配合节拍器练。
 
@@ -93,5 +94,9 @@ import { RhythmTap } from "../../components/interactive/RhythmTap";
 手比嘴诚实。节拍器之外,用手直接跟拍点打一遍 8 拍的稳定节奏,看看你的均匀度:
 
 <RhythmTap client:visible bpm={70} beats={8} />
+
+下扫和上扫的声音差在哪,耳朵先学会再上手。在和弦机里打开「↓↑ 交替扫」,点同一张和弦卡对比两种手势:
+
+<Guitar client:visible label="开「↓↑ 交替扫」后点和弦卡:第一下是下扫的全弦,跟上的第二下是上扫的高四弦——薄一圈。" />
 
 右手会扫了,剩下的难关是左手换和弦的速度。

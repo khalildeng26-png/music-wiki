@@ -25,6 +25,7 @@ order: 20
 import { ChordDiagram } from "../../components/interactive/ChordDiagram";
 import { ChordPlayer } from "../../components/interactive/ChordPlayer";
 import { Metronome } from "../../components/interactive/Metronome";
+import { Guitar } from "../../components/interactive/Guitar";
 
 弹唱 = 和弦进行 + 节奏型 + 嘴。今天先练前两样,嘴留到最后自己加。
 
@@ -92,6 +93,10 @@ import { Metronome } from "../../components/interactive/Metronome";
   label="完整 8 小节:| C | G | Am | F | C | G | F | C |,每小节一个和弦。"
   desc="听熟之后,自己扫的时候就知道「走到哪儿了」。"
 />
+
+这首歌的骨架就是 1–6–4–5。在和弦机里点「▶ 1-6-4-5 演示」,先单独把和弦框架听熟,再回来对完整版:
+
+<Guitar client:visible label="点「▶ 1-6-4-5 演示」:C → Am → F → G 的纯框架,就是这首歌抽掉旋律后的地基。" />
 
 ## 常见误区
 
