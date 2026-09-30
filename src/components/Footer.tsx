@@ -23,44 +23,44 @@ export function Footer({ children }: { children?: ReactNode }) {
             组件里写不了 client: 指令,只能从 .astro 层往里传 */}
         <div className="grid grid-cols-1 gap-x-8 gap-y-5 border-t pt-8 sm:grid-cols-2 lg:grid-cols-3">
           <nav aria-label="分类导航">
-              <div className="text-sm font-medium">词条分类</div>
-              <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
-                {categories.map((c) => (
-                  <li key={c.id}>
-                    <a href={`/categories/${c.id}`} className="hover:text-signature">
-                      {c.label}
-                    </a>
-                  </li>
-                ))}
-                <li>
-                  <a href="/entries" className="hover:text-signature">
-                    全部词条
+            <div className="text-sm font-medium">词条分类</div>
+            <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
+              {categories.map((c) => (
+                <li key={c.id}>
+                  <a href={`/categories/${c.id}`} className="hover:text-signature">
+                    {c.label}
                   </a>
                 </li>
-              </ul>
-            </nav>
+              ))}
+              <li>
+                <a href="/entries" className="hover:text-signature">
+                  全部词条
+                </a>
+              </li>
+            </ul>
+          </nav>
 
-            <nav aria-label="路线导航">
-              <div className="text-sm font-medium">入门路线</div>
-              <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
-                {INTRO_PATHS.map((p) => (
-                  <li key={p.id}>
-                    <a href={`/paths/${p.id}`} className="hover:text-signature">
-                      {p.label}
-                    </a>
-                  </li>
-                ))}
-                <li>
-                  <a href="/paths" className="hover:text-signature">
-                    全部路线
+          <nav aria-label="路线导航">
+            <div className="text-sm font-medium">入门路线</div>
+            <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
+              {INTRO_PATHS.map((p) => (
+                <li key={p.id}>
+                  <a href={`/paths/${p.id}`} className="hover:text-signature">
+                    {p.label}
                   </a>
                 </li>
-              </ul>
-            </nav>
+              ))}
+              <li>
+                <a href="/paths" className="hover:text-signature">
+                  全部路线
+                </a>
+              </li>
+            </ul>
+          </nav>
 
-            {/* 联系方式岛排最右 */}
-            {children}
-          </div>
+          {/* 联系方式岛排最右 */}
+          {children}
+        </div>
 
         <div className="mt-8 flex flex-col items-center justify-between gap-2 border-t pt-5 text-xs text-muted-foreground sm:flex-row">
           <span>© {year} 橙月Wiki · 一本可交互的音乐百科全书</span>

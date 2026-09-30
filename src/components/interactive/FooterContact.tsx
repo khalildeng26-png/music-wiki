@@ -50,11 +50,7 @@ export function FooterContact() {
           className="inline-flex items-center gap-1 transition hover:text-signature"
         >
           {EMAIL}
-          {copied ? (
-            <Check className="size-3.5 text-signature" />
-          ) : (
-            <Copy className="size-3.5" />
-          )}
+          {copied ? <Check className="size-3.5 text-signature" /> : <Copy className="size-3.5" />}
         </button>
         <button
           type="button"
@@ -93,7 +89,7 @@ export function FooterContact() {
               type="button"
               onClick={() => setQrOpen(false)}
               aria-label="关闭"
-              className="absolute right-4 top-4 inline-flex size-9 items-center justify-center rounded-full bg-background/15 text-background transition hover:bg-background/30"
+              className="absolute top-4 right-4 inline-flex size-9 items-center justify-center rounded-full bg-background/15 text-background transition hover:bg-background/30"
             >
               <X className="size-5" />
             </button>

@@ -78,8 +78,16 @@ import { StaffNotation } from "../../components/interactive/StaffNotation";
 
 听两条旋律的区别:一条逐级上行,一条大跳上行再回收:
 
-<StaffNotation client:visible notes={["C4", "D4", "E4", "F4", "G4"]} label="级进上行:平滑、好唱。" />
-<StaffNotation client:visible notes={["C4", "G4", "F4", "E4", "D4"]} label="大跳上行后反向级进回收:醒目但不失控。" />
+<StaffNotation
+  client:visible
+  notes={["C4", "D4", "E4", "F4", "G4"]}
+  label="级进上行:平滑、好唱。"
+/>
+<StaffNotation
+  client:visible
+  notes={["C4", "G4", "F4", "E4", "D4"]}
+  label="大跳上行后反向级进回收:醒目但不失控。"
+/>
 
 > 检验标准:一条好旋律,应该能用一句话哼出来、并且记得住。
 

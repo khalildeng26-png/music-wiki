@@ -112,9 +112,24 @@ export const GENRES: Record<string, GenreDemo> = {
           timbre: "eguitar",
           events: [
             // 八分音符扫弦(复原——此前的四分化是坏军鼓误诊的连坐)
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, notes: ["E3", "B3", "E4"], dur: 0.42, vel: 0.85 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 8 + i * 0.5, notes: ["G3", "D4", "G4"], dur: 0.42, vel: 0.85 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 12 + i * 0.5, notes: ["A3", "E4", "A4"], dur: 0.42, vel: 0.85 })),
+            ...Array.from({ length: 16 }, (_, i) => ({
+              t: i * 0.5,
+              notes: ["E3", "B3", "E4"],
+              dur: 0.42,
+              vel: 0.85,
+            })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: 8 + i * 0.5,
+              notes: ["G3", "D4", "G4"],
+              dur: 0.42,
+              vel: 0.85,
+            })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: 12 + i * 0.5,
+              notes: ["A3", "E4", "A4"],
+              dur: 0.42,
+              vel: 0.85,
+            })),
           ],
         },
         {
@@ -135,7 +150,11 @@ export const GENRES: Record<string, GenreDemo> = {
               hit: "snare" as const,
               vel: 0.8,
             })),
-            ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.45 })),
+            ...Array.from({ length: 32 }, (_, i) => ({
+              t: i * 0.5,
+              hit: "hihat" as const,
+              vel: 0.45,
+            })),
             { t: 0, hit: "openhat", vel: 0.6 },
           ],
         },
@@ -485,10 +504,22 @@ export const GENRES: Record<string, GenreDemo> = {
           timbre: "bass",
           // 行走感:换和弦前用三音/半音级进接近新根音(E→F、Ab→G)
           events: [
-            "C2", "C3", "E2", "E2",
-            "F2", "C3", "F2", "Ab2",
-            "G2", "G2", "D2", "D2",
-            "G1", "B1", "C2", "C3",
+            "C2",
+            "C3",
+            "E2",
+            "E2",
+            "F2",
+            "C3",
+            "F2",
+            "Ab2",
+            "G2",
+            "G2",
+            "D2",
+            "D2",
+            "G1",
+            "B1",
+            "C2",
+            "C3",
           ].map((n, i) => ({ t: i, notes: [n], dur: 0.9, vel: 0.7 })),
         },
         {
@@ -894,8 +925,16 @@ export const GENRES: Record<string, GenreDemo> = {
           kind: "drums",
           events: [
             // one-drop:底鼓和军鼓一起砸在第 3 拍,第 1 拍空着
-            ...Array.from({ length: 4 }, (_, b) => ({ t: b * 4 + 2, hit: "kick" as const, vel: 0.8 })),
-            ...Array.from({ length: 4 }, (_, b) => ({ t: b * 4 + 2, hit: "snare" as const, vel: 0.7 })),
+            ...Array.from({ length: 4 }, (_, b) => ({
+              t: b * 4 + 2,
+              hit: "kick" as const,
+              vel: 0.8,
+            })),
+            ...Array.from({ length: 4 }, (_, b) => ({
+              t: b * 4 + 2,
+              hit: "snare" as const,
+              vel: 0.7,
+            })),
             ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.35 })),
           ],
         },
@@ -921,9 +960,19 @@ export const GENRES: Record<string, GenreDemo> = {
             ["D3", ["F#4", "A3", "D4"]],
           ].flatMap(([root, ch], bar) => [
             { t: bar * 4, notes: [root], dur: 0.9, vel: 0.8 },
-            ...ch.flatMap((n, i) => ({ t: bar * 4 + 1 + i * 0.02, notes: [n], dur: 0.8, vel: 0.6 })),
+            ...ch.flatMap((n, i) => ({
+              t: bar * 4 + 1 + i * 0.02,
+              notes: [n],
+              dur: 0.8,
+              vel: 0.6,
+            })),
             { t: bar * 4 + 2, notes: [root], dur: 0.9, vel: 0.8 },
-            ...ch.flatMap((n, i) => ({ t: bar * 4 + 3 + i * 0.02, notes: [n], dur: 0.8, vel: 0.6 })),
+            ...ch.flatMap((n, i) => ({
+              t: bar * 4 + 3 + i * 0.02,
+              notes: [n],
+              dur: 0.8,
+              vel: 0.6,
+            })),
           ]),
         },
         {
@@ -962,12 +1011,42 @@ export const GENRES: Record<string, GenreDemo> = {
           kind: "notes",
           timbre: "eguitar",
           events: [
-            ...Array.from({ length: 8 }, (_, i) => ({ t: i * 0.5, notes: ["E3", "B3", "E4"], dur: 0.22, vel: 0.8 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 4 + i * 0.5, notes: ["A2", "E3", "A3"], dur: 0.22, vel: 0.8 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 6 + i * 0.5, notes: ["E3", "B3", "E4"], dur: 0.22, vel: 0.8 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 8 + i * 0.5, notes: ["E3", "B3", "E4"], dur: 0.22, vel: 0.8 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 12 + i * 0.5, notes: ["G2", "D3", "G3"], dur: 0.22, vel: 0.8 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 14 + i * 0.5, notes: ["A2", "E3", "A3"], dur: 0.22, vel: 0.8 })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: i * 0.5,
+              notes: ["E3", "B3", "E4"],
+              dur: 0.22,
+              vel: 0.8,
+            })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 4 + i * 0.5,
+              notes: ["A2", "E3", "A3"],
+              dur: 0.22,
+              vel: 0.8,
+            })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 6 + i * 0.5,
+              notes: ["E3", "B3", "E4"],
+              dur: 0.22,
+              vel: 0.8,
+            })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: 8 + i * 0.5,
+              notes: ["E3", "B3", "E4"],
+              dur: 0.22,
+              vel: 0.8,
+            })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 12 + i * 0.5,
+              notes: ["G2", "D3", "G3"],
+              dur: 0.22,
+              vel: 0.8,
+            })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 14 + i * 0.5,
+              notes: ["A2", "E3", "A3"],
+              dur: 0.22,
+              vel: 0.8,
+            })),
           ],
         },
         {
@@ -998,7 +1077,12 @@ export const GENRES: Record<string, GenreDemo> = {
           timbre: "piano",
           events: [
             ...["Am", "Am", "Dm", "E7"].flatMap((ch, bar) => {
-              const v = ch === "Am" ? ["A3", "C4", "E4"] : ch === "Dm" ? ["D4", "F4", "A4"] : ["G3", "B3", "D4", "F4"];
+              const v =
+                ch === "Am"
+                  ? ["A3", "C4", "E4"]
+                  : ch === "Dm"
+                    ? ["D4", "F4", "A4"]
+                    : ["G3", "B3", "D4", "F4"];
               return [
                 { t: bar * 4, notes: v, dur: 0.3, vel: 0.65 },
                 { t: bar * 4 + 1, notes: v, dur: 0.3, vel: 0.55 },
@@ -1030,7 +1114,12 @@ export const GENRES: Record<string, GenreDemo> = {
           kind: "notes",
           timbre: "bass",
           events: ["A1", "A1", "D2", "E1"].flatMap((root, bar) =>
-            Array.from({ length: 4 }, (_, i) => ({ t: bar * 4 + i, notes: [root], dur: 0.7, vel: 0.75 })),
+            Array.from({ length: 4 }, (_, i) => ({
+              t: bar * 4 + i,
+              notes: [root],
+              dur: 0.7,
+              vel: 0.75,
+            })),
           ),
         },
       ],
@@ -1052,7 +1141,12 @@ export const GENRES: Record<string, GenreDemo> = {
             ...["C", "G", "C", "F"].flatMap((ch, bar) => {
               const off = bar * 3;
               const root = ch === "C" ? "C2" : ch === "G" ? "G1" : "F1";
-              const triad = ch === "C" ? ["C4", "E4", "G4"] : ch === "G" ? ["B3", "D4", "G4"] : ["A3", "C4", "F4"];
+              const triad =
+                ch === "C"
+                  ? ["C4", "E4", "G4"]
+                  : ch === "G"
+                    ? ["B3", "D4", "G4"]
+                    : ["A3", "C4", "F4"];
               return [
                 { t: off, notes: [root], dur: 0.8, vel: 0.7 },
                 { t: off + 1, notes: triad, dur: 0.6, vel: 0.42 },
@@ -1284,7 +1378,11 @@ export const GENRES: Record<string, GenreDemo> = {
         {
           kind: "drums",
           events: [
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, hit: "msnare" as const, vel: i % 2 === 0 ? 0.55 : 0.35 })),
+            ...Array.from({ length: 16 }, (_, i) => ({
+              t: i * 0.5,
+              hit: "msnare" as const,
+              vel: i % 2 === 0 ? 0.55 : 0.35,
+            })),
             ...Array.from({ length: 4 }, (_, b) => ({ t: b * 4, hit: "kick" as const, vel: 0.5 })),
           ],
         },
@@ -1305,7 +1403,12 @@ export const GENRES: Record<string, GenreDemo> = {
           timbre: "piano",
           events: Array.from({ length: 4 }, (_, b) => {
             const off = b * 4;
-            const arp = b === 1 ? ["A3", "D4", "F#4", "A4"] : b === 2 ? ["B3", "D4", "G4", "B4"] : ["D3", "A3", "D4", "F#4"];
+            const arp =
+              b === 1
+                ? ["A3", "D4", "F#4", "A4"]
+                : b === 2
+                  ? ["B3", "D4", "G4", "B4"]
+                  : ["D3", "A3", "D4", "F#4"];
             return arp.map((n, i) => ({ t: off + i, notes: [n], dur: 1.6, vel: 0.5 }));
           }).flat(),
         },
@@ -1369,9 +1472,19 @@ export const GENRES: Record<string, GenreDemo> = {
             ] as [string, string[]][]
           ).flatMap(([root, ch], bar) => [
             { t: bar * 4, notes: [root], dur: 0.85, vel: 0.75 },
-            ...ch.flatMap((n, i) => ({ t: bar * 4 + 1 + i * 0.02, notes: [n], dur: 0.7, vel: 0.55 })),
+            ...ch.flatMap((n, i) => ({
+              t: bar * 4 + 1 + i * 0.02,
+              notes: [n],
+              dur: 0.7,
+              vel: 0.55,
+            })),
             { t: bar * 4 + 2, notes: [root], dur: 0.85, vel: 0.75 },
-            ...ch.flatMap((n, i) => ({ t: bar * 4 + 3 + i * 0.02, notes: [n], dur: 0.7, vel: 0.55 })),
+            ...ch.flatMap((n, i) => ({
+              t: bar * 4 + 3 + i * 0.02,
+              notes: [n],
+              dur: 0.7,
+              vel: 0.55,
+            })),
           ]),
         },
         {
@@ -1389,7 +1502,14 @@ export const GENRES: Record<string, GenreDemo> = {
 
 // 演示时长:vamp 型曲风(循环段本质)转 3 遍,乐句型转 2 遍——比堆音符更符合各曲风的真实形态
 const REPEATS: Record<string, number> = {
-  funk: 3, disco: 3, reggae: 3, electronic: 3, hiphop: 3, rnb: 3, soul: 3, "bossa-nova": 3,
+  funk: 3,
+  disco: 3,
+  reggae: 3,
+  electronic: 3,
+  hiphop: 3,
+  rnb: 3,
+  soul: 3,
+  "bossa-nova": 3,
 };
 for (const [slug, g] of Object.entries(GENRES)) g.pattern.repeat = REPEATS[slug] ?? 2;
 
@@ -1451,8 +1571,16 @@ export const SOUL_CALLOUT: GenreDemo = {
             { t: b * 4, hit: "kick" as const, vel: 0.85 },
             { t: b * 4 + 2, hit: "kick" as const, vel: 0.6 },
           ]).flat(),
-          ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.8 })),
-          ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.3 })),
+          ...Array.from({ length: 8 }, (_, i) => ({
+            t: 1 + i * 2,
+            hit: "snare" as const,
+            vel: 0.8,
+          })),
+          ...Array.from({ length: 32 }, (_, i) => ({
+            t: i * 0.5,
+            hit: "hihat" as const,
+            vel: 0.3,
+          })),
         ],
       },
     ],

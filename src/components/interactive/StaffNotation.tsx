@@ -23,15 +23,18 @@ type Props = {
 
 /** 渲染一段五线谱(abcjs),点琥珀播放键用 Tone.js 依次发声。
  *  transpose 开启时附 ±5 半音换调:abcjs 按新音高重绘谱面,播放同步换调。 */
-export function StaffNotation({ notes, label, timbre = "piano", clef = "treble", transpose }: Props) {
+export function StaffNotation({
+  notes,
+  label,
+  timbre = "piano",
+  clef = "treble",
+  transpose,
+}: Props) {
   const ref = React.useRef<HTMLDivElement>(null);
   const { playing, start, stop } = usePlayToggle();
   const [semis, setSemis] = React.useState(0);
   // 谱面展示的音(换调后随之平移);渲染 effect 与播放共用这一份
-  const shown = React.useMemo(
-    () => (semis ? transposeNotes(notes, semis) : notes),
-    [notes, semis],
-  );
+  const shown = React.useMemo(() => (semis ? transposeNotes(notes, semis) : notes), [notes, semis]);
 
   React.useEffect(() => {
     let cancelled = false;

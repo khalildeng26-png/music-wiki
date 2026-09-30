@@ -76,13 +76,27 @@ import { ChordPlayer } from "../../components/interactive/ChordPlayer";
 
 帕赫贝尔《D 大调卡农》建在一条循环往复的低音线上。先把这条低音单独听一遍,三条小提琴声部进入之前,它已经先循环起来:
 
-<StaffNotation client:visible clef="bass" notes={["D3", "A3", "B3", "F#3", "G3", "D3", "G3", "A3"]} label="卡农的低音线,全曲循环不变。" />
+<StaffNotation
+  client:visible
+  clef="bass"
+  notes={["D3", "A3", "B3", "F#3", "G3", "D3", "G3", "A3"]}
+  label="卡农的低音线,全曲循环不变。"
+/>
 
 再把同样的低音听成和弦,感受它撑起整个和声框架的样子:
 
 <ChordPlayer
   client:visible
-  chords={[["D3", "F#3", "A3"], ["A3", "C#4", "E4"], ["B3", "D4", "F#4"], ["F#3", "A3", "C#4"], ["G3", "B3", "D4"], ["D3", "F#3", "A3"], ["G3", "B3", "D4"], ["A3", "C#4", "E4"]]}
+  chords={[
+    ["D3", "F#3", "A3"],
+    ["A3", "C#4", "E4"],
+    ["B3", "D4", "F#4"],
+    ["F#3", "A3", "C#4"],
+    ["G3", "B3", "D4"],
+    ["D3", "F#3", "A3"],
+    ["G3", "B3", "D4"],
+    ["A3", "C#4", "E4"],
+  ]}
   label="帕赫贝尔卡农的和弦进行(I–V–vi–iii–IV–I–IV–V,D 大调)。"
 />
 

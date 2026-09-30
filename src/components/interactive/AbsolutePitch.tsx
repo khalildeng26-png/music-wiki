@@ -21,7 +21,8 @@ function nextNote(prev: string | null): string {
 }
 
 function verdict(score: number): string {
-  if (score >= 9) return "这个成绩像绝对音感。它大多在 4–6 岁前形成,成年人极难获得——值得再测几轮排除运气。";
+  if (score >= 9)
+    return "这个成绩像绝对音感。它大多在 4–6 岁前形成,成年人极难获得——值得再测几轮排除运气。";
   if (score >= 7) return "很强的音高记忆!大概率是长期接触音乐攒下的「锚点音」在起作用。";
   if (score >= 5) return "不错的成绩。多数人靠锚点音(C 或 A)再推算其余音,这正是可以练的部分。";
   return "正常人类水平——绝对音感本来就是少数派(约万分之一),相对音感才是人人能练的真功夫。";
@@ -130,12 +131,8 @@ export function AbsolutePitch() {
               <Play className="size-3.5" /> 重听
             </button>
           </div>
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {WHITES.map(chip)}
-          </div>
-          <div className="mt-1.5 flex flex-wrap gap-1.5">
-            {BLACKS.map(chip)}
-          </div>
+          <div className="mt-3 flex flex-wrap gap-1.5">{WHITES.map(chip)}</div>
+          <div className="mt-1.5 flex flex-wrap gap-1.5">{BLACKS.map(chip)}</div>
           {phase === "feedback" && (
             <div className="mt-4 flex items-center justify-between rounded-lg bg-muted/50 px-4 py-2 text-sm">
               <span className={picked === note ? "font-medium text-green-600" : "text-red-500"}>
@@ -155,7 +152,7 @@ export function AbsolutePitch() {
 
       {phase === "done" && (
         <div className="flex flex-col gap-3">
-          <div className="text-3xl font-display font-bold">
+          <div className="font-display text-3xl font-bold">
             {score} <span className="text-lg font-normal text-muted-foreground">/ {TOTAL}</span>
           </div>
           <p className="text-sm leading-relaxed text-muted-foreground">{verdict(score)}</p>

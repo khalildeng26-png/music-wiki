@@ -77,7 +77,11 @@ import { Piano } from "../../components/interactive/Piano";
 
 听一听升号的作用:♯ 出现后,同一小节里再遇到同位置的音仍然是升高的。
 
-<StaffNotation client:visible notes={["F4", "F#4", "F#4", "G4"]} label="F 本位 → F♯(升半音)→ 再遇 F 仍是 F♯ → 换到 G。" />
+<StaffNotation
+  client:visible
+  notes={["F4", "F#4", "F#4", "G4"]}
+  label="F 本位 → F♯(升半音)→ 再遇 F 仍是 F♯ → 换到 G。"
+/>
 
 再到钢琴上找一找黑键:每个黑键都有一个升号名(F♯、G♯……)和一个降号名(G♭、A♭……),同一键、两种说法。
 

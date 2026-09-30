@@ -31,8 +31,16 @@ const CHORDS: Chord[] = [
     frets: [3, 2, 0, 0, 0, 3],
     fingers: [2, 1, 0, 0, 0, 3],
     variants: [
-      { label: "123·留小指", fingers: [2, 1, 0, 0, 0, 3], note: "空出小拇指,可临时去够二弦三品这类加音" },
-      { label: "234·留食指", fingers: [2, 3, 0, 0, 0, 4], note: "空出食指,二弦一品(C 音)随时能按;歌里要给 G 挂 C 色彩时用它" },
+      {
+        label: "123·留小指",
+        fingers: [2, 1, 0, 0, 0, 3],
+        note: "空出小拇指,可临时去够二弦三品这类加音",
+      },
+      {
+        label: "234·留食指",
+        fingers: [2, 3, 0, 0, 0, 4],
+        note: "空出食指,二弦一品(C 音)随时能按;歌里要给 G 挂 C 色彩时用它",
+      },
     ],
   },
   { name: "D", frets: [-1, -1, 0, 2, 3, 2], fingers: [0, 0, 0, 1, 3, 2] },
@@ -43,8 +51,16 @@ const CHORDS: Chord[] = [
     frets: [0, 2, 2, 1, 1, 0],
     fingers: [0, 2, 3, 1, 1, 0],
     variants: [
-      { label: "三指·留小指", fingers: [0, 2, 3, 1, 1, 0], note: "食指小横按压一品两弦;也是 F 大横按的前身" },
-      { label: "四指", fingers: [0, 3, 4, 1, 2, 0], note: "一品两弦分给食指中指,二品两弦分给无名指小指;每弦一指,职责清楚" },
+      {
+        label: "三指·留小指",
+        fingers: [0, 2, 3, 1, 1, 0],
+        note: "食指小横按压一品两弦;也是 F 大横按的前身",
+      },
+      {
+        label: "四指",
+        fingers: [0, 3, 4, 1, 2, 0],
+        note: "一品两弦分给食指中指,二品两弦分给无名指小指;每弦一指,职责清楚",
+      },
     ],
   },
   {
@@ -53,7 +69,11 @@ const CHORDS: Chord[] = [
     fingers: [0, 0, 1, 2, 3, 0],
     variants: [
       { label: "三指", fingers: [0, 0, 1, 2, 3, 0], note: "二品三根弦各用一指;最通用的版本" },
-      { label: "横按·留三指", fingers: [0, 0, 1, 1, 1, 0], note: "食指横压二品三根弦,空出中指无名指小指加音;A 型大横按的前身" },
+      {
+        label: "横按·留三指",
+        fingers: [0, 0, 1, 1, 1, 0],
+        note: "食指横压二品三根弦,空出中指无名指小指加音;A 型大横按的前身",
+      },
     ],
   },
   { name: "Dm", frets: [-1, -1, 0, 2, 3, 1], fingers: [0, 0, 0, 2, 3, 1] },
@@ -85,7 +105,7 @@ function groupChord(chord: Chord): {
     bars.push({ s0: pairs[0].s, s1: pairs[pairs.length - 1].s, fret, finger: 1 });
     for (const p of pairs) if (p.g !== 1) dots.push({ s: p.s, fret: p.f, finger: p.g });
   } else {
-    for (let i = 0; i < pairs.length; ) {
+    for (let i = 0; i < pairs.length;) {
       let j = i;
       while (
         j + 1 < pairs.length &&
@@ -94,7 +114,8 @@ function groupChord(chord: Chord): {
         pairs[j + 1].f === pairs[i].f
       )
         j++;
-      if (j > i) bars.push({ s0: pairs[i].s, s1: pairs[j].s, fret: pairs[i].f, finger: pairs[i].g });
+      if (j > i)
+        bars.push({ s0: pairs[i].s, s1: pairs[j].s, fret: pairs[i].f, finger: pairs[i].g });
       else dots.push({ s: pairs[i].s, fret: pairs[i].f, finger: pairs[i].g });
       i = j + 1;
     }
@@ -127,20 +148,64 @@ function ChordDiagram({ chord }: { chord: Chord }) {
     <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
       {/* 品丝 */}
       {[1, 2, 3, 4].map((f) => (
-        <line key={f} x1={left} y1={y(f)} x2={x(5)} y2={y(f)} stroke="currentColor" strokeWidth={1} className="text-neutral-400 dark:text-neutral-600" />
+        <line
+          key={f}
+          x1={left}
+          y1={y(f)}
+          x2={x(5)}
+          y2={y(f)}
+          stroke="currentColor"
+          strokeWidth={1}
+          className="text-neutral-400 dark:text-neutral-600"
+        />
       ))}
       {/* 上弦枕(加粗) */}
-      <line x1={left} y1={y(1)} x2={x(5)} y2={y(1)} stroke="currentColor" strokeWidth={3.5} className="text-neutral-600 dark:text-neutral-300" />
+      <line
+        x1={left}
+        y1={y(1)}
+        x2={x(5)}
+        y2={y(1)}
+        stroke="currentColor"
+        strokeWidth={3.5}
+        className="text-neutral-600 dark:text-neutral-300"
+      />
       {/* 弦 */}
       {STRINGS.map((_, s) => (
-        <line key={s} x1={x(s)} y1={y(1)} x2={x(s)} y2={y(4)} stroke="currentColor" strokeWidth={1} className="text-neutral-400 dark:text-neutral-600" />
+        <line
+          key={s}
+          x1={x(s)}
+          y1={y(1)}
+          x2={x(s)}
+          y2={y(4)}
+          stroke="currentColor"
+          strokeWidth={1}
+          className="text-neutral-400 dark:text-neutral-600"
+        />
       ))}
       {/* 闷弦 × / 空弦 ○ */}
       {chord.frets.map((f, s) =>
         f === -1 ? (
-          <text key={s} x={x(s)} y={top - 10} textAnchor="middle" fontSize="11" className="fill-neutral-400">✕</text>
+          <text
+            key={s}
+            x={x(s)}
+            y={top - 10}
+            textAnchor="middle"
+            fontSize="11"
+            className="fill-neutral-400"
+          >
+            ✕
+          </text>
         ) : f === 0 ? (
-          <circle key={s} cx={x(s)} cy={top - 13} r={4} fill="none" stroke="currentColor" strokeWidth={1.4} className="text-neutral-400" />
+          <circle
+            key={s}
+            cx={x(s)}
+            cy={top - 13}
+            r={4}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.4}
+            className="text-neutral-400"
+          />
         ) : null,
       )}
       {/* 横杆:同指同品的连续弦段,圆角横杆上标一个指法号 */}
@@ -170,7 +235,14 @@ function ChordDiagram({ chord }: { chord: Chord }) {
       {dots.map((d) => (
         <g key={`d${d.s}`}>
           <circle cx={x(d.s)} cy={y(d.fret) + fh / 2} r={6.5} className="fill-signature" />
-          <text x={x(d.s)} y={y(d.fret) + fh / 2 + 3} textAnchor="middle" fontSize="8.5" fontWeight="700" className="fill-signature-foreground">
+          <text
+            x={x(d.s)}
+            y={y(d.fret) + fh / 2 + 3}
+            textAnchor="middle"
+            fontSize="8.5"
+            fontWeight="700"
+            className="fill-signature-foreground"
+          >
             {d.finger || ""}
           </text>
         </g>
@@ -241,9 +313,7 @@ function Fretboard({
   };
 
   // 指法分组(横杆+独立点);pressed=全部按品弦,供格底光用
-  const grp = activeChord
-    ? groupChord(activeChord)
-    : { bars: [], dots: [], pressed: [] };
+  const grp = activeChord ? groupChord(activeChord) : { bars: [], dots: [], pressed: [] };
   const muted = new Set<number>();
   if (activeChord) activeChord.frets.forEach((f, s) => f === -1 && muted.add(s));
 
@@ -297,7 +367,15 @@ function Fretboard({
           clipPath={`url(#neckclip${k})`}
         />
         {/* 琴颈上缘高光,压出体积 */}
-        <rect x={neck.x} y={neck.y} width={neck.w} height={10} rx={5} fill="#FFFFFF" opacity={dark ? 0.04 : 0.18} />
+        <rect
+          x={neck.x}
+          y={neck.y}
+          width={neck.w}
+          height={10}
+          rx={5}
+          fill="#FFFFFF"
+          opacity={dark ? 0.04 : 0.18}
+        />
         {/* 品丝:金属条 */}
         {Array.from({ length: FRETS }, (_, i) => i + 1).map((f) => (
           <rect
@@ -345,7 +423,7 @@ function Fretboard({
             width={fx(f2) - fx(f2 - 1) - 4}
             height={26}
             rx={13}
-            fill='#E8590C'
+            fill="#E8590C"
             opacity={0.16}
           />
         ))}
@@ -391,45 +469,45 @@ function Fretboard({
           </g>
         ))}
         {/* 和弦联动按点(弹入动画,key 绑和弦名):横杆+独立点,光晕+指法编号 */}
-        <g key={`dots-${activeChord?.name ?? 'none'}`} className='gpop'>
-        {grp.bars.map((r) => (
-          <g key={`bar-${r.s0}-${r.s1}-${r.fret}`}>
-            <rect
-              x={cx(r.fret) - 8}
-              y={sy(r.s1) - 8}
-              width={16}
-              height={sy(r.s0) - sy(r.s1) + 16}
-              rx={8}
-              fill={`url(#dot${k})`}
-            />
-            <text
-              x={cx(r.fret)}
-              y={(sy(r.s0) + sy(r.s1)) / 2 + 3.5}
-              textAnchor="middle"
-              fontSize="10.5"
-              fontWeight="800"
-              fill="#FFF7ED"
-            >
-              {r.finger}
-            </text>
-          </g>
-        ))}
-        {grp.dots.map((d) => (
-          <g key={`${d.s}-${d.fret}`}>
-            <circle cx={cx(d.fret)} cy={sy(d.s)} r={17} fill="#E8590C" opacity={0.16} />
-            <circle cx={cx(d.fret)} cy={sy(d.s)} r={11} fill={`url(#dot${k})`} />
-            <text
-              x={cx(d.fret)}
-              y={sy(d.s) + 3.5}
-              textAnchor="middle"
-              fontSize="10.5"
-              fontWeight="800"
-              fill="#FFF7ED"
-            >
-              {d.finger || ""}
-            </text>
-          </g>
-        ))}
+        <g key={`dots-${activeChord?.name ?? "none"}`} className="gpop">
+          {grp.bars.map((r) => (
+            <g key={`bar-${r.s0}-${r.s1}-${r.fret}`}>
+              <rect
+                x={cx(r.fret) - 8}
+                y={sy(r.s1) - 8}
+                width={16}
+                height={sy(r.s0) - sy(r.s1) + 16}
+                rx={8}
+                fill={`url(#dot${k})`}
+              />
+              <text
+                x={cx(r.fret)}
+                y={(sy(r.s0) + sy(r.s1)) / 2 + 3.5}
+                textAnchor="middle"
+                fontSize="10.5"
+                fontWeight="800"
+                fill="#FFF7ED"
+              >
+                {r.finger}
+              </text>
+            </g>
+          ))}
+          {grp.dots.map((d) => (
+            <g key={`${d.s}-${d.fret}`}>
+              <circle cx={cx(d.fret)} cy={sy(d.s)} r={17} fill="#E8590C" opacity={0.16} />
+              <circle cx={cx(d.fret)} cy={sy(d.s)} r={11} fill={`url(#dot${k})`} />
+              <text
+                x={cx(d.fret)}
+                y={sy(d.s) + 3.5}
+                textAnchor="middle"
+                fontSize="10.5"
+                fontWeight="800"
+                fill="#FFF7ED"
+              >
+                {d.finger || ""}
+              </text>
+            </g>
+          ))}
         </g>
         {/* 和弦空弦标记 ○(琥珀环,与闷弦 ✕ 配对) */}
         {activeChord?.frets.map((fr, s2) =>
@@ -439,8 +517,8 @@ function Fretboard({
               cx={cx(0)}
               cy={sy(s2)}
               r={5.5}
-              fill='none'
-              stroke='#E8590C'
+              fill="none"
+              stroke="#E8590C"
               strokeWidth={2.4}
             />
           ) : null,
@@ -501,7 +579,10 @@ function Fretboard({
       </filter>
       <filter id="grain">
         <feTurbulence type="fractalNoise" baseFrequency="0.005 0.11" numOctaves="3" seed="7" />
-        <feColorMatrix type="matrix" values="0 0 0 0 0.35  0 0 0 0 0.24  0 0 0 0 0.10  0.7 0 0 0 -0.62" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0.35  0 0 0 0 0.24  0 0 0 0 0.10  0.7 0 0 0 -0.62"
+        />
       </filter>
       <clipPath id="neckclip">
         <rect x={neck.x} y={neck.y} width={neck.w} height={neck.h} rx={12} />
@@ -542,7 +623,10 @@ function Fretboard({
       </filter>
       <filter id="grainD">
         <feTurbulence type="fractalNoise" baseFrequency="0.005 0.11" numOctaves="3" seed="7" />
-        <feColorMatrix type="matrix" values="0 0 0 0 0.9  0 0 0 0 0.78  0 0 0 0 0.55  0.5 0 0 0 -0.6" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0.9  0 0 0 0 0.78  0 0 0 0 0.55  0.5 0 0 0 -0.6"
+        />
       </filter>
       <clipPath id="neckclipD">
         <rect x={neck.x} y={neck.y} width={neck.w} height={neck.h} rx={12} />
@@ -664,7 +748,15 @@ export function Guitar({ label }: Props) {
       window.setTimeout(() => {
         void playNote(n.note, 0.9, "guitar").catch(() => {});
         setFlash((prev) => new Set(prev).add(n.s));
-        window.setTimeout(() => setFlash((prev) => { const nx = new Set(prev); nx.delete(n.s); return nx; }), 200);
+        window.setTimeout(
+          () =>
+            setFlash((prev) => {
+              const nx = new Set(prev);
+              nx.delete(n.s);
+              return nx;
+            }),
+          200,
+        );
       }, i * gap);
     });
     setActiveChord(chord.name);
@@ -754,7 +846,11 @@ export function Guitar({ label }: Props) {
       )}
       <div className="p-4">
         {/* 和弦卡一排(窄屏横滑) */}
-        <div className="flex gap-2 overflow-x-auto pb-2" role="group" aria-label="常用和弦,点击扫弦">
+        <div
+          className="flex gap-2 overflow-x-auto pb-2"
+          role="group"
+          aria-label="常用和弦,点击扫弦"
+        >
           {CHORDS.map((c, i) => {
             const on = c.name === activeChord;
             const kbd = showKbd && i < KB_ROW.length ? kbChar(KB_ROW[i]) : undefined;
@@ -774,7 +870,7 @@ export function Guitar({ label }: Props) {
                     }}
                     title={`当前按法:${vLabel ?? ""}。${vNote ?? ""}`}
                     aria-label={`切换 ${c.name} 的按法,当前 ${vLabel ?? ""}`}
-                    className="absolute bottom-0.5 right-0.5 z-10 inline-flex size-4 items-center justify-center rounded-full border border-neutral-300 bg-white/95 text-[9px] leading-none text-muted-foreground transition hover:border-signature/50 hover:text-signature active:scale-90 dark:border-neutral-600 dark:bg-neutral-800/95"
+                    className="absolute right-0.5 bottom-0.5 z-10 inline-flex size-4 items-center justify-center rounded-full border border-neutral-300 bg-white/95 text-[9px] leading-none text-muted-foreground transition hover:border-signature/50 hover:text-signature active:scale-90 dark:border-neutral-600 dark:bg-neutral-800/95"
                   >
                     ⇄
                   </button>
@@ -784,14 +880,18 @@ export function Guitar({ label }: Props) {
                   onPointerDown={() => strumCard(c)}
                   aria-label={`${c.name} 和弦,点击扫弦`}
                   className={
-                    "flex flex-col items-center rounded-lg border px-1.5 pb-1.5 pt-1 transition active:scale-95 " +
+                    "flex flex-col items-center rounded-lg border px-1.5 pt-1 pb-1.5 transition active:scale-95 " +
                     (on
                       ? "border-signature/70 bg-signature/10"
                       : "border-transparent bg-muted/40 hover:border-signature/40")
                   }
                 >
                   <ChordDiagram chord={effChord(c)} />
-                  <span className={"mt-0.5 text-xs font-semibold " + (on ? "text-signature" : "text-foreground")}>
+                  <span
+                    className={
+                      "mt-0.5 text-xs font-semibold " + (on ? "text-signature" : "text-foreground")
+                    }
+                  >
                     {c.name}
                     {kbd && (
                       <span className="ml-1 inline-flex h-4 min-w-4 items-center justify-center rounded border border-neutral-300 bg-white px-1 font-mono text-[9px] leading-none text-slate-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">

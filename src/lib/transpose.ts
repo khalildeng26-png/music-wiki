@@ -29,6 +29,9 @@ export const TRANSPOSE_STEPS: { semis: number; label: string }[] = (() => {
   const NAME = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
   return Array.from({ length: TRANSPOSE_SAFE * 2 + 1 }, (_, i) => {
     const s = i - TRANSPOSE_SAFE;
-    return { semis: s, label: `${s === 0 ? "原调" : (s > 0 ? "+" : "") + s + " (" + NAME[((s % 12) + 12) % 12] + ")"}` };
+    return {
+      semis: s,
+      label: `${s === 0 ? "原调" : (s > 0 ? "+" : "") + s + " (" + NAME[((s % 12) + 12) % 12] + ")"}`,
+    };
   });
 })();

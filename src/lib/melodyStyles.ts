@@ -48,8 +48,14 @@ export const STYLES: StyleArrangement[] = [
           events: [
             ...theme(["E5", "D5", "C5", "B4", "A4", "G4", "A4", "B4"], 0.9),
             ...[
-              ["G5", "E5"], ["D5", "B4"], ["E5", "C5"], ["B4", "G4"],
-              ["C5", "A4"], ["G5", "E5"], ["C5", "A4"], ["D5", "B4"],
+              ["G5", "E5"],
+              ["D5", "B4"],
+              ["E5", "C5"],
+              ["B4", "G4"],
+              ["C5", "A4"],
+              ["G5", "E5"],
+              ["C5", "A4"],
+              ["D5", "B4"],
             ].flatMap((pair, u) =>
               pair.map((n, i) => ({ t: 16 + unit(u) + i, notes: [n], dur: 0.9, vel: 0.8 })),
             ),
@@ -220,7 +226,11 @@ export const STYLES: StyleArrangement[] = [
               { t: unit(u) + 1.25, hit: "kick" as const, vel: 0.4 },
               { t: unit(u) + 1, hit: "snare" as const, vel: 0.5 },
             ]),
-            ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.28 })),
+            ...Array.from({ length: 32 }, (_, i) => ({
+              t: i * 0.5,
+              hit: "hihat" as const,
+              vel: 0.28,
+            })),
           ],
         },
       ],
@@ -267,7 +277,11 @@ export const STYLES: StyleArrangement[] = [
           kind: "drums",
           events: [
             ...[0, 2.75, 8, 10.75].map((t) => ({ t, hit: "kick" as const, vel: 0.75 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.65 })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.65,
+            })),
             ...Array.from({ length: 16 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.25 })),
           ],
         },
@@ -317,9 +331,21 @@ export const STYLES: StyleArrangement[] = [
         {
           kind: "drums",
           events: [
-            ...Array.from({ length: 8 }, (_, u) => ({ t: unit(u), hit: "kick" as const, vel: 0.7 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.6 })),
-            ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.35 })),
+            ...Array.from({ length: 8 }, (_, u) => ({
+              t: unit(u),
+              hit: "kick" as const,
+              vel: 0.7,
+            })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.6,
+            })),
+            ...Array.from({ length: 32 }, (_, i) => ({
+              t: i * 0.5,
+              hit: "hihat" as const,
+              vel: 0.35,
+            })),
             { t: 0, hit: "openhat", vel: 0.5 },
           ],
         },

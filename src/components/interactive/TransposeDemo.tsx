@@ -1,10 +1,11 @@
 import { Play, Square } from "lucide-react";
 import * as React from "react";
 
-import { playPattern, type Pattern, type Timbre } from "./audio";
-import { usePlayToggle } from "./usePlayToggle";
-import { TransposePicker } from "./TransposePicker";
 import { track } from "@/lib/track";
+
+import { playPattern, type Pattern, type Timbre } from "./audio";
+import { TransposePicker } from "./TransposePicker";
+import { usePlayToggle } from "./usePlayToggle";
 
 type Props = {
   /** 旋律音名(科学记法) */

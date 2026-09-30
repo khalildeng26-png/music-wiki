@@ -11,7 +11,9 @@ const DIR = join(process.cwd(), "src/content/entries");
 const verbose = process.argv.includes("--verbose");
 
 // 1. 建立 标题→slug 映射
-const files = readdirSync(DIR).filter((f) => f.endsWith(".mdx")).sort();
+const files = readdirSync(DIR)
+  .filter((f) => f.endsWith(".mdx"))
+  .sort();
 const titleMap = new Map(); // title -> slug
 const slugTitle = new Map(); // slug -> title
 for (const f of files) {

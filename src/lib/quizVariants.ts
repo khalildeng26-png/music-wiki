@@ -31,8 +31,16 @@ export const VARIANTS: Record<string, Pattern[]> = {
         {
           kind: "drums",
           events: [
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, hit: "ride" as const, vel: 0.5 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 1 + i * 2, hit: "hihat" as const, vel: 0.45 })),
+            ...Array.from({ length: 16 }, (_, i) => ({
+              t: i * 0.5,
+              hit: "ride" as const,
+              vel: 0.5,
+            })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "hihat" as const,
+              vel: 0.45,
+            })),
             { t: 0, hit: "kick", vel: 0.3 },
           ],
         },
@@ -48,10 +56,30 @@ export const VARIANTS: Record<string, Pattern[]> = {
           kind: "notes",
           timbre: "eguitar",
           events: [
-            ...Array.from({ length: 2 }, (_, i) => ({ t: i, notes: ["A2", "E3", "A3"], dur: 0.8, vel: 0.85 })),
-            ...Array.from({ length: 2 }, (_, i) => ({ t: 2 + i, notes: ["G2", "D3", "G3"], dur: 0.8, vel: 0.85 })),
-            ...Array.from({ length: 2 }, (_, i) => ({ t: 4 + i, notes: ["F2", "C3", "F3"], dur: 0.8, vel: 0.85 })),
-            ...Array.from({ length: 2 }, (_, i) => ({ t: 6 + i, notes: ["E2", "B2", "E3"], dur: 0.8, vel: 0.85 })),
+            ...Array.from({ length: 2 }, (_, i) => ({
+              t: i,
+              notes: ["A2", "E3", "A3"],
+              dur: 0.8,
+              vel: 0.85,
+            })),
+            ...Array.from({ length: 2 }, (_, i) => ({
+              t: 2 + i,
+              notes: ["G2", "D3", "G3"],
+              dur: 0.8,
+              vel: 0.85,
+            })),
+            ...Array.from({ length: 2 }, (_, i) => ({
+              t: 4 + i,
+              notes: ["F2", "C3", "F3"],
+              dur: 0.8,
+              vel: 0.85,
+            })),
+            ...Array.from({ length: 2 }, (_, i) => ({
+              t: 6 + i,
+              notes: ["E2", "B2", "E3"],
+              dur: 0.8,
+              vel: 0.85,
+            })),
           ],
         },
         {
@@ -70,7 +98,11 @@ export const VARIANTS: Record<string, Pattern[]> = {
           kind: "drums",
           events: [
             ...Array.from({ length: 4 }, (_, i) => ({ t: i * 2, hit: "kick" as const, vel: 0.85 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.8 })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.8,
+            })),
             ...Array.from({ length: 8 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.35 })),
           ],
         },
@@ -108,7 +140,11 @@ export const VARIANTS: Record<string, Pattern[]> = {
           kind: "drums",
           events: [
             ...Array.from({ length: 4 }, (_, i) => ({ t: i * 2, hit: "kick" as const, vel: 0.8 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.7 })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.7,
+            })),
             ...Array.from({ length: 8 }, (_, i) => ({ t: i, hit: "hihat" as const, vel: 0.35 })),
           ],
         },
@@ -132,7 +168,12 @@ export const VARIANTS: Record<string, Pattern[]> = {
             ] as [string, string[]][]
           ).flatMap(([root, ch], bar) => [
             { t: bar * 2, notes: [root], dur: 0.9, vel: 0.8 },
-            ...ch.flatMap((n, i) => ({ t: bar * 2 + 1 + i * 0.02, notes: [n], dur: 0.8, vel: 0.62 })),
+            ...ch.flatMap((n, i) => ({
+              t: bar * 2 + 1 + i * 0.02,
+              notes: [n],
+              dur: 0.8,
+              vel: 0.62,
+            })),
           ]),
         },
         {
@@ -157,20 +198,48 @@ export const VARIANTS: Record<string, Pattern[]> = {
         {
           kind: "notes",
           timbre: "guitar",
-          events: ["A2", "A2", "C#3", "A2", "D3", "A2", "C#3", "A2", "A2", "A2", "C#3", "A2", "D3", "C#3", "A2", "G2"].map(
-            (n, i) => ({ t: i * 0.5, notes: [n], dur: 0.4, vel: 0.75 }),
-          ),
+          events: [
+            "A2",
+            "A2",
+            "C#3",
+            "A2",
+            "D3",
+            "A2",
+            "C#3",
+            "A2",
+            "A2",
+            "A2",
+            "C#3",
+            "A2",
+            "D3",
+            "C#3",
+            "A2",
+            "G2",
+          ].map((n, i) => ({ t: i * 0.5, notes: [n], dur: 0.4, vel: 0.75 })),
         },
         {
           kind: "notes",
           timbre: "bass",
-          events: ["A1", "E2", "A1", "G1"].map((n, i) => ({ t: i * 2, notes: [n], dur: 1.8, vel: 0.8 })),
+          events: ["A1", "E2", "A1", "G1"].map((n, i) => ({
+            t: i * 2,
+            notes: [n],
+            dur: 1.8,
+            vel: 0.8,
+          })),
         },
         {
           kind: "drums",
           events: [
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, hit: "ride" as const, vel: 0.5 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.5 })),
+            ...Array.from({ length: 16 }, (_, i) => ({
+              t: i * 0.5,
+              hit: "ride" as const,
+              vel: 0.5,
+            })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.5,
+            })),
           ],
         },
       ],
@@ -198,7 +267,12 @@ export const VARIANTS: Record<string, Pattern[]> = {
           kind: "notes",
           timbre: "guzheng",
           events: Array.from({ length: 2 }, (_, b) =>
-            ["A3", "C4", "E4", "A4"].map((n, i) => ({ t: b * 4 + i, notes: [n], dur: 0.9, vel: 0.5 })),
+            ["A3", "C4", "E4", "A4"].map((n, i) => ({
+              t: b * 4 + i,
+              notes: [n],
+              dur: 0.9,
+              vel: 0.5,
+            })),
           ).flat(),
         },
         { kind: "notes", timbre: "erhu", events: [{ t: 0, notes: ["A4"], dur: 7.6, vel: 0.4 }] },
@@ -214,7 +288,12 @@ export const VARIANTS: Record<string, Pattern[]> = {
           kind: "notes",
           timbre: "piano",
           events: Array.from({ length: 2 }, (_, b) =>
-            ["G2", "D3", "B3", "D3"].map((n, i) => ({ t: b * 4 + i, notes: [n], dur: 0.9, vel: 0.5 })),
+            ["G2", "D3", "B3", "D3"].map((n, i) => ({
+              t: b * 4 + i,
+              notes: [n],
+              dur: 0.9,
+              vel: 0.5,
+            })),
           ).flat(),
         },
         {
@@ -268,8 +347,16 @@ export const VARIANTS: Record<string, Pattern[]> = {
               { t: b * 4, hit: "kick" as const, vel: 0.75 },
               { t: b * 4 + 2.5, hit: "kick" as const, vel: 0.55 },
             ]).flat(),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.55 })),
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.35 })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.55,
+            })),
+            ...Array.from({ length: 16 }, (_, i) => ({
+              t: i * 0.5,
+              hit: "hihat" as const,
+              vel: 0.35,
+            })),
           ],
         },
       ],
@@ -310,7 +397,11 @@ export const VARIANTS: Record<string, Pattern[]> = {
           events: [
             ...[0, 2, 4, 6].map((t) => ({ t, hit: "kick" as const, vel: 0.85 })),
             ...[1, 3, 5, 7].map((t) => ({ t, hit: "snare" as const, vel: 0.75 })),
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.35 })),
+            ...Array.from({ length: 16 }, (_, i) => ({
+              t: i * 0.5,
+              hit: "hihat" as const,
+              vel: 0.35,
+            })),
           ],
         },
       ],
@@ -350,8 +441,16 @@ export const VARIANTS: Record<string, Pattern[]> = {
           kind: "drums",
           events: [
             ...Array.from({ length: 4 }, (_, i) => ({ t: i * 2, hit: "kick" as const, vel: 0.85 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.8 })),
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.4 })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.8,
+            })),
+            ...Array.from({ length: 16 }, (_, i) => ({
+              t: i * 0.5,
+              hit: "hihat" as const,
+              vel: 0.4,
+            })),
           ],
         },
       ],
@@ -392,8 +491,16 @@ export const VARIANTS: Record<string, Pattern[]> = {
               { t: b * 4, hit: "kick" as const, vel: 0.9 },
               { t: b * 4 + 2.75, hit: "kick" as const, vel: 0.8 },
             ]).flat(),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.85 })),
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.38 })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.85,
+            })),
+            ...Array.from({ length: 16 }, (_, i) => ({
+              t: i * 0.5,
+              hit: "hihat" as const,
+              vel: 0.38,
+            })),
           ],
         },
       ],
@@ -426,16 +533,34 @@ export const VARIANTS: Record<string, Pattern[]> = {
           kind: "notes",
           timbre: "synth",
           events: [
-            ...Array.from({ length: 4 }, () => "A2").map((n, i) => ({ t: i + 0.5, notes: [n], dur: 0.3, vel: 0.8 })),
-            ...Array.from({ length: 4 }, () => "F2").map((n, i) => ({ t: 4 + i + 0.5, notes: [n], dur: 0.3, vel: 0.8 })),
+            ...Array.from({ length: 4 }, () => "A2").map((n, i) => ({
+              t: i + 0.5,
+              notes: [n],
+              dur: 0.3,
+              vel: 0.8,
+            })),
+            ...Array.from({ length: 4 }, () => "F2").map((n, i) => ({
+              t: 4 + i + 0.5,
+              notes: [n],
+              dur: 0.3,
+              vel: 0.8,
+            })),
           ],
         },
         {
           kind: "drums",
           events: [
             ...Array.from({ length: 8 }, (_, i) => ({ t: i, hit: "kick" as const, vel: 0.85 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.6 })),
-            ...Array.from({ length: 8 }, (_, i) => ({ t: i + 0.5, hit: "hihat" as const, vel: 0.45 })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.6,
+            })),
+            ...Array.from({ length: 8 }, (_, i) => ({
+              t: i + 0.5,
+              hit: "hihat" as const,
+              vel: 0.45,
+            })),
           ],
         },
       ],
@@ -481,8 +606,16 @@ export const VARIANTS: Record<string, Pattern[]> = {
               { t: b * 4, hit: "kick" as const, vel: 0.9 },
               { t: b * 4 + 1.75, hit: "kick" as const, vel: 0.7 },
             ]).flat(),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.7 })),
-            ...Array.from({ length: 32 }, (_, i) => ({ t: i * 0.25, hit: "hihat" as const, vel: 0.35 })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.7,
+            })),
+            ...Array.from({ length: 32 }, (_, i) => ({
+              t: i * 0.25,
+              hit: "hihat" as const,
+              vel: 0.35,
+            })),
           ],
         },
       ],
@@ -496,24 +629,62 @@ export const VARIANTS: Record<string, Pattern[]> = {
         {
           kind: "notes",
           timbre: "chip",
-          events: ["A4", "C5", "E5", "A4", "G4", "E5", "D5", "C5", "A4", "C5", "E5", "A5", "G5", "E5", "C5", "A4"].map(
-            (n, i) => ({ t: i * 0.5, notes: [n], dur: 0.4, vel: 0.75 }),
-          ),
+          events: [
+            "A4",
+            "C5",
+            "E5",
+            "A4",
+            "G4",
+            "E5",
+            "D5",
+            "C5",
+            "A4",
+            "C5",
+            "E5",
+            "A5",
+            "G5",
+            "E5",
+            "C5",
+            "A4",
+          ].map((n, i) => ({ t: i * 0.5, notes: [n], dur: 0.4, vel: 0.75 })),
         },
         {
           kind: "notes",
           timbre: "chip",
-          events: ["A2", "A2", "A3", "A2", "F2", "F2", "F3", "F2", "A2", "A2", "A3", "A2", "E2", "E2", "E3", "E2"].map(
-            (n, i) => ({ t: i, notes: [n], dur: 0.9, vel: 0.9 }),
-          ),
+          events: [
+            "A2",
+            "A2",
+            "A3",
+            "A2",
+            "F2",
+            "F2",
+            "F3",
+            "F2",
+            "A2",
+            "A2",
+            "A3",
+            "A2",
+            "E2",
+            "E2",
+            "E3",
+            "E2",
+          ].map((n, i) => ({ t: i, notes: [n], dur: 0.9, vel: 0.9 })),
         },
         {
           kind: "drums",
           kit: "synth",
           events: [
             ...Array.from({ length: 4 }, (_, i) => ({ t: i * 2, hit: "kick" as const, vel: 0.9 })),
-            ...Array.from({ length: 4 }, (_, i) => ({ t: 1 + i * 2, hit: "snare" as const, vel: 0.75 })),
-            ...Array.from({ length: 16 }, (_, i) => ({ t: i * 0.5, hit: "hihat" as const, vel: 0.45 })),
+            ...Array.from({ length: 4 }, (_, i) => ({
+              t: 1 + i * 2,
+              hit: "snare" as const,
+              vel: 0.75,
+            })),
+            ...Array.from({ length: 16 }, (_, i) => ({
+              t: i * 0.5,
+              hit: "hihat" as const,
+              vel: 0.45,
+            })),
           ],
         },
       ],

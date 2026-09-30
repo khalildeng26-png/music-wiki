@@ -92,7 +92,12 @@ import { StaffNotation } from "../../components/interactive/StaffNotation";
 
 再听一条连贯的旋律线,感受连奏"不断线"的气息([小提琴](/entries/violin)音色,像一弓拉完一句):
 
-<StaffNotation client:visible notes={["C4", "D4", "E4", "F4", "G4"]} timbre="violin" label="连奏感:音与音之间不留空隙。" />
+<StaffNotation
+  client:visible
+  notes={["C4", "D4", "E4", "F4", "G4"]}
+  timbre="violin"
+  label="连奏感:音与音之间不留空隙。"
+/>
 
 断奏、保持音、重音的区别在于每个音"怎么收尾",这一点在固定时值的网页组件里无法完整模拟,要在真实乐器上对比着练,或找两个版本的录音对照,重点听每个音的结束位置。
 

@@ -85,9 +85,17 @@ import { StaffNotation } from "../../components/interactive/StaffNotation";
 
 同一条旋律,换个节奏型再来一遍,就是最朴素的变奏(每音 0.45 秒:第一遍一拍一个音,第二遍一拍两个音):
 
-<StaffNotation client:visible notes={["C4", "C4", "G4", "G4", "A4", "A4", "G4"]} label="主题:小星星前句,一拍一个音。" />
+<StaffNotation
+  client:visible
+  notes={["C4", "C4", "G4", "G4", "A4", "A4", "G4"]}
+  label="主题:小星星前句,一拍一个音。"
+/>
 
-<StaffNotation client:visible notes={["C4", "D4", "C4", "D4", "G4", "A4", "G4", "A4", "A4", "B4", "A4", "B4", "G4", "F4"]} label="变奏:同样的骨架,音数翻倍、线条加花。" />
+<StaffNotation
+  client:visible
+  notes={["C4", "D4", "C4", "D4", "G4", "A4", "G4", "A4", "A4", "B4", "A4", "B4", "G4", "F4"]}
+  label="变奏:同样的骨架,音数翻倍、线条加花。"
+/>
 
 ## 练习
 

@@ -65,11 +65,21 @@ import { Piano } from "../../components/interactive/Piano";
 
 <StaffNotation client:visible notes={["C4"]} label="高音谱号:中央 C 是下加一线。" />
 
-<StaffNotation client:visible notes={["C4"]} clef="bass" label="低音谱号:同一个中央 C,变成上加一线。" />
+<StaffNotation
+  client:visible
+  notes={["C4"]}
+  clef="bass"
+  label="低音谱号:同一个中央 C,变成上加一线。"
+/>
 
 在键盘上找到它,感受"一个音、两种写法":
 
-<Piano client:visible startOct={3} octaves={2} label="找到键盘正中间的 C(中央 C),它在两种谱号里写法不同。" />
+<Piano
+  client:visible
+  startOct={3}
+  octaves={2}
+  label="找到键盘正中间的 C(中央 C),它在两种谱号里写法不同。"
+/>
 
 ## 练习
 

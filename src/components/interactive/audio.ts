@@ -55,7 +55,15 @@ const SAMPLES: Record<
   // 鼓组(Freesound CC0,BaDokick/blakengouda/Cringegaming64yt 上传):
   // 伪音名映射到五个单响——触发时打对应"音名"即为对应鼓件
   drums: {
-    files: { C1: "kick", D1: "snare", E1: "hihat", F1: "openhat", G1: "ride", A1: "bodhran", B1: "msnare" },
+    files: {
+      C1: "kick",
+      D1: "snare",
+      E1: "hihat",
+      F1: "openhat",
+      G1: "ride",
+      A1: "bodhran",
+      B1: "msnare",
+    },
     volume: -10,
     release: 0.2,
   },

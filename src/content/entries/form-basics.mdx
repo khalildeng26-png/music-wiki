@@ -83,8 +83,16 @@ import { StaffNotation } from "../../components/interactive/StaffNotation";
 
 先听一条停在属音上的乐句(问),再听一条落回主音的乐句(答),体会"没说完"和"说完了"的差别:
 
-<StaffNotation client:visible notes={["C4", "E4", "G4", "A4", "G4"]} label="问句:收在属音 sol,悬着。" />
-<StaffNotation client:visible notes={["C4", "E4", "G4", "A4", "G4", "E4", "C4"]} label="答句:落回主音 do,收住。" />
+<StaffNotation
+  client:visible
+  notes={["C4", "E4", "G4", "A4", "G4"]}
+  label="问句:收在属音 sol,悬着。"
+/>
+<StaffNotation
+  client:visible
+  notes={["C4", "E4", "G4", "A4", "G4", "E4", "C4"]}
+  label="答句:落回主音 do,收住。"
+/>
 
 > 听歌时跟着数小节:你会发现绝大多数流行歌的旋律,4 小节就"换气"一次,那是乐句在呼吸。
 

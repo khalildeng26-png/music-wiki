@@ -32,12 +32,31 @@ function buildKeys(startOct: number, octaves: number): { keys: Key[]; whiteCount
 // 数字排 1–7 按半音阶补完 F#5–C6(数字排本无黑白错位,当半音阶弹最顺)。
 // semi 为相对 C4 的半音数:D#=3、F#=6、G#=8、A#=10、F#5=18、C6=24。
 const KB_BINDINGS: [string, number][] = [
-  ["KeyA", 0], ["KeyS", 2], ["KeyD", 4], ["KeyF", 5], ["KeyG", 7], ["KeyH", 9],
-  ["KeyJ", 11], ["KeyK", 12], ["KeyL", 14], ["Semicolon", 16], ["Quote", 17],
-  ["KeyW", 1], ["KeyE", 3], ["KeyT", 6], ["KeyY", 8], ["KeyU", 10],
-  ["KeyO", 13], ["KeyP", 15],
-  ["Digit1", 18], ["Digit2", 19], ["Digit3", 20], ["Digit4", 21],
-  ["Digit5", 22], ["Digit6", 23], ["Digit7", 24],
+  ["KeyA", 0],
+  ["KeyS", 2],
+  ["KeyD", 4],
+  ["KeyF", 5],
+  ["KeyG", 7],
+  ["KeyH", 9],
+  ["KeyJ", 11],
+  ["KeyK", 12],
+  ["KeyL", 14],
+  ["Semicolon", 16],
+  ["Quote", 17],
+  ["KeyW", 1],
+  ["KeyE", 3],
+  ["KeyT", 6],
+  ["KeyY", 8],
+  ["KeyU", 10],
+  ["KeyO", 13],
+  ["KeyP", 15],
+  ["Digit1", 18],
+  ["Digit2", 19],
+  ["Digit3", 20],
+  ["Digit4", 21],
+  ["Digit5", 22],
+  ["Digit6", 23],
+  ["Digit7", 24],
 ];
 
 /** 绑定键的展示字母(印在琴键上的徽章) */
@@ -315,7 +334,12 @@ function Keyboard({
                 }
                 style={
                   pc
-                    ? { left: `${left}%`, width: `${blackW}%`, height: "100%", backgroundColor: pc.bg }
+                    ? {
+                        left: `${left}%`,
+                        width: `${blackW}%`,
+                        height: "100%",
+                        backgroundColor: pc.bg,
+                      }
                     : { left: `${left}%`, width: `${blackW}%`, height: "100%" }
                 }
               >
@@ -335,7 +359,13 @@ function Keyboard({
 
 /** 琴体木壳:胡桃木渐变外壳 + 键槽上方的深红呢毡条;内联卡片与全屏演奏共用同一份样式。
  *  内容区高度用 calc(100%-7px):外层有高度时(全屏)铺满,auto 时回退为自适应。 */
-function PianoCase({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function PianoCase({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <div
       className={
@@ -343,7 +373,10 @@ function PianoCase({ children, className = "" }: { children: React.ReactNode; cl
         className
       }
     >
-      <div className="h-[5px] rounded-sm bg-gradient-to-b from-[#A03A2C] to-[#7C2A1F]" aria-hidden="true" />
+      <div
+        className="h-[5px] rounded-sm bg-gradient-to-b from-[#A03A2C] to-[#7C2A1F]"
+        aria-hidden="true"
+      />
       <div className="mt-[2px] h-[calc(100%-7px)] overflow-hidden rounded-b-md">{children}</div>
     </div>
   );

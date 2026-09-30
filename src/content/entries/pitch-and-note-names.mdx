@@ -69,7 +69,11 @@ import { Piano } from "../../components/interactive/Piano";
 
 先在键盘上把中央 C 找出来(两个黑键左边的白键),再听一听线与间上的音是怎么排列的:
 
-<StaffNotation client:visible notes={["C4", "D4", "E4", "F4", "G4"]} label="下加一线是 C,往上逐格升高:线、间交替。" />
+<StaffNotation
+  client:visible
+  notes={["C4", "D4", "E4", "F4", "G4"]}
+  label="下加一线是 C,往上逐格升高:线、间交替。"
+/>
 
 <Piano client:visible octaves={2} label="在白键上从中央 C 开始,把 C D E F G 弹一遍,和上面对照。" />
 
