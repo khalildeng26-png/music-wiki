@@ -144,51 +144,55 @@ function chordNotes(c: Chord): string[] {
   return out;
 }
 
-/** 单个和弦图(竖排网格:六根竖线=弦,低音在左;四条品丝,上弦枕加粗)。
+/** 单个和弦图(竖排网格:六根竖线=弦,低音在左;弦枕在顶 + 五条品丝,共五个品格)。
+ *  几何约定:wireY(f)=第 f 品品丝的 y;弦枕单独画在 top(不与品丝重叠——
+ *  此前品丝从 1 起画又被弦枕盖住一根,导致实际只有 N-1 个品格的 bug 即源于此);
+ *  第 f 品的按点中心 = dotY(f),坐在第 f-1 与第 f 品丝之间。
  *  横按画圆角横杆(E 的食指小横按/F 的全横按),其余按品画圆点;杆/点上标指法编号。 */
 function ChordDiagram({ chord }: { chord: Chord }) {
   const W = 84;
-  const H = 122;
+  const H = 140;
   const left = 14;
   const top = 26;
   const sw = (W - left - 10) / 5; // 弦距
-  const fh = (H - top - 14) / 5; // 品距(画 5 个品,容纳 Gm/Cm 的五品横按)
+  const fh = (H - top - 12) / 5; // 品距(五个品格)
   const x = (s: number) => left + s * sw;
-  const y = (f: number) => top + (f - 1) * fh;
+  const wireY = (f: number) => top + f * fh; // 第 f 品品丝
+  const dotY = (f: number) => top + (f - 0.5) * fh; // 第 f 品按点中心
   const { bars, dots } = groupChord(chord);
   return (
     <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
-      {/* 品丝 */}
+      {/* 品丝:第 1–5 品 */}
       {[1, 2, 3, 4, 5].map((f) => (
         <line
           key={f}
           x1={left}
-          y1={y(f)}
+          y1={wireY(f)}
           x2={x(5)}
-          y2={y(f)}
+          y2={wireY(f)}
           stroke="currentColor"
           strokeWidth={1}
           className="text-neutral-400 dark:text-neutral-600"
         />
       ))}
-      {/* 上弦枕(加粗) */}
+      {/* 上弦枕(加粗,独立于品丝) */}
       <line
         x1={left}
-        y1={y(1)}
+        y1={top}
         x2={x(5)}
-        y2={y(1)}
+        y2={top}
         stroke="currentColor"
         strokeWidth={3.5}
         className="text-neutral-600 dark:text-neutral-300"
       />
-      {/* 弦 */}
+      {/* 弦:从弦枕贯穿到第 5 品品丝 */}
       {STRINGS.map((_, s) => (
         <line
           key={s}
           x1={x(s)}
-          y1={y(1)}
+          y1={top}
           x2={x(s)}
-          y2={y(5)}
+          y2={wireY(5)}
           stroke="currentColor"
           strokeWidth={1}
           className="text-neutral-400 dark:text-neutral-600"
@@ -225,7 +229,7 @@ function ChordDiagram({ chord }: { chord: Chord }) {
         <g key={`bar${i}`}>
           <rect
             x={x(r.s0) - 6.5}
-            y={y(r.fret) + fh / 2 - 6.5}
+            y={dotY(r.fret) - 6.5}
             width={x(r.s1) - x(r.s0) + 13}
             height={13}
             rx={6.5}
@@ -233,7 +237,7 @@ function ChordDiagram({ chord }: { chord: Chord }) {
           />
           <text
             x={(x(r.s0) + x(r.s1)) / 2}
-            y={y(r.fret) + fh / 2 + 3}
+            y={dotY(r.fret) + 3}
             textAnchor="middle"
             fontSize="8.5"
             fontWeight="700"
@@ -246,10 +250,10 @@ function ChordDiagram({ chord }: { chord: Chord }) {
       {/* 独立按品圆点(带指法编号) */}
       {dots.map((d) => (
         <g key={`d${d.s}`}>
-          <circle cx={x(d.s)} cy={y(d.fret) + fh / 2} r={6.5} className="fill-signature" />
+          <circle cx={x(d.s)} cy={dotY(d.fret)} r={6.5} className="fill-signature" />
           <text
             x={x(d.s)}
-            y={y(d.fret) + fh / 2 + 3}
+            y={dotY(d.fret) + 3}
             textAnchor="middle"
             fontSize="8.5"
             fontWeight="700"
