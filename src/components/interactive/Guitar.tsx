@@ -15,53 +15,45 @@ type Chord = {
   frets: number[];
   /** 指法编号(1=食指…4=小指,0=空弦/闷弦);小圆点里的数字 */
   fingers: number[];
-  /** 横按提示(如 F 的食指小横按) */
+  /** 横按提示(如 F/Bm 的食指横按) */
   barre?: boolean;
   /** 同位异指的多按法(位置与音完全不变,只换手指分配)。
    *  指法选择是战略:空出哪根手指,决定这个和弦能怎么被装饰。
    *  variants 含默认版为第一项,其 fingers 与顶层一致。 */
   variants?: { label: string; fingers: number[]; note?: string }[];
+  /** 分组(基本/七和弦/挂留加音/横按),用于分类筛选 */
+  group: (typeof GROUPS)[number];
 };
 
-/** 入门最先学的九个开放和弦 + F 小横按;全部落在 1–3 品内,和弦图无需滚动。 */
+/** 和弦分组与展示顺序(分类筛选 chips 顺序,按学习阶段排) */
+const GROUPS = ["基本", "七和弦", "挂留加音", "横按"] as const;
+
+/** 常用和弦库:四个学习阶段分组;横按组最高到 5 品(和弦图画 5 品)。 */
 const CHORDS: Chord[] = [
-  { name: "C", frets: [-1, 3, 2, 0, 1, 0], fingers: [0, 3, 2, 0, 1, 0] },
+  // ── 基本:入门开放和弦 ──
+  { name: "C", frets: [-1, 3, 2, 0, 1, 0], fingers: [0, 3, 2, 0, 1, 0], group: "基本" },
   {
     name: "G",
     frets: [3, 2, 0, 0, 0, 3],
     fingers: [2, 1, 0, 0, 0, 3],
     variants: [
-      {
-        label: "123·留小指",
-        fingers: [2, 1, 0, 0, 0, 3],
-        note: "空出小拇指,可临时去够二弦三品这类加音",
-      },
-      {
-        label: "234·留食指",
-        fingers: [2, 3, 0, 0, 0, 4],
-        note: "空出食指,二弦一品(C 音)随时能按;歌里要给 G 挂 C 色彩时用它",
-      },
+      { label: "123·留小指", fingers: [2, 1, 0, 0, 0, 3], note: "空出小拇指,可临时去够二弦三品这类加音" },
+      { label: "234·留食指", fingers: [2, 3, 0, 0, 0, 4], note: "空出食指,二弦一品(C 音)随时能按;歌里要给 G 挂 C 色彩时用它" },
     ],
+    group: "基本",
   },
-  { name: "D", frets: [-1, -1, 0, 2, 3, 2], fingers: [0, 0, 0, 1, 3, 2] },
-  { name: "Em", frets: [0, 2, 2, 0, 0, 0], fingers: [0, 2, 3, 0, 0, 0] },
-  { name: "Am", frets: [-1, 0, 2, 2, 1, 0], fingers: [0, 0, 2, 3, 1, 0] },
+  { name: "D", frets: [-1, -1, 0, 2, 3, 2], fingers: [0, 0, 0, 1, 3, 2], group: "基本" },
+  { name: "Em", frets: [0, 2, 2, 0, 0, 0], fingers: [0, 2, 3, 0, 0, 0], group: "基本" },
+  { name: "Am", frets: [-1, 0, 2, 2, 1, 0], fingers: [0, 0, 2, 3, 1, 0], group: "基本" },
   {
     name: "E",
     frets: [0, 2, 2, 1, 1, 0],
     fingers: [0, 2, 3, 1, 1, 0],
     variants: [
-      {
-        label: "三指·留小指",
-        fingers: [0, 2, 3, 1, 1, 0],
-        note: "食指小横按压一品两弦;也是 F 大横按的前身",
-      },
-      {
-        label: "四指",
-        fingers: [0, 3, 4, 1, 2, 0],
-        note: "一品两弦分给食指中指,二品两弦分给无名指小指;每弦一指,职责清楚",
-      },
+      { label: "三指·留小指", fingers: [0, 2, 3, 1, 1, 0], note: "食指小横按压一品两弦;也是 F 大横按的前身" },
+      { label: "四指", fingers: [0, 3, 4, 1, 2, 0], note: "一品两弦分给食指中指,二品两弦分给无名指小指;每弦一指,职责清楚" },
     ],
+    group: "基本",
   },
   {
     name: "A",
@@ -69,15 +61,35 @@ const CHORDS: Chord[] = [
     fingers: [0, 0, 1, 2, 3, 0],
     variants: [
       { label: "三指", fingers: [0, 0, 1, 2, 3, 0], note: "二品三根弦各用一指;最通用的版本" },
-      {
-        label: "横按·留三指",
-        fingers: [0, 0, 1, 1, 1, 0],
-        note: "食指横压二品三根弦,空出中指无名指小指加音;A 型大横按的前身",
-      },
+      { label: "横按·留三指", fingers: [0, 0, 1, 1, 1, 0], note: "食指横压二品三根弦,空出中指无名指小指加音;A 型大横按的前身" },
     ],
+    group: "基本",
   },
-  { name: "Dm", frets: [-1, -1, 0, 2, 3, 1], fingers: [0, 0, 0, 2, 3, 1] },
-  { name: "F", frets: [1, 3, 3, 2, 1, 1], fingers: [1, 3, 4, 2, 1, 1], barre: true },
+  { name: "Dm", frets: [-1, -1, 0, 2, 3, 1], fingers: [0, 0, 0, 2, 3, 1], group: "基本" },
+  { name: "F", frets: [1, 3, 3, 2, 1, 1], fingers: [1, 3, 4, 2, 1, 1], barre: true, group: "基本" },
+  // ── 七和弦:布鲁斯与流行的色彩主力 ──
+  { name: "G7", frets: [3, 2, 0, 0, 0, 1], fingers: [2, 1, 0, 0, 0, 3], group: "七和弦" },
+  { name: "C7", frets: [-1, 3, 2, 3, 1, 0], fingers: [0, 3, 2, 4, 1, 0], group: "七和弦" },
+  { name: "D7", frets: [-1, -1, 0, 2, 1, 2], fingers: [0, 0, 0, 2, 1, 3], group: "七和弦" },
+  { name: "A7", frets: [-1, 0, 2, 0, 2, 0], fingers: [0, 0, 1, 0, 2, 0], group: "七和弦" },
+  { name: "E7", frets: [0, 2, 0, 1, 0, 0], fingers: [0, 2, 0, 1, 0, 0], group: "七和弦" },
+  { name: "Em7", frets: [0, 2, 2, 0, 3, 0], fingers: [0, 2, 3, 0, 4, 0], group: "七和弦" },
+  { name: "Am7", frets: [-1, 0, 2, 0, 1, 0], fingers: [0, 0, 2, 0, 1, 0], group: "七和弦" },
+  { name: "Dm7", frets: [-1, -1, 0, 2, 1, 1], fingers: [0, 0, 0, 2, 1, 1], group: "七和弦" },
+  { name: "B7", frets: [-1, 2, 1, 2, 0, 2], fingers: [0, 2, 1, 3, 0, 4], group: "七和弦" },
+  // ── 挂留/加音: Modifier 色彩 ──
+  { name: "Dsus4", frets: [-1, -1, 0, 2, 3, 3], fingers: [0, 0, 0, 1, 3, 4], group: "挂留加音" },
+  { name: "Dsus2", frets: [-1, -1, 0, 2, 3, 0], fingers: [0, 0, 0, 1, 3, 0], group: "挂留加音" },
+  { name: "Asus2", frets: [-1, 0, 2, 2, 0, 0], fingers: [0, 0, 1, 2, 0, 0], group: "挂留加音" },
+  { name: "Asus4", frets: [-1, 0, 2, 2, 3, 0], fingers: [0, 0, 1, 2, 3, 0], group: "挂留加音" },
+  { name: "Esus4", frets: [0, 2, 2, 2, 0, 0], fingers: [0, 2, 3, 1, 0, 0], group: "挂留加音" },
+  { name: "Cadd9", frets: [-1, 3, 2, 0, 3, 0], fingers: [0, 2, 1, 0, 3, 0], group: "挂留加音" },
+  // ── 横按:F 之后的大关 ──
+  { name: "Bm", frets: [-1, 2, 4, 4, 3, 2], fingers: [0, 1, 3, 4, 2, 1], barre: true, group: "横按" },
+  { name: "B♭", frets: [-1, 1, 3, 3, 3, 1], fingers: [0, 1, 3, 3, 3, 1], group: "横按" },
+  { name: "F#m", frets: [2, 4, 4, 2, 2, 2], fingers: [1, 3, 4, 1, 1, 1], barre: true, group: "横按" },
+  { name: "Gm", frets: [3, 5, 5, 3, 3, 3], fingers: [1, 3, 4, 1, 1, 1], barre: true, group: "横按" },
+  { name: "Cm", frets: [-1, 3, 5, 5, 4, 3], fingers: [0, 1, 3, 4, 2, 1], barre: true, group: "横按" },
 ];
 
 /** 电脑键盘:字母排 A S D F G H J K L 依次对应九个和弦(与钢琴组件同一条手位思路)。 */
@@ -136,18 +148,18 @@ function chordNotes(c: Chord): string[] {
  *  横按画圆角横杆(E 的食指小横按/F 的全横按),其余按品画圆点;杆/点上标指法编号。 */
 function ChordDiagram({ chord }: { chord: Chord }) {
   const W = 84;
-  const H = 108;
+  const H = 122;
   const left = 14;
   const top = 26;
   const sw = (W - left - 10) / 5; // 弦距
-  const fh = (H - top - 14) / 4; // 品距(画 4 个品)
+  const fh = (H - top - 14) / 5; // 品距(画 5 个品,容纳 Gm/Cm 的五品横按)
   const x = (s: number) => left + s * sw;
   const y = (f: number) => top + (f - 1) * fh;
   const { bars, dots } = groupChord(chord);
   return (
     <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
       {/* 品丝 */}
-      {[1, 2, 3, 4].map((f) => (
+      {[1, 2, 3, 4, 5].map((f) => (
         <line
           key={f}
           x1={left}
@@ -781,7 +793,8 @@ export function Guitar({ label }: Props) {
       return;
     }
     track("guitar-demo");
-    const prog = [CHORDS[0], CHORDS[4], CHORDS[8], CHORDS[1]];
+    const byName = (n: string) => CHORDS.find((c) => c.name === n)!;
+    const prog = [byName("C"), byName("Am"), byName("F"), byName("G")];
     const step = 355;
     const timers: number[] = [];
     let t = 0;
@@ -804,7 +817,12 @@ export function Guitar({ label }: Props) {
     demoRef.current = null;
   }
 
-  // 电脑键盘演奏:字母排触发和弦扫弦
+  // 电脑键盘演奏:字母排触发当前分类的和弦扫弦
+  const [group, setGroup] = React.useState<(typeof GROUPS)[number]>("基本");
+  const shown = React.useMemo(() => CHORDS.filter((c) => c.group === group), [group]);
+  // 键盘回调要拿到最新分类列表,用 ref 避免每次切分类重挂监听
+  const shownRef = React.useRef(shown);
+  shownRef.current = shown;
   React.useEffect(() => {
     const typing = (t: EventTarget | null) =>
       t instanceof HTMLElement &&
@@ -813,9 +831,10 @@ export function Guitar({ label }: Props) {
       if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
       if (typing(e.target)) return;
       const i = KB_ROW.indexOf(e.code);
-      if (i < 0 || i >= CHORDS.length) return;
+      const list = shownRef.current;
+      if (i < 0 || i >= list.length) return;
       e.preventDefault();
-      strumCard(CHORDS[i], "kbd");
+      strumCard(list[i], "kbd");
     };
     window.addEventListener("keydown", down);
     return () => window.removeEventListener("keydown", down);
@@ -850,13 +869,37 @@ export function Guitar({ label }: Props) {
         </figcaption>
       )}
       <div className="p-4">
-        {/* 和弦卡一排(窄屏横滑) */}
+        {/* 分类筛选:按学习阶段换一组和弦 */}
+        <div className="mb-2 flex flex-wrap gap-1.5" role="tablist" aria-label="和弦分组">
+          {GROUPS.map((g) => (
+            <button
+              key={g}
+              type="button"
+              role="tab"
+              aria-selected={group === g}
+              onClick={() => {
+                if (g === group) return;
+                setGroup(g);
+                track("guitar-chordset", { set: g });
+              }}
+              className={
+                "rounded-full border px-2.5 py-0.5 text-xs transition active:scale-95 " +
+                (group === g
+                  ? "border-signature/60 bg-signature/10 font-medium text-signature"
+                  : "text-muted-foreground hover:border-signature/50 hover:text-signature")
+              }
+            >
+              {g}
+            </button>
+          ))}
+        </div>
+        {/* 和弦卡一排(窄屏横滑,只显示当前分类) */}
         <div
           className="flex gap-2 overflow-x-auto pb-2"
           role="group"
           aria-label="常用和弦,点击扫弦"
         >
-          {CHORDS.map((c, i) => {
+          {shown.map((c, i) => {
             const on = c.name === activeChord;
             const kbd = showKbd && i < KB_ROW.length ? kbChar(KB_ROW[i]) : undefined;
             const hasAlts = (c.variants?.length ?? 0) > 1;
