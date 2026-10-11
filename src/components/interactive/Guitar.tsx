@@ -188,7 +188,7 @@ function ChordDiagram({ chord }: { chord: Chord }) {
           x1={x(s)}
           y1={y(1)}
           x2={x(s)}
-          y2={y(4)}
+          y2={y(5)}
           stroke="currentColor"
           strokeWidth={1}
           className="text-neutral-400 dark:text-neutral-600"
