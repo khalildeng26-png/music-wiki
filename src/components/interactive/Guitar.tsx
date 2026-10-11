@@ -144,26 +144,31 @@ function chordNotes(c: Chord): string[] {
   return out;
 }
 
-/** 单个和弦图(竖排网格:六根竖线=弦,低音在左;弦枕在顶 + 五条品丝,共五个品格)。
- *  几何约定:wireY(f)=第 f 品品丝的 y;弦枕单独画在 top(不与品丝重叠——
- *  此前品丝从 1 起画又被弦枕盖住一根,导致实际只有 N-1 个品格的 bug 即源于此);
- *  第 f 品的按点中心 = dotY(f),坐在第 f-1 与第 f 品丝之间。
- *  横按画圆角横杆(E 的食指小横按/F 的全横按),其余按品画圆点;杆/点上标指法编号。 */
+/** 单个和弦图(竖排网格:六根竖线=弦,低音在左;固定三个品格,教科书式紧凑)。
+ *  把位记号:开放把位(有空弦或一品起按)顶上画加粗弦枕;高把位和弦(如 Gm/Cm)
+ *  顶上是一条普通品丝,并在第一格左侧标把位数字——标 3 即图中第一格=实际第三品。
+ *  横按画圆角横杆,其余按品画圆点;杆/点上标指法编号。
+ *  几何:top=图顶横线;wireY(f)=第 f 格品丝;dotY(f)=第 f 格按点中心(f-1 与 f 丝之间)。 */
 function ChordDiagram({ chord }: { chord: Chord }) {
   const W = 84;
-  const H = 140;
+  const H = 94;
   const left = 14;
   const top = 26;
+  const ROWS = 3; // 可视品格数
   const sw = (W - left - 10) / 5; // 弦距
-  const fh = (H - top - 12) / 5; // 品距(五个品格)
+  const fh = (H - top - 12) / ROWS; // 品距
   const x = (s: number) => left + s * sw;
-  const wireY = (f: number) => top + f * fh; // 第 f 品品丝
-  const dotY = (f: number) => top + (f - 0.5) * fh; // 第 f 品按点中心
+  const wireY = (f: number) => top + f * fh; // 第 f 格品丝
+  const dotY = (f: number) => top + (f - 0.5) * fh; // 第 f 格按点中心
+  // 把位:有空弦或按品最低为 1 → 开放把位(顶线=弦枕);否则 pos=最低按品(高把位)
+  const fretted = chord.frets.filter((f) => f > 0);
+  const pos = fretted.length === 0 || Math.min(...fretted) === 1 || chord.frets.includes(0) ? 1 : Math.min(...fretted);
+  const vf = (f: number) => f - pos + 1; // 实际品 → 图中格
   const { bars, dots } = groupChord(chord);
   return (
     <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
-      {/* 品丝:第 1–5 品 */}
-      {[1, 2, 3, 4, 5].map((f) => (
+      {/* 品丝:第 1–3 格 */}
+      {[1, 2, 3].map((f) => (
         <line
           key={f}
           x1={left}
@@ -175,24 +180,36 @@ function ChordDiagram({ chord }: { chord: Chord }) {
           className="text-neutral-400 dark:text-neutral-600"
         />
       ))}
-      {/* 上弦枕(加粗,独立于品丝) */}
+      {/* 图顶横线:开放把位=加粗弦枕;高把位=普通品丝 + 左侧把位数字 */}
       <line
         x1={left}
         y1={top}
         x2={x(5)}
         y2={top}
         stroke="currentColor"
-        strokeWidth={3.5}
-        className="text-neutral-600 dark:text-neutral-300"
+        strokeWidth={pos === 1 ? 3.5 : 1.5}
+        className={pos === 1 ? "text-neutral-600 dark:text-neutral-300" : "text-neutral-400 dark:text-neutral-600"}
       />
-      {/* 弦:从弦枕贯穿到第 5 品品丝 */}
+      {pos > 1 && (
+        <text
+          x={left - 9}
+          y={dotY(1) + 3}
+          textAnchor="middle"
+          fontSize="9.5"
+          fontWeight="700"
+          className="fill-neutral-500 dark:fill-neutral-400"
+        >
+          {pos}
+        </text>
+      )}
+      {/* 弦:从图顶贯穿到第 3 格品丝 */}
       {STRINGS.map((_, s) => (
         <line
           key={s}
           x1={x(s)}
           y1={top}
           x2={x(s)}
-          y2={wireY(5)}
+          y2={wireY(ROWS)}
           stroke="currentColor"
           strokeWidth={1}
           className="text-neutral-400 dark:text-neutral-600"
@@ -229,7 +246,7 @@ function ChordDiagram({ chord }: { chord: Chord }) {
         <g key={`bar${i}`}>
           <rect
             x={x(r.s0) - 6.5}
-            y={dotY(r.fret) - 6.5}
+            y={dotY(vf(r.fret)) - 6.5}
             width={x(r.s1) - x(r.s0) + 13}
             height={13}
             rx={6.5}
@@ -237,7 +254,7 @@ function ChordDiagram({ chord }: { chord: Chord }) {
           />
           <text
             x={(x(r.s0) + x(r.s1)) / 2}
-            y={dotY(r.fret) + 3}
+            y={dotY(vf(r.fret)) + 3}
             textAnchor="middle"
             fontSize="8.5"
             fontWeight="700"
@@ -250,10 +267,10 @@ function ChordDiagram({ chord }: { chord: Chord }) {
       {/* 独立按品圆点(带指法编号) */}
       {dots.map((d) => (
         <g key={`d${d.s}`}>
-          <circle cx={x(d.s)} cy={dotY(d.fret)} r={6.5} className="fill-signature" />
+          <circle cx={x(d.s)} cy={dotY(vf(d.fret))} r={6.5} className="fill-signature" />
           <text
             x={x(d.s)}
-            y={dotY(d.fret) + 3}
+            y={dotY(vf(d.fret)) + 3}
             textAnchor="middle"
             fontSize="8.5"
             fontWeight="700"
