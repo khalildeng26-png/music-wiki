@@ -3,40 +3,42 @@
 <head>
 <meta charset="utf-8">
 <style>
-  body { margin: 0; background: #fffaf3; display: flex; align-items: flex-start; gap: 80px; padding: 40px; }
+  body { margin: 0; background: #fffaf3; display: flex; align-items: flex-start; gap: 70px; padding: 40px; }
   .wrap { text-align: center; font: 13px sans-serif; color: #888; }
   canvas { display: block; margin: 0 auto 10px; }
+  img { display: block; width: 200px; margin: 0 auto 10px; }
 </style>
 </head>
 <body>
-  <div class="wrap"><canvas id="c"></canvas>第三版:弦斜张/柱贴边/窄长板</div>
+  <div class="wrap"><img src="real-headstock.jpg">真实参考(局部)</div>
+  <div class="wrap"><canvas id="c"></canvas>第四版(按真图测量)</div>
 <script>
-// 目标解剖(竖立,弦枕在顶):
-// - 窄长板(高:宽 ≈ 1.4),肩部外扩、腰部微收、底部圆角+中央冠口
-// - 六弦从弦枕槽位「斜向外张」到贴边的弦柱(3+3:6E/1E 最远,4D/3G 最近)
-// - 无横向连杆(此前被看成品丝),弦柱即侧边银柱,旋钮在板外
+// 真图测量基准:
+// 高宽比 1.3 / 弦枕端板宽 75% / 弦柱横位 25% 与 75% / 纵位 26%-44%-62%(近枕→远枕)
+// 枕端弦距 ≈ 柱端弦距的 60%(内紧外松,扇形向外张) / 远端大圆弧(冠口改浅)
 function draw() {
   const cv = document.getElementById('c');
-  const W = 150, H = 210, k = 2.2;
+  const W = 150, H = 195, k = 2.2;
   cv.width = W*k; cv.height = H*k; cv.style.width = W+'px'; cv.style.height = H+'px';
   const ctx = cv.getContext('2d');
   ctx.scale(k,k);
 
   const sil = () => {
-    const nw = W*0.17;
     ctx.beginPath();
-    ctx.moveTo(nw, 0);
-    ctx.quadraticCurveTo(W/2, -H*0.012, W-nw, 0);
-    ctx.bezierCurveTo(W*0.925,H*0.018, W*0.965,H*0.075, W*0.98,H*0.17);  // 肩
-    ctx.bezierCurveTo(W*0.99,H*0.30, W*0.955,H*0.38, W*0.965,H*0.52);    // 上腰内收
-    ctx.bezierCurveTo(W*0.975,H*0.66, W*0.99,H*0.74, W*0.98,H*0.86);     // 下腰外鼓
-    ctx.bezierCurveTo(W*0.965,H*0.95, W*0.92,H*0.99, W*0.8,H*0.995);
-    ctx.bezierCurveTo(W*0.68,H*1.0, W*0.615,H*0.865, W*0.5,H*0.865);     // 冠口
-    ctx.bezierCurveTo(W*0.385,H*0.865, W*0.32,H*1.0, W*0.2,H*0.995);
-    ctx.bezierCurveTo(W*0.08,H*0.99, W*0.035,H*0.95, W*0.02,H*0.86);
-    ctx.bezierCurveTo(W*0.01,H*0.74, W*0.025,H*0.66, W*0.035,H*0.52);
-    ctx.bezierCurveTo(W*0.045,H*0.38, W*0.01,H*0.30, W*0.02,H*0.17);
-    ctx.bezierCurveTo(W*0.035,H*0.075, W*0.075,H*0.018, nw, 0);
+    // 顶部(弦枕端)宽 75%
+    ctx.moveTo(W*0.125, 0);
+    ctx.quadraticCurveTo(W/2, -H*0.01, W*0.875, 0);
+    // 右肩:到最宽(全宽)在 ~35% 高度
+    ctx.bezierCurveTo(W*0.95,H*0.06, W,H*0.18, W,H*0.35);
+    ctx.bezierCurveTo(W,H*0.55, W*0.995,H*0.68, W,H*0.8);
+    // 远端大圆弧收底(浅冠口)
+    ctx.bezierCurveTo(W*0.99,H*0.93, W*0.93,H*0.99, W*0.82,H*0.995);
+    ctx.bezierCurveTo(W*0.68,H*1.0, W*0.6,H*0.94, W*0.5,H*0.94);
+    ctx.bezierCurveTo(W*0.4,H*0.94, W*0.32,H*1.0, W*0.18,H*0.995);
+    ctx.bezierCurveTo(W*0.07,H*0.99, W*0.01,H*0.93, 0,H*0.8);
+    // 左侧镜像
+    ctx.bezierCurveTo(W*0.005,H*0.68, 0,H*0.55, 0,H*0.35);
+    ctx.bezierCurveTo(0,H*0.18, W*0.05,H*0.06, W*0.125, 0);
     ctx.closePath();
   };
 
@@ -58,32 +60,33 @@ function draw() {
 
   ctx.font='bold 9px sans-serif'; ctx.textAlign='center';
   ctx.shadowColor='rgba(87,53,14,0.9)'; ctx.shadowOffsetY=0.8;
-  ctx.fillStyle='#f3e2bd'; ctx.fillText('橙  月', W/2, H*0.1); ctx.shadowColor='transparent';
+  ctx.fillStyle='#f3e2bd'; ctx.fillText('橙  月', W/2, H*0.09); ctx.shadowColor='transparent';
 
-  // 弦枕 + 槽位(弦在枕端分布 26%-74%)
+  // 弦枕(占顶宽75%同宽) + 槽位:枕端弦距=柱端 60% → 弦枕内聚集
   const nutY=8;
   const nutG=ctx.createLinearGradient(0,nutY,0,nutY+8);
   nutG.addColorStop(0,'#f8efd7'); nutG.addColorStop(1,'#e2d0a4');
-  ctx.fillStyle=nutG; ctx.fillRect(W*0.08,nutY,W*0.84,8);
-  const xs=[26,34.8,43.6,52.4,61.2,70].map(p=>W*p/100);
-  ctx.fillStyle='rgba(87,53,14,0.55)';
-  xs.forEach(x=>{ctx.beginPath();ctx.arc(x,nutY+4,1.3,0,7);ctx.fill();});
-
-  // 弦柱位:贴边(12%/88%),扇形远近 6E/1E 最远
+  ctx.fillStyle=nutG; ctx.fillRect(W*0.10,nutY,W*0.80,8);
+  // 柱端横位:6E/5A/4D 在 25%,3G/2B/1E 在 75%;枕端按60%压缩向中心
+  const postX=i=> i<3 ? W*0.25 : W*0.75;
   const postY=[0.62,0.44,0.26,0.26,0.44,0.62].map(p=>H*p);
-  const postX=i=> i<3 ? W*0.12 : W*0.88;
+  const nutX=i=>{ // 向对应侧的柱收 60%:枕位 = 中心 + (柱位-中心)*0.6
+    const c=W/2, t=0.6;
+    return c+(postX(i)-c)*t;
+  };
+  ctx.fillStyle='rgba(87,53,14,0.55)';
+  for(let i=0;i<6;i++){ ctx.beginPath(); ctx.arc(nutX(i),nutY+4,1.3,0,7); ctx.fill(); }
 
-  // 六弦:弦枕槽 → 斜行到弦柱(低三弦古铜粗)
+  // 六弦:枕端 → 斜向外张到柱端(真扇形:内紧外松)
   for(let i=0;i<6;i++){
     const wound=i<3;
     ctx.lineWidth=wound?3.6:2;
     ctx.strokeStyle=wound?'#9a7038':'#b8b8b8';
     ctx.beginPath();
-    ctx.moveTo(xs[i], nutY+8);
+    ctx.moveTo(nutX(i), nutY+8);
     ctx.lineTo(postX(i), postY[i]);
     ctx.stroke();
   }
-  // 弦柱
   for(let i=0;i<6;i++){
     const px=postX(i), py=postY[i];
     const pg=ctx.createRadialGradient(px-3,py-3,1,px,py,8);
@@ -94,18 +97,22 @@ function draw() {
   ctx.restore();
   ctx.strokeStyle='rgba(87,53,14,0.55)'; ctx.lineWidth=1.6; sil(); ctx.stroke();
 
-  // 旋钮(板外示意)
   for(let i=0;i<6;i++){
     const py=postY[i], left=i<3;
-    const kx= left? -16 : W+16;
-    const g=ctx.createLinearGradient(kx-12,0,kx+12,0);
+    const kx= left? -17 : W+17;
+    // 旋钮斜向外下(真琴头安装角)
+    ctx.save();
+    ctx.translate(kx,py);
+    ctx.rotate(left? -12*Math.PI/180 : 12*Math.PI/180);
+    const g=ctx.createLinearGradient(-12,0,12,0);
     g.addColorStop(0,'#fffdf5'); g.addColorStop(1,'#cbbfa0');
     ctx.fillStyle=g; ctx.strokeStyle='#8d7748'; ctx.lineWidth=2;
     ctx.beginPath();
-    if(ctx.roundRect) ctx.roundRect(kx-12,py-11,24,22,7); else ctx.rect(kx-12,py-11,24,22);
+    if(ctx.roundRect) ctx.roundRect(-12,-11,24,22,7); else ctx.rect(-12,-11,24,22);
     ctx.fill(); ctx.stroke();
     ctx.fillStyle='#5c4a24'; ctx.font='bold 7.5px sans-serif';
-    ctx.fillText(['6E','5A','4D','3G','2B','1E'][i], kx, py+2.6);
+    ctx.fillText(['6E','5A','4D','3G','2B','1E'][i], 0, 2.6);
+    ctx.restore();
   }
 }
 draw();
