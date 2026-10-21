@@ -15,7 +15,7 @@ type Props = {
   /** 播放音色,默认钢琴。词条在哪个乐器语境下就用哪个(如 guitar* 用 guitar)。 */
   timbre?: Timbre;
   /** 谱号,默认高音;低音乐器(贝斯等)传 "bass" 免得加线满天飞 */
-  clef?: "treble" | "bass";
+  clef?: "treble" | "bass" | "alto";
   /** 显示一键换调选择器(默认关):开启后谱面随移调重渲染、音频同步换调——
    *  移调二期:一期只换了音频,谱面不动;这里让「读谱的人」也看见平移 */
   transpose?: boolean;
@@ -43,7 +43,9 @@ export function StaffNotation({
       if (cancelled || !ref.current) return;
       ref.current.innerHTML = "";
       // 固定 K:C:每个变化音显式标注升降号,换调后无需换调号记法,渲染最稳
-      const key = clef === "bass" ? "K:C clef=bass" : "K:C";
+      // 谱号:高音(K:C 默认)/ 低音(clef=bass)/ 中音(clef=alto,中提琴用)
+      const key =
+        clef === "bass" ? "K:C clef=bass" : clef === "alto" ? "K:C clef=alto" : "K:C";
       const abc = `X:1\nL:1/4\n${key}\n${shown.map(toAbc).join(" ")} |`;
       abcjs.renderAbc(ref.current, abc, {
         responsive: "resize",
