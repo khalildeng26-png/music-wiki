@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import StaffLines from "@/components/StaffLines.astro";
+import VinylPlayer from "@/components/VinylPlayer.astro";
 import { getCollection } from "astro:content";
 import { categories, catColor } from "@/lib/categories";
 import HomeSearch from "@/components/interactive/HomeSearch";
@@ -158,10 +159,16 @@ const interactiveCount = new Set(
   description="一本可交互的音乐百科全书 —— 乐理、记谱、曲风,边读边练。"
   ogImage="/og/index.png"
 >
-  <!-- Hero:价值主张当主角,品牌住在徽章里 -->
-  <section class="border-b bg-linear-to-b from-surface/60 to-background">
-    <div class="container py-14 md:py-24">
-      <div class="hero-in inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 text-sm text-muted-foreground">
+  <!-- Hero:价值主张当主角,品牌住在徽章里;夜空星野由 BaseLayout 的 StarField 全站提供。
+       dark:bg-none:暗色下去掉这层渐变罩,否则它压在星空上,首屏的星星会比别处暗 -->
+  <section class="relative border-b bg-linear-to-b from-surface/60 to-background dark:bg-none">
+    <!-- -translate-x-[2%]:盘心在画布内右移腾月晕空间后,整体左移补偿,月盘页面位置不变 -->
+    <div class="pointer-events-auto absolute top-[calc(50%-60px)] right-[116px] z-[3] hidden -translate-x-[2%] -translate-y-1/2 md:block">
+      <VinylPlayer />
+    </div>
+    <div class="container relative z-[2] flex min-h-svh flex-col justify-start py-[clamp(1.5rem,4vh,4rem)] lg:px-0">
+      <div class="flex w-full flex-col">
+      <div class="hero-in inline-flex w-fit items-center gap-2 rounded-full border bg-card px-3 py-1 text-sm text-muted-foreground">
         <img src="/logo.png" alt="" class="size-4 rounded-sm" />
         <span class="font-medium text-foreground">橙月Wiki</span>
         <span aria-hidden="true">·</span>
@@ -210,6 +217,7 @@ const interactiveCount = new Set(
       </div>
 
       <StaffLines class="mt-12 w-3/4 text-signature/60" />
+      </div>
     </div>
   </section>
 

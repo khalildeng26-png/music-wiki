@@ -1,0 +1,192 @@
+---
+// 全站夜空星野(仅 dark 可见):挂在 BaseLayout 内容层里,
+// fixed + 负 z-index —— 垫在页面底色之上、一切内容之下,滚动时星空不动。
+// 星星是「生灭式」的:随机位置亮起 → 闪烁一阵 → 熄灭 → 别处再生新星,
+// 星图永远在变,没有固定图案。约 200 颗同时在空,亮星带十字闪。
+---
+
+<div class="star-field pointer-events-none fixed inset-0 z-[-1] overflow-hidden" aria-hidden="true">
+  <canvas></canvas>
+</div>
+
+<style is:global>
+  .star-field {
+    display: none;
+  }
+  .dark .star-field {
+    display: block;
+  }
+  .star-field canvas {
+    width: 100%;
+    height: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .star-field {
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  function initStarField(wrapper: HTMLElement) {
+    const canvas = wrapper.querySelector("canvas") as HTMLCanvasElement | null;
+    if (!canvas) return;
+    const g = canvas.getContext("2d");
+    if (!g) return;
+
+    const TAU = Math.PI * 2;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    /* 同空星数随视口面积走:基准 200 @1920×1080,小屏按比例减,不糊成一片 */
+    const starCount = () =>
+      Math.max(72, Math.round(200 * ((innerWidth * innerHeight) / (1920 * 1080))));
+
+    interface Star {
+      x: number; y: number; r: number;
+      born: number; life: number;          /* 生命周期:born 亮起时刻,life 存活时长 */
+      ph: number; sp: number; amp: number; /* 呼吸闪烁 */
+      fsp: number; fph: number; famp: number; /* 随机锐峰:偶发猛地一亮 */
+      shape: "dot" | "glow" | "spark";
+      hue: string;
+    }
+    let stars: Star[] = [];
+    let W = 0, H = 0;
+    let lastT = 0;
+
+    const rand = (a: number, b: number) => a + Math.random() * (b - a);
+
+    /* 星型抽签:圆点最常见;柔光球、四芒星依次稀有 */
+    function pickShape(): Star["shape"] {
+      const p = Math.random();
+      if (p < 0.56) return "dot";
+      if (p < 0.8) return "glow";
+      return "spark";
+    }
+
+    /* 在随机位置生一颗新星;atT = 亮起时刻 */
+    function spawn(atT: number): Star {
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const shape = pickShape();
+      /* 尺寸收着点:大星星会抢戏 */
+      const size =
+        shape === "dot" ? rand(0.6, 1.5) : shape === "glow" ? rand(1, 1.9) : rand(1.4, 2.3);
+      return {
+        x: rand(0.02, 0.98) * W,
+        y: rand(0.02, 0.98) * H,
+        r: size * dpr,
+        born: atT,
+        life: rand(4, 13),                    /* 存活 4~13 秒 */
+        ph: rand(0, TAU),
+        sp: rand(1.2, 4.4),                   /* 呼吸 1.4~5 秒一轮 */
+        amp: shape === "dot" ? rand(0.6, 0.95) : rand(0.75, 1),
+        fsp: rand(0.3, 1.2),
+        fph: rand(0, TAU),
+        famp: rand(0.6, 1.7),
+        shape,
+        /* 更亮的星色:近白的暖光为主,少数冷白 */
+        hue: Math.random() < 1 / 7 ? "#e9f1ff" : "#fff3d2",
+      };
+    }
+
+    function resize(nowT: number) {
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const r = wrapper.getBoundingClientRect();
+      W = Math.max(2, r.width * dpr);
+      H = Math.max(2, r.height * dpr);
+      canvas.width = W;
+      canvas.height = H;
+      stars = [];
+      const n = starCount();
+      for (let i = 0; i < n; i++) {
+        const s = spawn(nowT);
+        /* 初始错峰:把出生时刻摊在各自生命期内,避免整片星同生同灭 */
+        s.born = nowT - Math.random() * s.life;
+        stars.push(s);
+      }
+    }
+
+    function draw(t: number) {
+      g.clearRect(0, 0, W, H);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      for (let i = 0; i < stars.length; i++) {
+        const s = stars[i];
+        const age = t - s.born;
+        if (age >= s.life) {
+          stars[i] = spawn(t); /* 熄灭 → 随机位置再生 */
+          continue;
+        }
+        /* 包络:亮起 ~1s,熄灭 ~1.5s,中间全亮 */
+        const env =
+          Math.min(1, age / 0.9) * Math.min(1, (s.life - age) / 1.5);
+        const tw = reduceMotion ? 0.7 : 0.5 + 0.5 * Math.sin(t * s.sp + s.ph);
+        const flare = reduceMotion
+          ? 0
+          : Math.pow(Math.max(0, Math.sin(t * s.fsp + s.fph)), 12) * s.famp;
+        const alpha = Math.min(1, s.amp * (0.5 + 0.65 * tw) * (1 + flare) * env);
+        const rr = s.r * (1 + flare * 0.5);
+        g.fillStyle = s.hue;
+        g.strokeStyle = s.hue;
+
+        if (s.shape === "glow") {
+          /* 柔光球:径向渐变,白亮核心向四周化开 */
+          const gr = g.createRadialGradient(s.x, s.y, 0, s.x, s.y, rr * 2.4);
+          gr.addColorStop(0, "#ffffff");
+          gr.addColorStop(0.4, s.hue);
+          gr.addColorStop(1, "rgba(248,226,174,0)");
+          g.globalAlpha = alpha;
+          g.fillStyle = gr;
+          g.beginPath();
+          g.arc(s.x, s.y, rr * 2.4, 0, TAU);
+          g.fill();
+        } else if (s.shape === "spark") {
+          /* 四芒星:内凹的四尖闪星,锐峰时整体涨大 */
+          const R0 = rr * 2.8;
+          const q = R0 * 0.18;
+          g.globalAlpha = alpha;
+          g.beginPath();
+          g.moveTo(s.x, s.y - R0);
+          g.quadraticCurveTo(s.x + q, s.y - q, s.x + R0, s.y);
+          g.quadraticCurveTo(s.x + q, s.y + q, s.x, s.y + R0);
+          g.quadraticCurveTo(s.x - q, s.y + q, s.x - R0, s.y);
+          g.quadraticCurveTo(s.x - q, s.y - q, s.x, s.y - R0);
+          g.closePath();
+          g.fill();
+          g.globalAlpha = Math.min(1, alpha * 1.2);
+          g.beginPath();
+          g.arc(s.x, s.y, Math.max(0.9, rr * 0.6), 0, TAU);
+          g.fill();
+        } else {
+          /* 圆点星(最常见) */
+          g.globalAlpha = alpha;
+          g.beginPath();
+          g.arc(s.x, s.y, rr, 0, TAU);
+          g.fill();
+        }
+      }
+      g.globalAlpha = 1;
+    }
+
+    function frame(ms: number) {
+      const t = ms / 1000;
+      if (document.documentElement.classList.contains("dark")) {
+        draw(t);
+        lastT = t;
+      }
+      requestAnimationFrame(frame);
+    }
+
+    const ro = new ResizeObserver(() => resize(lastT));
+    ro.observe(wrapper);
+    resize(0);
+    if (reduceMotion) {
+      /* 减少动态:画一帧静态星空,之后仅在主题切换时重画 */
+      draw(0);
+      new MutationObserver(() => {
+        if (document.documentElement.classList.contains("dark")) draw(0);
+      }).observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    } else {
+      requestAnimationFrame(frame);
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>(".star-field").forEach((el) => initStarField(el));
+</script>

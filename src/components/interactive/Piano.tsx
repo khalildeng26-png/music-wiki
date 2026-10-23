@@ -387,15 +387,24 @@ type Props = {
   octaves?: number;
   label?: string;
   /** 键长(px),默认 160(词条内紧凑);首屏等展示场景传 256 更像真琴 */
-  keyHeight?: number;
+  keyHeight?: number | string;
   /** 键盘区最小宽度(px);不传则按每白键 ≥44px 触控标准自适应(超出容器自动横滑) */
   minWidth?: number;
+  /** 标题栏右侧插槽(如乐器切换分段钮) */
+  headerExtra?: React.ReactNode;
 };
 
 /** 虚拟钢琴:点琴键用 Tone.js 发声,琥珀高亮当前键,支持多指同按的和弦。
  *  键盘可达:整个键盘只占一个 Tab 停点(roving tabindex),← → 移动、Enter/Space 发声。
  *  「全屏演奏」把键盘铺满屏幕并尝试锁定横屏;锁不了的环境(iOS)用 CSS 旋转兜底。 */
-export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWidth }: Props) {
+export function Piano({
+  startOct = 4,
+  octaves = 2,
+  label,
+  keyHeight = 160,
+  minWidth,
+  headerExtra,
+}: Props) {
   const [expanded, setExpanded] = React.useState(false);
   // 展开时的视口尺寸:竖屏状态下要把键盘旋转 90°,需要实时 w/h;null = 未展开(SSR 安全)
   const [dims, setDims] = React.useState<{ w: number; h: number } | null>(null);
@@ -475,11 +484,12 @@ export function Piano({ startOct = 4, octaves = 2, label, keyHeight = 160, minWi
   return (
     <figure className="not-prose overflow-hidden rounded-xl border bg-card">
       {label && (
-        <figcaption className="border-b bg-muted/40 px-4 py-2 text-sm text-muted-foreground">
-          {label}
+        <figcaption className="flex items-center justify-between gap-3 border-b bg-muted/40 px-4 py-2 text-sm text-muted-foreground">
+          <span>{label}</span>
+          {headerExtra}
         </figcaption>
       )}
-      <div className="p-4">
+      <div className="px-4 pt-2 pb-4">
         <PianoCase>
           <div style={{ height: keyHeight }}>
             <Keyboard

@@ -280,10 +280,14 @@ export function initStaffPlay(root: HTMLElement): () => void {
     st.sweepDir = 0;
     /* 进入即拨最近的一根:触摸反馈(快速甩过时,这就是那一下) */
     if (performance.now() - st.lastPluckAt > 120) {
-      let best = 0, bd = Infinity;
+      let best = 0,
+        bd = Infinity;
       for (let i = 0; i < 5; i++) {
         const d = Math.abs(y - lineY(i));
-        if (d < bd) { bd = d; best = i; }
+        if (d < bd) {
+          bd = d;
+          best = i;
+        }
       }
       pluck(best, clamp(x, 0.06, 0.94), 6);
     }

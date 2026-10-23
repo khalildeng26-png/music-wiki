@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 
 import HeadSEO from "@/components/HeadSEO.astro";
+import StarField from "@/components/StarField.astro";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FeedbackWidget } from "@/components/interactive/FeedbackWidget";
@@ -31,10 +32,8 @@ const { title, description, ogImage, jsonLd } = Astro.props;
       (() => {
         try {
           const stored = localStorage.getItem("theme");
-          const prefersDark = window.matchMedia(
-            "(prefers-color-scheme: dark)",
-          ).matches;
-          const dark = stored ? stored === "dark" : prefersDark;
+          /* 首访默认黑夜(站名「橙月」,月夜是主视觉);用户手动切换过才跟随存储值 */
+          const dark = stored ? stored === "dark" : true;
           document.documentElement.classList.toggle("dark", dark);
         } catch {}
       })();
@@ -75,6 +74,7 @@ const { title, description, ogImage, jsonLd } = Astro.props;
     )}
   >
     <div class="bg-background relative z-10 flex min-h-svh flex-col">
+      <StarField />
       <Header client:load />
       <FeedbackWidget client:load />
       <main class="flex flex-1 flex-col">

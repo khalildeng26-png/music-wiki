@@ -44,8 +44,7 @@ export function StaffNotation({
       ref.current.innerHTML = "";
       // 固定 K:C:每个变化音显式标注升降号,换调后无需换调号记法,渲染最稳
       // 谱号:高音(K:C 默认)/ 低音(clef=bass)/ 中音(clef=alto,中提琴用)
-      const key =
-        clef === "bass" ? "K:C clef=bass" : clef === "alto" ? "K:C clef=alto" : "K:C";
+      const key = clef === "bass" ? "K:C clef=bass" : clef === "alto" ? "K:C clef=alto" : "K:C";
       const abc = `X:1\nL:1/4\n${key}\n${shown.map(toAbc).join(" ")} |`;
       abcjs.renderAbc(ref.current, abc, {
         responsive: "resize",

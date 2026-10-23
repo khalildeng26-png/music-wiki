@@ -12,7 +12,7 @@ type Props = {
   guitarLabel?: string;
   startOct?: number;
   octaves?: number;
-  keyHeight?: number;
+  keyHeight?: number | string;
   minWidth?: number;
 };
 
@@ -37,44 +37,49 @@ export function InstrumentSwitch({
 
   return (
     <div>
-      <div role="tablist" aria-label="选择乐器" className="mb-2 flex justify-end">
-        <div className="inline-flex rounded-full border bg-card p-0.5 text-xs">
-          {(
-            [
-              ["piano", "钢琴", PianoIcon],
-              ["guitar", "吉他", GuitarIcon],
-            ] as const
-          ).map(([key, name, Icon]) => (
-            <button
-              key={key}
-              type="button"
-              role="tab"
-              aria-selected={inst === key}
-              onClick={() => switchTo(key)}
-              className={
-                "inline-flex items-center gap-1 rounded-full px-3 py-1 transition active:scale-95 " +
-                (inst === key
-                  ? "bg-signature text-signature-foreground"
-                  : "text-muted-foreground hover:text-signature")
-              }
-            >
-              <Icon className="size-3.5" /> {name}
-            </button>
-          ))}
-        </div>
-      </div>
-      {/* 只挂载当前乐器:切换即卸载另一个 */}
-      {inst === "piano" ? (
-        <Piano
-          startOct={startOct}
-          octaves={octaves}
-          keyHeight={keyHeight}
-          minWidth={minWidth}
-          label={pianoLabel}
-        />
-      ) : (
-        <Guitar label={guitarLabel} />
-      )}
+      {/* 分段钮放进乐器卡的标题栏右侧(切换即换整张卡) */}
+      {(() => {
+        const tabs = (
+          <div role="tablist" aria-label="选择乐器" className="shrink-0">
+            <div className="inline-flex rounded-full border bg-card p-0.5 text-xs">
+              {(
+                [
+                  ["piano", "钢琴", PianoIcon],
+                  ["guitar", "吉他", GuitarIcon],
+                ] as const
+              ).map(([key, name, Icon]) => (
+                <button
+                  key={key}
+                  type="button"
+                  role="tab"
+                  aria-selected={inst === key}
+                  onClick={() => switchTo(key)}
+                  className={
+                    "inline-flex items-center gap-1 rounded-full px-3 py-1 transition active:scale-95 " +
+                    (inst === key
+                      ? "bg-signature text-signature-foreground"
+                      : "text-muted-foreground hover:text-signature")
+                  }
+                >
+                  <Icon className="size-3.5" /> {name}
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+        return inst === "piano" ? (
+          <Piano
+            startOct={startOct}
+            octaves={octaves}
+            keyHeight={keyHeight}
+            minWidth={minWidth}
+            label={pianoLabel}
+            headerExtra={tabs}
+          />
+        ) : (
+          <Guitar label={guitarLabel} headerExtra={tabs} />
+        );
+      })()}
     </div>
   );
 }

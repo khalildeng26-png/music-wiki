@@ -1,0 +1,74 @@
+---
+// 月亮唱盘:首页 Hero 的昼唱夜月播放器(站歌《橙月》)
+// 白天是黑胶唱机(canvas 绘制);随站点切换暗色主题时,唱片化为一轮琥珀月。
+// 月面用美术素材(public/moon-disc.webp),由 canvas 直接叠画在唱盘圆上,
+// 保证昼夜两态严丝合缝、过渡连续;canvas 另负责唱臂、落针涟漪与月光倒影。
+const { class: className = "" } = Astro.props;
+---
+
+<div class:list={["vinyl-player relative select-none", className]}>
+  <canvas
+    role="img"
+    aria-label="月亮唱盘装饰:白天是黑胶唱机,入夜化作琥珀月与海面月影"
+  ></canvas>
+  <p class="vinyl-status sr-only" aria-live="polite"></p>
+  <!-- 站内曲目署名行:仅当 public/music/ 下放了曲目文件时由 JS 显示 -->
+  <p class="vinyl-credit" hidden>
+    ♪
+    <a href="https://soundcloud.com/leagueoflegends/ever-fall-1" target="_blank" rel="noreferrer">
+      "Ever Fall"
+    </a>
+    — League of Legends Music &amp; Toyko · Courtesy of Riot Games
+  </p>
+</div>
+
+<style is:global>
+  .vinyl-player {
+    width: 520px;
+    max-width: 40vw;
+    /* 比正方形高:多出来的高度全给下方的水面。
+       画布加高不挪月亮 —— 盘心 y 按「画布中线再上提固定量」算(见 vinylplayer.ts) */
+    aspect-ratio: 1 / 1.25;
+  }
+  .vinyl-player canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    cursor: default; /* 由 JS 按是否在唱片圆内切换 */
+    touch-action: manipulation;
+    z-index: 3;
+  }
+  .vinyl-player canvas:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 4px;
+    border-radius: 999px;
+  }
+  /* 曲目署名行:悬在画布下缘之外,不挡交互 */
+  .vinyl-credit {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -30px;
+    margin: 0;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted-foreground);
+    opacity: 0.8;
+  }
+  .vinyl-credit a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .vinyl-credit[hidden] {
+    display: none;
+  }
+</style>
+
+<script>
+  import { initVinylPlayer } from "../lib/vinylplayer";
+  document
+    .querySelectorAll<HTMLCanvasElement>(".vinyl-player canvas")
+    .forEach((el) => initVinylPlayer(el));
+</script>
