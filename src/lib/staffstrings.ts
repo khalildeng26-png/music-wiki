@@ -250,7 +250,9 @@ export function initStaffPlay(root: HTMLElement): () => void {
     s.amp = clamp(0.5 + vel * 0.09, 0.5, 1.3);
     s.born = performance.now() / 1000;
     s.pos = clamp(pos, 0.06, 0.94);
-    ksPlay(PITCHES[i].f, s.pos, 0.5 + vel * 0.07);
+    /* 静音版:只拨弦振动,不出声(用户要求「不需要响,会动就行了」)。
+       要恢复发声,取消下一行注释即可。 */
+    // ksPlay(PITCHES[i].f, s.pos, 0.5 + vel * 0.07);
     ensureLoop();
   };
 

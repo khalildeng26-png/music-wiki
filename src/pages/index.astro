@@ -162,8 +162,9 @@ const interactiveCount = new Set(
   <!-- Hero:价值主张当主角,品牌住在徽章里;夜空星野由 BaseLayout 的 StarField 全站提供。
        dark:bg-none:暗色下去掉这层渐变罩,否则它压在星空上,首屏的星星会比别处暗 -->
   <section class="relative border-b bg-linear-to-b from-surface/60 to-background dark:bg-none">
-    <!-- -translate-x-[2%]:盘心在画布内右移腾月晕空间后,整体左移补偿,月盘页面位置不变 -->
-    <div class="pointer-events-auto absolute top-[calc(50%-60px)] right-[116px] z-[3] hidden -translate-x-[2%] -translate-y-1/2 md:block">
+    <!-- top 用 50svh(首屏一半)而非区块 50%:切钢琴/吉他时区块高度会变,
+         若锚在区块上,唱片会跟着上下跳;锚在首屏则钉死不动 -->
+    <div class="pointer-events-auto absolute top-[calc(50svh-60px)] right-[116px] z-[3] hidden -translate-x-[2%] -translate-y-1/2 md:block">
       <VinylPlayer />
     </div>
     <div class="container relative z-[2] flex min-h-svh flex-col justify-start py-[clamp(1.5rem,4vh,4rem)] lg:px-0">

@@ -217,6 +217,9 @@ let conv: ConvolverNode | null = null;
 let noiseBuf: AudioBuffer | null = null;
 let analyser: AnalyserNode | null = null;
 let spec: Uint8Array | null = null;
+/* 曲目(外置音频)链:MediaElementSource → 分析器(视觉用)+ 终端 */
+let trackAnalyser: AnalyserNode | null = null;
+let trackSpec: Uint8Array | null = null;
 const nowA = () => (actx ? actx.currentTime : 0);
 function ensureAudio() {
   if (!actx) {
@@ -416,6 +419,7 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
   const trackAudio = new Audio();
   trackAudio.loop = true;
   trackAudio.preload = "auto";
+  let trackSrcNode: MediaElementAudioSourceNode | null = null;
   let trackReady = false;
   let trackFade: number | null = null;
   trackAudio.addEventListener("canplaythrough", () => {
@@ -450,6 +454,7 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
     noteQ: [] as { at: number; kind: string; vel: number; len: number }[],
     ripples: [] as RippleItem[],
     eS: 0,
+    noteAt: 0,
     lastBeat: -1,
     waterRipples: [] as WaterRipple[],
     _wLast: 0,
@@ -577,7 +582,21 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
     hiss.start(t + ARM_LAND); /* 唱针落到盘面,底噪随之而起 */
     transport.hiss = hiss;
     if (transport.trackMode) {
-      /* 站内曲目模式:落针到位 → 音频从头播放;不放合成音符 */
+      /* 站内曲目模式:落针到位 → 音频从头播放;不放合成音。
+         同时把音频接进分析器 —— 音符/盘缘辉光跟真实音乐的能量走。 */
+      try {
+        if (!trackSrcNode && actx) {
+          trackSrcNode = actx.createMediaElementSource(trackAudio);
+          trackAnalyser = actx.createAnalyser();
+          trackAnalyser.fftSize = 2048;
+          trackAnalyser.smoothingTimeConstant = 0.55;
+          trackSpec = new Uint8Array(trackAnalyser.frequencyBinCount);
+          trackSrcNode.connect(actx.destination);
+          trackSrcNode.connect(trackAnalyser);
+        }
+      } catch {
+        /* 接不进音频图就退化为无能量反馈 */
+      }
       window.setTimeout(() => {
         if (!transport.playing) return;
         trackAudio.currentTime = 0;
@@ -1239,6 +1258,14 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
            不然一分钟的后台会攒出几十个音符同帧迸发 */
         if (q && q.at >= nowA() - 0.2) spawnNote(0, q.kind, q.vel, q.len);
       }
+      if (transport.trackMode) {
+        /* 曲目模式:音符跟真实音乐的能量走 —— 能量越过了阈值、
+           且距上个音符留了随机间隔,就冒一个(不会满屏都是) */
+        if (vinyl.eS > 0.14 && t - vinyl.noteAt > 0.34 + Math.random() * 0.42) {
+          vinyl.noteAt = t;
+          spawnNote(0, Math.random() < 0.3 ? "spark" : "mel", 0.85);
+        }
+      }
       const b = (nowA() - transport.loopStart) / SPB;
       const bi = Math.floor(b);
       if (b >= 0 && bi !== vinyl.lastBeat) {
@@ -1256,10 +1283,16 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
     }
     for (let i = vinyl.ripples.length - 1; i >= 0; i--)
       if (performance.now() / 1000 - vinyl.ripples[i].born > 0.7) vinyl.ripples.splice(i, 1);
-    if (analyser && spec) {
-      analyser.getByteFrequencyData(spec);
+    /* 能量来源:曲目模式读曲目分析器(真实音乐),否则读合成器分析器 */
+    const an = transport.playing && transport.trackMode && trackAnalyser && trackSpec
+      ? { node: trackAnalyser, buf: trackSpec }
+      : analyser && spec
+        ? { node: analyser, buf: spec }
+        : null;
+    if (an) {
+      an.node.getByteFrequencyData(an.buf);
       let e = 0;
-      for (let k = 2; k < 160; k++) e += spec[k];
+      for (let k = 2; k < 160; k++) e += an.buf[k];
       vinyl.eS += (e / 158 / 255 - vinyl.eS) * Math.min(1, dt * 6);
     } else vinyl.eS *= 0.95;
     for (const nt of notes) nt.age += dt;
