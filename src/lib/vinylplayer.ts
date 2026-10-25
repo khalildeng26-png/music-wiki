@@ -37,9 +37,10 @@ const MOON_ASSET_VER = 8;
    授权进度见 docs/demos/riot-permission-email-draft.md(工单 #139871488) */
 const TRACK_URL = "/music/ever-fall.mp3";
 
-/* 播放总开关:曲目授权未批(Riot 工单 #139871488),期间唱片机纯展示,
-   点击不播放任何内容。批复下来后:放好音频文件 + 改回 true 即恢复。 */
-const PLAYBACK_ENABLED = false;
+/* 播放总开关。曲目《Ever Fall》授权已批(Riot 工单 #139871488,2026-10-25
+   回复:准许个人网站使用,含广告变现;批复原文存 docs/demos/riot-permission-email-draft.md)。
+   public/music/ever-fall.mp3 存在 → 播放该曲并显示署名行;不存在 → 合成版《橙月》。 */
+const PLAYBACK_ENABLED = true;
 
 /* 唱臂动作耗时(秒):落针 / 抬针。音乐起播与唱臂落盘对齐同一时刻,
    听感与画面才对得上;补间用显式时长,与帧率无关。 */

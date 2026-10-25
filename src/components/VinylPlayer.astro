@@ -8,8 +8,9 @@ const { class: className = "" } = Astro.props;
 
 <div class:list={["vinyl-player relative select-none", className]}>
   <canvas
-    role="img"
-    aria-label="月亮唱盘装饰:白天是黑胶唱机,入夜化作琥珀月与海面月影"
+    role="button"
+    tabindex="0"
+    aria-label="月亮唱盘:点击落针播放;夜间模式下唱片化作月亮"
   ></canvas>
   <p class="vinyl-status sr-only" aria-live="polite"></p>
   <!-- 站内曲目署名行:仅当 public/music/ 下放了曲目文件时由 JS 显示 -->
