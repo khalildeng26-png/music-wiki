@@ -6,13 +6,13 @@ import { Button } from "@/components/ui/button";
 type Theme = "light" | "dark";
 
 function getInitialTheme(): Theme {
-  if (typeof window === "undefined") return "dark";
+  if (typeof window === "undefined") return "light";
 
   const stored = localStorage.getItem("theme") as Theme | null;
   if (stored === "light" || stored === "dark") return stored;
 
-  /* 首访默认黑夜(站名「橙月」,月夜是主视觉);手动切换过才跟随存储值 */
-  return "dark";
+  /* 首访跟随系统偏好 */
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
 export const ThemeToggle: React.FC = () => {

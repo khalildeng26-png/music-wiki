@@ -32,8 +32,11 @@ const { title, description, ogImage, jsonLd } = Astro.props;
       (() => {
         try {
           const stored = localStorage.getItem("theme");
-          /* 首访默认黑夜(站名「橙月」,月夜是主视觉);用户手动切换过才跟随存储值 */
-          const dark = stored ? stored === "dark" : true;
+          const prefersDark = window.matchMedia(
+            "(prefers-color-scheme: dark)",
+          ).matches;
+          /* 首访跟随系统偏好;用户手动切换过才跟随存储值 */
+          const dark = stored ? stored === "dark" : prefersDark;
           document.documentElement.classList.toggle("dark", dark);
         } catch {}
       })();
