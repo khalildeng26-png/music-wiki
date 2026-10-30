@@ -757,26 +757,31 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
       }
     } /* 结束:盘体+唱纹+高光 块 */
 
-    /* 入夜:月晕 + 月面。月晕 canvas 自绘、衬在月面之下,与唱片同层。
-       峰值透明度刻意压到 0.13 —— 上一版 0.3 会被看成"黄壳子";
-       外缘收在 1.08R(画布左缘在 1.1R),不会被切出硬边。 */
+    /* 入夜:月晕 + 月面。月亮不能是死的 ——
+       · 月晕呼吸:空闲时缓慢起伏;播放时跟着音乐能量走
+         (夜里音符隐去,月晕就是「正在播放」的指示灯)
+       · 月面微闪:大气扰动般的亮度起伏(±12%) */
     if (nk > 0.001) {
-      const glow = g.createRadialGradient(cx, cy, R * 0.995, cx, cy, R * 1.14);
-      glow.addColorStop(0, `rgba(255,200,112,${0.3 * nk})`);
-      glow.addColorStop(0.4, `rgba(250,172,80,${0.14 * nk})`);
+      const breath =
+        0.62 + 0.38 * Math.sin(t * 0.8) + (transport.playing ? vinyl.eS * 1.1 : 0);
+      const gR = R * (1.12 + 0.04 * Math.sin(t * 0.8));
+      const glow = g.createRadialGradient(cx, cy, R * 0.995, cx, cy, gR);
+      glow.addColorStop(0, `rgba(255,198,105,${Math.min(0.85, 0.52 * breath) * nk})`);
+      glow.addColorStop(0.45, `rgba(250,170,76,${Math.min(0.42, 0.26 * breath) * nk})`);
       glow.addColorStop(1, "rgba(240,150,40,0)");
       g.fillStyle = glow;
       g.beginPath();
-      g.arc(cx, cy, R * 1.14, 0, TAU);
+      g.arc(cx, cy, gR, 0, TAU);
       g.fill();
 
       const side = Math.ceil((2 * R) / MOON_DISC_FRAC);
       const layer = moonFor(side);
       if (layer) {
-        g.globalAlpha = nk;
+        g.globalAlpha = nk * (reduceMotion ? 1 : 0.88 + 0.12 * Math.sin(t * 1.05 + 1.3));
         g.drawImage(layer, cx - side / 2, cy - side / 2, side, side);
         g.globalAlpha = 1;
       }
+
     }
 
     /* 标签:无字净面(入夜随月亮显影而完全隐去,只留一条极淡轮廓) */

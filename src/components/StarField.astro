@@ -51,8 +51,10 @@
     let stars: Star[] = [];
     let W = 0, H = 0;
     let lastT = 0;
-
+    /* 流星状态:t0 = 本颗起始时刻(-1 无),next = 下一颗时刻 */
+    const meteor = { t0: -1, next: -1, x1: 0, y1: 0, x2: 0, y2: 0 };
     const rand = (a: number, b: number) => a + Math.random() * (b - a);
+
 
     /* 星型抽签:圆点最常见;柔光球、四芒星依次稀有 */
     function pickShape(): Star["shape"] {
@@ -160,6 +162,56 @@
           g.beginPath();
           g.arc(s.x, s.y, rr, 0, TAU);
           g.fill();
+        }
+      }
+
+      /* 流星:每 18~40 秒一颗,0.9 秒划过 —— 亮头 + 渐隐长尾,
+         只在上半屏、向左下或右下斜穿 */
+      if (!reduceMotion) {
+        if (meteor.next < 0) meteor.next = t + 6; /* 载入后 6s 第一颗 */
+        if (meteor.t0 < 0 && t >= meteor.next) {
+          meteor.t0 = t;
+          const fromLeft = Math.random() < 0.5;
+          const len = Math.min(W, H) * (0.22 + Math.random() * 0.12);
+          const x1 = fromLeft ? rand(0.05, 0.4) * W : rand(0.6, 0.95) * W;
+          const y1 = rand(0.05, 0.35) * H;
+          const dx = (fromLeft ? 1 : -1) * len;
+          const dy = len * (0.35 + Math.random() * 0.25);
+          meteor.x1 = x1; meteor.y1 = y1;
+          meteor.x2 = x1 + dx; meteor.y2 = y1 + dy;
+        }
+        if (meteor.t0 >= 0) {
+          const DUR = 0.9;
+          const k = (t - meteor.t0) / DUR;
+          if (k >= 1) {
+            meteor.t0 = -1;
+            meteor.next = t + 18 + Math.random() * 22;
+          } else {
+            const ease = 1 - Math.pow(1 - k, 2.2); /* 越滑越快 */
+            const px = meteor.x1 + (meteor.x2 - meteor.x1) * ease;
+            const py = meteor.y1 + (meteor.y2 - meteor.y1) * ease;
+            const tailK = Math.max(0, ease - 0.22); /* 尾长随速度展开 */
+            const tx = meteor.x1 + (meteor.x2 - meteor.x1) * tailK;
+            const ty = meteor.y1 + (meteor.y2 - meteor.y1) * tailK;
+            const fade = Math.sin(Math.PI * Math.min(1, k * 1.15));
+            const tl = g.createLinearGradient(tx, ty, px, py);
+            tl.addColorStop(0, "rgba(255,244,214,0)");
+            tl.addColorStop(0.75, `rgba(255,244,214,${0.5 * fade})`);
+            tl.addColorStop(1, `rgba(255,252,238,${0.95 * fade})`);
+            g.strokeStyle = tl;
+            g.lineWidth = 1.6;
+            g.lineCap = "round";
+            g.beginPath();
+            g.moveTo(tx, ty);
+            g.lineTo(px, py);
+            g.stroke();
+            g.globalAlpha = 0.9 * fade;
+            g.fillStyle = "#fffcf0";
+            g.beginPath();
+            g.arc(px, py, 1.7, 0, TAU);
+            g.fill();
+            g.globalAlpha = 1;
+          }
         }
       }
       g.globalAlpha = 1;
