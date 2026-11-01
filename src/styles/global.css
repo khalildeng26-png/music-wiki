@@ -422,3 +422,11 @@
   color: var(--signature-ink);
   font-weight: 500;
 }
+
+
+/* 主题切换的 View Transition 截面:稍拉长默认交叉淡化,与星空淡入同步 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.45s;
+  animation-timing-function: ease;
+}

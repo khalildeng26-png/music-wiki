@@ -758,12 +758,11 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
     } /* 结束:盘体+唱纹+高光 块 */
 
     /* 入夜:月晕 + 月面。月亮不能是死的 ——
-       · 月晕呼吸:空闲时缓慢起伏;播放时跟着音乐能量走
-         (夜里音符隐去,月晕就是「正在播放」的指示灯)
-       · 月面微闪:大气扰动般的亮度起伏(±12%) */
+       · 月晕呼吸:8 秒一轮的缓慢起伏(用户要求:月面图保持原样不动,
+         不做微闪,也不随音乐跳) */
     if (nk > 0.001) {
       const breath =
-        0.62 + 0.38 * Math.sin(t * 0.8) + (transport.playing ? vinyl.eS * 1.1 : 0);
+        0.62 + 0.38 * Math.sin(t * 0.8);
       const gR = R * (1.12 + 0.04 * Math.sin(t * 0.8));
       const glow = g.createRadialGradient(cx, cy, R * 0.995, cx, cy, gR);
       glow.addColorStop(0, `rgba(255,198,105,${Math.min(0.85, 0.52 * breath) * nk})`);
@@ -777,7 +776,7 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
       const side = Math.ceil((2 * R) / MOON_DISC_FRAC);
       const layer = moonFor(side);
       if (layer) {
-        g.globalAlpha = nk * (reduceMotion ? 1 : 0.88 + 0.12 * Math.sin(t * 1.05 + 1.3));
+        g.globalAlpha = nk;
         g.drawImage(layer, cx - side / 2, cy - side / 2, side, side);
         g.globalAlpha = 1;
       }

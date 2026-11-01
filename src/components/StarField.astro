@@ -10,11 +10,14 @@
 </div>
 
 <style is:global>
+  /* 星空常驻 DOM,用透明度随主题淡入淡出(display 开关无法过渡,会硬切) */
   .star-field {
-    display: none;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.9s ease;
   }
   .dark .star-field {
-    display: block;
+    opacity: 1;
   }
   .star-field canvas {
     width: 100%;
@@ -22,7 +25,7 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .star-field {
-      display: block;
+      transition: none;
     }
   }
 </style>
