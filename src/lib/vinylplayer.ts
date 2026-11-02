@@ -781,6 +781,25 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
         g.globalAlpha = 1;
       }
 
+      /* 播放中的月面呼吸:整体缓慢变亮又变暗(9 秒一轮)。
+         纯时间驱动、与音量无关 —— 夜里这就是「正在播放」的指示。
+         基准是原画满亮:亮段叠暖光(lighter),暗段叠深色,摆幅 ±8%。 */
+      if (transport.playing && !reduceMotion) {
+        const k9 = 0.5 + 0.5 * Math.sin((t * TAU) / 9);
+        const b = 0.92 + 0.16 * k9; /* 亮度系数 0.92 ~ 1.08 */
+        g.save();
+        g.beginPath();
+        g.arc(cx, cy, R, 0, TAU);
+        g.clip();
+        if (b < 1) {
+          g.fillStyle = `rgba(16,15,24,${(1 - b) * 1.1 * nk})`;
+        } else {
+          g.globalCompositeOperation = "lighter";
+          g.fillStyle = `rgba(255,214,130,${(b - 1) * 0.9 * nk})`;
+        }
+        g.fillRect(cx - R, cy - R, R * 2, R * 2);
+        g.restore();
+      }
     }
 
     /* 标签:无字净面(入夜随月亮显影而完全隐去,只留一条极淡轮廓) */
