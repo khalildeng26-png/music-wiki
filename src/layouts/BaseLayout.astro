@@ -31,13 +31,17 @@ const { title, description, ogImage, jsonLd } = Astro.props;
     <script is:inline>
       (() => {
         try {
-          const stored = localStorage.getItem("theme");
+          /* 只有带 themeChosen 标记的存储值才算「用户真选过」。
+             旧版代码每次访问都会自动写 theme,把时段规则全部顶掉了 ——
+             那些值不是用户的选择,一律回退到时段规则重新决定。 */
+          const chosen = localStorage.getItem("themeChosen") === "1";
+          const stored = chosen ? localStorage.getItem("theme") : null;
           const prefersDark = window.matchMedia(
             "(prefers-color-scheme: dark)",
           ).matches;
           /* 首访无选择时:系统暗色 或 真实黄昏时段(18:00–6:00)→ 黑夜。
              「月亮在夜里升起」,与站名自洽;白天来阅读的访客仍是亮色。
-             手动切换过才永远跟随存储值。规则与 ThemeToggle.tsx 保持同步。 */
+             规则与 ThemeToggle.tsx 保持同步。 */
           const h = new Date().getHours();
           const dark = stored ? stored === "dark" : prefersDark || h >= 18 || h < 6;
           document.documentElement.classList.toggle("dark", dark);

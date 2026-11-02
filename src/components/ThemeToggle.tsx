@@ -9,8 +9,12 @@ type Theme = "light" | "dark";
 function getInitialTheme(): Theme {
   if (typeof window === "undefined") return "light";
 
-  const stored = localStorage.getItem("theme") as Theme | null;
-  if (stored === "light" || stored === "dark") return stored;
+  /* 只有带 themeChosen 标记的存储值才算「用户真选过」——
+     旧版代码自动写的 theme 不是选择,一律走时段规则(与 BaseLayout 同步) */
+  if (localStorage.getItem("themeChosen") === "1") {
+    const stored = localStorage.getItem("theme") as Theme | null;
+    if (stored === "light" || stored === "dark") return stored;
+  }
 
   /* 首访无选择时:系统暗色 或 真实黄昏时段(18:00–6:00)→ 黑夜。
      规则与 BaseLayout.astro 的内联脚本保持同步。 */
@@ -50,6 +54,7 @@ export const ThemeToggle: React.FC = () => {
     const apply = () => {
       root.classList.toggle("dark", next === "dark");
       localStorage.setItem("theme", next); /* 手动选择,从此固定 */
+      localStorage.setItem("themeChosen", "1");
     };
     const doc = document as Document & {
       startViewTransition?: (cb: () => void) => unknown;
