@@ -35,8 +35,11 @@ const { title, description, ogImage, jsonLd } = Astro.props;
           const prefersDark = window.matchMedia(
             "(prefers-color-scheme: dark)",
           ).matches;
-          /* 首访跟随系统偏好;用户手动切换过才跟随存储值 */
-          const dark = stored ? stored === "dark" : prefersDark;
+          /* 首访无选择时:系统暗色 或 真实黄昏时段(18:00–6:00)→ 黑夜。
+             「月亮在夜里升起」,与站名自洽;白天来阅读的访客仍是亮色。
+             手动切换过才永远跟随存储值。规则与 ThemeToggle.tsx 保持同步。 */
+          const h = new Date().getHours();
+          const dark = stored ? stored === "dark" : prefersDark || h >= 18 || h < 6;
           document.documentElement.classList.toggle("dark", dark);
         } catch {}
       })();

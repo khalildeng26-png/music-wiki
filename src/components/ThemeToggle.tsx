@@ -2,6 +2,7 @@ import { Moon, Sun } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
+import { track } from "@/lib/track";
 
 type Theme = "light" | "dark";
 
@@ -11,16 +12,21 @@ function getInitialTheme(): Theme {
   const stored = localStorage.getItem("theme") as Theme | null;
   if (stored === "light" || stored === "dark") return stored;
 
-  /* 首访跟随系统偏好 */
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  /* 首访无选择时:系统暗色 或 真实黄昏时段(18:00–6:00)→ 黑夜。
+     规则与 BaseLayout.astro 的内联脚本保持同步。 */
+  const h = new Date().getHours();
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  return prefersDark || h >= 18 || h < 6 ? "dark" : "light";
 }
 
 export const ThemeToggle: React.FC = () => {
   const [theme, setTheme] = React.useState<Theme>(getInitialTheme);
 
   React.useEffect(() => {
+    /* 只同步类名,不写存储 —— 没手动选择过的访客,每次访问都按
+       「系统偏好 + 真实时段」重新决定,月亮跟着真实的昼夜走;
+       存储只在手动切换时写入(toggleTheme) */
     document.documentElement.classList.toggle("dark", theme === "dark");
-    localStorage.setItem("theme", theme);
   }, [theme]);
 
   React.useEffect(() => {
@@ -37,15 +43,13 @@ export const ThemeToggle: React.FC = () => {
   }, []);
 
   const toggleTheme = () => {
-    /* 用 View Transitions 做主题切换:浏览器截取新旧两帧,在合成器上
-       做一层交叉淡化(GPU 加速)。之前给全站元素挂颜色 transition 的方案
-       会让几千个元素同时插值,切换瞬间掉帧卡顿,已废弃。
-       不支持该 API(旧内核)或减少动态时,直接切换。 */
+    /* View Transitions:新旧两帧在合成器上交叉淡化(GPU 一层,零逐元素开销);
+       不支持的旧内核/减少动态退回直切 */
     const root = document.documentElement;
     const next = root.classList.contains("dark") ? "light" : "dark";
     const apply = () => {
       root.classList.toggle("dark", next === "dark");
-      localStorage.setItem("theme", next);
+      localStorage.setItem("theme", next); /* 手动选择,从此固定 */
     };
     const doc = document as Document & {
       startViewTransition?: (cb: () => void) => unknown;
@@ -56,7 +60,8 @@ export const ThemeToggle: React.FC = () => {
     } else {
       apply();
     }
-    setTheme(next); /* React 状态跟进(图标/aria 同步;effect 幂等) */
+    track("theme_toggle", { to: next }); /* 数据验证:多少人在切主题、往哪切 */
+    setTheme(next); /* React 状态跟进(effect 只同步类名,幂等) */
   };
 
   const isDark = theme === "dark";
