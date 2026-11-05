@@ -1,6 +1,7 @@
-/** 吉他和弦库(与交互组件同源的数据层):29 个和弦 + 指法分组 + 按品几何。
+/** 吉他和弦库(与交互组件同源的数据层):43 个和弦 + 指法分组 + 按品几何。
  *  纯数据/纯函数,无 React 依赖——Guitar 组件与和弦反查工具(ChordFinder)共用。
- *  移植自小程序 miniprogram/miniprogram/shared/chords.ts(同源同数据)。 */
+ *  移植自小程序 miniprogram/miniprogram/shared/chords.ts(同源同数据;
+ *  web 端 43 个为扩充版,小程序仍为 29 个,后续同步)。 */
 
 import { transposeNote } from './transpose';
 
@@ -22,7 +23,7 @@ export type Chord = {
   group: (typeof GROUPS)[number];
 };
 
-export const GROUPS = ["基本", "七和弦", "挂留加音", "横按"] as const;
+export const GROUPS = ["基本", "七和弦", "挂留加音", "横按", "斜杠"] as const;
 export const CHORDS: Chord[] = [
   // ── 基本:入门开放和弦 ──
   { name: "C", frets: [-1, 3, 2, 0, 1, 0], fingers: [0, 3, 2, 0, 1, 0], group: "基本" },
@@ -91,13 +92,32 @@ export const CHORDS: Chord[] = [
   { name: "Am7", frets: [-1, 0, 2, 0, 1, 0], fingers: [0, 0, 2, 0, 1, 0], group: "七和弦" },
   { name: "Dm7", frets: [-1, -1, 0, 2, 1, 1], fingers: [0, 0, 0, 2, 1, 1], group: "七和弦" },
   { name: "B7", frets: [-1, 2, 1, 2, 0, 2], fingers: [0, 2, 1, 3, 0, 4], group: "七和弦" },
+  // ── 大七:日系/流行的朦胧色彩,ii-V-I 爵士入门必需 ──
+  { name: "Cmaj7", frets: [-1, 3, 2, 0, 0, 0], fingers: [0, 3, 2, 0, 0, 0], group: "七和弦" },
+  { name: "Fmaj7", frets: [-1, -1, 3, 2, 1, 0], fingers: [0, 0, 3, 2, 1, 0], group: "七和弦" },
+  { name: "Gmaj7", frets: [3, -1, 0, 0, 0, 2], fingers: [2, 0, 0, 0, 0, 1], group: "七和弦" },
+  { name: "Dmaj7", frets: [-1, -1, 0, 2, 2, 2], fingers: [0, 0, 0, 1, 1, 1], group: "七和弦" },
+  { name: "Amaj7", frets: [-1, 0, 2, 1, 2, 0], fingers: [0, 0, 2, 1, 3, 0], group: "七和弦" },
+  // ── 小七(横按族):E 调/D 调常用 ──
+  { name: "Bm7", frets: [-1, 2, 0, 2, 0, 2], fingers: [0, 1, 0, 2, 0, 3], group: "七和弦" },
+  {
+    name: "F#m7",
+    frets: [2, -1, 2, 2, 2, 2],
+    fingers: [1, 0, 1, 1, 1, 1],
+    barre: true,
+    group: "七和弦",
+  },
   // ── 挂留/加音: Modifier 色彩 ──
   { name: "Dsus4", frets: [-1, -1, 0, 2, 3, 3], fingers: [0, 0, 0, 1, 3, 4], group: "挂留加音" },
   { name: "Dsus2", frets: [-1, -1, 0, 2, 3, 0], fingers: [0, 0, 0, 1, 3, 0], group: "挂留加音" },
   { name: "Asus2", frets: [-1, 0, 2, 2, 0, 0], fingers: [0, 0, 1, 2, 0, 0], group: "挂留加音" },
   { name: "Asus4", frets: [-1, 0, 2, 2, 3, 0], fingers: [0, 0, 1, 2, 3, 0], group: "挂留加音" },
   { name: "Esus4", frets: [0, 2, 2, 2, 0, 0], fingers: [0, 2, 3, 1, 0, 0], group: "挂留加音" },
+  { name: "Csus4", frets: [-1, 3, 3, 0, 1, -1], fingers: [0, 3, 4, 0, 1, 0], group: "挂留加音" },
+  { name: "Gsus4", frets: [3, 3, 0, 0, 1, 3], fingers: [2, 3, 0, 0, 1, 4], group: "挂留加音" },
   { name: "Cadd9", frets: [-1, 3, 2, 0, 3, 0], fingers: [0, 2, 1, 0, 3, 0], group: "挂留加音" },
+  // ── 六和弦:老歌/爵士的收尾甜味 ──
+  { name: "C6", frets: [-1, 3, 2, 2, 1, 0], fingers: [0, 3, 2, 1, 1, 0], group: "挂留加音" },
   // ── 横按:F 之后的大关 ──
   {
     name: "Bm",
@@ -128,6 +148,17 @@ export const CHORDS: Chord[] = [
     barre: true,
     group: "横按",
   },
+  {
+    name: "G#m",
+    frets: [4, 6, 6, 4, 4, 4],
+    fingers: [1, 3, 4, 1, 1, 1],
+    barre: true,
+    group: "横按",
+  },
+  // ── 斜杠:指定低音的转位,民谣低音下行(C→G/B→Am)刚需 ──
+  { name: "G/B", frets: [-1, 2, 0, 0, 0, 3], fingers: [0, 1, 0, 0, 0, 3], group: "斜杠" },
+  { name: "C/E", frets: [0, 3, 2, 0, 1, 0], fingers: [0, 3, 2, 0, 1, 0], group: "斜杠" },
+  { name: "D/F#", frets: [2, -1, 0, 2, 3, -1], fingers: [1, 0, 0, 2, 3, 0], group: "斜杠" },
 ];
 
 /** 指法分组:把按品拆成「横杆(同指同品的连续弦段≥2)」与「独立圆点」。

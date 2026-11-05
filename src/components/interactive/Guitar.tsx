@@ -183,8 +183,20 @@ export function Guitar({ label, headerExtra }: Props) {
   const [showKbd, setShowKbd] = React.useState(false);
   const [activeChord, setActiveChord] = React.useState<string | null>(null);
   const [flash, setFlash] = React.useState<ReadonlySet<number>>(new Set());
-  const demoRef = React.useRef<number | null>(null);
+  // ── 和弦走向播放:输入→校验→循环 ──
+  const [progText, setProgText] = React.useState("C Am F G");
+  const [progPlaying, setProgPlaying] = React.useState(false);
+  const progPlayingRef = React.useRef(false);
   const timersRef = React.useRef<number[]>([]);
+  // 模糊搜索:正在编辑的词(最后一个词)与匹配浮层;结尾 b 归一成 ♭(g/b 这类斜杠名除外)
+  const [progFocus, setProgFocus] = React.useState(false);
+  const lastWord = React.useMemo(() => progText.split(/[\s,，、;；|-]+/).pop() ?? "", [progText]);
+  const matches = React.useMemo(() => {
+    if (!progFocus || !lastWord) return [] as Chord[];
+    const raw = lastWord.toLowerCase();
+    const q = /b$/.test(raw) && !raw.endsWith("/b") ? raw.slice(0, -1) + "♭" : raw;
+    return CHORDS.filter((c) => c.name.toLowerCase().includes(q)).slice(0, 12);
+  }, [lastWord, progFocus]);
 
   React.useEffect(() => {
     try {
@@ -194,7 +206,7 @@ export function Guitar({ label, headerExtra }: Props) {
     }
   }, []);
 
-  React.useEffect(() => () => cancelDemo(), []);
+  React.useEffect(() => () => stopProg(), []);
 
   /** 点单音/扫弦时短暂点亮某根弦(视觉反馈共用一套) */
   function flashString(s: number) {
@@ -256,35 +268,78 @@ export function Guitar({ label, headerExtra }: Props) {
     if (alt) window.setTimeout(() => strum(chord, "up", src), 320);
   }
 
-  /** 1-6-4-5(C–Am–F–G)连播:每和弦「下上」×2,约 84 BPM 的八分扫弦;再点一次取消。 */
-  function toggleDemo() {
-    if (demoRef.current !== null) {
-      cancelDemo();
+  /** 解析走向串 → 和弦序列 + 不认识的词。
+   *  分隔:空格/中英逗号/顿号/分号/连字符;归一:结尾 b→♭(斜杠名除外)、am→Am。 */
+  function parseProg(text: string): { seq: Chord[]; bad: string[] } {
+    const tokens = text
+      .split(/[\s,，、;；|-]+/)
+      .map((t) => t.trim())
+      .filter(Boolean);
+    const seq: Chord[] = [];
+    const bad: string[] = [];
+    for (const t of tokens) {
+      const tried = [t];
+      if (/b$/i.test(t) && !/\/b$/i.test(t)) tried.push(t.slice(0, -1) + "♭");
+      tried.push(t[0].toUpperCase() + t.slice(1));
+      let hit: Chord | undefined;
+      for (const n of tried) hit = hit ?? CHORDS.find((c) => c.name === n);
+      if (hit) seq.push(hit);
+      else bad.push(t);
+    }
+    return { seq, bad };
+  }
+  const progBad = React.useMemo(
+    () => (progText.trim() ? parseProg(progText).bad : []),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [progText],
+  );
+
+  /** 走向循环播放:每和弦「下上下上」一小节(84 BPM 八分扫弦),一轮完续下一轮;再点停止。 */
+  function toggleProg() {
+    if (progPlayingRef.current) {
+      stopProg();
       return;
     }
-    track("guitar-demo");
-    const byName = (n: string) => CHORDS.find((c) => c.name === n)!;
-    const prog = [byName("C"), byName("Am"), byName("F"), byName("G")];
+    const { seq, bad } = parseProg(progText);
+    if (bad.length || seq.length === 0) return; // 有红标词不让播
+    track("guitar-prog", { prog: seq.map((c) => c.name).join(" ") });
+    progPlayingRef.current = true;
+    setProgPlaying(true);
     const step = 355;
-    const timers: number[] = [];
     let t = 0;
-    for (let r = 0; r < 2; r++) {
-      for (const c of prog) {
+    const round = () => {
+      for (const c of seq) {
         for (const dir of ["down", "up", "down", "up"] as const) {
-          timers.push(window.setTimeout(() => strum(c, dir, "ptr"), t));
+          const d = t;
+          timersRef.current.push(window.setTimeout(() => strum(c, dir, "ptr"), d));
           t += step;
         }
       }
-    }
-    // 播完自清,按钮回到「▶」态
-    timers.push(window.setTimeout(() => (demoRef.current = null), t + 400));
-    demoRef.current = timers[0];
-    timersRef.current = timers;
+      const end = t;
+      timersRef.current.push(
+        window.setTimeout(() => {
+          if (progPlayingRef.current) round();
+        }, end + 50),
+      );
+    };
+    round();
   }
-  function cancelDemo() {
+  function stopProg() {
+    progPlayingRef.current = false;
+    setProgPlaying(false);
     for (const id of timersRef.current) window.clearTimeout(id);
     timersRef.current = [];
-    demoRef.current = null;
+    setActiveChord(null);
+  }
+
+  /** 模糊搜索点选:把正在编辑的最后一个词替换成完整和弦名 */
+  function pickMatch(name: string) {
+    track("guitar-prog-pick", { id: name });
+    setProgText((prev) => {
+      const parts = prev.split(/([\s,，、;；|-]+)/); // 保留分隔符
+      parts[parts.length - 1] = name + " ";
+      return parts.join("");
+    });
   }
 
   // 电脑键盘演奏:字母排触发当前分类的和弦扫弦
@@ -424,6 +479,66 @@ export function Guitar({ label, headerExtra }: Props) {
           })}
         </div>
 
+        {/* 走向输入:模糊搜索浮层点选;不认识的词红标;循环播放 */}
+        <div className="relative mt-2 flex items-center gap-2 text-xs">
+          <span className="shrink-0 text-muted-foreground">走向</span>
+          <div className="relative min-w-[140px] flex-1">
+            <input
+              value={progText}
+              onChange={(e) => setProgText(e.target.value)}
+              onFocus={() => setProgFocus(true)}
+              onBlur={() => window.setTimeout(() => setProgFocus(false), 150)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  toggleProg();
+                  (e.target as HTMLInputElement).blur();
+                }
+              }}
+              placeholder="C Am F G,空格分隔"
+              aria-label="和弦走向输入"
+              spellCheck={false}
+              disabled={progPlaying}
+              className={
+                "w-full rounded-full border bg-card px-3 py-1 outline-none transition " +
+                (progBad.length ? "border-red-400/70" : "focus:border-signature/60")
+              }
+            />
+            {matches.length > 0 && !progPlaying && (
+              <div className="absolute left-0 top-full z-20 mt-1 flex max-w-[min(480px,60vw)] flex-wrap gap-1 rounded-lg border bg-card p-1.5 shadow-lg">
+                {matches.map((m) => (
+                  <button
+                    key={m.name}
+                    type="button"
+                    onPointerDown={(e) => {
+                      e.preventDefault();
+                      pickMatch(m.name);
+                    }}
+                    className="whitespace-nowrap rounded-full border px-2 py-0.5 transition hover:border-signature/50 hover:text-signature active:scale-95"
+                  >
+                    {m.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          {progBad.length > 0 && (
+            <span className="shrink-0 text-red-500">不认识 {progBad.join(" ")}</span>
+          )}
+          <button
+            type="button"
+            onClick={toggleProg}
+            disabled={progPlaying ? false : progBad.length > 0 || !progText.trim()}
+            className={
+              "inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 font-medium transition active:scale-95 " +
+              (progPlaying
+                ? "border-red-400/60 text-red-500"
+                : "border-signature/60 text-signature hover:bg-signature/10 disabled:opacity-40")
+            }
+          >
+            {progPlaying ? "■ 停止" : "▶ 播放"}
+          </button>
+        </div>
+
         {/* 工具栏 */}
         <div className="mt-2 flex flex-wrap items-center justify-end gap-2 text-xs">
           <button
@@ -455,13 +570,6 @@ export function Guitar({ label, headerExtra }: Props) {
             }
           >
             键位
-          </button>
-          <button
-            type="button"
-            onClick={toggleDemo}
-            className="inline-flex items-center gap-1 rounded-full border border-signature/60 px-2.5 py-1 font-medium text-signature transition hover:bg-signature/10 active:scale-95"
-          >
-            ▶ 1-6-4-5 演示
           </button>
         </div>
 
