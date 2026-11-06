@@ -424,9 +424,31 @@
 }
 
 
-/* 主题切换的 View Transition 截面:稍拉长默认交叉淡化,与星空淡入同步 */
+/* 主题切换的 View Transition 截面:放慢到 1.4s 的从容交叉淡化。
+   时长与 ThemeToggle.tsx 的 THEME_VT_MS、StarField 的淡入保持同步 */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 0.45s;
-  animation-timing-function: ease;
+  animation-duration: 1.4s;
+  animation-timing-function: ease-in-out;
+}
+
+/* 快照期冻结元素自身的微过渡:卡片/按钮等带着 150ms 的颜色过渡,
+   新快照会在过渡起步的一瞬拍到旧颜色 → 交叉淡化结束时真变色「弹」一下。
+   期间全部 transition 关停(零插值开销),类名翻转即刻生效,
+   快照拍到终态色,淡化承载全部变化,结尾无缝。 */
+.vt-snap,
+.vt-snap *,
+.vt-snap *::before,
+.vt-snap *::after {
+  transition: none !important;
+}
+
+/* 交叉淡化期间点击必须穿透:默认遮罩层会挡住整页的指针事件,
+   主题按钮在动画进行的 1.4s 里点了没反应(实测命中 <html>) */
+::view-transition,
+::view-transition-group(*),
+::view-transition-image-pair(*),
+::view-transition-old(*),
+::view-transition-new(*) {
+  pointer-events: none;
 }

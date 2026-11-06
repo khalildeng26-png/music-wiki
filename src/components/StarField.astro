@@ -10,11 +10,13 @@
 </div>
 
 <style is:global>
-  /* 星空常驻 DOM,用透明度随主题淡入淡出(display 开关无法过渡,会硬切) */
+  /* 星空常驻 DOM,用透明度随主题淡入淡出(display 开关无法过渡,会硬切);
+     1.4s 与页面交叉淡化同步(走 View Transition 时星空已包含在快照里,
+     这条主要兜底不支持 VT 的旧内核直切路径) */
   .star-field {
     display: block;
     opacity: 0;
-    transition: opacity 0.9s ease;
+    transition: opacity 1.4s ease-in-out;
   }
   .dark .star-field {
     opacity: 1;

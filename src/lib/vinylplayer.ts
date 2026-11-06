@@ -446,6 +446,8 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
     rpm: 0.02,
     angle: 0,
     lastT: 0,
+    vT: 0,
+    lastMs: 0,
     dt: 0.016,
     burst: false,
     nx: 0,
@@ -560,7 +562,7 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
     /* 唱臂补间:0 → 1,耗时 ARM_LAND */
     vinyl.armFrom = vinyl.armK;
     vinyl.armTo = 1;
-    vinyl.armT0 = performance.now() / 1000;
+    vinyl.armT0 = vinyl.vT; /* 视觉时钟,与 loop 的 t 同源 */
     vinyl.armDur = ARM_LAND;
     if (trackFade !== null) {
       /* 上一次抬针的渐出还没走完就再次落针:终止渐出,音量复位 */
@@ -641,7 +643,7 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
     /* 唱臂抬起:1 → 0,耗时 ARM_LIFT */
     vinyl.armFrom = vinyl.armK;
     vinyl.armTo = 0;
-    vinyl.armT0 = performance.now() / 1000;
+    vinyl.armT0 = vinyl.vT; /* 视觉时钟,与 loop 的 t 同源 */
     vinyl.armDur = ARM_LIFT;
   }
 
@@ -986,7 +988,7 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
       py = cy - R * 0.86;
     const ease = vinyl.armK * vinyl.armK * (3 - 2 * vinyl.armK);
     const nrT = 0.56 - 0.1 * (playing ? prog : vinyl.lastProg);
-    vinyl.nrS += (nrT - vinyl.nrS) * clamp((playing ? 3.2 : 1.2) * (vinyl.dt || 0.016), 0, 1);
+    vinyl.nrS += (nrT - vinyl.nrS) * clamp((playing ? 3.2 : 1.2) * vinyl.dt, 0, 1);
     const nr = R * vinyl.nrS;
     const tx = cx + Math.cos(0.44) * nr;
     const ty = cy + Math.sin(0.44) * nr - (1 - ease) * R * 0.3;
@@ -1113,7 +1115,7 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
 
     /* 针尖涟漪 + 辉光:随入夜整体淡出 —— 夜里月面上不该有机械反馈 */
     const playFade = 1 - nk;
-    const nowS = performance.now() / 1000;
+    const nowS = t; /* 视觉时钟(冻结时随 t 停摆),不再混用真实时钟 */
     if (playFade > 0.01) {
       for (let i = vinyl.ripples.length - 1; i >= 0; i--) {
         const rp = vinyl.ripples[i];
@@ -1229,6 +1231,20 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
   canvas.addEventListener("pointerleave", onLeave);
   canvas.addEventListener("keydown", onKey);
 
+  /* 主题切换:事件由 ThemeToggle 在 VT 的 apply 回调里发出 —— 恰好落在
+     「旧快照已拍完、新快照还未拍」的窗口里:
+     ① 形态瞬切(nightK 直达目标)并立即重绘 → 新快照里就是月亮/唱片,
+        化月与化碟的溶解溶进页面 1.4s 交叉淡化,与背景同时完成、同时结束;
+     ② holdMs 期间冻结视觉时钟(转轴/涟漪停摆),揭幕时真实画面与快照
+        严格对齐,旋转无缝续播不跳角度 */
+  let vtHoldUntil = 0;
+  window.addEventListener("theme-vt", (e) => {
+    vtHoldUntil = performance.now() + ((e as CustomEvent).detail?.holdMs ?? 0);
+    vinyl.nightK = rootEl.classList.contains("dark") ? 1 : 0;
+    V = readVars(); /* 类名刚切,同步取色(MutationObserver 是微任务,可能还没跑) */
+    drawDisc(vinyl.vT); /* 不等下一帧,立刻重绘,确保新快照拍到目标形态 */
+  });
+
   const themeObs = new MutationObserver(() => {
     V = readVars();
   });
@@ -1245,8 +1261,15 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
 
   let rafId = 0;
   function loop(ms: number) {
-    const t = ms / 1000;
-    const dt = clamp(t - vinyl.lastT || 0.016, 0.001, 0.05);
+    /* 视觉时钟:VT 遮罩期间(见 theme-vt 监听的 vtHoldUntil)整体冻结。
+       遮罩显示的是静帧快照,底下的画布若继续动,揭幕瞬间会整体跳变
+       (转动中的唱片约差 140°) —— 冻结后揭幕时真实画面与快照严格对齐,
+       无缝续播。涟漪/音符/唱臂等所有时间戳统一走这个时钟。 */
+    const hold = ms < vtHoldUntil;
+    if (!hold) vinyl.vT += clamp((ms - vinyl.lastMs) / 1000, 0, 0.05);
+    vinyl.lastMs = ms;
+    const t = vinyl.vT;
+    const dt = clamp(t - vinyl.lastT, 0, 0.05); /* 冻结时为 0:一切缓动停摆 */
     vinyl.lastT = t;
     vinyl.dt = dt;
     const targetRps = transport.playing ? 33.33 / 120 : 0.02;
@@ -1256,20 +1279,24 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
     const armP = clamp((t - vinyl.armT0) / vinyl.armDur, 0, 1);
     vinyl.armK = vinyl.armFrom + (vinyl.armTo - vinyl.armFrom) * armP;
     const nightT = rootEl.classList.contains("dark") ? 1 : 0;
-    vinyl.nightK += (nightT - vinyl.nightK) * Math.min(1, dt * 1.8);
+    /* 淡化期间按住(见 theme-vt 监听);结束后以 ~1/s 的速率缓变,
+       唱盘↔月亮的形变在用户眼前完整上演 */
+    if (ms >= vtHoldUntil) {
+      vinyl.nightK += (nightT - vinyl.nightK) * Math.min(1, dt);
+    }
 
     if (transport.playing && vinyl.armK > 0.9 && !reduceMotion) {
       if (!vinyl.burst) {
         vinyl.burst = true;
         for (let i = 0; i < 3; i++) spawnNote(0.1 + i * 0.26);
         vinyl.ripples.push({
-          born: performance.now() / 1000,
+          born: t,
           x: vinyl.nx,
           y: vinyl.ny,
           small: false,
         });
         vinyl.ripples.push({
-          born: performance.now() / 1000 + 0.14,
+          born: t + 0.14,
           x: vinyl.nx,
           y: vinyl.ny,
           small: false,
@@ -1294,7 +1321,7 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
       if (b >= 0 && bi !== vinyl.lastBeat) {
         vinyl.lastBeat = bi;
         vinyl.ripples.push({
-          born: performance.now() / 1000,
+          born: t,
           x: vinyl.nx,
           y: vinyl.ny,
           small: true,
@@ -1305,7 +1332,7 @@ export function initVinylPlayer(canvas: HTMLCanvasElement): () => void {
       vinyl.lastBeat = -1;
     }
     for (let i = vinyl.ripples.length - 1; i >= 0; i--)
-      if (performance.now() / 1000 - vinyl.ripples[i].born > 0.7) vinyl.ripples.splice(i, 1);
+      if (t - vinyl.ripples[i].born > 0.7) vinyl.ripples.splice(i, 1);
     /* 能量来源:曲目模式读曲目分析器(真实音乐),否则读合成器分析器 */
     const an = transport.playing && transport.trackMode && trackAnalyser && trackSpec
       ? { node: trackAnalyser, buf: trackSpec }
