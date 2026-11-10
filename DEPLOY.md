@@ -100,7 +100,7 @@ ICP 备案通过后:把自定义域名 CNAME 到 `<桶名>.<OSS_REGION>.aliyuncs
 ## 国内服务器部署(正式站,日常首选)
 
 - **正式地址**:`https://ambermoon.wiki/`(已备案 + certbot HTTPS,HTTP 强制跳转)
-- **裸 IP `http://47.108.214.184/` 返回 404 属预期**:nginx 按 server_name 匹配域名,IP 直连不提供服务
+- **裸 IP `http://<your-server-ip>/` 返回 404 属预期**:nginx 按 server_name 匹配域名,IP 直连不提供服务
 - **服务器**:阿里云轻量 **Ubuntu 24.04**,nginx,站点目录 `/var/www/music-wiki`,用户 `admin`(免密 sudo)
 - **本机密钥**:`~/.ssh/musicwiki_deploy`(已装公钥到服务器)
 - **更新网站唯一命令**:`bash deploy/deploy-server.sh`(build → 上传 → 生效 → 可选百度推送)

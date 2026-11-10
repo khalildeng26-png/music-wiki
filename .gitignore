@@ -30,3 +30,11 @@ scripts/_tmp/raw/
 # 验证截图(playwright 临时产物)
 scripts/_tmp/shots/
 .baidu-pushed-urls
+
+# ── 开源范围:小程序与推广内容不开源(私有部分) ──
+miniprogram/
+docs/promotion/
+docs/miniprogram/
+
+# ── 三方采样:授权不允许再分发,不入库(运行前自行放置,见 README) ──
+public/audio/**/*.mp3

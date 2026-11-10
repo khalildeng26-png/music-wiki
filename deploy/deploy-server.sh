@@ -1,8 +1,8 @@
 #!/bin/bash
 # 本地运行:构建 + 上传 dist 到服务器(不用密码,用密钥)
-# 用法: bash deploy-server.sh [IP(默认47.108.214.184)] [用户(默认admin)]
+# 用法: bash deploy-server.sh [IP(默认<your-server-ip>)] [用户(默认admin)]
 set -e
-SERVER_IP="${1:-47.108.214.184}"
+SERVER_IP="${1:-<your-server-ip>}"
 USER_NAME="${2:-admin}"
 KEY="$HOME/.ssh/musicwiki_deploy"
 

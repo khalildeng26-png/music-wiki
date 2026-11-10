@@ -46,7 +46,7 @@ triggers:
 
 1. `export PATH="/c/Users/admin/node22:$PATH" && npm run build` 通过(pagefind Indexed 页数不减少)。
 2. 逐篇自查清单 1–6。
-3. 部署:`bash deploy/deploy-server.sh 47.108.214.184 admin` + `npx wrangler pages deploy dist --project-name music-wiki --branch main --commit-dirty=true`。
+3. 部署:`bash deploy/deploy-server.sh <your-server-ip> admin` + `npx wrangler pages deploy dist --project-name music-wiki --branch main --commit-dirty=true`。
 4. commit 信息格式:`style(content): 文风重写——<范围>`。
 
 ## 批量节奏建议

@@ -44,6 +44,17 @@ npm run check      # oxlint + oxfmt
 bash deploy/deploy-server.sh   # 构建 → 上传 → 生效
 ```
 
+## 开源说明
+
+本仓库只包含 **web 站点**(ambermoon.wiki)。配套的微信小程序与运营侧内容属于私有部分,不在本仓库开源范围内。
+
+### 音频采样
+
+词条交互组件依赖的乐器采样(`public/audio/{音色}/{音名}.mp3`,如 `public/audio/piano/A4.mp3`)来自**第三方采样库**——其授权不允许再分发,因此不入库。克隆后组件在无音频时静默降级,不影响页面其余功能;如需完整体验,请自行取得采样授权后按上述目录结构放置。
+
 ## License
 
-[MIT](LICENSE)
+**代码 / 内容双许可**,详见 [LICENSE](LICENSE):
+
+- 代码(除 `src/content/` 外):**MIT**
+- 词条与路线内容(`src/content/`):**CC BY-NC-SA 4.0**(署名-非商业-相同方式共享;欢迎转载学习,谢绝整站镜像与商用)

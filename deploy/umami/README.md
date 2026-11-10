@@ -14,14 +14,14 @@
 
 ## 步骤(约 10 分钟)
 
-**0. DNS(阿里云控制台)**:给 `ambermoon.wiki` 加一条 A 记录:`stats → 47.108.214.184`
+**0. DNS(阿里云控制台)**:给 `ambermoon.wiki` 加一条 A 记录:`stats → <your-server-ip>`
 
 **1. 本机传文件上服务器**:
 
 ```bash
 scp -i ~/.ssh/musicwiki_deploy -o StrictHostKeyChecking=no \
   deploy/umami/docker-compose.yml deploy/umami/nginx-stats.conf \
-  admin@47.108.214.184:/tmp/
+  admin@<your-server-ip>:/tmp/
 ```
 
 **2. 服务器装 Docker**(已有则跳过):
