@@ -38,3 +38,12 @@ docs/miniprogram/
 
 # ── 三方采样:授权不允许再分发,不入库(运行前自行放置,见 README) ──
 public/audio/**/*.mp3
+
+# 站歌(Riot 授权仅限本站使用,不入库)
+public/music/*.mp3
+
+# 本地工具/会话产物
+.agents/
+.check-out/
+.claude/
+.omc/state/
